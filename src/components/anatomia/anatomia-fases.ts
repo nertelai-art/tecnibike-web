@@ -8,7 +8,7 @@ export type Moment = {
   peca: Peca;
   /** Segon del vídeo en què la peça ja ha sortit del tot. */
   t: number;
-  /** On és la peça en aquell moment, en % del fotograma de la bici (per a l'etiqueta). */
+  /** On és la peça en aquell moment, en % del fotograma de la bici. */
   x: number;
   y: number;
 };
@@ -48,25 +48,6 @@ export function tempsDeProgres(p: number): number {
   const x = Math.min(1, Math.max(0, (p - INICI) / (DESMUNTADA - INICI)));
   const suau = x * x * (3 - 2 * x);
   return suau * DURADA;
-}
-
-/** Quant abans i després del seu moment es veu l'etiqueta d'una peça, en segons de vídeo. */
-const ABANS = 0.5;
-const DESPRES = 0.9;
-
-/**
- * Peça que s'ha d'etiquetar en aquest segon del vídeo (-1 si cap): cada peça s'assenyala just quan
- * acaba de sortir, i deixa pas a la següent.
- */
-export function etiquetaActiva(t: number): number {
-  // La primera que encaixa mana: si dues surten molt seguides, l'anterior acaba una mica abans que
-  // arribi el moment de la següent.
-  for (let i = 0; i < MOMENTS.length; i++) {
-    const m = MOMENTS[i]!;
-    const seguent = MOMENTS[i + 1]?.t ?? Infinity;
-    if (t >= m.t - ABANS && t < Math.min(m.t + DESPRES, seguent - 0.2)) return i;
-  }
-  return -1;
 }
 
 /**

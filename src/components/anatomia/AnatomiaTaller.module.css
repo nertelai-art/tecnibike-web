@@ -1,6 +1,6 @@
 /* Secció de taller: l'escena (taller clar amb la bici, 16:9) cobreix tota la pantalla, ancorada a
    la dreta; a l'esquerra, un vel clar sota el text. Per sobre de tot, en una còpia de la caixa de
-   l'escena, les etiquetes i els bàners, perquè ni el text ni el vel els tapin. Al mòbil, l'escena es
+   l'escena, els bàners, perquè ni el text ni el vel els tapin. Al mòbil, l'escena es
    retalla a la zona de la bici i el text va al peu. */
 
 .escena {
@@ -43,52 +43,12 @@ img.escena {
   position: absolute;
 }
 
-.capaEtiquetes,
 .capaBanners {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-/* ── Etiquetes mentre es desmunta ── */
-
-.etiqueta {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px 6px 6px;
-  border-radius: 999px;
-  background: rgb(18 20 23 / 0.85);
-  backdrop-filter: blur(6px);
-  color: var(--blanc);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transform: translate(-12px, -50%) scale(0.85);
-  opacity: 0;
-  filter: blur(4px);
-  transition:
-    opacity 0.5s var(--ease),
-    transform 0.5s var(--ease),
-    filter 0.5s var(--ease);
-}
-.etiqueta[data-visible='true'] {
-  opacity: 1;
-  filter: none;
-  transform: translate(-12px, -50%) scale(1);
-}
-.etiquetaEsquerra {
-  flex-direction: row-reverse;
-  padding: 6px 6px 6px 12px;
-  transform: translate(calc(-100% + 12px), -50%) scale(0.85);
-}
-.etiquetaEsquerra[data-visible='true'] {
-  transform: translate(calc(-100% + 12px), -50%) scale(1);
-}
-.etiqueta i,
 .punt {
   width: 14px;
   height: 14px;
@@ -326,13 +286,6 @@ img.escena {
     font-size: 16px;
   }
 
-  .etiqueta {
-    font-size: 11px;
-    padding: 4px 10px 4px 4px;
-  }
-  .etiquetaEsquerra {
-    padding: 4px 4px 4px 10px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

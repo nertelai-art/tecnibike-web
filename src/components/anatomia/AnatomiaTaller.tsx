@@ -11,7 +11,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from
 import { BotoCita } from '@/components/cita/BotoCita';
 import { ScrollVideo, type ScrollVideoFrame } from '@/components/video/ScrollVideo';
 import { useReducedMotion } from '@/lib/scroll-scene';
-import { DESMUNTADA, DURADA, ENQUADRE, etiquetaActiva, FINAL, MOMENTS, seguentBanner, tempsDeProgres, TEXTOS } from './anatomia-fases';
+import { DESMUNTADA, DURADA, ENQUADRE, FINAL, MOMENTS, seguentBanner, tempsDeProgres, TEXTOS } from './anatomia-fases';
 import styles from './AnatomiaTaller.module.css';
 
 /** Inèrcia del vídeo respecte del scroll: suavitza la roda del ratolí però s'atura de seguida. */
@@ -27,7 +27,6 @@ export function AnatomiaTaller() {
   const tt = useTranslations('taller');
   const reduced = useReducedMotion();
   const pista = useRef<HTMLDivElement>(null);
-  const etiquetes = useRef<HTMLDivElement>(null);
   const text = useRef<HTMLDivElement>(null);
   const [desmuntada, setDesmuntada] = useState(false);
   const [acabada, setAcabada] = useState(false);
@@ -63,8 +62,6 @@ export function AnatomiaTaller() {
   // «desmuntada» passen per React (no a cada fotograma).
   const onFrame = ({ progress }: ScrollVideoFrame) => {
     const final = progress >= DESMUNTADA;
-    const actiu = final ? -1 : etiquetaActiva(tempsDeProgres(progress));
-    etiquetes.current?.querySelectorAll<HTMLElement>('[data-peca]').forEach((e, i) => (e.dataset.visible = String(i === actiu)));
     if (text.current) text.current.dataset.visible = String(progress >= TEXTOS);
     setDesmuntada((abans) => (abans === final ? abans : final));
   };
@@ -82,26 +79,11 @@ export function AnatomiaTaller() {
     </div>
   );
 
-  // Per sobre de tot (també del text i del vel): les etiquetes i els bàners, en la mateixa caixa que
-  // l'escena perquè les posicions en % coincideixin amb el vídeo.
+  // Per sobre de tot (també del text i del vel): els bàners, en la mateixa caixa que l'escena perquè
+  // les posicions en % coincideixin amb el vídeo.
   const capaSuperior = (bannersActius: boolean) => (
     <div className={`${styles.escena} ${styles.capaSuperior}`} aria-hidden={!bannersActius || undefined}>
       <div className={styles.bici} style={ENQUADRE_ESTIL}>
-        <div ref={etiquetes} className={styles.capaEtiquetes} aria-hidden="true">
-          {MOMENTS.map((m) => (
-            <span
-              key={m.peca}
-              data-peca={m.peca}
-              data-visible="false"
-              // A la part dreta de la bici, el text va a l'esquerra del punt perquè no surti.
-              className={`${styles.etiqueta} ${m.x > 70 ? styles.etiquetaEsquerra : ''}`}
-              style={{ left: `${m.x}%`, top: `${m.y}%` }}
-            >
-              <i />
-              {t(`peces.${m.peca}.nom`)}
-            </span>
-          ))}
-        </div>
         <Banners actius={bannersActius} />
       </div>
     </div>

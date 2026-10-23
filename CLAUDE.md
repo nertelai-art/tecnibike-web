@@ -38,7 +38,7 @@ Versions que **no** són l'última, i per què:
 - **Portada** (`src/components/Portada.tsx`): vídeo en bucle (`public/video/hero*.mp4`) d'un
   ciclista que passa per platja, poble, muntanya i costa.
 - **Taller** (`src/components/anatomia/`): un taller clar (imatge generada amb IA) amb la Pinarello.
-  La secció es queda fixa i, amb el scroll, la bici es desmunta (`public/video/taller*.mp4`,
+  La secció es queda fixa i, amb el scroll, la bici es desmunta (sense etiquetes) (`public/video/taller*.mp4`,
   component `ScrollVideo` de la skill `scroll-video`) i entren els textos; al final surten a l'atzar
   bàners amb fil que expliquen cada peça (es paren amb el ratolí a sobre), en una capa per sobre de
   tot. Un cop passada de llarg, queda desmuntada i no es repeteix. El vídeo es munta amb
