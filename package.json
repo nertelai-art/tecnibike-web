@@ -8,32 +8,30 @@
     "node": "24.x"
   },
   "scripts": {
-    "dev": "next dev --webpack",
-    "build": "next build",
-    "build:local": "next build --webpack",
+    "dev": "node scripts/copia-maplibre-worker.mjs && next dev --webpack",
+    "build": "node scripts/copia-maplibre-worker.mjs && next build",
+    "build:local": "node scripts/copia-maplibre-worker.mjs && next build --webpack",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "pnpm typecheck && pnpm lint && pnpm test",
-    "prepare": "git config core.hooksPath .githooks || exit 0"
+    "prepare": "git config core.hooksPath .githooks || exit 0",
+    "worker:mapa": "node scripts/copia-maplibre-worker.mjs"
   },
   "dependencies": {
-    "@react-three/drei": "10.7.9",
-    "@react-three/fiber": "9.8.2",
+    "maplibre-gl": "6.15.0",
     "next": "16.4.2",
     "next-intl": "4.14.9",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "three": "0.186.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "@types/three": "0.186.0",
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.2",
     "typescript": "6.0.3",

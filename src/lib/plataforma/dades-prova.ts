@@ -1,4 +1,4 @@
-import type { Accessori, BiciLloguer, Ressenya, ServeiTaller, Valoracio } from './esquema';
+import type { Accessori, BiciLloguer, Producte, Ressenya, ServeiTaller, Valoracio } from './esquema';
 
 // Dades de la implementació de proves. Les tarifes són les oficials del PDF de 2026; el que porta
 // `ficticia: true` és inventat perquè es vegi com queda i no es pot publicar sense confirmar-ho.
@@ -127,6 +127,28 @@ export const serveisTaller: ServeiTaller[] = [
   { id: 'direccio', peca: 'direccio', desDe: 1800, dies: 1, ficticia: true },
   { id: 'seient', peca: 'seient', desDe: 6000, dies: 1, ficticia: true },
   { id: 'quadre', peca: 'quadre', desDe: 6900, dies: 2, ficticia: true },
+];
+
+/**
+ * Productes de la botiga per peça. Les marques són les que Tecnibike té a la web i a l'Instagram;
+ * els models i els preus són inventats fins que tinguem el catàleg de la plataforma.
+ */
+export const productes: Producte[] = [
+  { id: 'gp5000', peca: 'rodes', marca: 'Continental', nom: 'Grand Prix 5000 S TR', preu: 7495, ficticia: true },
+  { id: 'pzero', peca: 'rodes', marca: 'Pirelli', nom: 'P Zero Race TLR', preu: 6990, ficticia: true },
+  { id: 'tubeless', peca: 'rodes', marca: 'Muc-Off', nom: 'Kit tubeless amb segellant', preu: 3999, ficticia: true },
+  { id: 'pastilles', peca: 'frens', marca: 'Shimano', nom: 'Pastilles de resina L05A', preu: 2495, ficticia: true },
+  { id: 'discs', peca: 'frens', marca: 'Shimano', nom: 'Discs RT-MT800 160 mm', preu: 5995, ficticia: true },
+  { id: 'cadena', peca: 'transmissio', marca: 'Shimano', nom: 'Cadena Ultegra 12v', preu: 4495, ficticia: true },
+  { id: 'cassette', peca: 'transmissio', marca: 'SRAM', nom: 'Cassette Force XG-1270', preu: 21900, ficticia: true },
+  { id: 'lubricant', peca: 'transmissio', marca: 'Muc-Off', nom: 'Lubricant Ceramic Wet', preu: 1799, ficticia: true },
+  { id: 'pedals', peca: 'transmissio', marca: 'Look', nom: 'Pedals Kéo Blade Carbon', preu: 17900, ficticia: true },
+  { id: 'cinta', peca: 'direccio', marca: 'Specialized', nom: 'Cinta S-Wrap HexTack', preu: 3500, ficticia: true },
+  { id: 'gps', peca: 'direccio', marca: 'Thule', nom: 'Suport frontal per a GPS', preu: 2990, ficticia: true },
+  { id: 'sella', peca: 'seient', marca: 'Specialized', nom: 'Sella Power Expert Mirror', preu: 32000, ficticia: true },
+  { id: 'culot', peca: 'seient', marca: 'Gobik', nom: 'Culot Absolute 6.0', preu: 15990, ficticia: true },
+  { id: 'netejador', peca: 'quadre', marca: 'Muc-Off', nom: 'Kit de neteja i protecció', preu: 4999, ficticia: true },
+  { id: 'casc', peca: 'quadre', marca: 'POC', nom: 'Casc Ventral Air', preu: 27000, ficticia: true },
 ];
 
 /** Consultat a Google Maps el 23-10-2026. */

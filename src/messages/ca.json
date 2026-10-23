@@ -29,53 +29,66 @@
     "ctaLloguer": "Reserva una bici",
     "ctaTaller": "Demana cita al taller",
     "valoracio": "{mitjana} de 5 · {total} ressenyes a Google",
-    "scroll": "Fes scroll i desmunta-la"
+    "entorns": "Entorns del vídeo",
+    "entorn": {
+      "platja": "Platja",
+      "poble": "Poble",
+      "muntanya": "Muntanya",
+      "costa": "Costa"
+    }
   },
   "anatomia": {
     "situacio": "Anatomia d'una bici",
-    "titol": "Cada peça té el seu servei.",
-    "intro": "Desmuntem la bici peça per peça. Tria la que et preocupa i reserva el servei directament.",
-    "desDe": "des de {preu}",
-    "termini": "{dies, plural, one {Llesta en 24 h} other {Llesta en # dies}}",
+    "titol": "Desmuntem-la peça a peça.",
+    "intro": "Una bici de carretera de gamma alta, com les que reparem cada dia. Baixa i mira què fa cada peça, què hi guanyes si la millores i com te la deixem a punt.",
+    "pista": "Fes scroll per desmuntar-la",
+    "potencial": "Si la millores:",
+    "alTaller": "Al taller",
+    "aLaBotiga": "A la botiga",
     "reservar": "Reserva aquest servei",
-    "final": {
-      "titol": "Tot plegat, en una posada a punt.",
-      "text": "Revisem les sis peces, ajustem, greixem i te la tornem com nova. T'avisem per WhatsApp quan està llesta.",
-      "cta": "Demana cita al taller"
-    },
-    "sr": "Una bici de carretera blava es desmunta en sis peces (transmissió, frens, rodes, direcció, seient i quadre) i després es torna a muntar.",
+    "preguntar": "Pregunta'ns per WhatsApp",
+    "missatgeWhatsapp": "Hola! M'interessa millorar: {peca}. Què em recomaneu?",
+    "sr": "Una bici de carretera vermella es desmunta peça a peça sobre una carretera de muntanya: rodes, frens, transmissió, manillar, sella i, al final, el quadre sol.",
     "peces": {
-      "transmissio": {
-        "nom": "Transmissió",
-        "servei": "Ajust de canvis, cadena i cassette",
-        "text": "Si el canvi salta, fa soroll o costa d'entrar, l'ajustem i mesurem el desgast de la cadena."
+      "rodes": {
+        "nom": "Rodes",
+        "servei": "Punxades, tubeless i centrat",
+        "funcio": "Són l'únic que toca a terra: el pneumàtic decideix l'adherència, i la roda, quanta energia es perd a cada pedalada.",
+        "potencial": "unes rodes més lleugeres i uns pneumàtics tubeless fan la bici més àgil a les pujades i més segura als revolts. És la millora que més es nota."
       },
       "frens": {
         "nom": "Frens",
         "servei": "Purgat i pastilles",
-        "text": "Frens hidràulics purgats, pastilles noves i discs centrats perquè frenis sense xiular."
+        "funcio": "Els frens de disc hidràulics aturen la bici amb dos dits, plogui o faci sol.",
+        "potencial": "amb pastilles i discs nous frenes abans, sense xiulets, i entres als revolts amb més confiança."
       },
-      "rodes": {
-        "nom": "Rodes",
-        "servei": "Punxades, tubeless i centrat",
-        "text": "Reparem punxades, muntem tubeless i centrem la roda perquè giri recta."
+      "transmissio": {
+        "nom": "Transmissió",
+        "servei": "Ajust de canvis, cadena i cassette",
+        "funcio": "Plat, cadena, cassette i canvi: porten la força de les cames fins a la roda de darrere.",
+        "potencial": "amb una cadena i una cassette en bon estat canvies sense salts ni sorolls. Una cadena gastada es menja els pinyons: canviar-la a temps surt molt més barat."
       },
       "direccio": {
         "nom": "Direcció",
         "servei": "Direcció, potència i cinta",
-        "text": "Revisem els rodaments de la direcció, ajustem la potència i canviem la cinta del manillar."
+        "funcio": "Manillar, potència i manetes: amb això governes la bici i d'aquí canvies i frenes.",
+        "potencial": "una bona cinta i un manillar a la teva mida treuen pes de les mans i de les espatlles a les sortides llargues."
       },
       "seient": {
         "nom": "Seient",
         "servei": "Ajust de posició (bike fitting)",
-        "text": "Alçada i retrocés de la sella i alçada del manillar a la teva mida, per pedalar sense mal d'esquena."
+        "funcio": "La sella i la tija decideixen a quina alçada i amb quin retrocés pedales.",
+        "potencial": "amb la sella a la mida justa pedales amb més força i sense mal de genolls ni d'esquena."
       },
       "quadre": {
         "nom": "Quadre",
         "servei": "Posada a punt completa",
-        "text": "Neteja a fons, revisió estructural del quadre i ajust de totes les peces. La bici, com el primer dia."
+        "funcio": "El cor de la bici, on s'ajunta tot. Un quadre de carboni és rígid on has d'empènyer i còmode on ha d'absorbir.",
+        "potencial": "una posada a punt completa el revisa per dins i per fora i deixa totes les peces ajustades com el primer dia."
       }
-    }
+    },
+    "desDe": "des de {preu}",
+    "termini": "{dies, plural, one {Llesta en 24 h} other {Llesta en # dies}}"
   },
   "flota": {
     "situacio": "Lloguer",
@@ -137,30 +150,41 @@
     "electrica": "També diagnosi d'e-bikes"
   },
   "rutes": {
-    "situacio": "Rutes",
-    "titol": "La Costa Brava és el millor gimnàs.",
-    "intro": "Les nostres rutes preferides des de la botiga, i guies que te les ensenyen. També organitzem viatges guiats per tota Europa.",
-    "distancia": "{km} km",
-    "desnivell": "{m} m+",
-    "bici": "Amb",
-    "guia": "Vull una ruta guiada",
+    "intro": "Tres rutes reals que surten de la botiga, amb el traçat, la distància i el desnivell de debò. Si vols, te les ensenya un dels nostres guies.",
+    "bici": "Bici recomanada",
+    "mapa": "Mapa de la ruta {nom}",
+    "errorMapa": "No s'ha pogut carregar el mapa. Les dades de la ruta són al costat.",
+    "perfil": "Perfil d'alçada",
+    "etDistancia": "Distància",
+    "etDesnivell": "Desnivell",
+    "font": "Traçat calculat amb BRouter sobre dades d'OpenStreetMap.",
+    "bicis": {
+      "gavarres": "Carretera disc",
+      "fitor": "Gravel",
+      "arques": "E-bike doble suspensió"
+    },
     "llista": {
       "gavarres": {
-        "nom": "Volta per les Gavarres",
+        "nom": "Volta per Romanyà",
         "tipus": "Carretera",
-        "text": "Puja a Romanyà i baixa per Santa Cristina amb vistes al mar."
+        "text": "Per Calonge, la pujada a Romanyà de la Selva entre suros i la baixada per Santa Cristina d'Aro fins a la platja."
       },
       "fitor": {
-        "nom": "Coll de Fitor",
+        "nom": "Pistes de Fitor",
         "tipus": "Gravel",
-        "text": "Pistes entre suros fins al santuari, i tornada per Calonge."
+        "text": "Pistes entre suros i pins per Vall-llobrega i Santa Coloma de Fitor, i tornada per Sant Cebrià dels Alls."
       },
-      "ardenya": {
-        "nom": "Massís de l'Ardenya",
+      "arques": {
+        "nom": "Puig d'Arques",
         "tipus": "Muntanya",
-        "text": "Corriols tècnics entre pins, amb la badia de Sant Feliu als peus."
+        "text": "Fins al cim de les Gavarres, a més de 500 metres, per pistes forestals i corriols, amb vistes a tot l'Empordà."
       }
-    }
+    },
+    "distancia": "{km} km",
+    "desnivell": "{m} m+",
+    "situacio": "Rutes",
+    "titol": "La Costa Brava és el millor gimnàs.",
+    "guia": "Vull una ruta guiada"
   },
   "marques": {
     "titol": "Les marques que fem servir, les que venem.",

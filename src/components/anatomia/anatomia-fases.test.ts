@@ -1,28 +1,36 @@
-import { FASES, ORDRE_PECES, obertura, opacitatPortada, pasActiu } from './anatomia-fases';
+import { aturat, MOMENTS, ORDRE_PECES, pasActiu, tempsVideo } from './anatomia-fases';
 
-describe('fases de l\'anatomia', () => {
-  it('les fases es toquen o se solapen: no hi ha forats morts', () => {
-    expect(FASES.esbotzat[0]).toBeLessThanOrEqual(FASES.portada[1]);
-    expect(FASES.peces[0]).toBeLessThanOrEqual(FASES.esbotzat[1]);
-    expect(FASES.muntatge[0]).toBeLessThanOrEqual(FASES.peces[1]);
+describe("línia de temps de l'anatomia", () => {
+  it('comença amb la bici sencera i acaba al final del vídeo', () => {
+    expect(tempsVideo(0)).toBe(0);
+    expect(tempsVideo(1)).toBeCloseTo(MOMENTS.at(-1)!.t);
   });
 
-  it('la bici comença i acaba muntada, i és oberta mentre es recorren les peces', () => {
-    expect(obertura(0)).toBe(0);
-    expect(obertura(0.5)).toBe(1);
-    expect(obertura(1)).toBe(0);
+  it('el temps del vídeo mai no va enrere quan es baixa', () => {
+    let anterior = 0;
+    for (let p = 0; p <= 1; p += 0.002) {
+      const t = tempsVideo(p);
+      expect(t).toBeGreaterThanOrEqual(anterior - 1e-9);
+      anterior = t;
+    }
   });
 
-  it('recorre les sis peces en ordre i acaba amb totes vistes', () => {
-    expect(pasActiu(0.1)).toBe(-1);
-    const vistos = new Set<number>();
-    for (let p = FASES.peces[0]; p < FASES.peces[1]; p += 0.005) vistos.add(pasActiu(p));
-    expect([...vistos]).toEqual(ORDRE_PECES.map((_, i) => i));
-    expect(pasActiu(0.9)).toBe(ORDRE_PECES.length);
+  it('recorre les sis peces en ordre i totes acaben aturades a lloc', () => {
+    const vistes: number[] = [];
+    for (let p = 0; p <= 1; p += 0.002) {
+      const pas = pasActiu(p);
+      if (pas >= 0 && !vistes.includes(pas)) vistes.push(pas);
+    }
+    expect(vistes).toEqual(ORDRE_PECES.map((_, i) => i));
+    for (let i = 0; i < MOMENTS.length; i++) {
+      const fiDelTram = 0.1 + ((i + 0.95) * 0.9) / MOMENTS.length;
+      expect(aturat(fiDelTram)).toBe(true);
+      expect(tempsVideo(fiDelTram)).toBeCloseTo(MOMENTS[i]!.t);
+    }
   });
 
-  it('el text de portada es fon abans que s\'obri del tot', () => {
-    expect(opacitatPortada(0)).toBe(1);
-    expect(opacitatPortada(0.2)).toBe(0);
+  it('els moments són dins del vídeo i en ordre', () => {
+    for (let i = 1; i < MOMENTS.length; i++) expect(MOMENTS[i]!.t).toBeGreaterThan(MOMENTS[i - 1]!.t);
+    expect(MOMENTS.at(-1)!.t).toBeLessThan(10.04);
   });
 });

@@ -1,9 +1,10 @@
 import { sumaDies } from '../calendari';
 import { totalReserva } from '../preus';
-import { flota, preusAccessoris, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
+import { flota, preusAccessoris, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
 import { frangesTaller, unitatsLliures } from './disponibilitat-prova';
 import {
   biciLloguer,
+  producte,
   citaTaller,
   reservaLloguer,
   ressenya,
@@ -14,6 +15,7 @@ import {
   type CitaTaller,
   type Confirmacio,
   type FranjaTaller,
+  type Producte,
   type ReservaLloguer,
   type Ressenya,
   type ServeiTaller,
@@ -44,6 +46,8 @@ export interface Plataforma {
   serveisTaller(): Promise<ServeiTaller[]>;
   frangesTaller(dia: string): Promise<FranjaTaller[]>;
   crearCitaTaller(cita: CitaTaller): Promise<Confirmacio>;
+  /** Productes de la botiga que milloren cada peça (el catàleg de venda de la plataforma). */
+  productes(): Promise<Producte[]>;
   valoracio(): Promise<Valoracio>;
   ressenyes(): Promise<Ressenya[]>;
 }
@@ -114,6 +118,7 @@ export function crearPlataformaProva({ generaCodi }: { generaCodi: () => string 
       cites.push({ ...cita, ...confirmacio });
       return confirmacio;
     },
+    productes: async () => producte.array().parse(productes),
     valoracio: async () => valoracio.parse(valoracioGoogle),
     ressenyes: async () => ressenya.array().parse(ressenyes),
   };

@@ -8,8 +8,8 @@ client) i [docs/proposta-web.md](docs/proposta-web.md) (decisions, disseny i int
 
 ## Pila
 
-Next.js 16 (App Router) · React 19 · TypeScript · three.js + React Three Fiber · next-intl ·
-Zod · Vitest. CSS propi amb CSS Modules (sense Tailwind). pnpm (versió a `packageManager`).
+Next.js 16 (App Router) · React 19 · TypeScript · next-intl · Zod · MapLibre GL · Vitest. CSS
+propi amb CSS Modules (sense Tailwind). pnpm (versió a `packageManager`).
 
 Versions que **no** són l'última, i per què:
 
@@ -35,9 +35,19 @@ Versions que **no** són l'última, i per què:
   `src/lib/plataforma/`.
 - **Accions de servidor** (`src/app/[locale]/accions.ts`): tornen a validar-ho tot amb Zod i el
   preu el calcula la plataforma. El rellotge només entra aquí (`araABotiga`), en hora de Madrid.
-- **Escena 3D** (`src/components/anatomia/`): la bici es construeix per codi
-  (`bici-geometria.ts`), sense models externs. three.js només es pot importar en aquesta carpeta
-  (regla d'ESLint). Les fases són a `anatomia-fases.ts`, sense three.js, amb proves.
+- **Portada** (`src/components/Portada.tsx`): vídeo en bucle (`public/video/hero*.mp4`) d'un
+  ciclista que passa per platja, poble, muntanya i costa.
+- **Anatomia** (`src/components/anatomia/`), dins la secció de taller: vídeo lligat al scroll
+  (`public/video/anatomia*.mp4`, component `ScrollVideo` de la skill `scroll-video`) on una bici
+  real es desmunta peça a peça. La línia de temps i les aturades són a `anatomia-fases.ts`, amb
+  proves; els segons de cada peça es van mesurar fotograma a fotograma.
+- **Vídeos generats amb IA** (Higgsfield: Nano Banana 2.1 per als fotogrames clau i Kling 4.0 per
+  als vídeos) a partir de les fotos reals de la Pinarello del client. No són gravacions: s'ha de dir
+  al client. Els originals i les tires de control són a `recursos/ia/` (fora del repositori).
+- **Rutes** (`src/components/rutes/`): mapa real amb MapLibre i teselles d'OpenFreeMap (sense
+  clau). Els traçats els calcula BRouter sobre OpenStreetMap amb `node scripts/rutes.mjs`, que
+  escriu `src/content/rutes.json`; la web no crida BRouter en temps d'execució. El worker de
+  MapLibre es copia a `public/vendor/` abans de `dev` i `build` (`scripts/copia-maplibre-worker.mjs`).
 - **Dades de mostra:** tot el que és inventat porta `ficticia: true` a les dades i un `*` a la
   pàgina, amb la nota al peu. Abans de publicar, cap d'aquestes dades pot quedar sense confirmar.
 
@@ -50,3 +60,4 @@ Versions que **no** són l'última, i per què:
 - Fotos originals de la botiga a bona resolució.
 - Pàgines legals pròpies (ara enllacen a les de la web antiga), galetes i 404 pròpia.
 - Connexió real amb app.nertel.ai i els avisos per correu i WhatsApp.
+- Validar amb el client les tres rutes proposades i ensenyar-li els vídeos generats amb IA.

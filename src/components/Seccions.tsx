@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { rutes } from '@/content/rutes';
-import type { Ressenya, ServeiTaller, Valoracio } from '@/lib/plataforma/esquema';
+import type { Producte, Ressenya, ServeiTaller, Valoracio } from '@/lib/plataforma/esquema';
 import { formatEuros } from '@/lib/preus';
 import { Link } from '@/i18n/navigation';
 import { ORDRE_PECES } from './anatomia/anatomia-fases';
+import { AnatomiaTaller } from './anatomia/AnatomiaTaller';
+import { MapaRutes } from './rutes/MapaRutes';
 import { Revela } from './Revela';
 import styles from './Seccions.module.css';
 
@@ -33,20 +34,25 @@ export async function ComFunciona() {
   );
 }
 
-export async function Taller({ serveis }: { serveis: ServeiTaller[] }) {
+export async function Taller({ serveis, productes }: { serveis: ServeiTaller[]; productes: Producte[] }) {
   const t = await getTranslations('taller');
   const ta = await getTranslations('anatomia');
   const locale = await getLocale();
   const ordenats = ORDRE_PECES.map((peca) => serveis.find((s) => s.peca === peca)).filter((s) => s !== undefined);
   return (
-    <section id="taller" className={`seccio ${styles.taller}`} aria-labelledby="taller-titol">
+    <section id="taller" className={styles.taller} aria-labelledby="taller-titol">
+      <div className={`contenidor ${styles.capTaller}`}>
+        <p className={`situacio ${styles.situacioClara}`}>{t('situacio')}</p>
+        <h2 id="taller-titol" className="titol-seccio">
+          {t('titol')}
+        </h2>
+        <p className={`intro ${styles.introClara}`}>{t('intro')}</p>
+      </div>
+
+      <AnatomiaTaller serveis={serveis} productes={productes} />
+
       <div className={`contenidor ${styles.tallerGraella}`}>
         <div>
-          <p className={`situacio ${styles.situacioClara}`}>{t('situacio')}</p>
-          <h2 id="taller-titol" className="titol-seccio">
-            {t('titol')}
-          </h2>
-          <p className={`intro ${styles.introClara}`}>{t('intro')}</p>
           <ul className={styles.avantatges}>
             <li>{t('avantatges.whatsapp')}</li>
             <li>{t('avantatges.pressupost')}</li>
@@ -99,36 +105,7 @@ export async function Rutes() {
           {t('titol')}
         </h2>
         <p className="intro">{t('intro')}</p>
-        <ul className={styles.rutesGraella}>
-          {rutes.map((ruta, index) => (
-            <Revela as="li" key={ruta.id} retard={index * 90} className={styles.ruta}>
-              <svg viewBox="0 0 200 200" className={styles.tracat} aria-hidden="true">
-                <path d={ruta.tracat} pathLength={1} />
-                <circle cx={ruta.sortida[0]} cy={ruta.sortida[1]} r="5" />
-              </svg>
-              <p className={styles.tipusRuta}>{t(`llista.${ruta.id}.tipus`)}</p>
-              <h3>{t(`llista.${ruta.id}.nom`)}</h3>
-              <p className={styles.textRuta}>{t(`llista.${ruta.id}.text`)}</p>
-              <dl className={styles.dades}>
-                <div>
-                  <dt className="sr-only">km</dt>
-                  <dd>
-                    {t('distancia', { km: ruta.km })}
-                    <span className="mostra">*</span>
-                  </dd>
-                </div>
-                <div>
-                  <dt className="sr-only">+</dt>
-                  <dd>{t('desnivell', { m: ruta.desnivell })}</dd>
-                </div>
-                <div>
-                  <dt>{t('bici')}</dt>
-                  <dd>{ruta.bici}</dd>
-                </div>
-              </dl>
-            </Revela>
-          ))}
-        </ul>
+        <MapaRutes />
         <a href="#visita" className="boto boto--clar">
           {t('guia')} <span className="fletxa">→</span>
         </a>

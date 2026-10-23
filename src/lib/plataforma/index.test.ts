@@ -28,6 +28,13 @@ describe('plataforma de proves', () => {
     expect([...peces].sort()).toEqual(['direccio', 'frens', 'quadre', 'rodes', 'seient', 'transmissio']);
   });
 
+  it("cada peça de l'anatomia té productes de la botiga per millorar-la", async () => {
+    const productes = await plataforma.productes();
+    for (const peca of ['rodes', 'frens', 'transmissio', 'direccio', 'seient', 'quadre']) {
+      expect(productes.some((p) => p.peca === peca)).toBe(true);
+    }
+  });
+
   it('els serveis de taller inventats estan marcats com a ficticis', async () => {
     for (const servei of await plataforma.serveisTaller()) expect(servei.ficticia).toBe(true);
   });

@@ -29,53 +29,66 @@
     "ctaLloguer": "Reserva una bici",
     "ctaTaller": "Pide cita en el taller",
     "valoracio": "{mitjana} de 5 · {total} reseñas en Google",
-    "scroll": "Haz scroll y desmóntala"
+    "entorns": "Entornos del vídeo",
+    "entorn": {
+      "platja": "Playa",
+      "poble": "Pueblo",
+      "muntanya": "Montaña",
+      "costa": "Costa"
+    }
   },
   "anatomia": {
     "situacio": "Anatomía de una bici",
-    "titol": "Cada pieza tiene su servicio.",
-    "intro": "Desmontamos la bici pieza a pieza. Elige la que te preocupa y reserva el servicio directamente.",
-    "desDe": "desde {preu}",
-    "termini": "{dies, plural, one {Lista en 24 h} other {Lista en # días}}",
+    "titol": "La desmontamos pieza a pieza.",
+    "intro": "Una bici de carretera de gama alta, como las que reparamos cada día. Baja y mira qué hace cada pieza, qué ganas si la mejoras y cómo te la dejamos a punto.",
+    "pista": "Haz scroll para desmontarla",
+    "potencial": "Si la mejoras:",
+    "alTaller": "En el taller",
+    "aLaBotiga": "En la tienda",
     "reservar": "Reserva este servicio",
-    "final": {
-      "titol": "Todo junto, en una puesta a punto.",
-      "text": "Revisamos las seis piezas, ajustamos, engrasamos y te la devolvemos como nueva. Te avisamos por WhatsApp cuando está lista.",
-      "cta": "Pide cita en el taller"
-    },
-    "sr": "Una bici de carretera azul se desmonta en seis piezas (transmisión, frenos, ruedas, dirección, sillín y cuadro) y después se vuelve a montar.",
+    "preguntar": "Pregúntanos por WhatsApp",
+    "missatgeWhatsapp": "¡Hola! Me interesa mejorar: {peca}. ¿Qué me recomendáis?",
+    "sr": "Una bici de carretera roja se desmonta pieza a pieza sobre una carretera de montaña: ruedas, frenos, transmisión, manillar, sillín y, al final, el cuadro solo.",
     "peces": {
-      "transmissio": {
-        "nom": "Transmisión",
-        "servei": "Ajuste de cambios, cadena y cassette",
-        "text": "Si el cambio salta, hace ruido o cuesta que entre, lo ajustamos y medimos el desgaste de la cadena."
+      "rodes": {
+        "nom": "Ruedas",
+        "servei": "Pinchazos, tubeless y centrado",
+        "funcio": "Son lo único que toca el suelo: el neumático decide el agarre, y la rueda, cuánta energía se pierde en cada pedalada.",
+        "potencial": "unas ruedas más ligeras y unos neumáticos tubeless hacen la bici más ágil en las subidas y más segura en las curvas. Es la mejora que más se nota."
       },
       "frens": {
         "nom": "Frenos",
         "servei": "Purgado y pastillas",
-        "text": "Frenos hidráulicos purgados, pastillas nuevas y discos centrados para que frenes sin chirridos."
+        "funcio": "Los frenos de disco hidráulicos paran la bici con dos dedos, llueva o haga sol.",
+        "potencial": "con pastillas y discos nuevos frenas antes, sin chirridos, y entras en las curvas con más confianza."
       },
-      "rodes": {
-        "nom": "Ruedas",
-        "servei": "Pinchazos, tubeless y centrado",
-        "text": "Reparamos pinchazos, montamos tubeless y centramos la rueda para que gire recta."
+      "transmissio": {
+        "nom": "Transmisión",
+        "servei": "Ajuste de cambios, cadena y cassette",
+        "funcio": "Plato, cadena, cassette y cambio: llevan la fuerza de las piernas hasta la rueda trasera.",
+        "potencial": "con una cadena y una cassette en buen estado cambias sin saltos ni ruidos. Una cadena gastada se come los piñones: cambiarla a tiempo sale mucho más barato."
       },
       "direccio": {
         "nom": "Dirección",
         "servei": "Dirección, potencia y cinta",
-        "text": "Revisamos los rodamientos de la dirección, ajustamos la potencia y cambiamos la cinta del manillar."
+        "funcio": "Manillar, potencia y manetas: con esto diriges la bici y desde aquí cambias y frenas.",
+        "potencial": "una buena cinta y un manillar a tu medida quitan carga de manos y hombros en las salidas largas."
       },
       "seient": {
         "nom": "Sillín",
         "servei": "Ajuste de posición (bike fitting)",
-        "text": "Altura y retroceso del sillín y altura del manillar a tu medida, para pedalear sin dolor de espalda."
+        "funcio": "El sillín y la tija deciden a qué altura y con qué retroceso pedaleas.",
+        "potencial": "con el sillín a la medida justa pedaleas con más fuerza y sin dolor de rodillas ni de espalda."
       },
       "quadre": {
         "nom": "Cuadro",
         "servei": "Puesta a punto completa",
-        "text": "Limpieza a fondo, revisión estructural del cuadro y ajuste de todas las piezas. La bici, como el primer día."
+        "funcio": "El corazón de la bici, donde se une todo. Un cuadro de carbono es rígido donde hay que empujar y cómodo donde tiene que absorber.",
+        "potencial": "una puesta a punto completa lo revisa por dentro y por fuera y deja todas las piezas ajustadas como el primer día."
       }
-    }
+    },
+    "desDe": "desde {preu}",
+    "termini": "{dies, plural, one {Lista en 24 h} other {Lista en # días}}"
   },
   "flota": {
     "situacio": "Alquiler",
@@ -107,9 +120,18 @@
   "comFunciona": {
     "titol": "Alquilar es así de fácil.",
     "passos": {
-      "u": { "titol": "Elige bici y talla", "text": "Te decimos qué talla te va según tu altura, y eliges los pedales." },
-      "dos": { "titol": "Elige los días", "text": "Ves el precio total al momento, sin sorpresas, y reservas en dos minutos." },
-      "tres": { "titol": "Recógela y rueda", "text": "En la tienda te la ajustamos a tu medida. Te esperamos con el casco a punto." }
+      "u": {
+        "titol": "Elige bici y talla",
+        "text": "Te decimos qué talla te va según tu altura, y eliges los pedales."
+      },
+      "dos": {
+        "titol": "Elige los días",
+        "text": "Ves el precio total al momento, sin sorpresas, y reservas en dos minutos."
+      },
+      "tres": {
+        "titol": "Recógela y rueda",
+        "text": "En la tienda te la ajustamos a tu medida. Te esperamos con el casco a punto."
+      }
     }
   },
   "taller": {
@@ -128,18 +150,41 @@
     "electrica": "También diagnosis de e-bikes"
   },
   "rutes": {
-    "situacio": "Rutas",
-    "titol": "La Costa Brava es el mejor gimnasio.",
-    "intro": "Nuestras rutas favoritas desde la tienda, y guías que te las enseñan. También organizamos viajes guiados por toda Europa.",
+    "intro": "Tres rutas reales que salen de la tienda, con el trazado, la distancia y el desnivel de verdad. Si quieres, te las enseña uno de nuestros guías.",
+    "bici": "Bici recomendada",
+    "mapa": "Mapa de la ruta {nom}",
+    "errorMapa": "No se ha podido cargar el mapa. Los datos de la ruta están al lado.",
+    "perfil": "Perfil de altitud",
+    "etDistancia": "Distancia",
+    "etDesnivell": "Desnivel",
+    "font": "Trazado calculado con BRouter sobre datos de OpenStreetMap.",
+    "bicis": {
+      "gavarres": "Carretera disco",
+      "fitor": "Gravel",
+      "arques": "E-bike doble suspensión"
+    },
+    "llista": {
+      "gavarres": {
+        "nom": "Vuelta por Romanyà",
+        "tipus": "Carretera",
+        "text": "Por Calonge, la subida a Romanyà de la Selva entre alcornoques y la bajada por Santa Cristina d'Aro hasta la playa."
+      },
+      "fitor": {
+        "nom": "Pistas de Fitor",
+        "tipus": "Gravel",
+        "text": "Pistas entre alcornoques y pinos por Vall-llobrega y Santa Coloma de Fitor, y vuelta por Sant Cebrià dels Alls."
+      },
+      "arques": {
+        "nom": "Puig d'Arques",
+        "tipus": "Montaña",
+        "text": "Hasta la cima de las Gavarres, a más de 500 metros, por pistas forestales y senderos, con vistas a todo el Empordà."
+      }
+    },
     "distancia": "{km} km",
     "desnivell": "{m} m+",
-    "bici": "Con",
-    "guia": "Quiero una ruta guiada",
-    "llista": {
-      "gavarres": { "nom": "Vuelta por las Gavarres", "tipus": "Carretera", "text": "Sube a Romanyà y baja por Santa Cristina con vistas al mar." },
-      "fitor": { "nom": "Coll de Fitor", "tipus": "Gravel", "text": "Pistas entre alcornoques hasta el santuario, y vuelta por Calonge." },
-      "ardenya": { "nom": "Macizo de l'Ardenya", "tipus": "Montaña", "text": "Senderos técnicos entre pinos, con la bahía de Sant Feliu a tus pies." }
-    }
+    "situacio": "Rutas",
+    "titol": "La Costa Brava es el mejor gimnasio.",
+    "guia": "Quiero una ruta guiada"
   },
   "marques": {
     "titol": "Las marcas que usamos son las que vendemos.",
@@ -166,12 +211,30 @@
   "faq": {
     "titol": "Preguntas frecuentes",
     "items": {
-      "talla": { "p": "¿Cómo sé qué talla me va?", "r": "Al reservar te pedimos la altura y te sugerimos la talla. En la tienda te la ajustamos: altura de sillín y posición del manillar." },
-      "pedals": { "p": "¿Puedo traer mis pedales?", "r": "Claro. También tenemos planos, Shimano SPD, SPD-SL y Look para que no tengas que cargar nada." },
-      "fianca": { "p": "¿Hay que dejar fianza?", "r": "Pedimos el DNI o el pasaporte y una fianza con tarjeta que se devuelve al entregar la bici*." },
-      "cancel": { "p": "¿Puedo cancelar la reserva?", "r": "Sí, sin coste hasta 48 horas antes de la recogida*." },
-      "hotel": { "p": "¿Me la lleváis al hotel?", "r": "Llevamos a hoteles de Calonge, Platja d'Aro y Palamós a partir de dos bicis*." },
-      "taller": { "p": "¿Cuánto tarda el taller?", "r": "Una revisión o un pinchazo, normalmente el mismo día o al día siguiente. Te decimos el plazo al dejarla y te avisamos por WhatsApp." }
+      "talla": {
+        "p": "¿Cómo sé qué talla me va?",
+        "r": "Al reservar te pedimos la altura y te sugerimos la talla. En la tienda te la ajustamos: altura de sillín y posición del manillar."
+      },
+      "pedals": {
+        "p": "¿Puedo traer mis pedales?",
+        "r": "Claro. También tenemos planos, Shimano SPD, SPD-SL y Look para que no tengas que cargar nada."
+      },
+      "fianca": {
+        "p": "¿Hay que dejar fianza?",
+        "r": "Pedimos el DNI o el pasaporte y una fianza con tarjeta que se devuelve al entregar la bici*."
+      },
+      "cancel": {
+        "p": "¿Puedo cancelar la reserva?",
+        "r": "Sí, sin coste hasta 48 horas antes de la recogida*."
+      },
+      "hotel": {
+        "p": "¿Me la lleváis al hotel?",
+        "r": "Llevamos a hoteles de Calonge, Platja d'Aro y Palamós a partir de dos bicis*."
+      },
+      "taller": {
+        "p": "¿Cuánto tarda el taller?",
+        "r": "Una revisión o un pinchazo, normalmente el mismo día o al día siguiente. Te decimos el plazo al dejarla y te avisamos por WhatsApp."
+      }
     }
   },
   "visita": {
@@ -207,7 +270,12 @@
     "suggerida": "Te recomendamos la talla {talla}",
     "disponibles": "{n, plural, =0 {Agotada} one {Queda 1} other {Quedan #}}",
     "pedals": "Pedales",
-    "pedalsOpcions": { "plans": "Planos", "spd": "Shimano SPD", "spdSl": "Shimano SPD-SL", "look": "Look" },
+    "pedalsOpcions": {
+      "plans": "Planos",
+      "spd": "Shimano SPD",
+      "spdSl": "Shimano SPD-SL",
+      "look": "Look"
+    },
     "recollida": "Día de recogida",
     "durada": "Duración",
     "migDia": "Medio día",
@@ -216,7 +284,13 @@
     "mes": "Más",
     "bicis": "Número de bicis",
     "accessoris": "Añade a la reserva",
-    "accessorisOpcions": { "casc": "Casco", "cadenat": "Candado", "cadiraNado": "Silla portabebés", "alforges": "Alforjas", "comptaquilometres": "Cuentakilómetros" },
+    "accessorisOpcions": {
+      "casc": "Casco",
+      "cadenat": "Candado",
+      "cadiraNado": "Silla portabebés",
+      "alforges": "Alforjas",
+      "comptaquilometres": "Cuentakilómetros"
+    },
     "inclos": "Incluido",
     "perBici": "{preu} por bici",
     "dades": "Tus datos",
@@ -266,7 +340,13 @@
     "intro": "Elige qué le pasa y cuándo la traes. Te avisamos por WhatsApp cuando está lista.",
     "tornar": "Volver al inicio",
     "pas1": "¿Qué bici traes?",
-    "tipus": { "carretera": "Carretera", "muntanya": "Montaña", "gravel": "Gravel", "electrica": "Eléctrica", "urbana": "Urbana" },
+    "tipus": {
+      "carretera": "Carretera",
+      "muntanya": "Montaña",
+      "gravel": "Gravel",
+      "electrica": "Eléctrica",
+      "urbana": "Urbana"
+    },
     "pas2": "¿Qué le tenemos que hacer?",
     "potsTriarMes": "Puedes elegir más de uno.",
     "nota": "Cuéntanos qué le pasa (opcional)",

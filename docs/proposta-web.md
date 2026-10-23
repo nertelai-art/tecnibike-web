@@ -15,21 +15,35 @@ Esborrany del 23-10-2026, abans de dissenyar. Parteix de
 - **Accent: el taronja `#F85A00`** del logo de l'Instagram (el ciclista), en lloc del
   llima de Scott. Surt del client, i amb el blau TCNBK fa parella de complementaris.
 
-## Estat (23-10-2026)
+## Estat (23-10-2026, segona volta)
 
 Fet i provat al navegador, amb dades de mostra:
 
-- **Inici:** portada amb la bici 3D, escena d'anatomia (la bici s'esbotza en sis peces, cadascuna
-  amb el seu servei de taller), flota amb filtres i taula de tarifes 2026, com funciona, taller,
-  rutes, marques, botiga amb fotos reals de l'Instagram, ressenyes de Google, preguntes freqüents
-  (amb `FAQPage`) i on som (amb `BikeStore`).
-- **Reserva de lloguer** (`/lloguer/[bici]`): fitxa a l'estil Scott amb disponibilitat per talla,
-  talla suggerida per alçada, pedals, mig dia o dies, nombre de bicis, accessoris, preu en directe,
-  validació en línia i confirmació amb codi. Una reserva descompta estoc.
-- **Cita al taller** (`/taller/cita`): bici, serveis (ve triat si s'hi arriba des d'una peça de
-  l'anatomia), dia i hora amb places, dades i confirmació. Les hores passades no es poden triar.
+- **Portada:** vídeo en bucle d'un ciclista amb la Pinarello que travessa la platja, un poble de
+  pedra, la muntanya de les Gavarres i la costa, sense talls. Indicador de l'entorn que es veu.
+- **Taller amb anatomia:** una bici real es desmunta peça a peça amb el scroll (rodes, frens,
+  transmissió, direcció, seient i quadre). A cada aturada, una etiqueta assenyala la peça i la
+  fitxa explica què fa, què hi guanyes si la millores, el servei de taller amb preu i els productes
+  de la botiga per millorar-la, amb un enllaç a WhatsApp.
+- **Rutes reals:** mapa de veritat (MapLibre + OpenFreeMap) amb tres traçats calculats per BRouter
+  sobre OpenStreetMap, amb distància, desnivell i perfil d'alçada reals: volta per Romanyà
+  (34,5 km, 383 m+), pistes de Fitor en gravel (42,6 km, 922 m+) i el Puig d'Arques en BTT
+  (21,2 km, 638 m+).
+- **Reserva de lloguer** i **cita al taller** com a la primera volta.
 - **Idiomes:** català, castellà, anglès i francès.
-- Portes: 42 proves, typecheck, lint i build de producció en verd.
+- Portes: 54 proves, typecheck, lint i build de producció en verd.
+
+Com s'han fet els vídeos (cost real: uns 70 crèdits de Higgsfield):
+
+1. Fotogrames clau amb Nano Banana 2.1 a partir de les fotos de la Pinarello de l'Instagram.
+2. Vídeos entre fotogrames amb Kling 4.0 (inici i final fixats), a 1080p.
+3. Unió dels quatre trams del hero amb fosos de 0,3 s, i codificació amb ffmpeg: hero de 5 MB
+   (escriptori) i 2,3 MB (mòbil); anatomia de 4 MB i 2,5 MB amb GOP curt per poder-la recórrer.
+
+**Honestedat:** són imatges generades, no gravacions. El client ho ha de saber i ha de veure-les
+abans de publicar. El model s'inventa detalls; s'han revisat fotograma a fotograma, però una
+persona de la botiga hauria de mirar que la bici desmuntada no tingui res que un mecànic trobi
+estrany.
 
 No fet encara: connexió amb app.nertel.ai (no hi ha API), avisos per correu i WhatsApp,
 pagament, botiga en línia, pàgines legals pròpies i logo en SVG.

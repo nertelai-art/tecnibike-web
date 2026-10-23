@@ -40,6 +40,16 @@ export const serveiTaller = z.object({
   ficticia: z.boolean(),
 });
 
+/** Producte de la botiga (accessori o recanvi) que millora una peça de la bici. */
+export const producte = z.object({
+  id: z.string(),
+  peca,
+  marca: z.string(),
+  nom: z.string(),
+  preu: centims,
+  ficticia: z.boolean(),
+});
+
 export const ressenya = z.object({
   autor: z.string(),
   estrelles: z.number().int().min(1).max(5),
@@ -111,4 +121,5 @@ export type BiciLloguer = z.infer<typeof biciLloguer>;
 export type Peca = z.infer<typeof peca>;
 export type ServeiTaller = z.infer<typeof serveiTaller>;
 export type Ressenya = z.infer<typeof ressenya>;
+export type Producte = z.infer<typeof producte>;
 export type Valoracio = z.infer<typeof valoracio>;

@@ -1,0 +1,360 @@
+/* Escenari fosc del taller: el vídeo dins d'una caixa 16:9 a la dreta i la fitxa a l'esquerra. */
+
+.video {
+  position: absolute;
+  right: var(--gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(62vw, calc((100svh - 150px) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radi);
+  overflow: hidden;
+  box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.7);
+}
+
+.capa {
+  position: absolute;
+  inset: 0;
+  color: var(--blanc);
+}
+
+/* La còpia de la caixa que porta les etiquetes no ha de tapar res. */
+.capa > .video {
+  overflow: visible;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.etiqueta {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  background: rgb(18 20 23 / 0.78);
+  backdrop-filter: blur(6px);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translate(-12px, -50%) scale(0.9);
+  opacity: 0;
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.35s var(--ease);
+}
+.etiqueta[data-visible='true'] {
+  opacity: 1;
+  transform: translate(-12px, -50%) scale(1);
+}
+.etiquetaEsquerra {
+  flex-direction: row-reverse;
+  padding: 6px 6px 6px 12px;
+  transform: translate(calc(-100% + 12px), -50%) scale(0.9);
+}
+.etiquetaEsquerra[data-visible='true'] {
+  transform: translate(calc(-100% + 12px), -50%) scale(1);
+}
+.etiqueta i {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--taronja);
+  box-shadow: 0 0 0 0 rgb(248 90 0 / 0.6);
+  animation: pols 1.6s var(--ease) infinite;
+}
+@keyframes pols {
+  70% {
+    box-shadow: 0 0 0 10px rgb(248 90 0 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(248 90 0 / 0);
+  }
+}
+
+.text {
+  position: absolute;
+  left: var(--gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(100% - min(62vw, calc((100svh - 150px) * 16 / 9)) - var(--gutter) * 3);
+  max-width: 440px;
+  height: min(620px, calc(100svh - 120px));
+}
+
+.intro,
+.fitxa {
+  position: absolute;
+  inset: 0;
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.45s var(--ease),
+    visibility 0.45s;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+.intro[data-visible='false'] {
+  opacity: 0;
+  transform: translateY(-16px);
+  visibility: hidden;
+}
+.intro :global(.situacio) {
+  color: rgb(255 255 255 / 0.7);
+}
+.intro p {
+  color: rgb(255 255 255 / 0.78);
+  max-width: 40ch;
+}
+
+.titol {
+  font-size: clamp(40px, 4.6vw, 72px);
+}
+
+.pista {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--taronja) !important;
+}
+
+.fitxes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fitxa {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(18px);
+  visibility: hidden;
+}
+.fitxa[data-state='actiu'] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+}
+.fitxa[data-state='fet'] {
+  transform: translateY(-18px);
+}
+
+.numero {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--taronja);
+}
+.numero span {
+  color: rgb(255 255 255 / 0.4);
+}
+
+.nom {
+  font-size: clamp(44px, 4.4vw, 68px);
+}
+
+.funcio {
+  color: rgb(255 255 255 / 0.85);
+}
+
+.potencial {
+  font-size: 15px;
+  color: rgb(255 255 255 / 0.7);
+}
+.potencial strong {
+  color: var(--blanc);
+}
+
+.bloc {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.07);
+}
+
+.etiquetaBloc {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blau);
+}
+
+.servei,
+.productes li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.servei strong,
+.productes strong {
+  white-space: nowrap;
+}
+
+.productes {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.productes small {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.55);
+  margin-right: 4px;
+}
+
+.enllac {
+  justify-self: start;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--blanc);
+  text-decoration: none;
+  border-bottom: 2px solid var(--taronja);
+  pointer-events: auto;
+}
+.enllac:hover {
+  color: var(--taronja);
+}
+
+.fitxa :global(.mostra) {
+  color: var(--taronja);
+}
+
+.progres {
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: rgb(255 255 255 / 0.08);
+}
+.progres div {
+  height: 100%;
+  background: var(--taronja);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* Pantalles baixes: la fitxa es compacta perquè no surti de la caixa. */
+@media (min-width: 981px) and (max-height: 860px) {
+  .fitxa {
+    gap: 9px;
+  }
+  .nom {
+    font-size: clamp(38px, 3.6vw, 54px);
+  }
+  .funcio {
+    font-size: 15px;
+  }
+  .potencial {
+    font-size: 14px;
+  }
+  .bloc {
+    padding: 10px 14px;
+    gap: 6px;
+  }
+  .productes li:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+/* Si encara no hi cap, es pot fer scroll dins la fitxa. */
+.fitxa {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+/* ── Sense moviment ── */
+
+.estatic {
+  display: grid;
+  gap: 32px;
+  padding-inline: var(--gutter);
+  max-width: var(--max);
+  margin-inline: auto;
+  color: var(--blanc);
+}
+.fotoEstatica {
+  width: 100%;
+  border-radius: var(--radi);
+}
+.llistaEstatica {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.llistaEstatica .fitxa {
+  position: relative;
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+}
+
+/* ── Mòbil: vídeo a dalt, fitxa a sota ── */
+
+@media (max-width: 980px) {
+  .video {
+    top: calc(var(--header-h) + 24px);
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    transform: none;
+  }
+
+  .text {
+    top: auto;
+    bottom: 14px;
+    transform: none;
+    width: auto;
+    right: var(--gutter);
+    max-width: none;
+    height: calc(100svh - var(--header-h) - 24px - (100vw - var(--gutter) * 2) * 9 / 16 - 30px);
+  }
+
+  .fitxa {
+    justify-content: flex-start;
+    gap: 8px;
+    overflow-y: auto;
+    padding-top: 4px;
+  }
+
+  .nom {
+    font-size: 34px;
+  }
+
+  .potencial {
+    display: none;
+  }
+
+  .bloc {
+    padding: 10px 12px;
+  }
+
+  .titol {
+    font-size: 36px;
+  }
+
+  .etiqueta {
+    font-size: 11px;
+    padding: 4px 10px 4px 4px;
+  }
+}

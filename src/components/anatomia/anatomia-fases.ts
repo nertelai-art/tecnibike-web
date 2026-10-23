@@ -1,44 +1,59 @@
 import type { Peca } from '@/lib/plataforma/esquema';
 
-// Coreografia de l'escena d'anatomia, sense three.js perquè l'HTML (textos, pas actiu) la pugui
-// llegir sense arrossegar la llibreria. El progrés va de 0 a 1 dins la secció.
-//
-//   0.00 ─ portada ─ 0.10
-//          0.08 ─ la bici s'esbotza ─ 0.30
-//                                    0.30 ─ sis peces, una per una ─ 0.86
-//                                                                    0.86 ─ es torna a muntar ─ 0.97
+// Línia de temps de l'anatomia: el scroll mou el vídeo (public/video/anatomia.mp4, 10 s) on la bici
+// es desmunta peça a peça. Cada peça té un tram de scroll: la primera part avança el vídeo fins
+// que la peça ha sortit, i la resta s'hi atura perquè es pugui llegir la fitxa.
+// Sense dependències de React ni del DOM, perquè es pugui provar.
 
-export const FASES = {
-  portada: [0, 0.1],
-  esbotzat: [0.08, 0.3],
-  peces: [0.3, 0.86],
-  muntatge: [0.86, 0.97],
-} as const;
+export type Moment = {
+  peca: Peca;
+  /** Segon del vídeo en què la peça ja ha sortit del tot. */
+  t: number;
+  /** On és la peça en aquell moment, en % del fotograma (per a l'etiqueta). */
+  x: number;
+  y: number;
+};
 
-/** L'ordre en què es recorren les peces: de la que més es toca al taller a la que menys. */
-export const ORDRE_PECES: readonly Peca[] = ['transmissio', 'frens', 'rodes', 'direccio', 'seient', 'quadre'];
+/** L'ordre real en què es desmunta la bici al vídeo, mesurat fotograma a fotograma. */
+export const MOMENTS: readonly Moment[] = [
+  { peca: 'rodes', t: 4.0, x: 86, y: 60 },
+  { peca: 'frens', t: 5.5, x: 74, y: 64 },
+  { peca: 'transmissio', t: 7.0, x: 60, y: 71 },
+  { peca: 'direccio', t: 8.5, x: 74, y: 27 },
+  { peca: 'seient', t: 9.5, x: 52, y: 14 },
+  { peca: 'quadre', t: 9.95, x: 62, y: 44 },
+];
 
-export const tram = (p: number, [a, b]: readonly [number, number]) => Math.min(1, Math.max(0, (p - a) / (b - a)));
+export const ORDRE_PECES: readonly Peca[] = MOMENTS.map((m) => m.peca);
 
-export const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+/** Part del scroll del principi amb la bici sencera i la introducció. */
+const INTRO = 0.1;
+/** Dins del tram de cada peça, la part que avança el vídeo (la resta s'hi atura). */
+const MOVIMENT = 0.55;
 
-/** Fins a quin punt està esbotzada la bici (0 muntada, 1 del tot oberta). */
-export function obertura(p: number): number {
-  return easeInOut(tram(p, FASES.esbotzat)) * (1 - easeInOut(tram(p, FASES.muntatge)));
-}
+const tram = (p: number) => (Math.min(1, Math.max(0, p)) - INTRO) / ((1 - INTRO) / MOMENTS.length);
 
-/**
- * Peça que s'explica ara: -1 abans de començar, de 0 a 5 mentre es recorren i 6 quan ja s'han
- * vist totes.
- */
+/** Peça que s'explica ara: -1 durant la introducció, de 0 a 5 després. */
 export function pasActiu(p: number): number {
-  const [a, b] = FASES.peces;
-  if (p < a) return -1;
-  if (p >= b) return ORDRE_PECES.length;
-  return Math.min(ORDRE_PECES.length - 1, Math.floor(((p - a) / (b - a)) * ORDRE_PECES.length));
+  if (p < INTRO) return -1;
+  return Math.min(MOMENTS.length - 1, Math.floor(tram(p)));
 }
 
-/** Opacitat del text de portada: es fon quan la bici comença a obrir-se. */
-export function opacitatPortada(p: number): number {
-  return 1 - tram(p, [0.05, 0.11]);
+/** Segon del vídeo que toca per a un progrés de scroll (0–1). */
+export function tempsVideo(p: number): number {
+  const pas = pasActiu(p);
+  if (pas < 0) return 0;
+  const inici = pas === 0 ? 0 : MOMENTS[pas - 1]!.t;
+  const fi = MOMENTS[pas]!.t;
+  const dins = tram(p) - pas;
+  const avanc = Math.min(1, dins / MOVIMENT);
+  // Arrencada i arribada suaus: la peça accelera en sortir i frena en arribar.
+  const suau = avanc < 0.5 ? 2 * avanc * avanc : 1 - Math.pow(-2 * avanc + 2, 2) / 2;
+  return inici + (fi - inici) * suau;
+}
+
+/** Si la peça ja és a lloc i s'està aturat (per mostrar-ne l'etiqueta). */
+export function aturat(p: number): boolean {
+  const pas = pasActiu(p);
+  return pas >= 0 && tram(p) - pas >= MOVIMENT;
 }

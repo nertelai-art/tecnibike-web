@@ -61,6 +61,12 @@
 .taller {
   background: var(--grafit);
   color: var(--blanc);
+  padding-bottom: var(--section);
+}
+
+.capTaller {
+  padding-top: var(--section);
+  padding-bottom: 24px;
 }
 
 .situacioClara {
@@ -71,6 +77,7 @@
 }
 
 .tallerGraella {
+  margin-top: 64px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
   gap: clamp(40px, 6vw, 96px);
@@ -172,95 +179,6 @@
 
 .rutes {
   background: var(--blanc);
-}
-
-.rutesGraella {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: 20px;
-  margin: 48px 0 40px;
-  padding: 0;
-  list-style: none;
-}
-
-.ruta {
-  padding: 24px;
-  border-radius: var(--radi);
-  background: var(--escenari);
-}
-.ruta h3 {
-  margin-top: 6px;
-  font-size: 30px;
-}
-
-.tracat {
-  width: 100%;
-  height: auto;
-  max-height: 220px;
-  margin-bottom: 16px;
-  background-image:
-    linear-gradient(var(--linia-fina) 1px, transparent 1px),
-    linear-gradient(90deg, var(--linia-fina) 1px, transparent 1px);
-  background-size: 20px 20px;
-  border-radius: 12px;
-}
-.tracat path {
-  fill: none;
-  stroke: var(--blau-fosc);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 1.8s var(--ease) 0.2s;
-}
-.ruta[data-visible='true'] .tracat path {
-  stroke-dashoffset: 0;
-}
-.tracat circle {
-  fill: var(--taronja);
-}
-
-.tipusRuta {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--taronja-fosc);
-}
-
-.textRuta {
-  margin-top: 8px;
-  color: var(--tinta-2);
-  font-size: 15px;
-}
-
-.dades {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  margin: 18px 0 0;
-  padding-top: 14px;
-  border-top: 1px dashed var(--linia);
-  font-size: 14px;
-  font-variant-numeric: tabular-nums;
-}
-.dades div {
-  display: flex;
-  gap: 6px;
-}
-.dades dt {
-  color: var(--tinta-3);
-}
-.dades dd {
-  margin: 0;
-  font-weight: 700;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tracat path {
-    stroke-dashoffset: 0;
-  }
 }
 
 /* ── Marques ── */

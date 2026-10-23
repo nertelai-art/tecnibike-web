@@ -1,0 +1,165 @@
+.portada {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  background: var(--grafit);
+  color: var(--blanc);
+  overflow: hidden;
+}
+
+.fons {
+  position: absolute;
+  inset: 0;
+}
+/* Fosc a l'esquerra i a baix perquè el text es llegeixi sobre qualsevol entorn. */
+.fons::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(18 20 23 / 0.78) 0%, rgb(18 20 23 / 0.45) 38%, rgb(18 20 23 / 0) 62%),
+    linear-gradient(0deg, rgb(18 20 23 / 0.7) 0%, rgb(18 20 23 / 0) 40%);
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 50%;
+}
+
+.contingut {
+  position: relative;
+  padding-top: calc(var(--header-h) + 80px);
+  padding-bottom: clamp(72px, 12vh, 132px);
+}
+
+.situacio {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.85);
+}
+.situacio::before {
+  content: '';
+  width: 22px;
+  height: 2px;
+  background: var(--taronja);
+}
+
+.titol {
+  margin-top: 18px;
+  font-size: clamp(48px, min(6vw, 9.5vh), 108px);
+  line-height: 0.9;
+  max-width: 12ch;
+  text-shadow: 0 2px 24px rgb(0 0 0 / 0.25);
+}
+.titol span {
+  display: block;
+}
+.titolAccent {
+  color: var(--taronja);
+}
+
+.subtitol {
+  margin-top: 22px;
+  max-width: 44ch;
+  font-size: clamp(17px, 1.35vw, 19px);
+  color: rgb(255 255 255 / 0.85);
+}
+
+.botons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.valoracio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(255 255 255 / 0.85);
+}
+.estrelles {
+  color: var(--taronja);
+  letter-spacing: 0.08em;
+}
+
+.entorns {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(72px, 12vh, 132px);
+  display: flex;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.entorns li {
+  position: relative;
+  padding-top: 12px;
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.6);
+  color: rgb(255 255 255 / 0.5);
+  transition: color 0.4s var(--ease);
+}
+.entorns li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgb(255 255 255 / 0.25);
+}
+.entorns li[data-actiu] {
+  color: var(--blanc);
+}
+.entorns li[data-actiu]::before {
+  background: var(--taronja);
+}
+
+/* Mòbil: el vídeo a dalt, retallat al voltant del ciclista, i el text a sota. */
+@media (max-width: 860px) {
+  .portada {
+    display: block;
+    min-height: 0;
+  }
+  .fons {
+    position: relative;
+    height: min(62svh, 125vw);
+    margin-top: calc(var(--header-h) + 12px);
+  }
+  .fons::after {
+    background: linear-gradient(0deg, var(--grafit) 0%, rgb(18 20 23 / 0) 30%);
+  }
+  .contingut {
+    padding-top: 0;
+    margin-top: -48px;
+    padding-bottom: 48px;
+  }
+  .titol {
+    font-size: clamp(44px, 13vw, 64px);
+  }
+  .entorns {
+    position: absolute;
+    top: calc(var(--header-h) + 24px);
+    left: var(--gutter);
+    right: auto;
+    bottom: auto;
+    gap: 12px;
+    font-size: 10px;
+  }
+}

@@ -29,53 +29,66 @@
     "ctaLloguer": "Book a bike",
     "ctaTaller": "Book the workshop",
     "valoracio": "{mitjana} out of 5 · {total} Google reviews",
-    "scroll": "Scroll to take it apart"
+    "entorns": "Video settings",
+    "entorn": {
+      "platja": "Beach",
+      "poble": "Village",
+      "muntanya": "Mountain",
+      "costa": "Coast"
+    }
   },
   "anatomia": {
     "situacio": "Anatomy of a bike",
-    "titol": "Every part has its service.",
-    "intro": "We take the bike apart piece by piece. Pick the one that worries you and book the service right away.",
-    "desDe": "from {preu}",
-    "termini": "{dies, plural, one {Ready in 24 h} other {Ready in # days}}",
+    "titol": "We take it apart, piece by piece.",
+    "intro": "A high-end road bike like the ones we fix every day. Scroll down to see what each part does, what you gain by upgrading it and how we keep it in shape.",
+    "pista": "Scroll to take it apart",
+    "potencial": "Upgrade it and:",
+    "alTaller": "In the workshop",
+    "aLaBotiga": "In the shop",
     "reservar": "Book this service",
-    "final": {
-      "titol": "All of it, in one full service.",
-      "text": "We check all six parts, adjust, lubricate and hand it back like new. We'll message you on WhatsApp when it's ready.",
-      "cta": "Book the workshop"
-    },
-    "sr": "A blue road bike comes apart into six parts (drivetrain, brakes, wheels, cockpit, saddle and frame) and then goes back together.",
+    "preguntar": "Ask us on WhatsApp",
+    "missatgeWhatsapp": "Hi! I'd like to upgrade: {peca}. What do you recommend?",
+    "sr": "A red road bike comes apart piece by piece on a mountain road: wheels, brakes, drivetrain, handlebar, saddle and finally the bare frame.",
     "peces": {
-      "transmissio": {
-        "nom": "Drivetrain",
-        "servei": "Gear, chain and cassette tune-up",
-        "text": "If your gears skip, rattle or shift badly, we adjust them and measure chain wear."
+      "rodes": {
+        "nom": "Wheels",
+        "servei": "Punctures, tubeless and truing",
+        "funcio": "They're the only thing touching the road: the tyre decides grip, and the wheel how much energy each pedal stroke loses.",
+        "potencial": "lighter wheels and tubeless tyres make the bike livelier on climbs and safer in corners. It's the upgrade you feel the most."
       },
       "frens": {
         "nom": "Brakes",
         "servei": "Bleed and pads",
-        "text": "Hydraulic brakes bled, new pads and centred rotors so you stop without squealing."
+        "funcio": "Hydraulic disc brakes stop the bike with two fingers, rain or shine.",
+        "potencial": "new pads and rotors stop you sooner, without squealing, so you take corners with more confidence."
       },
-      "rodes": {
-        "nom": "Wheels",
-        "servei": "Punctures, tubeless and truing",
-        "text": "We fix punctures, set up tubeless and true the wheel so it spins straight."
+      "transmissio": {
+        "nom": "Drivetrain",
+        "servei": "Gear, chain and cassette tune-up",
+        "funcio": "Chainring, chain, cassette and derailleur carry the power from your legs to the rear wheel.",
+        "potencial": "a healthy chain and cassette shift without skipping or noise. A worn chain eats the cogs: replacing it on time is far cheaper."
       },
       "direccio": {
         "nom": "Cockpit",
         "servei": "Headset, stem and bar tape",
-        "text": "We check the headset bearings, adjust the stem and replace the handlebar tape."
+        "funcio": "Handlebar, stem and levers: you steer, shift and brake from here.",
+        "potencial": "good bar tape and a bar sized for you take strain off your hands and shoulders on long rides."
       },
       "seient": {
         "nom": "Saddle",
         "servei": "Position adjustment (bike fitting)",
-        "text": "Saddle height and setback and handlebar height set for you, so you ride without back pain."
+        "funcio": "Saddle and seatpost set the height and setback you pedal from.",
+        "potencial": "with the saddle set just right you pedal stronger and without knee or back pain."
       },
       "quadre": {
         "nom": "Frame",
         "servei": "Full service",
-        "text": "Deep clean, structural frame check and every part adjusted. The bike, like day one."
+        "funcio": "The heart of the bike, where everything joins. A carbon frame is stiff where you push and comfortable where it should absorb.",
+        "potencial": "a full service checks it inside and out and leaves every part adjusted like day one."
       }
-    }
+    },
+    "desDe": "from {preu}",
+    "termini": "{dies, plural, one {Ready in 24 h} other {Ready in # days}}"
   },
   "flota": {
     "situacio": "Rental",
@@ -107,9 +120,18 @@
   "comFunciona": {
     "titol": "Renting is this easy.",
     "passos": {
-      "u": { "titol": "Pick bike and size", "text": "We tell you which size fits your height, and you choose your pedals." },
-      "dos": { "titol": "Pick your days", "text": "You see the full price instantly, no surprises, and book in two minutes." },
-      "tres": { "titol": "Collect it and ride", "text": "At the shop we set it up for you. Your helmet will be ready." }
+      "u": {
+        "titol": "Pick bike and size",
+        "text": "We tell you which size fits your height, and you choose your pedals."
+      },
+      "dos": {
+        "titol": "Pick your days",
+        "text": "You see the full price instantly, no surprises, and book in two minutes."
+      },
+      "tres": {
+        "titol": "Collect it and ride",
+        "text": "At the shop we set it up for you. Your helmet will be ready."
+      }
     }
   },
   "taller": {
@@ -128,18 +150,41 @@
     "electrica": "E-bike diagnostics too"
   },
   "rutes": {
-    "situacio": "Routes",
-    "titol": "The Costa Brava is the best gym.",
-    "intro": "Our favourite rides from the shop, and guides to show you the way. We also organise guided trips all over Europe.",
+    "intro": "Three real routes starting from the shop, with their true track, distance and climbing. If you like, one of our guides will show you the way.",
+    "bici": "Recommended bike",
+    "mapa": "Map of the {nom} route",
+    "errorMapa": "The map couldn't load. The route details are alongside.",
+    "perfil": "Elevation profile",
+    "etDistancia": "Distance",
+    "etDesnivell": "Climbing",
+    "font": "Track calculated with BRouter on OpenStreetMap data.",
+    "bicis": {
+      "gavarres": "Disc road bike",
+      "fitor": "Gravel",
+      "arques": "Full-suspension e-bike"
+    },
+    "llista": {
+      "gavarres": {
+        "nom": "Romanyà loop",
+        "tipus": "Road",
+        "text": "Through Calonge, the climb to Romanyà de la Selva among cork oaks and the descent via Santa Cristina d'Aro down to the beach."
+      },
+      "fitor": {
+        "nom": "Fitor tracks",
+        "tipus": "Gravel",
+        "text": "Tracks through cork oaks and pines via Vall-llobrega and Santa Coloma de Fitor, back through Sant Cebrià dels Alls."
+      },
+      "arques": {
+        "nom": "Puig d'Arques",
+        "tipus": "Mountain",
+        "text": "Up to the top of the Gavarres, over 500 metres high, on forest tracks and singletrack, with views across the Empordà."
+      }
+    },
     "distancia": "{km} km",
     "desnivell": "{m} m+",
-    "bici": "On",
-    "guia": "I want a guided ride",
-    "llista": {
-      "gavarres": { "nom": "Gavarres loop", "tipus": "Road", "text": "Climb to Romanyà and descend through Santa Cristina with sea views." },
-      "fitor": { "nom": "Coll de Fitor", "tipus": "Gravel", "text": "Tracks through cork oaks up to the sanctuary, back via Calonge." },
-      "ardenya": { "nom": "Ardenya massif", "tipus": "Mountain", "text": "Technical singletrack through the pines, Sant Feliu bay below you." }
-    }
+    "situacio": "Routes",
+    "titol": "The Costa Brava is the best gym.",
+    "guia": "I want a guided ride"
   },
   "marques": {
     "titol": "The brands we ride are the brands we sell.",
@@ -166,12 +211,30 @@
   "faq": {
     "titol": "Frequently asked questions",
     "items": {
-      "talla": { "p": "How do I know my size?", "r": "When you book we ask your height and suggest a size. At the shop we fine-tune saddle height and handlebar position." },
-      "pedals": { "p": "Can I bring my own pedals?", "r": "Of course. We also have flat, Shimano SPD, SPD-SL and Look pedals so you don't have to pack yours." },
-      "fianca": { "p": "Is there a deposit?", "r": "We ask for an ID card or passport and a card deposit, refunded when you return the bike*." },
-      "cancel": { "p": "Can I cancel my booking?", "r": "Yes, free of charge up to 48 hours before collection*." },
-      "hotel": { "p": "Do you deliver to my hotel?", "r": "We deliver to hotels in Calonge, Platja d'Aro and Palamós for two bikes or more*." },
-      "taller": { "p": "How long does the workshop take?", "r": "A service or a puncture is usually same day or next day. We give you the turnaround when you drop it off and message you on WhatsApp." }
+      "talla": {
+        "p": "How do I know my size?",
+        "r": "When you book we ask your height and suggest a size. At the shop we fine-tune saddle height and handlebar position."
+      },
+      "pedals": {
+        "p": "Can I bring my own pedals?",
+        "r": "Of course. We also have flat, Shimano SPD, SPD-SL and Look pedals so you don't have to pack yours."
+      },
+      "fianca": {
+        "p": "Is there a deposit?",
+        "r": "We ask for an ID card or passport and a card deposit, refunded when you return the bike*."
+      },
+      "cancel": {
+        "p": "Can I cancel my booking?",
+        "r": "Yes, free of charge up to 48 hours before collection*."
+      },
+      "hotel": {
+        "p": "Do you deliver to my hotel?",
+        "r": "We deliver to hotels in Calonge, Platja d'Aro and Palamós for two bikes or more*."
+      },
+      "taller": {
+        "p": "How long does the workshop take?",
+        "r": "A service or a puncture is usually same day or next day. We give you the turnaround when you drop it off and message you on WhatsApp."
+      }
     }
   },
   "visita": {
@@ -207,7 +270,12 @@
     "suggerida": "We recommend size {talla}",
     "disponibles": "{n, plural, =0 {Sold out} one {1 left} other {# left}}",
     "pedals": "Pedals",
-    "pedalsOpcions": { "plans": "Flat", "spd": "Shimano SPD", "spdSl": "Shimano SPD-SL", "look": "Look" },
+    "pedalsOpcions": {
+      "plans": "Flat",
+      "spd": "Shimano SPD",
+      "spdSl": "Shimano SPD-SL",
+      "look": "Look"
+    },
     "recollida": "Collection day",
     "durada": "Duration",
     "migDia": "Half day",
@@ -216,7 +284,13 @@
     "mes": "More",
     "bicis": "Number of bikes",
     "accessoris": "Add to your booking",
-    "accessorisOpcions": { "casc": "Helmet", "cadenat": "Lock", "cadiraNado": "Child seat", "alforges": "Panniers", "comptaquilometres": "Bike computer" },
+    "accessorisOpcions": {
+      "casc": "Helmet",
+      "cadenat": "Lock",
+      "cadiraNado": "Child seat",
+      "alforges": "Panniers",
+      "comptaquilometres": "Bike computer"
+    },
     "inclos": "Included",
     "perBici": "{preu} per bike",
     "dades": "Your details",
@@ -266,7 +340,13 @@
     "intro": "Tell us what's wrong and when you'll bring it. We'll message you on WhatsApp when it's ready.",
     "tornar": "Back to home",
     "pas1": "Which bike are you bringing?",
-    "tipus": { "carretera": "Road", "muntanya": "Mountain", "gravel": "Gravel", "electrica": "Electric", "urbana": "City" },
+    "tipus": {
+      "carretera": "Road",
+      "muntanya": "Mountain",
+      "gravel": "Gravel",
+      "electrica": "Electric",
+      "urbana": "City"
+    },
     "pas2": "What does it need?",
     "potsTriarMes": "You can choose more than one.",
     "nota": "Tell us what's going on (optional)",

@@ -17,3 +17,6 @@ next-env.d.ts
 recursos/**/*
 !recursos/**/
 !recursos/**/README.md
+
+# Còpia del worker de MapLibre (la fa scripts/copia-maplibre-worker.mjs)
+public/vendor/
