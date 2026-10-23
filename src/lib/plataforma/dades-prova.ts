@@ -55,7 +55,8 @@ export const flota: BiciLloguer[] = [
     imatge: '/img/flota/carretera-di2.png',
     talles: TALLES_CARRETERA,
     tarifa: { dia: 6500, de2a6: 5500 },
-    model: { valor: 'Pinarello F5 · Ultegra Di2', ficticia: true },
+    // La foto de la web antiga és una Trek: el model inventat ha de quadrar amb la foto.
+    model: { valor: 'Trek Domane · Ultegra Di2', ficticia: true },
   },
   {
     id: 'e-carretera',

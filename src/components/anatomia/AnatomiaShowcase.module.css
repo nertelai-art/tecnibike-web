@@ -88,7 +88,9 @@
 
 .titol {
   margin-top: 20px;
-  font-size: clamp(54px, 7.4vw, 112px);
+  /* Limitat també per l'alçada: en pantalles baixes, el titular no pot empènyer els botons
+     fora de la primera pantalla. */
+  font-size: clamp(48px, min(5.6vw, 9.5vh), 104px);
   line-height: 0.9;
 }
 .titol span {

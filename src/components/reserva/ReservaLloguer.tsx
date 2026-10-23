@@ -31,7 +31,7 @@ export function ReservaLloguer({ bici, preusAccessoris }: Props) {
   const id = useId();
   const avui = useAvui();
 
-  const [talla, setTalla] = useState<string | null>(null);
+  const [tallaTriada, setTalla] = useState<string | null>(null);
   const [alcada, setAlcada] = useState('');
   const [pedals, setPedals] = useState<Pedals>('plans');
   const [dataTriada, setDataTriada] = useState('');
@@ -46,6 +46,8 @@ export function ReservaLloguer({ bici, preusAccessoris }: Props) {
   const [enviant, iniciaEnviament] = useTransition();
 
   const recollida = dataTriada || avui;
+  // Si la talla triada s'esgota en canviar les dates, deixa d'estar triada.
+  const talla = tallaTriada && disponibilitat?.[tallaTriada] !== 0 ? tallaTriada : null;
   const dies = durada.tipus === 'migDia' ? 1 : durada.dies;
 
   // Disponibilitat de cada talla per a les dates triades.
