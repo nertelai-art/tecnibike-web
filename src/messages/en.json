@@ -88,7 +88,9 @@
       }
     },
     "desDe": "from {preu}",
-    "termini": "{dies, plural, one {Ready in 24 h} other {Ready in # days}}"
+    "termini": "{dies, plural, one {Ready in 24 h} other {Ready in # days}}",
+    "index": "Bike parts",
+    "ctaCita": "Book the workshop"
   },
   "flota": {
     "situacio": "Rental",
@@ -186,10 +188,74 @@
     "titol": "The Costa Brava is the best gym.",
     "guia": "I want a guided ride"
   },
+  "equipament": {
+    "situacio": "Gear",
+    "titol": "Clothing, helmets and everything you wear.",
+    "text": "Try it on in the shop: we find your size, fit your helmet and tell you which nutrition suits the ride you are planning.",
+    "marques": "Brands",
+    "preguntar": "Ask about sizes and stock",
+    "missatge": "Hi! I would like some information about {categoria}.",
+    "credits": "Photos from Wikimedia Commons, to be replaced with photos of the shop —",
+    "categories": {
+      "cascs": {
+        "nom": "Helmets",
+        "text": "Light, well ventilated and with MIPS. We fit it for you on the spot."
+      },
+      "ulleres": {
+        "nom": "Eyewear",
+        "text": "Photochromic and contrast lenses for the Costa Brava sun."
+      },
+      "roba": {
+        "nom": "Clothing",
+        "text": "Technical jerseys, bib shorts and gilets for summer and winter."
+      },
+      "sabates": {
+        "nom": "Shoes",
+        "text": "Road and mountain, with the cleats fitted and adjusted."
+      },
+      "nutricio": {
+        "nom": "Nutrition",
+        "text": "Gels, bars and drinks so you never run empty halfway up a climb."
+      },
+      "accessoris": {
+        "nom": "Accessories",
+        "text": "Bottles, lights, maintenance, tubeless sealant and bike racks."
+      }
+    }
+  },
   "marques": {
-    "titol": "The brands we ride are the brands we sell.",
-    "bicis": "Bikes",
-    "material": "Components, clothing and nutrition"
+    "situacio": "The brands",
+    "titol": "Kit yourself out like a pro.",
+    "text": "The bikes, components, clothing and nutrition the pro teams use. Browse them, and if you are after one, ask us on WhatsApp.",
+    "filtre": "Filter by category",
+    "categories": {
+      "totes": "All",
+      "bicis": "Bikes",
+      "components": "Components",
+      "equipament": "Gear",
+      "nutricio": "Nutrition"
+    },
+    "tipus": {
+      "bicis": "Bikes",
+      "quadres": "Frames",
+      "pedals": "Pedals",
+      "grups": "Groupsets",
+      "pneumatics": "Tyres",
+      "manteniment": "Maintenance",
+      "portabicis": "Bike racks",
+      "cascs": "Helmets",
+      "ulleres": "Eyewear",
+      "roba": "Clothing",
+      "sabates": "Shoes",
+      "nutricio": "Sports nutrition"
+    },
+    "anterior": "Previous brands",
+    "seguent": "More brands",
+    "carrusel": "{n} brands in the shop",
+    "pregunta": "Ask about {marca} on WhatsApp",
+    "missatge": "Hi! Do you have any {marca} gear?",
+    "preguntar": "Ask us",
+    "pista": "Drag or use the arrows"
   },
   "botiga": {
     "situacio": "The shop",
@@ -368,6 +434,13 @@
       "titol": "Appointment confirmed",
       "text": "See you on {data} at {hora}. We'll give you a quote before touching anything and message you on WhatsApp when it's ready*.",
       "altra": "Book another slot"
-    }
+    },
+    "situacio": "Workshop",
+    "tancar": "Close"
+  },
+  "whatsapp": {
+    "parla": "Chat with our assistant on WhatsApp",
+    "missatgeCita": "Hi! I'd like to book a workshop appointment.",
+    "alternativa": "Prefer a message?"
   }
 }

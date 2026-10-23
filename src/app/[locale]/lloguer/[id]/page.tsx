@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Capcalera } from '@/components/Capcalera';
 import { ReservaLloguer } from '@/components/reserva/ReservaLloguer';
 import { Peu } from '@/components/Seccions';
 import { Link } from '@/i18n/navigation';
@@ -33,14 +32,14 @@ export default async function FitxaLloguer({ params }: Params) {
 
   return (
     <>
-      <Capcalera />
       <main id="contingut" className={styles.pagina}>
         <div className="contenidor">
           <Link href="/#flota" className={styles.tornar}>
             ← {t('tornar')}
           </Link>
           <div className={styles.graella}>
-            <div>
+            {/* La columna esquerra es queda fixa i la dreta (el panell de reserva) fa scroll. */}
+            <div className={styles.columnaFixa}>
               <div className={styles.escenari}>
                 <div className={styles.etiquetes}>
                   <span className={`${styles.etiqueta} ${styles['etiqueta--fosca']}`}>{t('nova')}</span>

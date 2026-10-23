@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Capcalera } from '@/components/Capcalera';
 import { CitaTaller } from '@/components/reserva/CitaTaller';
 import { Peu } from '@/components/Seccions';
 import { Link } from '@/i18n/navigation';
@@ -28,7 +27,6 @@ export default async function PaginaCita({ params, searchParams }: Props) {
 
   return (
     <>
-      <Capcalera />
       <main id="contingut" className={styles.pagina}>
         <div className="contenidor">
           <Link href="/#taller" className={styles.tornar}>

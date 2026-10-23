@@ -1,8 +1,8 @@
 import { setRequestLocale } from 'next-intl/server';
-import { Capcalera } from '@/components/Capcalera';
+import { DialegCita } from '@/components/cita/DialegCita';
 import { Flota } from '@/components/Flota';
 import { Portada } from '@/components/Portada';
-import { Botiga, ComFunciona, Marques, Peu, Preguntes, Ressenyes, Rutes, Taller, Visita } from '@/components/Seccions';
+import { Botiga, ComFunciona, Equipament, Marques, Peu, Preguntes, Ressenyes, Rutes, Taller, Visita } from '@/components/Seccions';
 import { plataforma } from '@/lib/plataforma';
 
 export default async function Inici({ params }: { params: Promise<{ locale: string }> }) {
@@ -18,20 +18,21 @@ export default async function Inici({ params }: { params: Promise<{ locale: stri
 
   return (
     <>
-      <Capcalera />
       <main>
         <Portada valoracio={valoracio} />
         <Flota flota={flota} />
         <ComFunciona />
         <Taller serveis={serveis} productes={productes} />
         <Rutes />
-        <Marques />
         <Botiga />
+        <Equipament />
+        <Marques />
         <Ressenyes ressenyes={ressenyes} valoracio={valoracio} />
         <Preguntes />
         <Visita />
       </main>
       <Peu />
+      <DialegCita serveis={serveis} />
     </>
   );
 }

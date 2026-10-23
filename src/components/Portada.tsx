@@ -6,7 +6,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
-import { Link } from '@/i18n/navigation';
+import { BotoCita } from './cita/BotoCita';
 import type { Valoracio } from '@/lib/plataforma/esquema';
 import { useReducedMotion } from '@/lib/scroll-scene';
 import styles from './Portada.module.css';
@@ -63,9 +63,7 @@ export function Portada({ valoracio }: { valoracio: Valoracio }) {
           <a href="#flota" className="boto boto--blau">
             {t('ctaLloguer')} <span className="fletxa">→</span>
           </a>
-          <Link href="/taller/cita" className="boto boto--fosc-sobre-fosc">
-            {t('ctaTaller')}
-          </Link>
+          <BotoCita className="boto boto--fosc-sobre-fosc">{t('ctaTaller')}</BotoCita>
         </div>
         <p className={styles.valoracio}>
           <span className={styles.estrelles} aria-hidden="true">

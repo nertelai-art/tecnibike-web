@@ -1,4 +1,4 @@
-import { aturat, MOMENTS, ORDRE_PECES, pasActiu, tempsVideo } from './anatomia-fases';
+import { aturat, MOMENTS, ORDRE_PECES, pasActiu, progresDePeca, tempsVideo } from './anatomia-fases';
 
 describe("línia de temps de l'anatomia", () => {
   it('comença amb la bici sencera i acaba al final del vídeo', () => {
@@ -32,5 +32,16 @@ describe("línia de temps de l'anatomia", () => {
   it('els moments són dins del vídeo i en ordre', () => {
     for (let i = 1; i < MOMENTS.length; i++) expect(MOMENTS[i]!.t).toBeGreaterThan(MOMENTS[i - 1]!.t);
     expect(MOMENTS.at(-1)!.t).toBeLessThan(10.04);
+  });
+});
+
+describe("salts des de l'índex de peces", () => {
+  it('cada salt cau dins de la seva peça, amb el vídeo ja a lloc', () => {
+    MOMENTS.forEach((m, i) => {
+      const p = progresDePeca(i);
+      expect(pasActiu(p)).toBe(i);
+      expect(aturat(p)).toBe(true);
+      expect(tempsVideo(p)).toBeCloseTo(m.t);
+    });
   });
 });

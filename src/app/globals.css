@@ -133,6 +133,32 @@ p {
   transform: none;
 }
 
+/* ── Barra de scroll: blau de la marca i una bici vista des de dalt com a polze ── */
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+::-webkit-scrollbar-track {
+  background: var(--escenari-2);
+}
+::-webkit-scrollbar-thumb {
+  min-height: 64px;
+  border: 2px solid var(--escenari-2);
+  border-radius: 999px;
+  background: var(--blau-fosc) url('/img/scroll-bici.svg') center / 9px auto no-repeat;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--grafit);
+}
+/* Firefox no admet imatges a la barra: com a mínim, els colors. (A Chrome, scrollbar-color
+   anul·laria els estils de dalt, per això només s'aplica on no hi ha ::-webkit-scrollbar.) */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: var(--blau-fosc) var(--escenari-2);
+  }
+}
+
 /* ── Peces comunes ───────────────────────────────────────────────────────────────────────── */
 
 .contenidor {

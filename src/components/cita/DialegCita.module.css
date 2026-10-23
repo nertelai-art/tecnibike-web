@@ -1,0 +1,84 @@
+.dialeg {
+  width: min(760px, calc(100vw - 24px));
+  max-height: calc(100svh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radi);
+  background: var(--blanc);
+  color: var(--tinta);
+  box-shadow: 0 40px 120px -40px rgb(0 0 0 / 0.6);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.dialeg::backdrop {
+  background: rgb(18 20 23 / 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.dialeg[open] {
+  animation: entra 0.35s var(--ease);
+}
+.dialeg[open]::backdrop {
+  animation: fons 0.35s var(--ease);
+}
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+@keyframes fons {
+  from {
+    opacity: 0;
+  }
+}
+
+.caixa {
+  padding: clamp(20px, 4vw, 36px);
+}
+
+.cap {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.titol {
+  margin-top: 10px;
+  font-size: clamp(32px, 4vw, 48px);
+}
+
+.intro {
+  margin-top: 10px;
+  color: var(--tinta-2);
+  max-width: 50ch;
+}
+
+.tancar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--escenari);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tancar:hover {
+  background: var(--escenari-2);
+}
+
+.alternativa {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--linia);
+  font-size: 14px;
+  color: var(--tinta-2);
+}
+.alternativa a {
+  font-weight: 800;
+  color: #157a41;
+}

@@ -48,6 +48,24 @@ estrany.
 No fet encara: connexió amb app.nertel.ai (no hi ha API), avisos per correu i WhatsApp,
 pagament, botiga en línia, pàgines legals pròpies i logo en SVG.
 
+## Estat (23-10-2026, tercera volta)
+
+- **Taller:** l'anatomia va més suau i sura (més inèrcia, vídeo més petit que flota), amb índex de
+  peces clicable i, sempre a la vista, «Demana cita» i «Parla per WhatsApp». La cita s'obre en un
+  diàleg a la mateixa pàgina, amb la peça ja triada si es ve d'una fitxa.
+- **Equipament:** secció nova amb cascs, ulleres, roba, sabates, nutrició i accessoris, les marques
+  que en té la botiga i un enllaç a WhatsApp per preguntar talles i estoc. Les fotos són de
+  Wikimedia Commons (CC BY i BY-SA), amb els crèdits a la mateixa secció; s'han de canviar per
+  fotos de la botiga. Unsplash ja no deixa cercar sense clau i Openverse anava massa lent.
+- **Marques:** carrusel que es passa amb fletxes, arrossegant o amb el dit, filtrable per bicis,
+  components, equipament i nutrició. Logos en SVG de Wikimedia Commons (domini públic) i, per a la
+  resta, els de la web antiga del client retallats. El logo de «SiS» de la web antiga era el de
+  Shimano Index System: s'ha deixat el nom en text fins que hi hagi el bo.
+- **Correccions:** el logo de la capçalera porta a dalt de tot (abans duia al peu), la columna
+  dreta del detall de lloguer és la que fa scroll, i la barra de scroll té els colors de la web
+  amb una bici vista des de dalt.
+- Portes: 59 proves, typecheck, lint i build de producció en verd.
+
 ## 1. Objectiu
 
 Que un ciclista **reservi una bici o una cita al taller en menys de dos minuts**, des del

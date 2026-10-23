@@ -39,7 +39,19 @@ export function Capcalera() {
         {t('saltar')}
       </a>
       <div className={styles.barra}>
-        <Link href="/" className={styles.logo} aria-label={t('inici')}>
+        <Link
+          href="/"
+          className={styles.logo}
+          aria-label={t('inici')}
+          onClick={(event) => {
+            // Ja som a l'inici (potser a /#visita, tocant al peu): Next no navegaria, així que pugem.
+            if (pathname === '/') {
+              event.preventDefault();
+              history.replaceState(null, '', window.location.pathname);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
+        >
           <Logo />
         </Link>
 

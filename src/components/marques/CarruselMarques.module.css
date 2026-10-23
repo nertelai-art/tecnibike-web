@@ -1,0 +1,261 @@
+/* Carrusel de marques: targetes blanques amb el logo en gris (en color en passar-hi per sobre) i
+   una pista que surt de la columna fins a la vora dreta de la pantalla. */
+
+.carrusel {
+  --marge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  margin-top: 40px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.filtres button {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--linia);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tinta-2);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.3s var(--ease),
+    color 0.3s var(--ease),
+    border-color 0.3s var(--ease);
+}
+.filtres button:hover {
+  border-color: var(--grafit);
+  color: var(--grafit);
+}
+.filtres button[aria-pressed='true'] {
+  background: var(--grafit);
+  border-color: var(--grafit);
+  color: var(--blanc);
+}
+
+.fletxes {
+  display: flex;
+  gap: 8px;
+}
+.fletxes button {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--grafit);
+  color: var(--blanc);
+  font-size: 20px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s var(--ease),
+    opacity 0.3s var(--ease);
+}
+.fletxes button:hover:not(:disabled) {
+  background: var(--blau-fosc);
+}
+.fletxes button:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.pista {
+  display: flex;
+  gap: 14px;
+  margin: 24px 0 0;
+  padding: 6px var(--marge) 18px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--marge);
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+}
+.pista::-webkit-scrollbar {
+  display: none;
+}
+.pista:focus-visible {
+  outline: 3px solid var(--blau-fosc);
+  outline-offset: -3px;
+}
+.pista[data-arrossegant='true'] {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
+}
+.pista[data-arrossegant='true'] .targeta {
+  pointer-events: none;
+}
+
+.pista > li {
+  flex: 0 0 clamp(210px, 21vw, 260px);
+  scroll-snap-align: start;
+}
+
+.targeta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 230px;
+  border-radius: var(--radi);
+  background: var(--blanc);
+  box-shadow: 0 1px 0 var(--linia-fina);
+  color: var(--tinta);
+  text-decoration: none;
+  overflow: hidden;
+  transition:
+    transform 0.5s var(--ease),
+    box-shadow 0.5s var(--ease);
+}
+.targeta:hover,
+.targeta:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 40px -24px rgb(18 20 23 / 0.35);
+}
+.targeta:focus-visible {
+  outline: 3px solid var(--blau-fosc);
+  outline-offset: 2px;
+}
+
+.logo {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 28px 26px 12px;
+}
+.logo img {
+  /* Caixa fixa i logo contingut: els SVG sense mida pròpia no s'arronsen a zero. */
+  width: 100%;
+  height: 64px;
+  object-fit: contain;
+  /* Els logos de la web antiga porten fons blanc: es fonen amb la targeta. */
+  mix-blend-mode: multiply;
+  filter: grayscale(1) contrast(1.15);
+  opacity: 0.78;
+  transition:
+    filter 0.5s var(--ease),
+    opacity 0.5s var(--ease),
+    transform 0.5s var(--ease);
+}
+.logo img[data-vector] {
+  /* Els SVG són transparents: en negre pla, tots iguals, sigui quin sigui el color de la marca. */
+  mix-blend-mode: normal;
+  filter: brightness(0);
+  opacity: 0.72;
+}
+.targeta:hover .logo img,
+.targeta:focus-visible .logo img {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.logoText {
+  font-size: 46px;
+  font-weight: 800;
+  font-variation-settings: 'wdth' 70;
+  letter-spacing: -0.02em;
+  color: var(--grafit);
+}
+
+.peu {
+  display: grid;
+  gap: 2px;
+  padding: 14px 18px 16px;
+  border-top: 1px solid var(--linia-fina);
+}
+.peu strong {
+  font-size: 16px;
+}
+.peu span {
+  font-size: 13px;
+  color: var(--tinta-3);
+}
+
+/* «Pregunta-ho» llisca per sobre del peu en passar-hi per sobre. */
+.preguntar {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 14px 18px 16px;
+  background: var(--grafit);
+  color: var(--blanc);
+  font-size: 14px;
+  font-weight: 800;
+  transform: translateY(100%);
+  transition: transform 0.45s var(--ease);
+}
+.targeta:hover .preguntar,
+.targeta:focus-visible .preguntar {
+  transform: none;
+}
+
+.peuCarrusel {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.progres {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--linia);
+  overflow: hidden;
+}
+.progres div {
+  position: absolute;
+  inset-block: 0;
+  border-radius: 3px;
+  background: var(--taronja);
+}
+
+.ajuda {
+  font-size: 13px;
+  color: var(--tinta-3);
+  white-space: nowrap;
+}
+
+@media (hover: none) {
+  .preguntar {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .fletxes {
+    display: none;
+  }
+  .filtres {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+  }
+  .filtres button {
+    white-space: nowrap;
+  }
+  .pista > li {
+    flex-basis: 62vw;
+  }
+  .targeta {
+    min-height: 200px;
+  }
+  .ajuda {
+    display: none;
+  }
+}

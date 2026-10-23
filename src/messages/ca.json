@@ -88,7 +88,9 @@
       }
     },
     "desDe": "des de {preu}",
-    "termini": "{dies, plural, one {Llesta en 24 h} other {Llesta en # dies}}"
+    "termini": "{dies, plural, one {Llesta en 24 h} other {Llesta en # dies}}",
+    "index": "Peces de la bici",
+    "ctaCita": "Demana cita al taller"
   },
   "flota": {
     "situacio": "Lloguer",
@@ -186,10 +188,74 @@
     "titol": "La Costa Brava és el millor gimnàs.",
     "guia": "Vull una ruta guiada"
   },
+  "equipament": {
+    "situacio": "Equipament",
+    "titol": "Roba, cascs i tot el que portes a sobre.",
+    "text": "Prova-t’ho a la botiga: et triem la talla, t’ajustem el casc i et diem quina nutrició et convé per a la ruta que faràs.",
+    "marques": "Marques",
+    "preguntar": "Pregunta per talles i estoc",
+    "missatge": "Hola! Voldria informació sobre {categoria}.",
+    "credits": "Fotos de Wikimedia Commons, pendents de substituir per fotos de la botiga —",
+    "categories": {
+      "cascs": {
+        "nom": "Cascs",
+        "text": "Lleugers, ventilats i amb MIPS. Te’l posem i l’ajustem al moment."
+      },
+      "ulleres": {
+        "nom": "Ulleres",
+        "text": "Lents fotocromàtiques i de contrast per al sol de la Costa Brava."
+      },
+      "roba": {
+        "nom": "Roba",
+        "text": "Mallots, culots i armilles tècniques, d’estiu i d’hivern."
+      },
+      "sabates": {
+        "nom": "Sabates",
+        "text": "De carretera i de muntanya, amb la cala muntada i ajustada."
+      },
+      "nutricio": {
+        "nom": "Nutrició",
+        "text": "Gels, barretes i begudes per no quedar-te buit a mitja pujada."
+      },
+      "accessoris": {
+        "nom": "Accessoris",
+        "text": "Bidons, llums, manteniment, líquid antipunxades i portabicis."
+      }
+    }
+  },
   "marques": {
-    "titol": "Les marques que fem servir, les que venem.",
-    "bicis": "Bicicletes",
-    "material": "Components, roba i nutrició"
+    "situacio": "Les marques",
+    "titol": "Equipa’t com un professional.",
+    "text": "Les bicis, els components, la roba i la nutrició que fan servir els equips. Passa-les, i si en busques una, pregunta’ns-ho per WhatsApp.",
+    "filtre": "Filtra per categoria",
+    "categories": {
+      "totes": "Totes",
+      "bicis": "Bicis",
+      "components": "Components",
+      "equipament": "Equipament",
+      "nutricio": "Nutrició"
+    },
+    "tipus": {
+      "bicis": "Bicicletes",
+      "quadres": "Quadres",
+      "pedals": "Pedals",
+      "grups": "Grups i transmissió",
+      "pneumatics": "Pneumàtics",
+      "manteniment": "Manteniment",
+      "portabicis": "Portabicis",
+      "cascs": "Cascs",
+      "ulleres": "Ulleres",
+      "roba": "Roba",
+      "sabates": "Sabates",
+      "nutricio": "Nutrició esportiva"
+    },
+    "anterior": "Marques anteriors",
+    "seguent": "Més marques",
+    "carrusel": "{n} marques de la botiga",
+    "pregunta": "Pregunta per {marca} per WhatsApp",
+    "missatge": "Hola! Teniu material de {marca}?",
+    "preguntar": "Pregunta-ho",
+    "pista": "Arrossega o fes servir les fletxes"
   },
   "botiga": {
     "situacio": "La botiga",
@@ -368,6 +434,13 @@
       "titol": "Cita confirmada",
       "text": "T'esperem el {data} a les {hora}. Et direm el pressupost abans de tocar res i t'avisarem per WhatsApp quan estigui llesta*.",
       "altra": "Demana una altra cita"
-    }
+    },
+    "situacio": "Taller",
+    "tancar": "Tanca"
+  },
+  "whatsapp": {
+    "parla": "Parla amb el nostre assistent per WhatsApp",
+    "missatgeCita": "Hola! Voldria demanar cita al taller.",
+    "alternativa": "Ho prefereixes en un missatge?"
   }
 }

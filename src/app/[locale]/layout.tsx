@@ -3,6 +3,7 @@ import { Archivo } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Capcalera } from '@/components/Capcalera';
 import { routing } from '@/i18n/routing';
 import '../globals.css';
 
@@ -32,9 +33,15 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className={archivo.variable}>
+    // data-scroll-behavior: Next desactiva el scroll suau mentre navega, i torna a dalt de debò.
+    <html lang={locale} className={archivo.variable} data-scroll-behavior="smooth">
       <body>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {/* Fora de les pàgines: si fos el primer element de cada pàgina, Next no tornaria a dalt
+              en navegar perquè una capçalera fixa sempre «és a la vista». */}
+          <Capcalera />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

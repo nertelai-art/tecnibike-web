@@ -88,7 +88,9 @@
       }
     },
     "desDe": "dès {preu}",
-    "termini": "{dies, plural, one {Prêt en 24 h} other {Prêt en # jours}}"
+    "termini": "{dies, plural, one {Prêt en 24 h} other {Prêt en # jours}}",
+    "index": "Pièces du vélo",
+    "ctaCita": "Rendez-vous à l'atelier"
   },
   "flota": {
     "situacio": "Location",
@@ -186,10 +188,74 @@
     "titol": "La Costa Brava, la meilleure salle de sport.",
     "guia": "Je veux une sortie guidée"
   },
+  "equipament": {
+    "situacio": "Équipement",
+    "titol": "Vêtements, casques et tout ce que vous portez.",
+    "text": "Essayez-le au magasin : nous trouvons votre taille, réglons votre casque et vous conseillons la nutrition adaptée à votre sortie.",
+    "marques": "Marques",
+    "preguntar": "Demander tailles et stock",
+    "missatge": "Bonjour ! Je voudrais des informations sur : {categoria}.",
+    "credits": "Photos de Wikimedia Commons, à remplacer par des photos du magasin —",
+    "categories": {
+      "cascs": {
+        "nom": "Casques",
+        "text": "Légers, ventilés et avec MIPS. Nous le réglons sur place."
+      },
+      "ulleres": {
+        "nom": "Lunettes",
+        "text": "Verres photochromiques et de contraste pour le soleil de la Costa Brava."
+      },
+      "roba": {
+        "nom": "Vêtements",
+        "text": "Maillots, cuissards et gilets techniques, été comme hiver."
+      },
+      "sabates": {
+        "nom": "Chaussures",
+        "text": "Route et VTT, avec les cales montées et réglées."
+      },
+      "nutricio": {
+        "nom": "Nutrition",
+        "text": "Gels, barres et boissons pour ne jamais être à court en pleine montée."
+      },
+      "accessoris": {
+        "nom": "Accessoires",
+        "text": "Bidons, éclairages, entretien, préventif anti-crevaison et porte-vélos."
+      }
+    }
+  },
   "marques": {
-    "titol": "Les marques que nous roulons sont celles que nous vendons.",
-    "bicis": "Vélos",
-    "material": "Composants, vêtements et nutrition"
+    "situacio": "Les marques",
+    "titol": "Équipez-vous comme un pro.",
+    "text": "Les vélos, les composants, les vêtements et la nutrition des équipes pros. Faites-les défiler, et si vous en cherchez une, demandez-nous sur WhatsApp.",
+    "filtre": "Filtrer par catégorie",
+    "categories": {
+      "totes": "Toutes",
+      "bicis": "Vélos",
+      "components": "Composants",
+      "equipament": "Équipement",
+      "nutricio": "Nutrition"
+    },
+    "tipus": {
+      "bicis": "Vélos",
+      "quadres": "Cadres",
+      "pedals": "Pédales",
+      "grups": "Groupes et transmission",
+      "pneumatics": "Pneus",
+      "manteniment": "Entretien",
+      "portabicis": "Porte-vélos",
+      "cascs": "Casques",
+      "ulleres": "Lunettes",
+      "roba": "Vêtements",
+      "sabates": "Chaussures",
+      "nutricio": "Nutrition sportive"
+    },
+    "anterior": "Marques précédentes",
+    "seguent": "Plus de marques",
+    "carrusel": "{n} marques du magasin",
+    "pregunta": "Demander pour {marca} sur WhatsApp",
+    "missatge": "Bonjour ! Avez-vous du matériel {marca} ?",
+    "preguntar": "Demandez-nous",
+    "pista": "Faites glisser ou utilisez les flèches"
   },
   "botiga": {
     "situacio": "La boutique",
@@ -368,6 +434,13 @@
       "titol": "Rendez-vous confirmé",
       "text": "Rendez-vous le {data} à {hora}. Nous vous donnerons un devis avant de toucher à quoi que ce soit et vous préviendrons sur WhatsApp quand il sera prêt*.",
       "altra": "Prendre un autre rendez-vous"
-    }
+    },
+    "situacio": "Atelier",
+    "tancar": "Fermer"
+  },
+  "whatsapp": {
+    "parla": "Parlez avec notre assistant sur WhatsApp",
+    "missatgeCita": "Bonjour ! Je voudrais prendre rendez-vous à l'atelier.",
+    "alternativa": "Vous préférez un message ?"
   }
 }

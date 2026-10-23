@@ -1,10 +1,13 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
+import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
 import type { Producte, Ressenya, ServeiTaller, Valoracio } from '@/lib/plataforma/esquema';
+import { enllacWhatsapp, TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
 import { formatEuros } from '@/lib/preus';
-import { Link } from '@/i18n/navigation';
 import { ORDRE_PECES } from './anatomia/anatomia-fases';
 import { AnatomiaTaller } from './anatomia/AnatomiaTaller';
+import { BotoCita } from './cita/BotoCita';
+import { CarruselMarques } from './marques/CarruselMarques';
 import { MapaRutes } from './rutes/MapaRutes';
 import { Revela } from './Revela';
 import styles from './Seccions.module.css';
@@ -59,9 +62,9 @@ export async function Taller({ serveis, productes }: { serveis: ServeiTaller[]; 
             <li>{t('avantatges.cafe')}</li>
             <li>{t('electrica')}</li>
           </ul>
-          <Link href="/taller/cita" className="boto boto--fosc-sobre-fosc">
+          <BotoCita className="boto boto--fosc-sobre-fosc">
             {t('reservar')} <span className="fletxa">→</span>
-          </Link>
+          </BotoCita>
         </div>
         <Revela className={styles.llistaServeis}>
           <table>
@@ -114,30 +117,18 @@ export async function Rutes() {
   );
 }
 
-const MARQUES_BICIS = ['Cannondale', 'Scott', 'Specialized', 'Pinarello', 'Colnago'];
-const MARQUES_MATERIAL = ['Shimano', 'SRAM', 'Continental', 'Pirelli', 'Muc-Off', 'Thule', 'POC', 'Gobik', 'Kask', 'Assos', 'Oakley', 'DMT', 'Maurten', '226ERS', 'SiS'];
-
 export async function Marques() {
   const t = await getTranslations('marques');
   return (
-    <section className={styles.marques} aria-labelledby="marques-titol">
+    <section id="marques" className={`seccio ${styles.marques}`} aria-labelledby="marques-titol">
       <div className="contenidor">
-        <h2 id="marques-titol" className="sr-only">
+        <p className="situacio">{t('situacio')}</p>
+        <h2 id="marques-titol" className="titol-seccio">
           {t('titol')}
         </h2>
-        <p className={styles.etiquetaMarques}>{t('bicis')}</p>
-        <ul className={styles.marquesBicis}>
-          {MARQUES_BICIS.map((marca) => (
-            <li key={marca}>{marca}</li>
-          ))}
-        </ul>
-        <p className={styles.etiquetaMarques}>{t('material')}</p>
-        <ul className={styles.marquesMaterial}>
-          {MARQUES_MATERIAL.map((marca) => (
-            <li key={marca}>{marca}</li>
-          ))}
-        </ul>
+        <p className="intro">{t('text')}</p>
       </div>
+      <CarruselMarques />
     </section>
   );
 }
@@ -168,6 +159,70 @@ export async function Botiga() {
             </Revela>
           ))}
         </ul>
+      </div>
+    </section>
+  );
+}
+
+export async function Equipament() {
+  const t = await getTranslations('equipament');
+  return (
+    <section id="equipament" className={`seccio ${styles.equipament}`} aria-labelledby="equipament-titol">
+      <div className="contenidor">
+        <div className={styles.capEquipament}>
+          <div>
+            <p className="situacio">{t('situacio')}</p>
+            <h2 id="equipament-titol" className="titol-seccio">
+              {t('titol')}
+            </h2>
+          </div>
+          <p className="intro">{t('text')}</p>
+        </div>
+        <ul className={styles.equipamentGraella}>
+          {CATEGORIES_EQUIPAMENT.map((c, index) => (
+            <Revela as="li" key={c} retard={(index % 3) * 80} className={styles.categoria}>
+              <Image src={FOTOS_EQUIPAMENT[c].src} alt="" fill sizes="(min-width: 980px) 30vw, (min-width: 640px) 45vw, 90vw" className={styles.fotoCategoria} />
+              <div className={styles.textCategoria}>
+                <h3>{t(`categories.${c}.nom`)}</h3>
+                <p>{t(`categories.${c}.text`)}</p>
+                <p className={styles.marquesCategoria}>
+                  <span className="sr-only">{t('marques')}: </span>
+                  {marquesDeCategoria(c)
+                    .map((m) => m.nom)
+                    .join(' · ')}
+                </p>
+                <a
+                  className={styles.enllacCategoria}
+                  href={enllacWhatsapp(t('missatge', { categoria: t(`categories.${c}.nom`).toLowerCase() }))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t('preguntar')} <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </Revela>
+          ))}
+        </ul>
+        <p className={styles.credits}>
+          {t('credits')}{' '}
+          {CATEGORIES_EQUIPAMENT.map((c, i) => {
+            const foto = FOTOS_EQUIPAMENT[c];
+            return (
+              <span key={c}>
+                {i > 0 && ' · '}
+                {t(`categories.${c}.nom`)}:{' '}
+                <a href={foto.font} target="_blank" rel="noopener noreferrer">
+                  {foto.autor}
+                </a>{' '}
+                (
+                <a href={foto.llicenciaUrl} target="_blank" rel="noopener noreferrer license">
+                  {foto.llicencia}
+                </a>
+                )
+              </span>
+            );
+          })}
+        </p>
       </div>
     </section>
   );
@@ -246,9 +301,6 @@ export async function Preguntes() {
   );
 }
 
-const TELEFON = '+34972662951';
-/** Número del botó de WhatsApp de la web d'ara. Quan hi hagi l'agent de Nertel, serà el seu. */
-const WHATSAPP = '34658909455';
 
 export async function Visita() {
   const t = await getTranslations('visita');
@@ -287,11 +339,11 @@ export async function Visita() {
             {t('poble')}
           </address>
           <div className={styles.contacte}>
-            <a className="boto boto--fosc-sobre-fosc" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer">
+            <a className="boto boto--fosc-sobre-fosc" href={enllacWhatsapp()} target="_blank" rel="noopener noreferrer">
               {t('whatsapp')} <span className="fletxa">→</span>
             </a>
             <a className={styles.enllacClar} href={`tel:${TELEFON}`}>
-              {t('telefon')} · 972 66 29 51
+              {t('telefon')} · {TELEFON_VISIBLE}
             </a>
             <a className={styles.enllacClar} href="mailto:info@tecnibike.es">
               info@tecnibike.es

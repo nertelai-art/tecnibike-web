@@ -28,8 +28,11 @@ export const ORDRE_PECES: readonly Peca[] = MOMENTS.map((m) => m.peca);
 
 /** Part del scroll del principi amb la bici sencera i la introducció. */
 const INTRO = 0.1;
-/** Dins del tram de cada peça, la part que avança el vídeo (la resta s'hi atura). */
-const MOVIMENT = 0.55;
+/**
+ * Dins del tram de cada peça, la part que avança el vídeo; la resta és una aturada curta. Com més
+ * llarga, més contínua i flotant es veu la sortida de les peces.
+ */
+const MOVIMENT = 0.82;
 
 const tram = (p: number) => (Math.min(1, Math.max(0, p)) - INTRO) / ((1 - INTRO) / MOMENTS.length);
 
@@ -46,14 +49,20 @@ export function tempsVideo(p: number): number {
   const inici = pas === 0 ? 0 : MOMENTS[pas - 1]!.t;
   const fi = MOMENTS[pas]!.t;
   const dins = tram(p) - pas;
-  const avanc = Math.min(1, dins / MOVIMENT);
-  // Arrencada i arribada suaus: la peça accelera en sortir i frena en arribar.
-  const suau = avanc < 0.5 ? 2 * avanc * avanc : 1 - Math.pow(-2 * avanc + 2, 2) / 2;
+  const x = Math.min(1, dins / MOVIMENT);
+  // «Smootherstep»: velocitat i acceleració zero als dos extrems, de manera que cada peça surt i
+  // s'atura sense cops, com si suressin.
+  const suau = x * x * x * (x * (6 * x - 15) + 10);
   return inici + (fi - inici) * suau;
 }
 
-/** Si la peça ja és a lloc i s'està aturat (per mostrar-ne l'etiqueta). */
+/** Si la peça ja ha sortit prou per mostrar-ne l'etiqueta (una mica abans d'aturar-se). */
 export function aturat(p: number): boolean {
   const pas = pasActiu(p);
-  return pas >= 0 && tram(p) - pas >= MOVIMENT;
+  return pas >= 0 && tram(p) - pas >= MOVIMENT * 0.6;
+}
+
+/** Progrés de scroll (0–1) en què la peça `i` ja és a lloc: per saltar-hi des de l'índex. */
+export function progresDePeca(i: number): number {
+  return INTRO + ((i + MOVIMENT + (1 - MOVIMENT) / 2) * (1 - INTRO)) / MOMENTS.length;
 }

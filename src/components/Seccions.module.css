@@ -184,48 +184,132 @@
 /* ── Marques ── */
 
 .marques {
-  padding-block: 64px;
   background: var(--escenari);
   border-block: 1px solid var(--linia-fina);
 }
 
-.etiquetaMarques {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--tinta-3);
+/* ── Equipament: fotos verticals amb el text a sobre, en una graella de 3 × 2 ── */
+
+.equipament {
+  background: var(--grafit);
+  color: var(--blanc);
+}
+.equipament :global(.situacio) {
+  color: rgb(255 255 255 / 0.7);
+}
+.equipament :global(.intro) {
+  color: rgb(255 255 255 / 0.72);
 }
 
-.marquesBicis {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 12px 32px;
-  margin: 14px 0 36px;
+.capEquipament {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: end;
+  gap: 24px 48px;
+}
+
+.equipamentGraella {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 56px 0 0;
   padding: 0;
   list-style: none;
 }
-.marquesBicis li {
-  font-size: clamp(30px, 4.6vw, 64px);
+
+.categoria {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radi);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--grafit-2);
+}
+.categoria::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgb(18 20 23 / 0.94) 0%, rgb(18 20 23 / 0.7) 38%, rgb(18 20 23 / 0) 70%);
+}
+
+.fotoCategoria {
+  z-index: -2;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+.categoria:hover .fotoCategoria,
+.categoria:focus-within .fotoCategoria {
+  transform: scale(1.05);
+}
+
+.textCategoria {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  gap: 8px;
+  padding: 24px;
+}
+.textCategoria h3 {
+  font-size: clamp(28px, 2.6vw, 38px);
+}
+.textCategoria p {
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.marquesCategoria {
+  font-size: 12px !important;
   font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-variation-settings: 'wdth' 64;
-  letter-spacing: -0.01em;
-  color: var(--grafit);
+  color: var(--taronja) !important;
 }
 
-.marquesMaterial {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 24px;
-  margin: 12px 0 0;
-  padding: 0;
-  list-style: none;
+.enllacCategoria {
+  justify-self: start;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 2px solid var(--taronja);
 }
-.marquesMaterial li {
-  font-weight: 600;
-  color: var(--tinta-2);
+.enllacCategoria:hover {
+  color: var(--taronja);
+}
+/* Tota la targeta és clicable, però l'enllaç és un de sol. */
+.enllacCategoria::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.credits {
+  margin-top: 24px;
+  font-size: 12px;
+  color: rgb(255 255 255 / 0.5);
+}
+.credits a {
+  color: inherit;
+}
+
+@media (max-width: 980px) {
+  .capEquipament {
+    grid-template-columns: 1fr;
+  }
+  .equipamentGraella {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .equipamentGraella {
+    grid-template-columns: 1fr;
+  }
+  .categoria {
+    aspect-ratio: 4 / 4.4;
+  }
 }
 
 /* ── Botiga ── */

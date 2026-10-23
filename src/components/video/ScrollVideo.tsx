@@ -38,6 +38,11 @@ interface ScrollVideoProps {
   remap?: (local: number, index: number) => number;
   /** Classe per a la capa del vídeo, per posar-lo dins d'una caixa en lloc de pantalla completa. */
   mediaClassName?: string;
+  /**
+   * Com de de pressa el vídeo atrapa el scroll (més baix = més suau i flotant, amb més inèrcia).
+   * Per defecte 14, gairebé enganxat al dit.
+   */
+  smoothing?: number;
 }
 
 const DEFAULT_SCROLL = 1.3;
@@ -66,7 +71,7 @@ const cover: CSSProperties = { position: "absolute", inset: 0, width: "100%", he
  * Cada clip es baixa com a `Blob` (sempre cercable, encara que el servidor no
  * serveixi peticions de rang) i només es carreguen l'actual i els veïns.
  */
-export function ScrollVideo({ clips, label, onFrame, offsetTop = 0, fade = 0.06, children, remap, mediaClassName }: ScrollVideoProps) {
+export function ScrollVideo({ clips, label, onFrame, offsetTop = 0, fade = 0.06, children, remap, mediaClassName, smoothing = 14 }: ScrollVideoProps) {
   const reduced = useSyncExternalStore(
     subscribeReducedMotion,
     () => window.matchMedia(reducedMotionQuery).matches,
@@ -192,7 +197,7 @@ export function ScrollVideo({ clips, label, onFrame, offsetTop = 0, fade = 0.06,
       // `delta` limitat: després d'una pausa de pestanya no ha de fer un salt.
       const delta = Math.min((now - lastTime) / 1000, 1 / 30);
       lastTime = now;
-      smoothed += (target - smoothed) * (1 - Math.exp(-delta * 14));
+      smoothed += (target - smoothed) * (1 - Math.exp(-delta * smoothing));
       if (Math.abs(target - smoothed) < 0.0004) smoothed = target;
       apply(smoothed);
       if (smoothed !== target) raf = requestAnimationFrame(tick);
@@ -232,7 +237,7 @@ export function ScrollVideo({ clips, label, onFrame, offsetTop = 0, fade = 0.06,
     };
     // `clips` i `spans` entren per les seves claus: un array nou a cada render no ha de reiniciar-ho tot.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reduced, spansKey, sourcesKey, offsetTop, fade]);
+  }, [reduced, spansKey, sourcesKey, offsetTop, fade, smoothing]);
 
   return (
     <div
