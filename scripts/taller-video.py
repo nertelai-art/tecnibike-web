@@ -1,10 +1,10 @@
 # Munta el vídeo del taller: la bici que es desmunta (retallada fotograma a fotograma del vídeo de
 # l'anatomia) sobre el fons del taller, amb una ombra suau a terra.
 #
-#   python scripts/taller-video.py <fotogrames> <mascares> <fons.png> <sortida>
+#   python scripts/taller-video.py <fotogrames> <mascares> <fons.png> <sortida> [ample]
 #
 # <fotogrames> i <mascares>: PNG numerats (0001.png…) del vídeo original i de la màscara de la bici
-# (rembg, model isnet-general-use). La màscara es suavitza en el temps (1-2-1) perquè les vores no
+# (rembg, model isnet-general-use; poden ser més petites que els fotogrames, s'amplien). La màscara es suavitza en el temps (1-2-1) perquè les vores no
 # tremolin. Escriu els fotogrames compostos a <sortida>; després es codifica amb ffmpeg.
 # Requereix Pillow i NumPy.
 
@@ -16,7 +16,9 @@ from PIL import Image, ImageDraw, ImageFilter
 
 fotogrames, mascares, fons_png, sortida = sys.argv[1:5]
 
-W, H = 1600, 900
+# Escena 16:9. A 2560 px, la bici (62 %) surt a la mida del vídeo original, sense ampliar-la.
+W = int(sys.argv[5]) if len(sys.argv) > 5 else 2560
+H = W * 9 // 16
 # On va el fotograma original de la bici dins l'escena (fraccions de l'escena). Ha de coincidir amb
 # ENQUADRE de src/components/anatomia/anatomia-fases.ts.
 X0, Y0, AMPLE = 0.36, 0.289, 0.62
@@ -36,7 +38,7 @@ bx, by = round(W * X0), round(H * Y0)
 # Ombra a terra: una el·lipse fosca i molt difuminada sota les rodes.
 ombra = Image.new('L', (W, H), 0)
 ImageDraw.Draw(ombra).ellipse([bx + bw * 0.06, by + bh * 0.9, bx + bw * 0.97, by + bh * 0.98], fill=170)
-ombra = np.asarray(ombra.filter(ImageFilter.GaussianBlur(28))).astype(np.float32)[..., None] / 255
+ombra = np.asarray(ombra.filter(ImageFilter.GaussianBlur(28 * W / 1600))).astype(np.float32)[..., None] / 255
 fons = fons * (1 - 0.45 * ombra)
 
 def mascara(i):
