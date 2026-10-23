@@ -77,8 +77,6 @@
   padding: 6px var(--marge) 18px;
   list-style: none;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--marge);
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   cursor: grab;
@@ -91,7 +89,6 @@
   outline-offset: -3px;
 }
 .pista[data-arrossegant='true'] {
-  scroll-snap-type: none;
   cursor: grabbing;
   user-select: none;
 }
@@ -101,7 +98,22 @@
 
 .pista > li {
   flex: 0 0 clamp(210px, 21vw, 260px);
-  scroll-snap-align: start;
+  /* Entrada esglaonada en canviar de categoria (--i és la posició, fins a 8). */
+  animation: entra 0.6s var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+}
+.pista[data-sortint] > li {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+  transition:
+    opacity 0.28s var(--ease),
+    transform 0.28s var(--ease);
 }
 
 .targeta {
@@ -218,9 +230,11 @@
 }
 .progres div {
   position: absolute;
-  inset-block: 0;
+  inset: 0;
   border-radius: 3px;
   background: var(--taronja);
+  transform-origin: left;
+  transform: scaleX(0);
 }
 
 .ajuda {

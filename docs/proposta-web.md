@@ -66,6 +66,19 @@ pagament, botiga en línia, pàgines legals pròpies i logo en SVG.
   amb una bici vista des de dalt.
 - Portes: 59 proves, typecheck, lint i build de producció en verd.
 
+## Estat (23-10-2026, quarta volta)
+
+- **Barra de scroll de l'inici:** en lloc de la icona, la Pinarello de la flota (foto real separada
+  en quadre i rodes) baixa per la vora dreta i les rodes giren el que recorre. Es pot arrossegar.
+- **Taller:** text i vídeo junts i centrats; el vídeo ja no sura sol i s'atura quan s'atura el
+  scroll (menys inèrcia i vídeo amb fotogrames clau cada 3 fotogrames, sense salts). Les fitxes
+  ensenyen les millors peces i les reparacions, sense preus ni descripcions. Botons de cita i
+  WhatsApp grans. Fora la llista d'avantatges i la taula de preus.
+- **Equipament:** cada targeta és un enllaç a la seva categoria de la botiga, amb els articles de
+  la plataforma (ara de mostra) i reserva per WhatsApp, a punt per a la venda en línia.
+- **Marques:** el carrusel passa sol i sense final, s'atura amb el ratolí, i en canviar de
+  categoria les targetes surten i entren amb un fos.
+
 ## 1. Objectiu
 
 Que un ciclista **reservi una bici o una cita al taller en menys de dos minuts**, des del

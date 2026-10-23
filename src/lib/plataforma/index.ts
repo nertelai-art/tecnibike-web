@@ -1,8 +1,9 @@
 import { sumaDies } from '../calendari';
 import { totalReserva } from '../preus';
-import { flota, preusAccessoris, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
+import { articles, flota, preusAccessoris, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
 import { frangesTaller, unitatsLliures } from './disponibilitat-prova';
 import {
+  article,
   biciLloguer,
   producte,
   citaTaller,
@@ -11,7 +12,9 @@ import {
   serveiTaller,
   valoracio,
   type Accessori,
+  type Article,
   type BiciLloguer,
+  type CategoriaEquipament,
   type CitaTaller,
   type Confirmacio,
   type FranjaTaller,
@@ -48,6 +51,8 @@ export interface Plataforma {
   crearCitaTaller(cita: CitaTaller): Promise<Confirmacio>;
   /** Productes de la botiga que milloren cada peça (el catàleg de venda de la plataforma). */
   productes(): Promise<Producte[]>;
+  /** Articles de la botiga d'equipament d'una categoria. */
+  articles(categoria: CategoriaEquipament): Promise<Article[]>;
   valoracio(): Promise<Valoracio>;
   ressenyes(): Promise<Ressenya[]>;
 }
@@ -119,6 +124,7 @@ export function crearPlataformaProva({ generaCodi }: { generaCodi: () => string 
       return confirmacio;
     },
     productes: async () => producte.array().parse(productes),
+    articles: async (categoria) => article.array().parse(articles.filter((a) => a.categoria === categoria)),
     valoracio: async () => valoracio.parse(valoracioGoogle),
     ressenyes: async () => ressenya.array().parse(ressenyes),
   };

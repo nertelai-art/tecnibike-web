@@ -2,30 +2,29 @@
 
 // Anatomia d'una bici, dins la secció de taller: una bici real es desmunta peça a peça amb el
 // scroll (vídeo fotorealista generat a partir de les fotos de la Pinarello del client). A cada
-// peça, una etiqueta l'assenyala i la fitxa explica què fa, què hi guanyes millorant-la, el servei
-// de taller i els productes de la botiga. Sempre a la vista: demanar cita i parlar per WhatsApp.
+// peça, una etiqueta l'assenyala i la fitxa mostra les millors peces de la botiga i les reparacions
+// del taller, sense preus. Sempre a la vista i ben grans: demanar cita i parlar per WhatsApp.
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 import { BotoCita } from '@/components/cita/BotoCita';
 import { ScrollVideo, type ScrollVideoFrame } from '@/components/video/ScrollVideo';
 import { enllacWhatsapp } from '@/lib/contacte';
-import type { Peca, Producte, ServeiTaller } from '@/lib/plataforma/esquema';
-import { formatEuros } from '@/lib/preus';
+import type { Peca, Producte } from '@/lib/plataforma/esquema';
 import { useReducedMotion } from '@/lib/scroll-scene';
 import { aturat, MOMENTS, pasActiu, progresDePeca, tempsVideo } from './anatomia-fases';
 import styles from './AnatomiaTaller.module.css';
 
 const DURADA = 10.04;
-/** Inèrcia del vídeo respecte del scroll: baixa perquè les peces surin en lloc de saltar. */
-const SUAVITAT = 4.5;
+/** Inèrcia del vídeo respecte del scroll: prou per suavitzar la roda del ratolí, però s'atura de
+ *  seguida quan s'atura el scroll (no es mou sol). */
+const SUAVITAT = 12;
 
-type Props = { serveis: ServeiTaller[]; productes: Producte[] };
+type Props = { productes: Producte[] };
 
-export function AnatomiaTaller({ serveis, productes }: Props) {
+export function AnatomiaTaller({ productes }: Props) {
   const t = useTranslations('anatomia');
   const tw = useTranslations('whatsapp');
-  const locale = useLocale();
   const reduced = useReducedMotion();
   const pista = useRef<HTMLDivElement>(null);
   const fitxes = useRef<HTMLOListElement>(null);
@@ -55,48 +54,20 @@ export function AnatomiaTaller({ serveis, productes }: Props) {
     window.scrollTo({ top: inici + recorregut * progresDePeca(i), behavior: 'smooth' });
   };
 
-  const euros = (c: number) => formatEuros(c, locale);
-
   const fitxa = (peca: Peca, i: number) => {
-    const servei = serveis.find((s) => s.peca === peca);
     const delaPeca = productes.filter((p) => p.peca === peca).slice(0, 3);
     return (
       <li key={peca} className={styles.fitxa} data-state={reduced ? 'actiu' : 'pendent'}>
         <h3 className={styles.nom}>{t(`peces.${peca}.nom`)}</h3>
-        <p className={styles.funcio}>{t(`peces.${peca}.funcio`)}</p>
-        <p className={styles.potencial}>
-          <strong>{t('potencial')}</strong> {t(`peces.${peca}.potencial`)}
-        </p>
-
         <div className={styles.blocs}>
-          {servei && (
-            <div className={styles.bloc}>
-              <p className={styles.etiquetaBloc}>{t('alTaller')}</p>
-              <p className={styles.linia}>
-                <span>{t(`peces.${peca}.servei`)}</span>
-                <strong>
-                  {t('desDe', { preu: euros(servei.desDe) })}
-                  {servei.ficticia && <span className="mostra">*</span>}
-                </strong>
-              </p>
-              <BotoCita peca={peca} className={styles.enllac}>
-                {t('reservar')} →
-              </BotoCita>
-            </div>
-          )}
           {delaPeca.length > 0 && (
             <div className={styles.bloc}>
-              <p className={styles.etiquetaBloc}>{t('aLaBotiga')}</p>
-              <ul className={styles.productes}>
+              <p className={styles.etiquetaBloc}>{t('millorsPeces')}</p>
+              <ul className={styles.llista}>
                 {delaPeca.map((p) => (
-                  <li key={p.id} className={styles.linia}>
-                    <span>
-                      <small>{p.marca}</small> {p.nom}
-                    </span>
-                    <strong>
-                      {euros(p.preu)}
-                      {p.ficticia && <span className="mostra">*</span>}
-                    </strong>
+                  <li key={p.id}>
+                    <small>{p.marca}</small> {p.nom}
+                    {p.ficticia && <span className="mostra">*</span>}
                   </li>
                 ))}
               </ul>
@@ -105,6 +76,17 @@ export function AnatomiaTaller({ serveis, productes }: Props) {
               </a>
             </div>
           )}
+          <div className={styles.bloc}>
+            <p className={styles.etiquetaBloc}>{t('reparacions')}</p>
+            <ul className={styles.llista}>
+              {(['a', 'b', 'c'] as const).map((r) => (
+                <li key={r}>{t(`peces.${peca}.reparacions.${r}`)}</li>
+              ))}
+            </ul>
+            <BotoCita peca={peca} className={styles.enllac}>
+              {t('reservar')} →
+            </BotoCita>
+          </div>
         </div>
         <span className={styles.numeroFons} aria-hidden="true">
           {String(i + 1).padStart(2, '0')}

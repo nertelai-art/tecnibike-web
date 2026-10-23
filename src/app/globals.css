@@ -133,29 +133,38 @@ p {
   transform: none;
 }
 
-/* ── Barra de scroll: blau de la marca i una bici vista des de dalt com a polze ── */
+/* ── Barra de scroll: colors de la marca. A l'inici, amb ratolí i pantalla ampla, la substitueix la
+   bici que roda (BarraBici) i la del navegador s'amaga. ── */
 
 ::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
 }
 ::-webkit-scrollbar-track {
   background: var(--escenari-2);
 }
 ::-webkit-scrollbar-thumb {
-  min-height: 64px;
-  border: 2px solid var(--escenari-2);
+  min-height: 48px;
+  border: 3px solid var(--escenari-2);
   border-radius: 999px;
-  background: var(--blau-fosc) url('/img/scroll-bici.svg') center / 9px auto no-repeat;
+  background: var(--blau-fosc);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--grafit);
+  background: var(--grafit);
 }
-/* Firefox no admet imatges a la barra: com a mínim, els colors. (A Chrome, scrollbar-color
-   anul·laria els estils de dalt, per això només s'aplica on no hi ha ::-webkit-scrollbar.) */
+/* A Chrome, scrollbar-color anul·laria els estils de dalt: només on no hi ha ::-webkit-scrollbar. */
 @supports not selector(::-webkit-scrollbar) {
   html {
     scrollbar-color: var(--blau-fosc) var(--escenari-2);
+  }
+}
+
+@media (min-width: 1000px) and (pointer: fine) {
+  html:has([data-barra-bici]) {
+    scrollbar-width: none;
+  }
+  html:has([data-barra-bici])::-webkit-scrollbar {
+    display: none;
   }
 }
 

@@ -40,57 +40,73 @@
   "anatomia": {
     "situacio": "Anatomy of a bike",
     "titol": "We take it apart, piece by piece.",
-    "intro": "A high-end road bike like the ones we fix every day. Scroll down to see what each part does, what you gain by upgrading it and how we keep it in shape.",
+    "intro": "A high-end road bike, like the ones we fix every day. Scroll down and, for each part, see the best upgrades we stock and the repairs we do.",
     "pista": "Scroll to take it apart",
-    "potencial": "Upgrade it and:",
-    "alTaller": "In the workshop",
-    "aLaBotiga": "In the shop",
-    "reservar": "Book this service",
-    "preguntar": "Ask us on WhatsApp",
+    "reservar": "Book it",
+    "preguntar": "Ask us",
     "missatgeWhatsapp": "Hi! I'd like to upgrade: {peca}. What do you recommend?",
     "sr": "A red road bike comes apart piece by piece on a mountain road: wheels, brakes, drivetrain, handlebar, saddle and finally the bare frame.",
     "peces": {
       "rodes": {
         "nom": "Wheels",
         "servei": "Punctures, tubeless and truing",
-        "funcio": "They're the only thing touching the road: the tyre decides grip, and the wheel how much energy each pedal stroke loses.",
-        "potencial": "lighter wheels and tubeless tyres make the bike livelier on climbs and safer in corners. It's the upgrade you feel the most."
+        "reparacions": {
+          "a": "Punctures and tubeless",
+          "b": "Wheel truing",
+          "c": "Tyre fitting"
+        }
       },
       "frens": {
         "nom": "Brakes",
         "servei": "Bleed and pads",
-        "funcio": "Hydraulic disc brakes stop the bike with two fingers, rain or shine.",
-        "potencial": "new pads and rotors stop you sooner, without squealing, so you take corners with more confidence."
+        "reparacions": {
+          "a": "Hydraulic brake bleed",
+          "b": "Pads and rotors",
+          "c": "Caliper alignment"
+        }
       },
       "transmissio": {
         "nom": "Drivetrain",
         "servei": "Gear, chain and cassette tune-up",
-        "funcio": "Chainring, chain, cassette and derailleur carry the power from your legs to the rear wheel.",
-        "potencial": "a healthy chain and cassette shift without skipping or noise. A worn chain eats the cogs: replacing it on time is far cheaper."
+        "reparacions": {
+          "a": "Gear tuning",
+          "b": "Chain and cassette",
+          "c": "Drivetrain cleaning"
+        }
       },
       "direccio": {
         "nom": "Cockpit",
         "servei": "Headset, stem and bar tape",
-        "funcio": "Handlebar, stem and levers: you steer, shift and brake from here.",
-        "potencial": "good bar tape and a bar sized for you take strain off your hands and shoulders on long rides."
+        "reparacions": {
+          "a": "Headset service",
+          "b": "Bar tape",
+          "c": "Lever setup"
+        }
       },
       "seient": {
         "nom": "Saddle",
         "servei": "Position adjustment (bike fitting)",
-        "funcio": "Saddle and seatpost set the height and setback you pedal from.",
-        "potencial": "with the saddle set just right you pedal stronger and without knee or back pain."
+        "reparacions": {
+          "a": "Bike fitting",
+          "b": "Saddle height and setback",
+          "c": "Saddle swap"
+        }
       },
       "quadre": {
         "nom": "Frame",
         "servei": "Full service",
-        "funcio": "The heart of the bike, where everything joins. A carbon frame is stiff where you push and comfortable where it should absorb.",
-        "potencial": "a full service checks it inside and out and leaves every part adjusted like day one."
+        "reparacions": {
+          "a": "Full service",
+          "b": "Frame inspection",
+          "c": "E-bike diagnostics"
+        }
       }
     },
     "desDe": "from {preu}",
-    "termini": "{dies, plural, one {Ready in 24 h} other {Ready in # days}}",
     "index": "Bike parts",
-    "ctaCita": "Book the workshop"
+    "ctaCita": "Book the workshop",
+    "millorsPeces": "The best parts",
+    "reparacions": "Repairs"
   },
   "flota": {
     "situacio": "Rental",
@@ -140,10 +156,6 @@
     "situacio": "Workshop",
     "titol": "Mechanics who get your bike.",
     "intro": "Over 15 years repairing road, mountain and electric bikes. Book a slot, drop it off, and we'll message you on WhatsApp when it's ready.",
-    "servei": "Service",
-    "preu": "Price",
-    "termini": "Turnaround",
-    "reservar": "Book a slot",
     "avantatges": {
       "whatsapp": "WhatsApp message when it's ready",
       "pressupost": "A quote before we touch anything",
@@ -193,9 +205,6 @@
     "titol": "Clothing, helmets and everything you wear.",
     "text": "Try it on in the shop: we find your size, fit your helmet and tell you which nutrition suits the ride you are planning.",
     "marques": "Brands",
-    "preguntar": "Ask about sizes and stock",
-    "missatge": "Hi! I would like some information about {categoria}.",
-    "credits": "Photos from Wikimedia Commons, to be replaced with photos of the shop —",
     "categories": {
       "cascs": {
         "nom": "Helmets",
@@ -222,6 +231,12 @@
         "text": "Bottles, lights, maintenance, tubeless sealant and bike racks."
       }
     }
+  },
+  "botigaCategoria": {
+    "tornar": "Back to home",
+    "aviat": "Online shopping is coming soon. For now, reserve it on WhatsApp and pick it up at the shop: we will have it ready.",
+    "reservar": "Reserve on WhatsApp",
+    "missatge": "Hi! I would like to reserve: {article}."
   },
   "marques": {
     "situacio": "The brands",
@@ -255,7 +270,7 @@
     "pregunta": "Ask about {marca} on WhatsApp",
     "missatge": "Hi! Do you have any {marca} gear?",
     "preguntar": "Ask us",
-    "pista": "Drag or use the arrows"
+    "pista": "Hover to pause"
   },
   "botiga": {
     "situacio": "The shop",
@@ -323,7 +338,8 @@
     "privacitat": "Privacy",
     "galetes": "Cookies",
     "drets": "© {any} Tecnibike Costa Brava SL",
-    "nertel": "Bookings and support by Nertel"
+    "nertel": "Bookings and support by Nertel",
+    "credits": "Photo credits"
   },
   "reserva": {
     "tornar": "All bikes",

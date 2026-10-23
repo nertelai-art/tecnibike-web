@@ -1,4 +1,4 @@
-import type { Accessori, BiciLloguer, Producte, Ressenya, ServeiTaller, Valoracio } from './esquema';
+import type { Accessori, Article, BiciLloguer, Producte, Ressenya, ServeiTaller, Valoracio } from './esquema';
 
 // Dades de la implementació de proves. Les tarifes són les oficials del PDF de 2026; el que porta
 // `ficticia: true` és inventat perquè es vegi com queda i no es pot publicar sense confirmar-ho.
@@ -149,6 +149,35 @@ export const productes: Producte[] = [
   { id: 'culot', peca: 'seient', marca: 'Gobik', nom: 'Culot Absolute 6.0', preu: 15990, ficticia: true },
   { id: 'netejador', peca: 'quadre', marca: 'Muc-Off', nom: 'Kit de neteja i protecció', preu: 4999, ficticia: true },
   { id: 'casc', peca: 'quadre', marca: 'POC', nom: 'Casc Ventral Air', preu: 27000, ficticia: true },
+];
+
+/**
+ * Articles de la botiga d'equipament, per categoria. Marques que treballa Tecnibike; models i preus
+ * inventats fins que tinguem el catàleg de la plataforma (i aleshores es podran vendre en línia).
+ */
+export const articles: Article[] = [
+  { id: 'poc-ventral', categoria: 'cascs', marca: 'POC', nom: 'Ventral Air MIPS', preu: 27000, ficticia: true },
+  { id: 'kask-protone', categoria: 'cascs', marca: 'Kask', nom: 'Protone Icon', preu: 26000, ficticia: true },
+  { id: 'kask-valegro', categoria: 'cascs', marca: 'Kask', nom: 'Valegro', preu: 21000, ficticia: true },
+  { id: 'eassun-casc', categoria: 'cascs', marca: 'Eassun', nom: 'Vulcano', preu: 8990, ficticia: true },
+  { id: 'oakley-sutro', categoria: 'ulleres', marca: 'Oakley', nom: 'Sutro Lite Prizm Road', preu: 17900, ficticia: true },
+  { id: 'poc-elicit', categoria: 'ulleres', marca: 'POC', nom: 'Elicit', preu: 23000, ficticia: true },
+  { id: 'bliz-breeze', categoria: 'ulleres', marca: 'Bliz', nom: 'Breeze', preu: 11000, ficticia: true },
+  { id: 'eassun-ulleres', categoria: 'ulleres', marca: 'Eassun', nom: 'Gaia fotocromàtiques', preu: 6990, ficticia: true },
+  { id: 'assos-mille', categoria: 'roba', marca: 'Assos', nom: 'Mallot Mille GT', preu: 15000, ficticia: true },
+  { id: 'gobik-culot', categoria: 'roba', marca: 'Gobik', nom: 'Culot Absolute 6.0', preu: 15990, ficticia: true },
+  { id: 'gobik-armilla', categoria: 'roba', marca: 'Gobik', nom: 'Armilla Plus 2.0', preu: 7990, ficticia: true },
+  { id: 'pissei-mallot', categoria: 'roba', marca: 'Pissei', nom: 'Mallot Primo', preu: 9500, ficticia: true },
+  { id: 'dmt-kr1', categoria: 'sabates', marca: 'DMT', nom: 'KR1 carretera', preu: 33000, ficticia: true },
+  { id: 'dmt-kr4', categoria: 'sabates', marca: 'DMT', nom: 'KR4 carretera', preu: 16000, ficticia: true },
+  { id: 'dmt-km4', categoria: 'sabates', marca: 'DMT', nom: 'KM4 muntanya', preu: 17000, ficticia: true },
+  { id: 'maurten-gel', categoria: 'nutricio', marca: 'Maurten', nom: 'Gel 100', preu: 350, ficticia: true },
+  { id: '226ers-gel', categoria: 'nutricio', marca: '226ERS', nom: 'High Energy Gel', preu: 220, ficticia: true },
+  { id: 'sis-beta', categoria: 'nutricio', marca: 'SiS', nom: 'Beta Fuel', preu: 390, ficticia: true },
+  { id: 'nutrinovex-barreta', categoria: 'nutricio', marca: 'Nutrinovex', nom: 'Barreta energètica', preu: 250, ficticia: true },
+  { id: 'mucoff-neteja', categoria: 'accessoris', marca: 'Muc-Off', nom: 'Netejador Nano Tech', preu: 1499, ficticia: true },
+  { id: 'xsauce-segellant', categoria: 'accessoris', marca: 'X-Sauce', nom: 'Líquid antipunxades 500 ml', preu: 1290, ficticia: true },
+  { id: 'thule-proride', categoria: 'accessoris', marca: 'Thule', nom: 'Portabicis ProRide', preu: 16000, ficticia: true },
 ];
 
 /** Consultat a Google Maps el 23-10-2026. */

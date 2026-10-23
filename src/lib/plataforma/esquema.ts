@@ -50,6 +50,19 @@ export const producte = z.object({
   ficticia: z.boolean(),
 });
 
+/** Categoria de la botiga d'equipament (casc, roba, nutrició…). */
+export const categoriaEquipament = z.enum(['cascs', 'ulleres', 'roba', 'sabates', 'nutricio', 'accessoris']);
+
+/** Article de la botiga d'equipament: el que es vendrà en línia quan la plataforma ho permeti. */
+export const article = z.object({
+  id: z.string(),
+  categoria: categoriaEquipament,
+  marca: z.string(),
+  nom: z.string(),
+  preu: centims,
+  ficticia: z.boolean(),
+});
+
 export const ressenya = z.object({
   autor: z.string(),
   estrelles: z.number().int().min(1).max(5),
@@ -122,4 +135,6 @@ export type Peca = z.infer<typeof peca>;
 export type ServeiTaller = z.infer<typeof serveiTaller>;
 export type Ressenya = z.infer<typeof ressenya>;
 export type Producte = z.infer<typeof producte>;
+export type CategoriaEquipament = z.infer<typeof categoriaEquipament>;
+export type Article = z.infer<typeof article>;
 export type Valoracio = z.infer<typeof valoracio>;

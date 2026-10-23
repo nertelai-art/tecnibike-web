@@ -1,5 +1,5 @@
 import { crearPlataformaProva, ErrorReserva, plataforma } from './index';
-import type { ReservaLloguer } from './esquema';
+import { categoriaEquipament, type ReservaLloguer } from './esquema';
 
 const client = { nom: 'Anna Puig', telefon: '+34 600 000 000', correu: 'anna@example.com', idioma: 'ca', privacitat: true } as const;
 
@@ -32,6 +32,14 @@ describe('plataforma de proves', () => {
     const productes = await plataforma.productes();
     for (const peca of ['rodes', 'frens', 'transmissio', 'direccio', 'seient', 'quadre']) {
       expect(productes.some((p) => p.peca === peca)).toBe(true);
+    }
+  });
+
+  it("cada categoria d'equipament té articles, i només els seus", async () => {
+    for (const categoria of categoriaEquipament.options) {
+      const articles = await plataforma.articles(categoria);
+      expect(articles.length, categoria).toBeGreaterThan(0);
+      expect(articles.every((a) => a.categoria === categoria)).toBe(true);
     }
   });
 

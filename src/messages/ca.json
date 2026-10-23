@@ -40,57 +40,73 @@
   "anatomia": {
     "situacio": "Anatomia d'una bici",
     "titol": "Desmuntem-la peça a peça.",
-    "intro": "Una bici de carretera de gamma alta, com les que reparem cada dia. Baixa i mira què fa cada peça, què hi guanyes si la millores i com te la deixem a punt.",
+    "intro": "Una bici de carretera de gamma alta, com les que reparem cada dia. Baixa i, per a cada peça, mira les millors peces que tenim i les reparacions que hi fem.",
     "pista": "Fes scroll per desmuntar-la",
-    "potencial": "Si la millores:",
-    "alTaller": "Al taller",
-    "aLaBotiga": "A la botiga",
-    "reservar": "Reserva aquest servei",
-    "preguntar": "Pregunta'ns per WhatsApp",
+    "reservar": "Reserva-la",
+    "preguntar": "Pregunta-ho",
     "missatgeWhatsapp": "Hola! M'interessa millorar: {peca}. Què em recomaneu?",
     "sr": "Una bici de carretera vermella es desmunta peça a peça sobre una carretera de muntanya: rodes, frens, transmissió, manillar, sella i, al final, el quadre sol.",
     "peces": {
       "rodes": {
         "nom": "Rodes",
         "servei": "Punxades, tubeless i centrat",
-        "funcio": "Són l'únic que toca a terra: el pneumàtic decideix l'adherència, i la roda, quanta energia es perd a cada pedalada.",
-        "potencial": "unes rodes més lleugeres i uns pneumàtics tubeless fan la bici més àgil a les pujades i més segura als revolts. És la millora que més es nota."
+        "reparacions": {
+          "a": "Punxades i tubeless",
+          "b": "Centrat de rodes",
+          "c": "Canvi de pneumàtics"
+        }
       },
       "frens": {
         "nom": "Frens",
         "servei": "Purgat i pastilles",
-        "funcio": "Els frens de disc hidràulics aturen la bici amb dos dits, plogui o faci sol.",
-        "potencial": "amb pastilles i discs nous frenes abans, sense xiulets, i entres als revolts amb més confiança."
+        "reparacions": {
+          "a": "Purgat de frens hidràulics",
+          "b": "Pastilles i discs",
+          "c": "Ajust de pinces"
+        }
       },
       "transmissio": {
         "nom": "Transmissió",
         "servei": "Ajust de canvis, cadena i cassette",
-        "funcio": "Plat, cadena, cassette i canvi: porten la força de les cames fins a la roda de darrere.",
-        "potencial": "amb una cadena i una cassette en bon estat canvies sense salts ni sorolls. Una cadena gastada es menja els pinyons: canviar-la a temps surt molt més barat."
+        "reparacions": {
+          "a": "Ajust de canvis",
+          "b": "Cadena i cassette",
+          "c": "Neteja de transmissió"
+        }
       },
       "direccio": {
         "nom": "Direcció",
         "servei": "Direcció, potència i cinta",
-        "funcio": "Manillar, potència i manetes: amb això governes la bici i d'aquí canvies i frenes.",
-        "potencial": "una bona cinta i un manillar a la teva mida treuen pes de les mans i de les espatlles a les sortides llargues."
+        "reparacions": {
+          "a": "Joc de direcció",
+          "b": "Cinta de manillar",
+          "c": "Ajust de manetes"
+        }
       },
       "seient": {
         "nom": "Seient",
         "servei": "Ajust de posició (bike fitting)",
-        "funcio": "La sella i la tija decideixen a quina alçada i amb quin retrocés pedales.",
-        "potencial": "amb la sella a la mida justa pedales amb més força i sense mal de genolls ni d'esquena."
+        "reparacions": {
+          "a": "Bike fitting",
+          "b": "Altura i retrocés del seient",
+          "c": "Canvi de sella"
+        }
       },
       "quadre": {
         "nom": "Quadre",
         "servei": "Posada a punt completa",
-        "funcio": "El cor de la bici, on s'ajunta tot. Un quadre de carboni és rígid on has d'empènyer i còmode on ha d'absorbir.",
-        "potencial": "una posada a punt completa el revisa per dins i per fora i deixa totes les peces ajustades com el primer dia."
+        "reparacions": {
+          "a": "Posada a punt completa",
+          "b": "Revisió del quadre",
+          "c": "Diagnosi d’e-bikes"
+        }
       }
     },
     "desDe": "des de {preu}",
-    "termini": "{dies, plural, one {Llesta en 24 h} other {Llesta en # dies}}",
     "index": "Peces de la bici",
-    "ctaCita": "Demana cita al taller"
+    "ctaCita": "Demana cita al taller",
+    "millorsPeces": "Les millors peces",
+    "reparacions": "Reparacions"
   },
   "flota": {
     "situacio": "Lloguer",
@@ -140,10 +156,6 @@
     "situacio": "Taller",
     "titol": "Mecànics que entenen la teva bici.",
     "intro": "Més de 15 anys reparant bicis de carretera, muntanya i elèctriques. Reserves l'hora, la deixes, i t'avisem per WhatsApp quan és llesta.",
-    "servei": "Servei",
-    "preu": "Preu",
-    "termini": "Termini",
-    "reservar": "Demana cita",
     "avantatges": {
       "whatsapp": "Avís per WhatsApp quan està llesta",
       "pressupost": "Pressupost abans de tocar res",
@@ -193,9 +205,6 @@
     "titol": "Roba, cascs i tot el que portes a sobre.",
     "text": "Prova-t’ho a la botiga: et triem la talla, t’ajustem el casc i et diem quina nutrició et convé per a la ruta que faràs.",
     "marques": "Marques",
-    "preguntar": "Pregunta per talles i estoc",
-    "missatge": "Hola! Voldria informació sobre {categoria}.",
-    "credits": "Fotos de Wikimedia Commons, pendents de substituir per fotos de la botiga —",
     "categories": {
       "cascs": {
         "nom": "Cascs",
@@ -222,6 +231,12 @@
         "text": "Bidons, llums, manteniment, líquid antipunxades i portabicis."
       }
     }
+  },
+  "botigaCategoria": {
+    "tornar": "Torna a l’inici",
+    "aviat": "La botiga en línia arriba aviat. De moment, reserva-ho per WhatsApp i passa a recollir-ho a la botiga: t’ho tindrem a punt.",
+    "reservar": "Reserva-ho per WhatsApp",
+    "missatge": "Hola! Voldria reservar: {article}."
   },
   "marques": {
     "situacio": "Les marques",
@@ -255,7 +270,7 @@
     "pregunta": "Pregunta per {marca} per WhatsApp",
     "missatge": "Hola! Teniu material de {marca}?",
     "preguntar": "Pregunta-ho",
-    "pista": "Arrossega o fes servir les fletxes"
+    "pista": "S’atura en passar-hi el ratolí"
   },
   "botiga": {
     "situacio": "La botiga",
@@ -323,7 +338,8 @@
     "privacitat": "Privacitat",
     "galetes": "Galetes",
     "drets": "© {any} Tecnibike Costa Brava SL",
-    "nertel": "Reserves i atenció amb Nertel"
+    "nertel": "Reserves i atenció amb Nertel",
+    "credits": "Crèdits de les fotos"
   },
   "reserva": {
     "tornar": "Totes les bicis",

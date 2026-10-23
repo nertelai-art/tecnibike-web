@@ -1,12 +1,10 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
-import type { Producte, Ressenya, ServeiTaller, Valoracio } from '@/lib/plataforma/esquema';
+import type { Producte, Ressenya, Valoracio } from '@/lib/plataforma/esquema';
+import { Link } from '@/i18n/navigation';
 import { enllacWhatsapp, TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
-import { formatEuros } from '@/lib/preus';
-import { ORDRE_PECES } from './anatomia/anatomia-fases';
 import { AnatomiaTaller } from './anatomia/AnatomiaTaller';
-import { BotoCita } from './cita/BotoCita';
 import { CarruselMarques } from './marques/CarruselMarques';
 import { MapaRutes } from './rutes/MapaRutes';
 import { Revela } from './Revela';
@@ -37,11 +35,8 @@ export async function ComFunciona() {
   );
 }
 
-export async function Taller({ serveis, productes }: { serveis: ServeiTaller[]; productes: Producte[] }) {
+export async function Taller({ productes }: { productes: Producte[] }) {
   const t = await getTranslations('taller');
-  const ta = await getTranslations('anatomia');
-  const locale = await getLocale();
-  const ordenats = ORDRE_PECES.map((peca) => serveis.find((s) => s.peca === peca)).filter((s) => s !== undefined);
   return (
     <section id="taller" className={styles.taller} aria-labelledby="taller-titol">
       <div className={`contenidor ${styles.capTaller}`}>
@@ -52,48 +47,7 @@ export async function Taller({ serveis, productes }: { serveis: ServeiTaller[]; 
         <p className={`intro ${styles.introClara}`}>{t('intro')}</p>
       </div>
 
-      <AnatomiaTaller serveis={serveis} productes={productes} />
-
-      <div className={`contenidor ${styles.tallerGraella}`}>
-        <div>
-          <ul className={styles.avantatges}>
-            <li>{t('avantatges.whatsapp')}</li>
-            <li>{t('avantatges.pressupost')}</li>
-            <li>{t('avantatges.cafe')}</li>
-            <li>{t('electrica')}</li>
-          </ul>
-          <BotoCita className="boto boto--fosc-sobre-fosc">
-            {t('reservar')} <span className="fletxa">→</span>
-          </BotoCita>
-        </div>
-        <Revela className={styles.llistaServeis}>
-          <table>
-            <caption className="sr-only">{t('situacio')}</caption>
-            <thead>
-              <tr>
-                <th scope="col">{t('servei')}</th>
-                <th scope="col">{t('termini')}</th>
-                <th scope="col">{t('preu')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ordenats.map((s) => (
-                <tr key={s.id}>
-                  <th scope="row">
-                    <span className={styles.pecaServei}>{ta(`peces.${s.peca}.nom`)}</span>
-                    {ta(`peces.${s.peca}.servei`)}
-                  </th>
-                  <td>{ta('termini', { dies: s.dies })}</td>
-                  <td className={styles.preuServei}>
-                    {ta('desDe', { preu: formatEuros(s.desDe, locale) })}
-                    {s.ficticia && <span className="mostra">*</span>}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Revela>
-      </div>
+      <AnatomiaTaller productes={productes} />
     </section>
   );
 }
@@ -181,48 +135,26 @@ export async function Equipament() {
         <ul className={styles.equipamentGraella}>
           {CATEGORIES_EQUIPAMENT.map((c, index) => (
             <Revela as="li" key={c} retard={(index % 3) * 80} className={styles.categoria}>
-              <Image src={FOTOS_EQUIPAMENT[c].src} alt="" fill sizes="(min-width: 980px) 30vw, (min-width: 640px) 45vw, 90vw" className={styles.fotoCategoria} />
-              <div className={styles.textCategoria}>
-                <h3>{t(`categories.${c}.nom`)}</h3>
-                <p>{t(`categories.${c}.text`)}</p>
-                <p className={styles.marquesCategoria}>
-                  <span className="sr-only">{t('marques')}: </span>
-                  {marquesDeCategoria(c)
-                    .map((m) => m.nom)
-                    .join(' · ')}
-                </p>
-                <a
-                  className={styles.enllacCategoria}
-                  href={enllacWhatsapp(t('missatge', { categoria: t(`categories.${c}.nom`).toLowerCase() }))}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t('preguntar')} <span aria-hidden="true">→</span>
-                </a>
-              </div>
+              {/* Tota la targeta porta a la categoria de la botiga (preparada per vendre en línia). */}
+              <Link href={`/botiga/${c}`} className={styles.enllacCategoria}>
+                <Image src={FOTOS_EQUIPAMENT[c].src} alt="" fill sizes="(min-width: 980px) 30vw, (min-width: 640px) 45vw, 90vw" className={styles.fotoCategoria} />
+                <span className={styles.textCategoria}>
+                  <span className={styles.nomCategoria}>{t(`categories.${c}.nom`)}</span>
+                  <span className={styles.descCategoria}>{t(`categories.${c}.text`)}</span>
+                  <span className={styles.marquesCategoria}>
+                    <span className="sr-only">{t('marques')}: </span>
+                    {marquesDeCategoria(c)
+                      .map((m) => m.nom)
+                      .join(' · ')}
+                  </span>
+                </span>
+                <span className={styles.fletxaCategoria} aria-hidden="true">
+                  →
+                </span>
+              </Link>
             </Revela>
           ))}
         </ul>
-        <p className={styles.credits}>
-          {t('credits')}{' '}
-          {CATEGORIES_EQUIPAMENT.map((c, i) => {
-            const foto = FOTOS_EQUIPAMENT[c];
-            return (
-              <span key={c}>
-                {i > 0 && ' · '}
-                {t(`categories.${c}.nom`)}:{' '}
-                <a href={foto.font} target="_blank" rel="noopener noreferrer">
-                  {foto.autor}
-                </a>{' '}
-                (
-                <a href={foto.llicenciaUrl} target="_blank" rel="noopener noreferrer license">
-                  {foto.llicencia}
-                </a>
-                )
-              </span>
-            );
-          })}
-        </p>
       </div>
     </section>
   );
@@ -399,6 +331,27 @@ export async function Peu() {
           </li>
           <li>{t('nertel')}</li>
         </ul>
+        <details className={styles.credits}>
+          <summary>{t('credits')}</summary>
+          <p>
+            {CATEGORIES_EQUIPAMENT.map((c, i) => {
+              const foto = FOTOS_EQUIPAMENT[c];
+              return (
+                <span key={c}>
+                  {i > 0 && ' · '}
+                  <a href={foto.font} target="_blank" rel="noopener noreferrer">
+                    {foto.autor}
+                  </a>{' '}
+                  (
+                  <a href={foto.llicenciaUrl} target="_blank" rel="noopener noreferrer license">
+                    {foto.llicencia}
+                  </a>
+                  )
+                </span>
+              );
+            })}
+          </p>
+        </details>
       </div>
     </footer>
   );

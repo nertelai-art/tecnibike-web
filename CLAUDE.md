@@ -48,6 +48,13 @@ Versions que **no** són l'última, i per què:
   clau). Els traçats els calcula BRouter sobre OpenStreetMap amb `node scripts/rutes.mjs`, que
   escriu `src/content/rutes.json`; la web no crida BRouter en temps d'execució. El worker de
   MapLibre es copia a `public/vendor/` abans de `dev` i `build` (`scripts/copia-maplibre-worker.mjs`).
+- **Barra de scroll de l'inici** (`src/components/BarraBici.tsx`): la Pinarello de la flota baixa
+  per la vora dreta i les rodes giren el que recorre. Les capes (`public/img/bici-scroll/`) les fa
+  `python scripts/capes-bici.py public/img/flota/carretera.jpg public/img/bici-scroll 360` (Pillow i
+  NumPy). Només amb ratolí i pantalla ≥ 1000 px; si no, la barra del navegador amb els colors.
+- **Botiga d'equipament:** la plataforma ja té `articles(categoria)` i cada categoria té pàgina a
+  `/[locale]/botiga/[categoria]`. Ara es reserva per WhatsApp; quan es pugui vendre en línia, el botó
+  es canvia per la cistella. Les fotos són de Wikimedia Commons, amb els crèdits al peu.
 - **Dades de mostra:** tot el que és inventat porta `ficticia: true` a les dades i un `*` a la
   pàgina, amb la nota al peu. Abans de publicar, cap d'aquestes dades pot quedar sense confirmar.
 
@@ -57,8 +64,9 @@ Versions que **no** són l'última, i per què:
   lloguer, models de la flota, rutes).
 - Logo en SVG (ara és text compost amb la tipografia del web) i decidir quin logo és el vigent:
   el blau TCNBK o el ciclista taronja de l'Instagram.
-- Fotos originals de la botiga a bona resolució. Les de la secció d'equipament són de Wikimedia
-  Commons amb crèdits (`src/content/equipament.ts`): en canviar-les, treu-ne els crèdits.
+- Fotos originals de la botiga a bona resolució, i fotos de producte per a la botiga d'equipament.
+  Les de les categories són de Wikimedia Commons amb crèdits al peu (`src/content/equipament.ts`):
+  en canviar-les, treu-ne els crèdits.
 - Logo bo de SiS (la web antiga hi tenia el de Shimano Index System; ara surt el nom en text).
 - Pàgines legals pròpies (ara enllacen a les de la web antiga), galetes i 404 pròpia.
 - Connexió real amb app.nertel.ai i els avisos per correu i WhatsApp.

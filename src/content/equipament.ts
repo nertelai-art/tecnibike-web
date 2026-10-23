@@ -1,11 +1,11 @@
 // Seccions de la botiga d'equipament. Les fotos són de Wikimedia Commons (llicències CC que demanen
-// citar l'autor, i les BY-SA també la llicència): els crèdits es pinten a la mateixa secció. Quan hi
-// hagi fotos pròpies de la botiga, se substitueixen i aquests crèdits marxen.
+// citar l'autor i la llicència): els crèdits surten al peu de la web. Quan hi hagi fotos pròpies de
+// la botiga, se substitueixen i aquests crèdits marxen.
 
+import { categoriaEquipament, type CategoriaEquipament } from '@/lib/plataforma/esquema';
 import { marquesDeTipus, type Marca, type TipusMarca } from './marques';
 
-export const CATEGORIES_EQUIPAMENT = ['cascs', 'ulleres', 'roba', 'sabates', 'nutricio', 'accessoris'] as const;
-export type CategoriaEquipament = (typeof CATEGORIES_EQUIPAMENT)[number];
+export const CATEGORIES_EQUIPAMENT = categoriaEquipament.options;
 
 type Foto = { src: string; autor: string; llicencia: string; llicenciaUrl: string; font: string };
 

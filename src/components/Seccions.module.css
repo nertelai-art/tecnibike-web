@@ -61,7 +61,6 @@
 .taller {
   background: var(--grafit);
   color: var(--blanc);
-  padding-bottom: var(--section);
 }
 
 .capTaller {
@@ -74,105 +73,6 @@
 }
 .introClara {
   color: rgb(255 255 255 / 0.75);
-}
-
-.tallerGraella {
-  margin-top: 64px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  gap: clamp(40px, 6vw, 96px);
-  align-items: start;
-}
-
-.avantatges {
-  display: grid;
-  gap: 12px;
-  margin: 32px 0 36px;
-  padding: 0;
-  list-style: none;
-}
-.avantatges li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 600;
-}
-.avantatges li::before {
-  content: '';
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--taronja);
-  flex-shrink: 0;
-}
-
-.llistaServeis {
-  border-radius: var(--radi);
-  background: var(--grafit-2);
-  padding: 8px 24px;
-}
-.llistaServeis table {
-  width: 100%;
-  border-collapse: collapse;
-  font-variant-numeric: tabular-nums;
-}
-.llistaServeis th,
-.llistaServeis td {
-  padding: 18px 8px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.1);
-  text-align: left;
-  vertical-align: top;
-}
-.llistaServeis tbody tr:last-child th,
-.llistaServeis tbody tr:last-child td {
-  border-bottom: 0;
-}
-.llistaServeis thead th {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgb(255 255 255 / 0.55);
-  font-weight: 600;
-}
-.llistaServeis tbody th {
-  font-weight: 600;
-}
-.llistaServeis td {
-  color: rgb(255 255 255 / 0.7);
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-.pecaServei {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--blau);
-  margin-bottom: 4px;
-}
-
-.preuServei {
-  color: var(--blanc) !important;
-  font-weight: 700;
-  font-size: 16px !important;
-  text-align: right !important;
-}
-.llistaServeis :global(.mostra) {
-  color: var(--taronja);
-}
-
-@media (max-width: 900px) {
-  .tallerGraella {
-    grid-template-columns: 1fr;
-  }
-  .llistaServeis {
-    padding: 4px 14px;
-  }
-  .llistaServeis td {
-    white-space: normal;
-  }
 }
 
 /* ── Rutes ── */
@@ -222,15 +122,28 @@
   aspect-ratio: 4 / 5;
   border-radius: var(--radi);
   overflow: hidden;
-  isolation: isolate;
   background: var(--grafit-2);
 }
-.categoria::after {
+
+/* Tota la targeta és l'enllaç: la foto, el text i la fletxa. */
+.enllacCategoria {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  display: block;
+  color: var(--blanc);
+  text-decoration: none;
+}
+.enllacCategoria::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(to top, rgb(18 20 23 / 0.94) 0%, rgb(18 20 23 / 0.7) 38%, rgb(18 20 23 / 0) 70%);
+  background: linear-gradient(to top, rgb(18 20 23 / 0.92) 0%, rgb(18 20 23 / 0.55) 36%, rgb(18 20 23 / 0) 66%);
+}
+.enllacCategoria:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: -3px;
 }
 
 .fotoCategoria {
@@ -238,9 +151,9 @@
   object-fit: cover;
   transition: transform 1.2s var(--ease);
 }
-.categoria:hover .fotoCategoria,
-.categoria:focus-within .fotoCategoria {
-  transform: scale(1.05);
+.enllacCategoria:hover .fotoCategoria,
+.enllacCategoria:focus-visible .fotoCategoria {
+  transform: scale(1.06);
 }
 
 .textCategoria {
@@ -250,48 +163,55 @@
   gap: 8px;
   padding: 24px;
 }
-.textCategoria h3 {
+.nomCategoria {
   font-size: clamp(28px, 2.6vw, 38px);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  font-variation-settings: 'wdth' 72;
 }
-.textCategoria p {
+.descCategoria {
   font-size: 15px;
   line-height: 1.45;
   color: rgb(255 255 255 / 0.8);
 }
-
 .marquesCategoria {
-  font-size: 12px !important;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--taronja) !important;
-}
-
-.enllacCategoria {
-  justify-self: start;
-  margin-top: 4px;
-  font-size: 14px;
-  font-weight: 800;
-  text-decoration: none;
-  border-bottom: 2px solid var(--taronja);
-}
-.enllacCategoria:hover {
   color: var(--taronja);
 }
-/* Tota la targeta és clicable, però l'enllaç és un de sol. */
-.enllacCategoria::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-}
 
-.credits {
-  margin-top: 24px;
-  font-size: 12px;
-  color: rgb(255 255 255 / 0.5);
+.fletxaCategoria {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--blanc);
+  color: var(--grafit);
+  font-size: 20px;
+  font-weight: 800;
+  transform: scale(0.8);
+  opacity: 0;
+  transition:
+    transform 0.4s var(--ease),
+    opacity 0.4s var(--ease);
 }
-.credits a {
-  color: inherit;
+.enllacCategoria:hover .fletxaCategoria,
+.enllacCategoria:focus-visible .fletxaCategoria {
+  transform: none;
+  opacity: 1;
+}
+@media (hover: none) {
+  .fletxaCategoria {
+    transform: none;
+    opacity: 1;
+  }
 }
 
 @media (max-width: 980px) {
@@ -580,4 +500,20 @@
   border-top: 1px solid rgb(255 255 255 / 0.12);
   list-style: none;
   font-size: 14px;
+}
+
+/* Crèdits de les fotos de Wikimedia Commons (les llicències demanen citar-los). */
+.credits {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: rgb(255 255 255 / 0.45);
+}
+.credits summary {
+  cursor: pointer;
+}
+.credits p {
+  margin-top: 8px;
+}
+.credits a {
+  color: inherit;
 }

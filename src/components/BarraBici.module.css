@@ -1,0 +1,73 @@
+/* Carril a la vora dreta i la bici que hi roda. Amagat al mòbil i a pantalles estretes. */
+
+.barra {
+  display: none;
+}
+
+@media (min-width: 1000px) and (pointer: fine) {
+  .barra {
+    position: fixed;
+    z-index: 60;
+    /* Comença sota la capçalera, que és fixa i arriba fins a la vora. */
+    top: calc(var(--header-h) + 28px);
+    right: 4px;
+    bottom: 12px;
+    display: block;
+    width: 64px;
+    cursor: pointer;
+    touch-action: none;
+  }
+}
+
+.carril {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* Les rodes toquen el carril pel costat dret de la bici girada: el carril va arran de la vora. */
+  right: 1px;
+  width: 3px;
+  border-radius: 3px;
+  background: rgb(18 20 23 / 0.12);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.35);
+}
+
+.bici {
+  position: absolute;
+  top: 0;
+  right: 3px;
+  cursor: grab;
+  /* Halo clar perquè les rodes negres es vegin també sobre les seccions fosques. */
+  filter: drop-shadow(0 0 1px rgb(255 255 255 / 0.8)) drop-shadow(0 4px 6px rgb(0 0 0 / 0.25));
+  will-change: transform;
+}
+.barra[data-arrossegant='true'],
+.barra[data-arrossegant='true'] .bici {
+  cursor: grabbing;
+}
+
+.giratori {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Mirall i quart de volta: la roda del davant queda avall i les rodes, a la dreta. */
+  transform: translate(-50%, -50%) rotate(-90deg) scaleX(-1);
+}
+
+.roda {
+  position: absolute;
+  height: auto;
+  will-change: transform;
+}
+
+.quadre {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.roda,
+.quadre {
+  user-select: none;
+  pointer-events: none;
+}

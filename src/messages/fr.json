@@ -40,57 +40,73 @@
   "anatomia": {
     "situacio": "Anatomie d'un vélo",
     "titol": "On le démonte pièce par pièce.",
-    "intro": "Un vélo de route haut de gamme, comme ceux que nous réparons chaque jour. Faites défiler pour voir ce que fait chaque pièce, ce que vous gagnez à l'améliorer et comment nous l'entretenons.",
+    "intro": "Un vélo de route haut de gamme, comme ceux que nous réparons chaque jour. Descendez et, pour chaque partie, découvrez les meilleures pièces en stock et nos réparations.",
     "pista": "Faites défiler pour le démonter",
-    "potencial": "En l'améliorant :",
-    "alTaller": "À l'atelier",
-    "aLaBotiga": "En boutique",
-    "reservar": "Réserver ce service",
-    "preguntar": "Écrivez-nous sur WhatsApp",
+    "reservar": "Réservez",
+    "preguntar": "Demandez-nous",
     "missatgeWhatsapp": "Bonjour ! J'aimerais améliorer : {peca}. Que me conseillez-vous ?",
     "sr": "Un vélo de route rouge se démonte pièce par pièce sur une route de montagne : roues, freins, transmission, cintre, selle et enfin le cadre seul.",
     "peces": {
       "rodes": {
         "nom": "Roues",
         "servei": "Crevaisons, tubeless et dévoilage",
-        "funcio": "C'est la seule chose qui touche la route : le pneu décide de l'adhérence, et la roue de l'énergie perdue à chaque coup de pédale.",
-        "potencial": "des roues plus légères et des pneus tubeless rendent le vélo plus vif en montée et plus sûr en virage. C'est l'amélioration qui se sent le plus."
+        "reparacions": {
+          "a": "Crevaisons et tubeless",
+          "b": "Dévoilage des roues",
+          "c": "Montage de pneus"
+        }
       },
       "frens": {
         "nom": "Freins",
         "servei": "Purge et plaquettes",
-        "funcio": "Les freins à disque hydrauliques arrêtent le vélo avec deux doigts, qu'il pleuve ou qu'il fasse beau.",
-        "potencial": "avec des plaquettes et des disques neufs, vous freinez plus tôt, sans grincement, et abordez les virages en confiance."
+        "reparacions": {
+          "a": "Purge des freins hydrauliques",
+          "b": "Plaquettes et disques",
+          "c": "Réglage des étriers"
+        }
       },
       "transmissio": {
         "nom": "Transmission",
         "servei": "Réglage des vitesses, chaîne et cassette",
-        "funcio": "Plateau, chaîne, cassette et dérailleur transmettent la force des jambes à la roue arrière.",
-        "potencial": "une chaîne et une cassette en bon état passent les vitesses sans sauts ni bruit. Une chaîne usée mange les pignons : la changer à temps coûte bien moins cher."
+        "reparacions": {
+          "a": "Réglage des vitesses",
+          "b": "Chaîne et cassette",
+          "c": "Nettoyage de transmission"
+        }
       },
       "direccio": {
         "nom": "Direction",
         "servei": "Jeu de direction, potence et ruban",
-        "funcio": "Cintre, potence et leviers : on dirige, on change de vitesse et on freine d'ici.",
-        "potencial": "un bon ruban et un cintre à votre taille soulagent les mains et les épaules sur les longues sorties."
+        "reparacions": {
+          "a": "Jeu de direction",
+          "b": "Guidoline",
+          "c": "Réglage des leviers"
+        }
       },
       "seient": {
         "nom": "Selle",
         "servei": "Réglage de position (bike fitting)",
-        "funcio": "La selle et la tige fixent la hauteur et le recul de pédalage.",
-        "potencial": "avec la selle bien réglée, vous pédalez plus fort et sans douleur aux genoux ni au dos."
+        "reparacions": {
+          "a": "Étude posturale",
+          "b": "Hauteur et recul de selle",
+          "c": "Changement de selle"
+        }
       },
       "quadre": {
         "nom": "Cadre",
         "servei": "Révision complète",
-        "funcio": "Le cœur du vélo, là où tout se rejoint. Un cadre carbone est rigide là où l'on pousse et confortable là où il doit absorber.",
-        "potencial": "une révision complète le contrôle dedans et dehors et laisse chaque pièce réglée comme au premier jour."
+        "reparacions": {
+          "a": "Révision complète",
+          "b": "Contrôle du cadre",
+          "c": "Diagnostic e-bike"
+        }
       }
     },
     "desDe": "dès {preu}",
-    "termini": "{dies, plural, one {Prêt en 24 h} other {Prêt en # jours}}",
     "index": "Pièces du vélo",
-    "ctaCita": "Rendez-vous à l'atelier"
+    "ctaCita": "Rendez-vous à l'atelier",
+    "millorsPeces": "Les meilleures pièces",
+    "reparacions": "Réparations"
   },
   "flota": {
     "situacio": "Location",
@@ -140,10 +156,6 @@
     "situacio": "Atelier",
     "titol": "Des mécaniciens qui comprennent votre vélo.",
     "intro": "Plus de 15 ans à réparer des vélos de route, VTT et électriques. Réservez un créneau, déposez-le, et on vous prévient sur WhatsApp quand il est prêt.",
-    "servei": "Service",
-    "preu": "Prix",
-    "termini": "Délai",
-    "reservar": "Prendre rendez-vous",
     "avantatges": {
       "whatsapp": "Message WhatsApp quand il est prêt",
       "pressupost": "Un devis avant de toucher à quoi que ce soit",
@@ -193,9 +205,6 @@
     "titol": "Vêtements, casques et tout ce que vous portez.",
     "text": "Essayez-le au magasin : nous trouvons votre taille, réglons votre casque et vous conseillons la nutrition adaptée à votre sortie.",
     "marques": "Marques",
-    "preguntar": "Demander tailles et stock",
-    "missatge": "Bonjour ! Je voudrais des informations sur : {categoria}.",
-    "credits": "Photos de Wikimedia Commons, à remplacer par des photos du magasin —",
     "categories": {
       "cascs": {
         "nom": "Casques",
@@ -222,6 +231,12 @@
         "text": "Bidons, éclairages, entretien, préventif anti-crevaison et porte-vélos."
       }
     }
+  },
+  "botigaCategoria": {
+    "tornar": "Retour à l’accueil",
+    "aviat": "La boutique en ligne arrive bientôt. En attendant, réservez sur WhatsApp et venez le chercher au magasin : il sera prêt.",
+    "reservar": "Réserver sur WhatsApp",
+    "missatge": "Bonjour ! Je voudrais réserver : {article}."
   },
   "marques": {
     "situacio": "Les marques",
@@ -255,7 +270,7 @@
     "pregunta": "Demander pour {marca} sur WhatsApp",
     "missatge": "Bonjour ! Avez-vous du matériel {marca} ?",
     "preguntar": "Demandez-nous",
-    "pista": "Faites glisser ou utilisez les flèches"
+    "pista": "Survolez pour mettre en pause"
   },
   "botiga": {
     "situacio": "La boutique",
@@ -323,7 +338,8 @@
     "privacitat": "Confidentialité",
     "galetes": "Cookies",
     "drets": "© {any} Tecnibike Costa Brava SL",
-    "nertel": "Réservations et accueil avec Nertel"
+    "nertel": "Réservations et accueil avec Nertel",
+    "credits": "Crédits photo"
   },
   "reserva": {
     "tornar": "Tous les vélos",

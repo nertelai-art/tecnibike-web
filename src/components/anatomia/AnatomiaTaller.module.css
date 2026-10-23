@@ -1,27 +1,24 @@
-/* Escenari fosc del taller: el vídeo a la dreta (més petit que abans) i, a l'esquerra, l'índex
-   de peces, la fitxa i els botons de cita i WhatsApp sempre a la vista. */
+/* Escenari fosc del taller: text i vídeo junts dins l'amplada de la pàgina (a pantalles amples no
+   queden separats per un buit), el vídeo quiet (només es mou amb el scroll) i, sota la fitxa, els
+   botons de cita i WhatsApp grans. */
+
+.video,
+.text {
+  --marge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  --util: calc(100vw - 2 * var(--marge));
+  --ample-video: min(calc(var(--util) * 0.56), calc((100svh - 200px) * 16 / 9));
+}
 
 .video {
   position: absolute;
-  right: var(--gutter);
+  right: var(--marge);
   top: 50%;
-  width: min(54vw, calc((100svh - 180px) * 16 / 9));
+  width: var(--ample-video);
   aspect-ratio: 16 / 9;
   border-radius: var(--radi);
   overflow: hidden;
   box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.75);
-  /* Sura lleugerament, com si la bici pengés en l'aire. */
-  animation: sura 7s ease-in-out infinite;
   transform: translateY(-50%);
-}
-@keyframes sura {
-  0%,
-  100% {
-    transform: translateY(-50%);
-  }
-  50% {
-    transform: translateY(calc(-50% - 7px));
-  }
 }
 
 .capa {
@@ -30,7 +27,7 @@
   color: var(--blanc);
 }
 
-/* La còpia de la caixa que porta les etiquetes no tapa res i sura igual que el vídeo. */
+/* La còpia de la caixa que porta les etiquetes no tapa res. */
 .capa > .video {
   overflow: visible;
   box-shadow: none;
@@ -93,14 +90,14 @@
 
 .text {
   position: absolute;
-  left: var(--gutter);
-  top: calc(var(--header-h) + 40px);
+  left: var(--marge);
+  top: calc(var(--header-h) + 28px);
   bottom: 28px;
-  width: calc(100% - min(54vw, calc((100svh - 180px) * 16 / 9)) - var(--gutter) * 3);
-  max-width: 500px;
+  width: calc(var(--util) - var(--ample-video) - clamp(32px, 4vw, 64px));
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  justify-content: center;
+  gap: 20px;
 }
 
 .index {
@@ -149,8 +146,8 @@
 
 .contingut {
   position: relative;
-  flex: 1;
-  min-height: 0;
+  flex: 0 0 auto;
+  height: clamp(260px, calc(100svh - 380px), 400px);
 }
 
 .intro,
@@ -243,35 +240,17 @@
   font-size: clamp(40px, 4vw, 60px);
 }
 
-.funcio {
-  font-size: 17px;
-  color: rgb(255 255 255 / 0.88);
-  max-width: 44ch;
-}
-
-.potencial {
-  padding-left: 14px;
-  border-left: 3px solid var(--taronja);
-  font-size: 15px;
-  color: rgb(255 255 255 / 0.72);
-  max-width: 46ch;
-}
-.potencial strong {
-  color: var(--blanc);
-}
-
 .blocs {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 4px;
 }
 
 .bloc {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 14px;
+  gap: 10px;
+  padding: 16px;
   border-radius: 14px;
   background: rgb(255 255 255 / 0.06);
 }
@@ -281,30 +260,19 @@
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--blau);
+  color: var(--taronja);
 }
 
-.linia {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 10px;
-  font-size: 13px;
-  line-height: 1.35;
-  font-variant-numeric: tabular-nums;
-}
-.linia strong {
-  white-space: nowrap;
-}
-
-.productes {
+.llista {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
+  font-size: 14px;
+  line-height: 1.35;
 }
-.productes small {
+.llista small {
   display: block;
   font-size: 10px;
   font-weight: 800;
@@ -330,12 +298,22 @@
   color: var(--taronja);
 }
 
-/* ── Botons sempre a la vista ── */
+/* ── Botons sempre a la vista: grans, l'un sota l'altre ── */
 
 .accions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  gap: 12px;
+}
+.accions :global(.boto) {
+  justify-content: center;
+  width: 100%;
+  min-height: 62px;
+  padding: 0 24px;
+  font-size: 17px;
+  box-shadow: 0 18px 36px -18px rgb(0 0 0 / 0.8);
+}
+.accions :global(.boto--blau) {
+  box-shadow: 0 18px 36px -16px rgb(61 95 158 / 0.9);
 }
 
 .botoWhatsapp {
@@ -360,25 +338,20 @@
   transform: scaleX(0);
 }
 
-/* Pantalles baixes: la fitxa es compacta perquè hi càpiga tot. */
-@media (min-width: 981px) and (max-height: 860px) {
+/* Pantalles baixes: tot més compacte perquè hi càpiga. */
+@media (min-width: 981px) and (max-height: 820px) {
   .nom {
-    font-size: clamp(36px, 3.4vw, 50px);
+    font-size: clamp(34px, 3.2vw, 46px);
   }
-  .funcio {
-    font-size: 15px;
+  .text {
+    gap: 14px;
   }
-  .potencial {
-    font-size: 14px;
+  .accions :global(.boto) {
+    min-height: 52px;
+    font-size: 16px;
   }
-  .productes li:nth-child(n + 3) {
+  .llista li:nth-child(n + 3) {
     display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .video {
-    animation: none;
   }
 }
 
@@ -420,17 +393,23 @@
     left: var(--gutter);
     right: var(--gutter);
     width: auto;
-    animation: none;
     transform: none;
   }
 
   .text {
     top: calc(var(--header-h) + 34px + (100vw - var(--gutter) * 2) * 9 / 16);
+    left: var(--gutter);
     right: var(--gutter);
     bottom: 14px;
     width: auto;
-    max-width: none;
+    justify-content: flex-start;
     gap: 10px;
+  }
+
+  .contingut {
+    flex: 1;
+    height: auto;
+    min-height: 0;
   }
 
   .index {
@@ -451,23 +430,21 @@
     font-size: 32px;
   }
 
-  .funcio {
-    font-size: 15px;
-  }
-
-  .potencial {
-    display: none;
-  }
-
   .blocs {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .bloc {
     padding: 10px 12px;
+    gap: 6px;
   }
 
-  .productes li:nth-child(n + 3) {
+  .llista {
+    font-size: 13px;
+    gap: 4px;
+  }
+  .llista li:nth-child(n + 3) {
     display: none;
   }
 
@@ -475,11 +452,12 @@
     font-size: 34px;
   }
 
+  .accions {
+    gap: 8px;
+  }
   .accions :global(.boto) {
-    flex: 1;
-    min-height: 46px;
-    padding: 0 14px;
-    font-size: 14px;
+    min-height: 50px;
+    font-size: 15px;
   }
 
   .etiqueta {

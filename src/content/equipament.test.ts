@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from './equipament';
+import { plataforma } from '@/lib/plataforma';
 import { MARQUES } from './marques';
 
 const PUBLIC = join(__dirname, '../../public');
@@ -26,5 +27,12 @@ describe('equipament i marques', () => {
 
   it('cap marca surt dues vegades al carrusel', () => {
     expect(new Set(MARQUES.map((m) => m.nom)).size).toBe(MARQUES.length);
+  });
+
+  it("les marques dels articles d'equipament són marques de la botiga", async () => {
+    const noms = new Set(MARQUES.map((m) => m.nom));
+    for (const categoria of CATEGORIES_EQUIPAMENT) {
+      for (const article of await plataforma.articles(categoria)) expect(noms.has(article.marca), article.marca).toBe(true);
+    }
   });
 });
