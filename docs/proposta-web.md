@@ -98,8 +98,9 @@ pagament, botiga en línia, pàgines legals pròpies i logo en SVG.
   cita i els bàners de les peces.
 - **Taller amb scroll (setena volta):** la secció torna a anar amb el scroll: es queda fixa, la bici
   es desmunta en baixar i entren els textos; al final, bàners més petits i sempre per sobre del text.
-  Vídeo a 2560 px (6,3 MB) perquè la bici surti a la mida original i no es vegi borrosa, amb el
-  fons ampliat a 4K i lleugerament desenfocat; al mòbil, 1280 px (2,5 MB).
+  Vídeo a 2560 px (6,7 MB) perquè la bici surti a la mida original i no es vegi borrosa, amb el
+  fons ampliat a 4K i lleugerament desenfocat; al mòbil, 1280 px (3,1 MB). Entre els radis es treu
+  el fons vell que traspuava (carretera i arbres) abans de posar-hi el taller.
 
 ## 1. Objectiu
 

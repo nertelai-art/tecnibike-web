@@ -4,8 +4,12 @@
 #   python scripts/taller-video.py <fotogrames> <mascares> <fons.png> <sortida> [ample]
 #
 # <fotogrames> i <mascares>: PNG numerats (0001.png…) del vídeo original i de la màscara de la bici
-# (rembg, model isnet-general-use; poden ser més petites que els fotogrames, s'amplien). La màscara es suavitza en el temps (1-2-1) perquè les vores no
-# tremolin. Escriu els fotogrames compostos a <sortida>; després es codifica amb ffmpeg.
+# (rembg, model isnet-general-use; poden ser més petites que els fotogrames, s'amplien).
+# Escriu els fotogrames compostos a <sortida>; després es codifica amb ffmpeg.
+#
+# Entre els radis, la màscara és semitransparent i hi traspuaria la carretera del vídeo original.
+# Per evitar-ho: s'endureixen les vores toves de la màscara, s'estima el fons original de cada punt
+# amb els píxels de fons del voltant, i se'n treu la contribució abans de posar-hi el taller.
 # Requereix Pillow i NumPy.
 
 import os
@@ -42,16 +46,37 @@ ombra = np.asarray(ombra.filter(ImageFilter.GaussianBlur(28 * W / 1600))).astype
 fons = fons * (1 - 0.45 * ombra)
 
 def mascara(i):
-    i = min(max(i, 0), len(fitxers) - 1)
     m = Image.open(os.path.join(mascares, fitxers[i])).convert('L').resize((bw, bh), Image.LANCZOS)
-    return np.asarray(m).astype(np.float32) / 255
+    alfa = np.asarray(m).astype(np.float32) / 255
+    # Vores toves més dures: el que és gairebé fons, fons; el que és gairebé bici, bici.
+    return np.clip((alfa - 0.12) / 0.76, 0, 1)
+
+
+# Radi de l'estimació del fons vell, en píxels (es fa reduint i tornant a ampliar, que és ràpid).
+PAS = max(2, round(8 * bw / 1000))
+
+
+def fons_original(bici, alfa):
+    """Fons del vídeo original estimat a cada punt amb els píxels de fons del voltant."""
+    pes = (alfa < 0.02).astype(np.float32)
+    def difumina(a):
+        petita = Image.fromarray(a, 'F').resize((bw // PAS, bh // PAS), Image.BOX)
+        return np.asarray(petita.resize((bw, bh), Image.BILINEAR))
+    suma = np.dstack([difumina(np.ascontiguousarray(bici[..., c] * pes)) for c in range(3)])
+    total = difumina(pes)[..., None]
+    return np.where(total > 1e-3, suma / np.maximum(total, 1e-3), bici)
+
 
 os.makedirs(sortida, exist_ok=True)
 for i, f in enumerate(fitxers):
-    alfa = (mascara(i - 1) + 2 * mascara(i) + mascara(i + 1)) / 4
+    alfa = mascara(i)
     bici = np.asarray(Image.open(os.path.join(fotogrames, f)).convert('RGB').resize((bw, bh), Image.LANCZOS)).astype(np.float32)
+    vell = fons_original(bici, alfa)
+    a = alfa[..., None]
+    # Color de la bici sense el fons vell que s'hi barrejava (només on la màscara és parcial).
+    net = np.where(a > 0.999, bici, np.clip((bici - (1 - a) * vell) / np.maximum(a, 0.25), 0, 255))
     escena = fons.copy()
     zona = escena[by : by + bh, bx : bx + bw]
-    zona[:] = zona * (1 - alfa[..., None]) + bici * alfa[..., None]
+    zona[:] = zona * (1 - a) + net * a
     Image.fromarray(escena.clip(0, 255).astype(np.uint8)).save(os.path.join(sortida, f))
 print('fotogrames', len(fitxers), 'bici', (bx, by, bw, bh))
