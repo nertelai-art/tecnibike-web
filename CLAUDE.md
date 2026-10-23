@@ -64,6 +64,17 @@ Versions que **no** són l'última, i per què:
 - **Dades de mostra:** tot el que és inventat porta `ficticia: true` a les dades i un `*` a la
   pàgina, amb la nota al peu. Abans de publicar, cap d'aquestes dades pot quedar sense confirmar.
 
+## Repositori i Vercel
+
+- GitHub: `nertelai-art/tecnibike-web` (públic). Només hi ha `developer`; a `main` s'hi arriba per
+  promoció, mai a mà.
+- Vercel: projecte `tecnibike-web` (equip nertelai-7298's projects), amb l'avatar TCNBK. URL:
+  https://tecnibike-web.vercel.app. El primer desplegament (en importar, 23-10-2026) és de producció.
+- **Cap push publica sol a producció:** Vercel encara té `developer` com a branca de producció (no
+  accepta `main` fins que existeixi), i per això l'«Ignored Build Step» és «Only build
+  pre-production». Quan existeixi `main`, cal posar-la com a branca de producció (Settings →
+  Environments → Production) i tornar l'Ignored Build Step a «Automatic».
+
 ## Pendent abans de publicar
 
 - Confirmar amb el client totes les dades marcades amb `*` (preus del taller, condicions de
