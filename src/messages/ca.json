@@ -1,0 +1,349 @@
+{
+  "meta": {
+    "titol": "Tecnibike · Lloguer de bicis i taller a la Costa Brava",
+    "descripcio": "Lloga bicis de carretera, gravel, muntanya i elèctriques a Sant Antoni de Calonge, o reserva cita al taller. Cannondale, Scott, Specialized, Pinarello i Colnago."
+  },
+  "nav": {
+    "saltar": "Salta al contingut",
+    "lloguer": "Lloguer",
+    "taller": "Taller",
+    "rutes": "Rutes",
+    "botiga": "Botiga",
+    "visita": "On som",
+    "reserva": "Reserva",
+    "idioma": "Idioma",
+    "menu": "Menú",
+    "tancar": "Tanca el menú",
+    "inici": "Tecnibike, inici"
+  },
+  "mostra": {
+    "marca": "Dada de mostra, pendent de confirmar",
+    "nota": "Les dades marcades amb * són de mostra i s'han de confirmar amb Tecnibike."
+  },
+  "portada": {
+    "situacio": "Sant Antoni de Calonge · Costa Brava",
+    "titol1": "Lloga-la.",
+    "titol2": "Repara-la.",
+    "titol3": "Roda la Costa Brava.",
+    "subtitol": "Bicis de botiga de gamma alta per dies o per hores, i un taller que te la deixa a punt. Reserva en dos minuts, en el teu idioma.",
+    "ctaLloguer": "Reserva una bici",
+    "ctaTaller": "Demana cita al taller",
+    "valoracio": "{mitjana} de 5 · {total} ressenyes a Google",
+    "scroll": "Fes scroll i desmunta-la"
+  },
+  "anatomia": {
+    "situacio": "Anatomia d'una bici",
+    "titol": "Cada peça té el seu servei.",
+    "intro": "Desmuntem la bici peça per peça. Tria la que et preocupa i reserva el servei directament.",
+    "desDe": "des de {preu}",
+    "termini": "{dies, plural, one {Llesta en 24 h} other {Llesta en # dies}}",
+    "reservar": "Reserva aquest servei",
+    "final": {
+      "titol": "Tot plegat, en una posada a punt.",
+      "text": "Revisem les sis peces, ajustem, greixem i te la tornem com nova. T'avisem per WhatsApp quan està llesta.",
+      "cta": "Demana cita al taller"
+    },
+    "sr": "Una bici de carretera blava es desmunta en sis peces (transmissió, frens, rodes, direcció, seient i quadre) i després es torna a muntar.",
+    "peces": {
+      "transmissio": {
+        "nom": "Transmissió",
+        "servei": "Ajust de canvis, cadena i cassette",
+        "text": "Si el canvi salta, fa soroll o costa d'entrar, l'ajustem i mesurem el desgast de la cadena."
+      },
+      "frens": {
+        "nom": "Frens",
+        "servei": "Purgat i pastilles",
+        "text": "Frens hidràulics purgats, pastilles noves i discs centrats perquè frenis sense xiular."
+      },
+      "rodes": {
+        "nom": "Rodes",
+        "servei": "Punxades, tubeless i centrat",
+        "text": "Reparem punxades, muntem tubeless i centrem la roda perquè giri recta."
+      },
+      "direccio": {
+        "nom": "Direcció",
+        "servei": "Direcció, potència i cinta",
+        "text": "Revisem els rodaments de la direcció, ajustem la potència i canviem la cinta del manillar."
+      },
+      "seient": {
+        "nom": "Seient",
+        "servei": "Ajust de posició (bike fitting)",
+        "text": "Alçada i retrocés de la sella i alçada del manillar a la teva mida, per pedalar sense mal d'esquena."
+      },
+      "quadre": {
+        "nom": "Quadre",
+        "servei": "Posada a punt completa",
+        "text": "Neteja a fons, revisió estructural del quadre i ajust de totes les peces. La bici, com el primer dia."
+      }
+    }
+  },
+  "flota": {
+    "situacio": "Lloguer",
+    "titol": "Tria la teva bici.",
+    "intro": "Bicis de la nostra botiga, revisades després de cada lloguer. El preu baixa com més dies la tens.",
+    "categories": {
+      "totes": "Totes",
+      "muntanya": "Muntanya",
+      "carretera": "Carretera",
+      "gravel": "Gravel",
+      "passeig": "Passeig"
+    },
+    "electrica": "Elèctrica",
+    "desDe": "des de",
+    "perDia": "/dia",
+    "talles": "Talles",
+    "reservar": "Reserva",
+    "tarifes": {
+      "titol": "Totes les tarifes 2026",
+      "obrir": "Mostra totes les tarifes",
+      "bici": "Bici",
+      "dia": "1 dia",
+      "migDia": "Mig dia",
+      "de2a6": "2–6 dies",
+      "mesDe6": "+6 dies",
+      "nota": "Preu per bici i per dia. Casc inclòs*."
+    }
+  },
+  "comFunciona": {
+    "titol": "Llogar és així de fàcil.",
+    "passos": {
+      "u": {
+        "titol": "Tria bici i talla",
+        "text": "Et diem quina talla et va segons la teva alçada, i tries els pedals."
+      },
+      "dos": {
+        "titol": "Tria els dies",
+        "text": "Veus el preu total a l'acte, sense sorpreses, i reserves en dos minuts."
+      },
+      "tres": {
+        "titol": "Recull-la i roda",
+        "text": "A la botiga te l'ajustem a la teva mida. T'esperem amb el casc a punt."
+      }
+    }
+  },
+  "taller": {
+    "situacio": "Taller",
+    "titol": "Mecànics que entenen la teva bici.",
+    "intro": "Més de 15 anys reparant bicis de carretera, muntanya i elèctriques. Reserves l'hora, la deixes, i t'avisem per WhatsApp quan és llesta.",
+    "servei": "Servei",
+    "preu": "Preu",
+    "termini": "Termini",
+    "reservar": "Demana cita",
+    "avantatges": {
+      "whatsapp": "Avís per WhatsApp quan està llesta",
+      "pressupost": "Pressupost abans de tocar res",
+      "cafe": "Coffee zone mentre esperes"
+    },
+    "electrica": "També diagnosi d'e-bikes"
+  },
+  "rutes": {
+    "situacio": "Rutes",
+    "titol": "La Costa Brava és el millor gimnàs.",
+    "intro": "Les nostres rutes preferides des de la botiga, i guies que te les ensenyen. També organitzem viatges guiats per tota Europa.",
+    "distancia": "{km} km",
+    "desnivell": "{m} m+",
+    "bici": "Amb",
+    "guia": "Vull una ruta guiada",
+    "llista": {
+      "gavarres": {
+        "nom": "Volta per les Gavarres",
+        "tipus": "Carretera",
+        "text": "Puja a Romanyà i baixa per Santa Cristina amb vistes al mar."
+      },
+      "fitor": {
+        "nom": "Coll de Fitor",
+        "tipus": "Gravel",
+        "text": "Pistes entre suros fins al santuari, i tornada per Calonge."
+      },
+      "ardenya": {
+        "nom": "Massís de l'Ardenya",
+        "tipus": "Muntanya",
+        "text": "Corriols tècnics entre pins, amb la badia de Sant Feliu als peus."
+      }
+    }
+  },
+  "marques": {
+    "titol": "Les marques que fem servir, les que venem.",
+    "bicis": "Bicicletes",
+    "material": "Components, roba i nutrició"
+  },
+  "botiga": {
+    "situacio": "La botiga",
+    "titol": "Vine a veure-les.",
+    "text": "Bicis, roba, components i nutrició de les millors marques, i assessorament per triar bé. I un cafè, si vens de ruta.",
+    "fotos": {
+      "dogma": "Pinarello Dogma vermella a la botiga",
+      "interiorCarretera": "Interior de la botiga amb bicis de carretera i un expositor de rodes",
+      "interiorEbikes": "Bicis elèctriques Cannondale i la paret de material de la botiga",
+      "colnago": "Colnago amb rodes de carboni",
+      "pinarello": "Pinarello de carretera vermella"
+    }
+  },
+  "ressenyes": {
+    "titol": "El que diuen de nosaltres.",
+    "font": "Ressenyes a Google",
+    "estrelles": "{n} estrelles de 5"
+  },
+  "faq": {
+    "titol": "Preguntes freqüents",
+    "items": {
+      "talla": {
+        "p": "Com sé quina talla em va?",
+        "r": "En reservar et demanem l'alçada i et suggerim la talla. A la botiga te l'ajustem: alçada de sella i posició del manillar."
+      },
+      "pedals": {
+        "p": "Puc portar els meus pedals?",
+        "r": "I tant. També en tenim de plans, Shimano SPD, SPD-SL i Look perquè no hagis de carregar res."
+      },
+      "fianca": {
+        "p": "Cal deixar fiança?",
+        "r": "Demanem el DNI o el passaport i una fiança amb targeta que es retorna en tornar la bici*."
+      },
+      "cancel": {
+        "p": "Puc cancel·lar la reserva?",
+        "r": "Sí, sense cost fins a 48 hores abans de la recollida*."
+      },
+      "hotel": {
+        "p": "Me la porteu a l'hotel?",
+        "r": "En portem a hotels de Calonge, Platja d'Aro i Palamós a partir de dues bicis*."
+      },
+      "taller": {
+        "p": "Quant triga el taller?",
+        "r": "Una revisió o una punxada, normalment el mateix dia o l'endemà. Et diem el termini en deixar-la i t'avisem per WhatsApp."
+      }
+    }
+  },
+  "visita": {
+    "situacio": "On som",
+    "titol": "A cinc minuts de la platja.",
+    "adreca": "Carrer de l'Empordà, 29",
+    "poble": "17252 Sant Antoni de Calonge (Girona)",
+    "horari": "Horari",
+    "dies": "Dilluns a dissabte",
+    "hores": "9–13 h i 16–20 h",
+    "diumenge": "Diumenge tancat",
+    "telefon": "Truca'ns",
+    "whatsapp": "Escriu-nos per WhatsApp",
+    "correu": "Correu",
+    "mapa": "Com arribar-hi"
+  },
+  "peu": {
+    "lema": "Lloguer, taller i botiga de bicis a la Costa Brava des de fa més de 15 anys.",
+    "legal": "Avís legal",
+    "privacitat": "Privacitat",
+    "galetes": "Galetes",
+    "drets": "© {any} Tecnibike Costa Brava SL",
+    "nertel": "Reserves i atenció amb Nertel"
+  },
+  "reserva": {
+    "tornar": "Totes les bicis",
+    "nova": "Lloguer",
+    "desDe": "des de {preu}/dia",
+    "talla": "Talla",
+    "tallaAjuda": "No saps la teva talla?",
+    "alcada": "La teva alçada",
+    "alcadaOpcio": "{min}–{max} cm",
+    "suggerida": "Et recomanem la talla {talla}",
+    "disponibles": "{n, plural, =0 {Esgotada} one {Queda 1} other {Queden #}}",
+    "pedals": "Pedals",
+    "pedalsOpcions": {
+      "plans": "Plans",
+      "spd": "Shimano SPD",
+      "spdSl": "Shimano SPD-SL",
+      "look": "Look"
+    },
+    "recollida": "Dia de recollida",
+    "durada": "Durada",
+    "migDia": "Mig dia",
+    "dies": "{n, plural, one {1 dia} other {# dies}}",
+    "menys": "Menys",
+    "mes": "Més",
+    "bicis": "Nombre de bicis",
+    "accessoris": "Afegeix a la reserva",
+    "accessorisOpcions": {
+      "casc": "Casc",
+      "cadenat": "Cadenat",
+      "cadiraNado": "Cadira per a nadó",
+      "alforges": "Alforges",
+      "comptaquilometres": "Comptaquilòmetres"
+    },
+    "inclos": "Inclòs",
+    "perBici": "{preu} per bici",
+    "dades": "Les teves dades",
+    "nom": "Nom i cognoms",
+    "telefon": "Telèfon (amb WhatsApp)",
+    "correu": "Correu electrònic",
+    "privacitat": "He llegit i accepto la política de privacitat.",
+    "perDiaX": "{preu} × {dies} × {bicis, plural, one {1 bici} other {# bicis}}",
+    "total": "Total",
+    "pagament": "Pagues a la botiga en recollir la bici*.",
+    "confirmar": "Confirma la reserva",
+    "enviant": "Enviant…",
+    "carregant": "Consultant disponibilitat…",
+    "errors": {
+      "dades": "Revisa els camps marcats.",
+      "esgotat": "Aquesta talla ja no queda per a aquests dies. Prova una altra talla o un altre dia.",
+      "durada": "Aquesta bici no es lloga per mig dia.",
+      "talla": "Tria una talla disponible.",
+      "xarxa": "No s'ha pogut enviar. Torna-ho a provar o truca'ns al 972 66 29 51."
+    },
+    "camps": {
+      "nom": "Escriu el teu nom.",
+      "telefon": "Escriu un telèfon vàlid, amb prefix si no és espanyol.",
+      "correu": "Escriu un correu vàlid.",
+      "privacitat": "Cal acceptar la política de privacitat."
+    },
+    "fet": {
+      "titol": "Reserva confirmada",
+      "codi": "Codi de reserva",
+      "text": "T'esperem el {data} a la botiga. Rebràs la confirmació per correu i WhatsApp*.",
+      "adreca": "Carrer de l'Empordà, 29 · Sant Antoni de Calonge",
+      "altra": "Fes una altra reserva"
+    },
+    "fitxa": {
+      "titol": "Què inclou",
+      "items": {
+        "revisada": "Revisada i ajustada abans de cada lloguer",
+        "talla": "Sella i manillar ajustats a la teva mida",
+        "casc": "Casc inclòs*",
+        "kit": "Kit de reparació i bomba*"
+      }
+    },
+    "perMigDia": "Mig dia: {preu} × {bicis, plural, one {1 bici} other {# bicis}}"
+  },
+  "cita": {
+    "titol": "Demana cita al taller",
+    "intro": "Tria què li passa i quan la portes. T'avisem per WhatsApp quan està llesta.",
+    "tornar": "Tornar a l'inici",
+    "pas1": "Quina bici portes?",
+    "tipus": {
+      "carretera": "Carretera",
+      "muntanya": "Muntanya",
+      "gravel": "Gravel",
+      "electrica": "Elèctrica",
+      "urbana": "Urbana"
+    },
+    "pas2": "Què li hem de fer?",
+    "potsTriarMes": "Pots triar-ne més d'un.",
+    "nota": "Explica'ns què li passa (opcional)",
+    "notaExemple": "Ex.: fa un soroll en canviar de pinyó",
+    "pas3": "Quan la portes?",
+    "franja": "Hora d'arribada",
+    "places": "{n, plural, =0 {Plena} one {1 plaça} other {# places}}",
+    "senseFranges": "Aquest dia no hi ha hores lliures. Prova'n un altre.",
+    "pas4": "Les teves dades",
+    "confirmar": "Demana la cita",
+    "enviant": "Enviant…",
+    "errors": {
+      "dades": "Revisa els camps marcats.",
+      "franja": "Aquesta hora s'acaba d'omplir. Tria'n una altra.",
+      "serveis": "Tria almenys un servei.",
+      "xarxa": "No s'ha pogut enviar. Torna-ho a provar o truca'ns al 972 66 29 51."
+    },
+    "fet": {
+      "titol": "Cita confirmada",
+      "text": "T'esperem el {data} a les {hora}. Et direm el pressupost abans de tocar res i t'avisarem per WhatsApp quan estigui llesta*.",
+      "altra": "Demana una altra cita"
+    }
+  }
+}

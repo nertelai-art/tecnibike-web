@@ -1,0 +1,27 @@
+.logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  color: var(--blau);
+}
+
+.sigles {
+  font-weight: 700;
+  font-size: 26px;
+  font-variation-settings: 'wdth' 62;
+  letter-spacing: 0.02em;
+}
+
+.nom {
+  margin-top: 2px;
+  font-size: 7.5px;
+  font-weight: 500;
+  letter-spacing: 0.62em;
+  margin-right: -0.62em;
+  text-transform: uppercase;
+}
+
+.clar {
+  color: var(--blau);
+}

@@ -1,0 +1,578 @@
+/* Fitxa de reserva: escenari gris a l'esquerra, panell blanc enganxat a la dreta (Scott). */
+
+.pagina {
+  padding-top: calc(var(--header-h) + 40px);
+  padding-bottom: var(--section);
+}
+
+.graella {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(360px, 0.75fr);
+  gap: clamp(24px, 3vw, 48px);
+  align-items: start;
+}
+
+.tornar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--tinta-2);
+}
+.tornar:hover {
+  color: var(--tinta);
+}
+
+.escenari {
+  position: sticky;
+  top: calc(var(--header-h) + 32px);
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  padding: clamp(24px, 4vw, 64px);
+  border-radius: var(--radi);
+  background: radial-gradient(90% 80% at 50% 45%, var(--blanc), var(--escenari) 70%);
+}
+.escenari img {
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
+}
+
+.etiquetes {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+}
+.etiqueta {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--taronja);
+  color: var(--grafit);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.etiqueta--fosca {
+  background: var(--grafit);
+  color: var(--blanc);
+}
+
+.inclou {
+  margin-top: 32px;
+}
+.inclou h2 {
+  font-size: 28px;
+}
+.inclou ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 24px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.inclou li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  color: var(--tinta-2);
+}
+.inclou li::before {
+  content: '✓';
+  color: var(--blau-fosc);
+  font-weight: 800;
+}
+
+/* ── Capçalera del panell ── */
+
+.capPanell {
+  margin-bottom: 8px;
+}
+.categoria {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+.nom {
+  margin-top: 8px;
+  font-size: clamp(36px, 3.6vw, 52px);
+}
+.ratlla {
+  width: 28px;
+  height: 3px;
+  margin: 16px 0;
+  background: var(--grafit);
+}
+.model {
+  color: var(--tinta-2);
+}
+.desDe {
+  margin-top: 8px;
+  font-size: 22px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Panell ── */
+
+.columna {
+  position: sticky;
+  top: calc(var(--header-h) + 32px);
+  padding: 28px;
+  border-radius: var(--radi);
+  background: var(--blanc);
+  box-shadow: 0 24px 60px -36px rgb(18 20 23 / 0.35);
+}
+
+.panell {
+  display: grid;
+  gap: 22px;
+  margin-top: 20px;
+}
+
+.grup {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.grup legend,
+.camp > span {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.talles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.talla {
+  position: relative;
+  cursor: pointer;
+}
+.talla input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+.talla > span:first-of-type {
+  display: grid;
+  place-items: center;
+  min-width: 56px;
+  height: 48px;
+  padding: 0 12px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1.5px var(--linia);
+  font-weight: 800;
+  transition:
+    box-shadow 0.15s var(--ease),
+    background-color 0.15s var(--ease);
+}
+.talla:hover > span:first-of-type {
+  box-shadow: inset 0 0 0 1.5px var(--grafit);
+}
+.talla input:checked + span {
+  background: var(--grafit);
+  color: var(--blanc);
+  box-shadow: none;
+}
+.talla input:focus-visible + span {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+.talla input:disabled + span {
+  color: var(--tinta-3);
+  background: var(--escenari);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+.talla[data-suggerida] > span:first-of-type {
+  box-shadow: inset 0 0 0 2px var(--blau-fosc);
+}
+/* Punt de disponibilitat, com el de les talles de Scott. */
+.talla i {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--escenari-2);
+}
+.talla[data-estat='lliure'] i {
+  background: #1f9d55;
+}
+.talla[data-estat='poques'] i {
+  background: var(--taronja);
+}
+.talla[data-estat='esgotada'] i {
+  background: #c53030;
+}
+
+.ajuda {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+
+.ajudaTalla {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.ajudaTalla summary {
+  cursor: pointer;
+  color: var(--blau-fosc);
+  font-weight: 700;
+}
+.ajudaTalla .camp {
+  margin-top: 12px;
+}
+
+.suggerida {
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.enllac {
+  border: 0;
+  background: var(--blau-fosc);
+  color: var(--blanc);
+  border-radius: 999px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.segments {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.segment {
+  position: relative;
+}
+.segment input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+.segment span {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1.5px var(--linia);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+.segment input:checked + span {
+  background: var(--blau-clar);
+  box-shadow: inset 0 0 0 2px var(--blau-fosc);
+  color: var(--blau-fosc);
+}
+.segment input:focus-visible + span {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.camp {
+  display: grid;
+  min-width: 0;
+}
+.camp input,
+.camp select,
+.camp textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--escenari);
+  box-shadow: inset 0 0 0 1.5px transparent;
+  font: inherit;
+  font-size: 16px;
+  color: var(--tinta);
+  transition: box-shadow 0.15s var(--ease);
+}
+.camp textarea {
+  min-height: 96px;
+  padding-top: 12px;
+  resize: vertical;
+}
+.camp input:focus,
+.camp select:focus,
+.camp textarea:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--blau-fosc);
+}
+.camp em,
+.errorSolt {
+  margin-top: 6px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  color: #b42318;
+}
+.camp[data-error] input {
+  box-shadow: inset 0 0 0 2px #b42318;
+}
+.camp + .camp,
+.camp + .fila,
+.fila + .check {
+  margin-top: 12px;
+}
+
+.comptador {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  min-height: 48px;
+  border-radius: 12px;
+  background: var(--escenari);
+}
+.comptador button {
+  height: 48px;
+  border: 0;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+.comptador button:hover:not(:disabled) {
+  background: var(--escenari-2);
+}
+.comptador button:disabled {
+  color: var(--tinta-3);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.comptador output {
+  text-align: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.accessoris {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.accessoris label,
+.check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.accessoris small {
+  margin-left: auto;
+  color: var(--tinta-2);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.accessoris input,
+.check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--blau-fosc);
+  flex-shrink: 0;
+}
+.check {
+  font-size: 14px;
+}
+.check[data-error] span {
+  color: #b42318;
+}
+
+.resum {
+  display: grid;
+  gap: 6px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--linia);
+}
+.linia {
+  font-size: 14px;
+  color: var(--tinta-2);
+  font-variant-numeric: tabular-nums;
+}
+.total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 18px;
+}
+.total strong {
+  font-size: 34px;
+  font-variation-settings: 'wdth' 78;
+  font-variant-numeric: tabular-nums;
+}
+
+.error {
+  margin-top: 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fef3f2;
+  color: #b42318;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.confirmar {
+  width: 100%;
+  margin-top: 10px;
+  min-height: 56px;
+}
+.confirmar:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+}
+
+/* ── Pàgina de cita ── */
+
+.columnaFlux {
+  position: relative;
+  top: 0;
+  margin-top: 32px;
+}
+
+.costat {
+  position: sticky;
+  top: calc(var(--header-h) + 32px);
+  display: grid;
+  gap: 20px;
+}
+
+.foto {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radi);
+  overflow: hidden;
+}
+.foto img {
+  object-fit: cover;
+}
+
+.avantatges {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 20px 22px;
+  border-radius: var(--radi);
+  background: var(--grafit);
+  color: var(--blanc);
+  list-style: none;
+  font-weight: 600;
+}
+.avantatges li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.avantatges li::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--taronja);
+  flex-shrink: 0;
+}
+
+/* ── Confirmació ── */
+
+.fet {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  margin-top: 20px;
+}
+.fet h2 {
+  font-size: 40px;
+}
+.fetMarca {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #1f9d55;
+  color: var(--blanc);
+  font-size: 28px;
+  font-weight: 800;
+}
+.codi {
+  display: grid;
+  gap: 2px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: var(--escenari);
+}
+.codi span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+}
+.codi strong {
+  font-size: 28px;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+.adreca {
+  color: var(--tinta-2);
+  font-size: 14px;
+}
+.totalFet strong {
+  font-size: 22px;
+}
+
+@media (max-width: 980px) {
+  .graella {
+    grid-template-columns: 1fr;
+  }
+  .escenari,
+  .columna,
+  .costat {
+    position: relative;
+    top: 0;
+  }
+  .columna {
+    padding: 22px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fila {
+    grid-template-columns: 1fr;
+  }
+}

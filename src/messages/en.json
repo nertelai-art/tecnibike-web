@@ -1,0 +1,293 @@
+{
+  "meta": {
+    "titol": "Tecnibike · Bike rental and workshop on the Costa Brava",
+    "descripcio": "Rent road, gravel, mountain and electric bikes in Sant Antoni de Calonge, or book a workshop appointment. Cannondale, Scott, Specialized, Pinarello and Colnago."
+  },
+  "nav": {
+    "saltar": "Skip to content",
+    "lloguer": "Rental",
+    "taller": "Workshop",
+    "rutes": "Routes",
+    "botiga": "Shop",
+    "visita": "Find us",
+    "reserva": "Book",
+    "idioma": "Language",
+    "menu": "Menu",
+    "tancar": "Close menu",
+    "inici": "Tecnibike, home"
+  },
+  "mostra": {
+    "marca": "Sample data, to be confirmed",
+    "nota": "Data marked with * is sample data and must be confirmed with Tecnibike."
+  },
+  "portada": {
+    "situacio": "Sant Antoni de Calonge · Costa Brava",
+    "titol1": "Rent it.",
+    "titol2": "Fix it.",
+    "titol3": "Ride the Costa Brava.",
+    "subtitol": "High-end bikes from our shop, by the day or by the hour, and a workshop that keeps yours in shape. Book in two minutes, in your language.",
+    "ctaLloguer": "Book a bike",
+    "ctaTaller": "Book the workshop",
+    "valoracio": "{mitjana} out of 5 · {total} Google reviews",
+    "scroll": "Scroll to take it apart"
+  },
+  "anatomia": {
+    "situacio": "Anatomy of a bike",
+    "titol": "Every part has its service.",
+    "intro": "We take the bike apart piece by piece. Pick the one that worries you and book the service right away.",
+    "desDe": "from {preu}",
+    "termini": "{dies, plural, one {Ready in 24 h} other {Ready in # days}}",
+    "reservar": "Book this service",
+    "final": {
+      "titol": "All of it, in one full service.",
+      "text": "We check all six parts, adjust, lubricate and hand it back like new. We'll message you on WhatsApp when it's ready.",
+      "cta": "Book the workshop"
+    },
+    "sr": "A blue road bike comes apart into six parts (drivetrain, brakes, wheels, cockpit, saddle and frame) and then goes back together.",
+    "peces": {
+      "transmissio": {
+        "nom": "Drivetrain",
+        "servei": "Gear, chain and cassette tune-up",
+        "text": "If your gears skip, rattle or shift badly, we adjust them and measure chain wear."
+      },
+      "frens": {
+        "nom": "Brakes",
+        "servei": "Bleed and pads",
+        "text": "Hydraulic brakes bled, new pads and centred rotors so you stop without squealing."
+      },
+      "rodes": {
+        "nom": "Wheels",
+        "servei": "Punctures, tubeless and truing",
+        "text": "We fix punctures, set up tubeless and true the wheel so it spins straight."
+      },
+      "direccio": {
+        "nom": "Cockpit",
+        "servei": "Headset, stem and bar tape",
+        "text": "We check the headset bearings, adjust the stem and replace the handlebar tape."
+      },
+      "seient": {
+        "nom": "Saddle",
+        "servei": "Position adjustment (bike fitting)",
+        "text": "Saddle height and setback and handlebar height set for you, so you ride without back pain."
+      },
+      "quadre": {
+        "nom": "Frame",
+        "servei": "Full service",
+        "text": "Deep clean, structural frame check and every part adjusted. The bike, like day one."
+      }
+    }
+  },
+  "flota": {
+    "situacio": "Rental",
+    "titol": "Choose your bike.",
+    "intro": "Bikes from our own shop, checked after every rental. The more days you keep it, the lower the price.",
+    "categories": {
+      "totes": "All",
+      "muntanya": "Mountain",
+      "carretera": "Road",
+      "gravel": "Gravel",
+      "passeig": "City"
+    },
+    "electrica": "Electric",
+    "desDe": "from",
+    "perDia": "/day",
+    "talles": "Sizes",
+    "reservar": "Book",
+    "tarifes": {
+      "titol": "All 2026 prices",
+      "obrir": "Show all prices",
+      "bici": "Bike",
+      "dia": "1 day",
+      "migDia": "Half day",
+      "de2a6": "2–6 days",
+      "mesDe6": "7+ days",
+      "nota": "Price per bike per day. Helmet included*."
+    }
+  },
+  "comFunciona": {
+    "titol": "Renting is this easy.",
+    "passos": {
+      "u": { "titol": "Pick bike and size", "text": "We tell you which size fits your height, and you choose your pedals." },
+      "dos": { "titol": "Pick your days", "text": "You see the full price instantly, no surprises, and book in two minutes." },
+      "tres": { "titol": "Collect it and ride", "text": "At the shop we set it up for you. Your helmet will be ready." }
+    }
+  },
+  "taller": {
+    "situacio": "Workshop",
+    "titol": "Mechanics who get your bike.",
+    "intro": "Over 15 years repairing road, mountain and electric bikes. Book a slot, drop it off, and we'll message you on WhatsApp when it's ready.",
+    "servei": "Service",
+    "preu": "Price",
+    "termini": "Turnaround",
+    "reservar": "Book a slot",
+    "avantatges": {
+      "whatsapp": "WhatsApp message when it's ready",
+      "pressupost": "A quote before we touch anything",
+      "cafe": "Coffee zone while you wait"
+    },
+    "electrica": "E-bike diagnostics too"
+  },
+  "rutes": {
+    "situacio": "Routes",
+    "titol": "The Costa Brava is the best gym.",
+    "intro": "Our favourite rides from the shop, and guides to show you the way. We also organise guided trips all over Europe.",
+    "distancia": "{km} km",
+    "desnivell": "{m} m+",
+    "bici": "On",
+    "guia": "I want a guided ride",
+    "llista": {
+      "gavarres": { "nom": "Gavarres loop", "tipus": "Road", "text": "Climb to Romanyà and descend through Santa Cristina with sea views." },
+      "fitor": { "nom": "Coll de Fitor", "tipus": "Gravel", "text": "Tracks through cork oaks up to the sanctuary, back via Calonge." },
+      "ardenya": { "nom": "Ardenya massif", "tipus": "Mountain", "text": "Technical singletrack through the pines, Sant Feliu bay below you." }
+    }
+  },
+  "marques": {
+    "titol": "The brands we ride are the brands we sell.",
+    "bicis": "Bikes",
+    "material": "Components, clothing and nutrition"
+  },
+  "botiga": {
+    "situacio": "The shop",
+    "titol": "Come and see them.",
+    "text": "Bikes, clothing, components and nutrition from the best brands, and advice to choose well. And a coffee, if you're out on a ride.",
+    "fotos": {
+      "dogma": "Red Pinarello Dogma in the shop",
+      "interiorCarretera": "Inside the shop with road bikes and a wheel display",
+      "interiorEbikes": "Cannondale e-bikes and the shop's gear wall",
+      "colnago": "Colnago with carbon wheels",
+      "pinarello": "Red Pinarello road bike"
+    }
+  },
+  "ressenyes": {
+    "titol": "What people say about us.",
+    "font": "Google reviews",
+    "estrelles": "{n} out of 5 stars"
+  },
+  "faq": {
+    "titol": "Frequently asked questions",
+    "items": {
+      "talla": { "p": "How do I know my size?", "r": "When you book we ask your height and suggest a size. At the shop we fine-tune saddle height and handlebar position." },
+      "pedals": { "p": "Can I bring my own pedals?", "r": "Of course. We also have flat, Shimano SPD, SPD-SL and Look pedals so you don't have to pack yours." },
+      "fianca": { "p": "Is there a deposit?", "r": "We ask for an ID card or passport and a card deposit, refunded when you return the bike*." },
+      "cancel": { "p": "Can I cancel my booking?", "r": "Yes, free of charge up to 48 hours before collection*." },
+      "hotel": { "p": "Do you deliver to my hotel?", "r": "We deliver to hotels in Calonge, Platja d'Aro and Palamós for two bikes or more*." },
+      "taller": { "p": "How long does the workshop take?", "r": "A service or a puncture is usually same day or next day. We give you the turnaround when you drop it off and message you on WhatsApp." }
+    }
+  },
+  "visita": {
+    "situacio": "Find us",
+    "titol": "Five minutes from the beach.",
+    "adreca": "Carrer de l'Empordà, 29",
+    "poble": "17252 Sant Antoni de Calonge (Girona)",
+    "horari": "Opening hours",
+    "dies": "Monday to Saturday",
+    "hores": "9 am–1 pm and 4–8 pm",
+    "diumenge": "Closed on Sunday",
+    "telefon": "Call us",
+    "whatsapp": "Message us on WhatsApp",
+    "correu": "Email",
+    "mapa": "Get directions"
+  },
+  "peu": {
+    "lema": "Bike rental, workshop and shop on the Costa Brava for over 15 years.",
+    "legal": "Legal notice",
+    "privacitat": "Privacy",
+    "galetes": "Cookies",
+    "drets": "© {any} Tecnibike Costa Brava SL",
+    "nertel": "Bookings and support by Nertel"
+  },
+  "reserva": {
+    "tornar": "All bikes",
+    "nova": "Rental",
+    "desDe": "from {preu}/day",
+    "talla": "Size",
+    "tallaAjuda": "Not sure about your size?",
+    "alcada": "Your height",
+    "alcadaOpcio": "{min}–{max} cm",
+    "suggerida": "We recommend size {talla}",
+    "disponibles": "{n, plural, =0 {Sold out} one {1 left} other {# left}}",
+    "pedals": "Pedals",
+    "pedalsOpcions": { "plans": "Flat", "spd": "Shimano SPD", "spdSl": "Shimano SPD-SL", "look": "Look" },
+    "recollida": "Collection day",
+    "durada": "Duration",
+    "migDia": "Half day",
+    "dies": "{n, plural, one {1 day} other {# days}}",
+    "menys": "Less",
+    "mes": "More",
+    "bicis": "Number of bikes",
+    "accessoris": "Add to your booking",
+    "accessorisOpcions": { "casc": "Helmet", "cadenat": "Lock", "cadiraNado": "Child seat", "alforges": "Panniers", "comptaquilometres": "Bike computer" },
+    "inclos": "Included",
+    "perBici": "{preu} per bike",
+    "dades": "Your details",
+    "nom": "Full name",
+    "telefon": "Phone (with WhatsApp)",
+    "correu": "Email",
+    "privacitat": "I have read and accept the privacy policy.",
+    "perDiaX": "{preu} × {dies} × {bicis, plural, one {1 bike} other {# bikes}}",
+    "perMigDia": "Half day: {preu} × {bicis, plural, one {1 bike} other {# bikes}}",
+    "total": "Total",
+    "pagament": "You pay at the shop when you collect the bike*.",
+    "confirmar": "Confirm booking",
+    "enviant": "Sending…",
+    "carregant": "Checking availability…",
+    "errors": {
+      "dades": "Please check the highlighted fields.",
+      "esgotat": "This size is no longer available for these days. Try another size or day.",
+      "durada": "This bike can't be rented for half a day.",
+      "talla": "Choose an available size.",
+      "xarxa": "We couldn't send it. Please try again or call us on +34 972 66 29 51."
+    },
+    "camps": {
+      "nom": "Enter your name.",
+      "telefon": "Enter a valid phone number, with country code if not Spanish.",
+      "correu": "Enter a valid email.",
+      "privacitat": "You need to accept the privacy policy."
+    },
+    "fet": {
+      "titol": "Booking confirmed",
+      "codi": "Booking code",
+      "text": "See you on {data} at the shop. You'll get the confirmation by email and WhatsApp*.",
+      "adreca": "Carrer de l'Empordà, 29 · Sant Antoni de Calonge",
+      "altra": "Make another booking"
+    },
+    "fitxa": {
+      "titol": "What's included",
+      "items": {
+        "revisada": "Checked and tuned before every rental",
+        "talla": "Saddle and bars set to your size",
+        "casc": "Helmet included*",
+        "kit": "Repair kit and pump*"
+      }
+    }
+  },
+  "cita": {
+    "titol": "Book the workshop",
+    "intro": "Tell us what's wrong and when you'll bring it. We'll message you on WhatsApp when it's ready.",
+    "tornar": "Back to home",
+    "pas1": "Which bike are you bringing?",
+    "tipus": { "carretera": "Road", "muntanya": "Mountain", "gravel": "Gravel", "electrica": "Electric", "urbana": "City" },
+    "pas2": "What does it need?",
+    "potsTriarMes": "You can choose more than one.",
+    "nota": "Tell us what's going on (optional)",
+    "notaExemple": "E.g.: it makes a noise when shifting",
+    "pas3": "When will you bring it?",
+    "franja": "Drop-off time",
+    "places": "{n, plural, =0 {Full} one {1 slot} other {# slots}}",
+    "senseFranges": "No free slots this day. Try another one.",
+    "pas4": "Your details",
+    "confirmar": "Book the slot",
+    "enviant": "Sending…",
+    "errors": {
+      "dades": "Please check the highlighted fields.",
+      "franja": "This time has just filled up. Choose another one.",
+      "serveis": "Choose at least one service.",
+      "xarxa": "We couldn't send it. Please try again or call us on +34 972 66 29 51."
+    },
+    "fet": {
+      "titol": "Appointment confirmed",
+      "text": "See you on {data} at {hora}. We'll give you a quote before touching anything and message you on WhatsApp when it's ready*.",
+      "altra": "Book another slot"
+    }
+  }
+}

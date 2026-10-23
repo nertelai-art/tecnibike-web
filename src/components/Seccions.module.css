@@ -1,0 +1,581 @@
+.titolMig {
+  font-size: clamp(36px, 5vw, 64px);
+  max-width: 16ch;
+}
+
+/* ── Com funciona ── */
+
+.comFunciona {
+  background: var(--escenari);
+}
+
+.passos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 0;
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: pas;
+}
+
+.pas {
+  position: relative;
+  padding: 28px 28px 28px 0;
+  border-top: 2px solid var(--grafit);
+}
+.pas + .pas {
+  padding-left: 28px;
+  border-left: 1px solid var(--linia);
+}
+.pas h3 {
+  margin-top: 16px;
+  font-size: 30px;
+}
+.pas p {
+  margin-top: 10px;
+  color: var(--tinta-2);
+  max-width: 34ch;
+}
+
+.numeroPas {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--taronja);
+  color: var(--grafit);
+  font-weight: 800;
+}
+
+@media (max-width: 700px) {
+  .pas + .pas {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* ── Taller (fosc) ── */
+
+.taller {
+  background: var(--grafit);
+  color: var(--blanc);
+}
+
+.situacioClara {
+  color: rgb(255 255 255 / 0.7);
+}
+.introClara {
+  color: rgb(255 255 255 / 0.75);
+}
+
+.tallerGraella {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.avantatges {
+  display: grid;
+  gap: 12px;
+  margin: 32px 0 36px;
+  padding: 0;
+  list-style: none;
+}
+.avantatges li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+.avantatges li::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--taronja);
+  flex-shrink: 0;
+}
+
+.llistaServeis {
+  border-radius: var(--radi);
+  background: var(--grafit-2);
+  padding: 8px 24px;
+}
+.llistaServeis table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.llistaServeis th,
+.llistaServeis td {
+  padding: 18px 8px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  text-align: left;
+  vertical-align: top;
+}
+.llistaServeis tbody tr:last-child th,
+.llistaServeis tbody tr:last-child td {
+  border-bottom: 0;
+}
+.llistaServeis thead th {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.55);
+  font-weight: 600;
+}
+.llistaServeis tbody th {
+  font-weight: 600;
+}
+.llistaServeis td {
+  color: rgb(255 255 255 / 0.7);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.pecaServei {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blau);
+  margin-bottom: 4px;
+}
+
+.preuServei {
+  color: var(--blanc) !important;
+  font-weight: 700;
+  font-size: 16px !important;
+  text-align: right !important;
+}
+.llistaServeis :global(.mostra) {
+  color: var(--taronja);
+}
+
+@media (max-width: 900px) {
+  .tallerGraella {
+    grid-template-columns: 1fr;
+  }
+  .llistaServeis {
+    padding: 4px 14px;
+  }
+  .llistaServeis td {
+    white-space: normal;
+  }
+}
+
+/* ── Rutes ── */
+
+.rutes {
+  background: var(--blanc);
+}
+
+.rutesGraella {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 20px;
+  margin: 48px 0 40px;
+  padding: 0;
+  list-style: none;
+}
+
+.ruta {
+  padding: 24px;
+  border-radius: var(--radi);
+  background: var(--escenari);
+}
+.ruta h3 {
+  margin-top: 6px;
+  font-size: 30px;
+}
+
+.tracat {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  margin-bottom: 16px;
+  background-image:
+    linear-gradient(var(--linia-fina) 1px, transparent 1px),
+    linear-gradient(90deg, var(--linia-fina) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-radius: 12px;
+}
+.tracat path {
+  fill: none;
+  stroke: var(--blau-fosc);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.8s var(--ease) 0.2s;
+}
+.ruta[data-visible='true'] .tracat path {
+  stroke-dashoffset: 0;
+}
+.tracat circle {
+  fill: var(--taronja);
+}
+
+.tipusRuta {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taronja-fosc);
+}
+
+.textRuta {
+  margin-top: 8px;
+  color: var(--tinta-2);
+  font-size: 15px;
+}
+
+.dades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px dashed var(--linia);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.dades div {
+  display: flex;
+  gap: 6px;
+}
+.dades dt {
+  color: var(--tinta-3);
+}
+.dades dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tracat path {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ── Marques ── */
+
+.marques {
+  padding-block: 64px;
+  background: var(--escenari);
+  border-block: 1px solid var(--linia-fina);
+}
+
+.etiquetaMarques {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+
+.marquesBicis {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 32px;
+  margin: 14px 0 36px;
+  padding: 0;
+  list-style: none;
+}
+.marquesBicis li {
+  font-size: clamp(30px, 4.6vw, 64px);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-variation-settings: 'wdth' 64;
+  letter-spacing: -0.01em;
+  color: var(--grafit);
+}
+
+.marquesMaterial {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.marquesMaterial li {
+  font-weight: 600;
+  color: var(--tinta-2);
+}
+
+/* ── Botiga ── */
+
+.botiga {
+  background: var(--blanc);
+}
+
+.botigaGraella {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+
+.mosaic {
+  display: grid;
+  /* Cinc fotos: la gran ocupa 2×2 i les altres quatre omplen les dues columnes de la dreta. */
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: clamp(120px, 13vw, 210px);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.foto {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--escenari);
+}
+.foto img {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+.foto:hover img {
+  transform: scale(1.04);
+}
+
+.fotoGran {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+@media (max-width: 900px) {
+  .botigaGraella {
+    grid-template-columns: 1fr;
+  }
+  .mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 150px;
+  }
+}
+
+/* ── Ressenyes ── */
+
+.ressenyes {
+  background: var(--escenari);
+}
+
+.capRessenyes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.nota {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--tinta-2);
+}
+.nota strong {
+  font-size: 56px;
+  line-height: 1;
+  color: var(--tinta);
+  font-variation-settings: 'wdth' 70;
+}
+
+.estrelles {
+  color: var(--taronja);
+  letter-spacing: 0.08em;
+}
+
+.ressenyesGraella {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 20px;
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ressenya {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px;
+  border-radius: var(--radi);
+  background: var(--blanc);
+}
+.ressenya blockquote {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.45;
+  flex: 1;
+}
+
+.autor {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--tinta-2);
+}
+
+/* ── Preguntes ── */
+
+.preguntes {
+  background: var(--blanc);
+}
+
+.preguntesGraella {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(32px, 5vw, 80px);
+}
+
+.pregunta {
+  border-bottom: 1px solid var(--linia);
+}
+.pregunta summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 68px;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  list-style: none;
+}
+.pregunta summary::-webkit-details-marker {
+  display: none;
+}
+.pregunta summary span {
+  font-size: 26px;
+  font-weight: 400;
+  transition: transform 0.25s var(--ease);
+}
+.pregunta[open] summary span {
+  transform: rotate(45deg);
+}
+.pregunta p {
+  padding-bottom: 22px;
+  max-width: 60ch;
+  color: var(--tinta-2);
+}
+
+@media (max-width: 900px) {
+  .preguntesGraella {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Visita (blau) ── */
+
+.visita {
+  background: var(--blau-fosc);
+  color: var(--blanc);
+}
+
+.visitaGraella {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: end;
+}
+
+.adreca {
+  margin-top: 28px;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.contacte {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  margin-top: 32px;
+}
+
+.enllacClar {
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+.horari {
+  padding: 28px;
+  border-radius: var(--radi);
+  background: rgb(255 255 255 / 0.1);
+}
+.horari h3 {
+  font-size: 28px;
+}
+.horari dl {
+  margin: 18px 0 24px;
+}
+.horari dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.18);
+}
+.horari dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .visitaGraella {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Peu ── */
+
+.peu {
+  background: var(--grafit);
+  color: rgb(255 255 255 / 0.75);
+  padding-block: 64px 40px;
+}
+
+.peuGraella {
+  display: grid;
+  gap: 18px;
+}
+
+.peuMarca {
+  font-size: clamp(80px, 18vw, 240px);
+  font-weight: 800;
+  line-height: 0.85;
+  font-variation-settings: 'wdth' 62;
+  color: var(--blau);
+}
+
+.lema {
+  max-width: 48ch;
+}
+
+.notaMostra {
+  font-size: 13px;
+  color: var(--taronja);
+}
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 24px 0 0;
+  padding: 24px 0 0;
+  border-top: 1px solid rgb(255 255 255 / 0.12);
+  list-style: none;
+  font-size: 14px;
+}

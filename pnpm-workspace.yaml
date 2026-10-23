@@ -1,0 +1,9 @@
+# pnpm no executa scripts d'instal·lació sense permís explícit. Aquests tres es deneguen
+# a posta: els binaris natius ja arriben precompilats per optionalDependencies.
+# - unrs-resolver (eslint-config-next): el postinstall només comprova el binari.
+# - @swc/core i @parcel/watcher (next-intl): el postinstall i el «build-from-source»
+#   només compilen si no hi ha binari precompilat.
+allowBuilds:
+  unrs-resolver: false
+  '@swc/core': false
+  '@parcel/watcher': false

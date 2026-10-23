@@ -1,0 +1,293 @@
+{
+  "meta": {
+    "titol": "Tecnibike · Location de vélos et atelier sur la Costa Brava",
+    "descripcio": "Louez des vélos de route, gravel, VTT et électriques à Sant Antoni de Calonge, ou prenez rendez-vous à l'atelier. Cannondale, Scott, Specialized, Pinarello et Colnago."
+  },
+  "nav": {
+    "saltar": "Aller au contenu",
+    "lloguer": "Location",
+    "taller": "Atelier",
+    "rutes": "Parcours",
+    "botiga": "Boutique",
+    "visita": "Nous trouver",
+    "reserva": "Réserver",
+    "idioma": "Langue",
+    "menu": "Menu",
+    "tancar": "Fermer le menu",
+    "inici": "Tecnibike, accueil"
+  },
+  "mostra": {
+    "marca": "Donnée d'exemple, à confirmer",
+    "nota": "Les données marquées d'un * sont des exemples et doivent être confirmées avec Tecnibike."
+  },
+  "portada": {
+    "situacio": "Sant Antoni de Calonge · Costa Brava",
+    "titol1": "Louez-le.",
+    "titol2": "Réparez-le.",
+    "titol3": "Roulez la Costa Brava.",
+    "subtitol": "Des vélos haut de gamme de notre boutique, à la journée ou à l'heure, et un atelier qui garde le vôtre au top. Réservez en deux minutes, dans votre langue.",
+    "ctaLloguer": "Réserver un vélo",
+    "ctaTaller": "Rendez-vous à l'atelier",
+    "valoracio": "{mitjana} sur 5 · {total} avis Google",
+    "scroll": "Faites défiler pour le démonter"
+  },
+  "anatomia": {
+    "situacio": "Anatomie d'un vélo",
+    "titol": "Chaque pièce a son service.",
+    "intro": "Nous démontons le vélo pièce par pièce. Choisissez celle qui vous inquiète et réservez le service directement.",
+    "desDe": "dès {preu}",
+    "termini": "{dies, plural, one {Prêt en 24 h} other {Prêt en # jours}}",
+    "reservar": "Réserver ce service",
+    "final": {
+      "titol": "Le tout, en une révision complète.",
+      "text": "Nous vérifions les six pièces, réglons, graissons et vous le rendons comme neuf. On vous prévient sur WhatsApp quand il est prêt.",
+      "cta": "Rendez-vous à l'atelier"
+    },
+    "sr": "Un vélo de route bleu se démonte en six pièces (transmission, freins, roues, direction, selle et cadre) puis se remonte.",
+    "peces": {
+      "transmissio": {
+        "nom": "Transmission",
+        "servei": "Réglage des vitesses, chaîne et cassette",
+        "text": "Si les vitesses sautent, font du bruit ou passent mal, nous les réglons et mesurons l'usure de la chaîne."
+      },
+      "frens": {
+        "nom": "Freins",
+        "servei": "Purge et plaquettes",
+        "text": "Freins hydrauliques purgés, plaquettes neuves et disques centrés pour freiner sans grincer."
+      },
+      "rodes": {
+        "nom": "Roues",
+        "servei": "Crevaisons, tubeless et dévoilage",
+        "text": "Nous réparons les crevaisons, montons le tubeless et dévoilons la roue pour qu'elle tourne droit."
+      },
+      "direccio": {
+        "nom": "Direction",
+        "servei": "Jeu de direction, potence et ruban",
+        "text": "Nous vérifions les roulements de direction, réglons la potence et changeons le ruban de cintre."
+      },
+      "seient": {
+        "nom": "Selle",
+        "servei": "Réglage de position (bike fitting)",
+        "text": "Hauteur et recul de selle et hauteur du cintre à votre mesure, pour pédaler sans mal de dos."
+      },
+      "quadre": {
+        "nom": "Cadre",
+        "servei": "Révision complète",
+        "text": "Nettoyage à fond, contrôle structurel du cadre et réglage de toutes les pièces. Le vélo, comme au premier jour."
+      }
+    }
+  },
+  "flota": {
+    "situacio": "Location",
+    "titol": "Choisissez votre vélo.",
+    "intro": "Des vélos de notre boutique, révisés après chaque location. Plus vous le gardez, plus le prix baisse.",
+    "categories": {
+      "totes": "Tous",
+      "muntanya": "VTT",
+      "carretera": "Route",
+      "gravel": "Gravel",
+      "passeig": "Ville"
+    },
+    "electrica": "Électrique",
+    "desDe": "dès",
+    "perDia": "/jour",
+    "talles": "Tailles",
+    "reservar": "Réserver",
+    "tarifes": {
+      "titol": "Tous les tarifs 2026",
+      "obrir": "Voir tous les tarifs",
+      "bici": "Vélo",
+      "dia": "1 jour",
+      "migDia": "Demi-journée",
+      "de2a6": "2–6 jours",
+      "mesDe6": "7 jours et +",
+      "nota": "Prix par vélo et par jour. Casque inclus*."
+    }
+  },
+  "comFunciona": {
+    "titol": "Louer, c'est aussi simple que ça.",
+    "passos": {
+      "u": { "titol": "Vélo et taille", "text": "On vous dit quelle taille vous convient selon votre taille, et vous choisissez les pédales." },
+      "dos": { "titol": "Vos dates", "text": "Vous voyez le prix total tout de suite, sans surprise, et réservez en deux minutes." },
+      "tres": { "titol": "Récupérez-le et roulez", "text": "En boutique, nous le réglons pour vous. Votre casque vous attend." }
+    }
+  },
+  "taller": {
+    "situacio": "Atelier",
+    "titol": "Des mécaniciens qui comprennent votre vélo.",
+    "intro": "Plus de 15 ans à réparer des vélos de route, VTT et électriques. Réservez un créneau, déposez-le, et on vous prévient sur WhatsApp quand il est prêt.",
+    "servei": "Service",
+    "preu": "Prix",
+    "termini": "Délai",
+    "reservar": "Prendre rendez-vous",
+    "avantatges": {
+      "whatsapp": "Message WhatsApp quand il est prêt",
+      "pressupost": "Un devis avant de toucher à quoi que ce soit",
+      "cafe": "Coffee zone pendant l'attente"
+    },
+    "electrica": "Diagnostic de VAE aussi"
+  },
+  "rutes": {
+    "situacio": "Parcours",
+    "titol": "La Costa Brava, la meilleure salle de sport.",
+    "intro": "Nos sorties préférées au départ de la boutique, et des guides pour vous les faire découvrir. Nous organisons aussi des voyages guidés dans toute l'Europe.",
+    "distancia": "{km} km",
+    "desnivell": "{m} m D+",
+    "bici": "En",
+    "guia": "Je veux une sortie guidée",
+    "llista": {
+      "gavarres": { "nom": "Boucle des Gavarres", "tipus": "Route", "text": "Montée à Romanyà et descente par Santa Cristina avec vue sur la mer." },
+      "fitor": { "nom": "Coll de Fitor", "tipus": "Gravel", "text": "Pistes entre les chênes-lièges jusqu'au sanctuaire, retour par Calonge." },
+      "ardenya": { "nom": "Massif de l'Ardenya", "tipus": "VTT", "text": "Sentiers techniques entre les pins, la baie de Sant Feliu à vos pieds." }
+    }
+  },
+  "marques": {
+    "titol": "Les marques que nous roulons sont celles que nous vendons.",
+    "bicis": "Vélos",
+    "material": "Composants, vêtements et nutrition"
+  },
+  "botiga": {
+    "situacio": "La boutique",
+    "titol": "Venez les voir.",
+    "text": "Vélos, vêtements, composants et nutrition des meilleures marques, et des conseils pour bien choisir. Et un café, si vous êtes en balade.",
+    "fotos": {
+      "dogma": "Pinarello Dogma rouge en boutique",
+      "interiorCarretera": "Intérieur de la boutique avec des vélos de route et un présentoir de roues",
+      "interiorEbikes": "Vélos électriques Cannondale et le mur d'équipement de la boutique",
+      "colnago": "Colnago avec roues carbone",
+      "pinarello": "Pinarello de route rouge"
+    }
+  },
+  "ressenyes": {
+    "titol": "Ce qu'on dit de nous.",
+    "font": "Avis Google",
+    "estrelles": "{n} étoiles sur 5"
+  },
+  "faq": {
+    "titol": "Questions fréquentes",
+    "items": {
+      "talla": { "p": "Comment connaître ma taille ?", "r": "À la réservation, nous vous demandons votre taille et vous suggérons celle du vélo. En boutique, nous ajustons la hauteur de selle et la position du cintre." },
+      "pedals": { "p": "Puis-je apporter mes pédales ?", "r": "Bien sûr. Nous avons aussi des pédales plates, Shimano SPD, SPD-SL et Look pour que vous n'ayez rien à emporter." },
+      "fianca": { "p": "Faut-il laisser une caution ?", "r": "Nous demandons une pièce d'identité ou un passeport et une caution par carte, rendue au retour du vélo*." },
+      "cancel": { "p": "Puis-je annuler ma réservation ?", "r": "Oui, sans frais jusqu'à 48 heures avant le retrait*." },
+      "hotel": { "p": "Livrez-vous à l'hôtel ?", "r": "Nous livrons dans les hôtels de Calonge, Platja d'Aro et Palamós à partir de deux vélos*." },
+      "taller": { "p": "Combien de temps à l'atelier ?", "r": "Une révision ou une crevaison, en général le jour même ou le lendemain. On vous donne le délai au dépôt et on vous prévient sur WhatsApp." }
+    }
+  },
+  "visita": {
+    "situacio": "Nous trouver",
+    "titol": "À cinq minutes de la plage.",
+    "adreca": "Carrer de l'Empordà, 29",
+    "poble": "17252 Sant Antoni de Calonge (Girona)",
+    "horari": "Horaires",
+    "dies": "Du lundi au samedi",
+    "hores": "9 h–13 h et 16 h–20 h",
+    "diumenge": "Fermé le dimanche",
+    "telefon": "Appelez-nous",
+    "whatsapp": "Écrivez-nous sur WhatsApp",
+    "correu": "E-mail",
+    "mapa": "Itinéraire"
+  },
+  "peu": {
+    "lema": "Location, atelier et boutique de vélos sur la Costa Brava depuis plus de 15 ans.",
+    "legal": "Mentions légales",
+    "privacitat": "Confidentialité",
+    "galetes": "Cookies",
+    "drets": "© {any} Tecnibike Costa Brava SL",
+    "nertel": "Réservations et accueil avec Nertel"
+  },
+  "reserva": {
+    "tornar": "Tous les vélos",
+    "nova": "Location",
+    "desDe": "dès {preu}/jour",
+    "talla": "Taille",
+    "tallaAjuda": "Vous ne connaissez pas votre taille ?",
+    "alcada": "Votre taille",
+    "alcadaOpcio": "{min}–{max} cm",
+    "suggerida": "Nous vous conseillons la taille {talla}",
+    "disponibles": "{n, plural, =0 {Épuisée} one {Plus que 1} other {Plus que #}}",
+    "pedals": "Pédales",
+    "pedalsOpcions": { "plans": "Plates", "spd": "Shimano SPD", "spdSl": "Shimano SPD-SL", "look": "Look" },
+    "recollida": "Jour de retrait",
+    "durada": "Durée",
+    "migDia": "Demi-journée",
+    "dies": "{n, plural, one {1 jour} other {# jours}}",
+    "menys": "Moins",
+    "mes": "Plus",
+    "bicis": "Nombre de vélos",
+    "accessoris": "Ajouter à la réservation",
+    "accessorisOpcions": { "casc": "Casque", "cadenat": "Antivol", "cadiraNado": "Siège enfant", "alforges": "Sacoches", "comptaquilometres": "Compteur" },
+    "inclos": "Inclus",
+    "perBici": "{preu} par vélo",
+    "dades": "Vos coordonnées",
+    "nom": "Nom et prénom",
+    "telefon": "Téléphone (avec WhatsApp)",
+    "correu": "E-mail",
+    "privacitat": "J'ai lu et j'accepte la politique de confidentialité.",
+    "perDiaX": "{preu} × {dies} × {bicis, plural, one {1 vélo} other {# vélos}}",
+    "perMigDia": "Demi-journée : {preu} × {bicis, plural, one {1 vélo} other {# vélos}}",
+    "total": "Total",
+    "pagament": "Vous payez en boutique au retrait du vélo*.",
+    "confirmar": "Confirmer la réservation",
+    "enviant": "Envoi…",
+    "carregant": "Vérification des disponibilités…",
+    "errors": {
+      "dades": "Vérifiez les champs signalés.",
+      "esgotat": "Cette taille n'est plus disponible pour ces dates. Essayez une autre taille ou un autre jour.",
+      "durada": "Ce vélo ne se loue pas à la demi-journée.",
+      "talla": "Choisissez une taille disponible.",
+      "xarxa": "L'envoi a échoué. Réessayez ou appelez-nous au +34 972 66 29 51."
+    },
+    "camps": {
+      "nom": "Indiquez votre nom.",
+      "telefon": "Indiquez un téléphone valide, avec l'indicatif s'il n'est pas espagnol.",
+      "correu": "Indiquez un e-mail valide.",
+      "privacitat": "Vous devez accepter la politique de confidentialité."
+    },
+    "fet": {
+      "titol": "Réservation confirmée",
+      "codi": "Code de réservation",
+      "text": "Rendez-vous le {data} à la boutique. Vous recevrez la confirmation par e-mail et WhatsApp*.",
+      "adreca": "Carrer de l'Empordà, 29 · Sant Antoni de Calonge",
+      "altra": "Faire une autre réservation"
+    },
+    "fitxa": {
+      "titol": "Ce qui est inclus",
+      "items": {
+        "revisada": "Révisé et réglé avant chaque location",
+        "talla": "Selle et cintre réglés à votre taille",
+        "casc": "Casque inclus*",
+        "kit": "Kit de réparation et pompe*"
+      }
+    }
+  },
+  "cita": {
+    "titol": "Rendez-vous à l'atelier",
+    "intro": "Dites-nous ce qui ne va pas et quand vous l'apportez. On vous prévient sur WhatsApp quand il est prêt.",
+    "tornar": "Retour à l'accueil",
+    "pas1": "Quel vélo apportez-vous ?",
+    "tipus": { "carretera": "Route", "muntanya": "VTT", "gravel": "Gravel", "electrica": "Électrique", "urbana": "Ville" },
+    "pas2": "Que faut-il faire ?",
+    "potsTriarMes": "Vous pouvez en choisir plusieurs.",
+    "nota": "Dites-nous ce qui se passe (facultatif)",
+    "notaExemple": "Ex. : il fait du bruit en changeant de pignon",
+    "pas3": "Quand l'apportez-vous ?",
+    "franja": "Heure de dépôt",
+    "places": "{n, plural, =0 {Complet} one {1 place} other {# places}}",
+    "senseFranges": "Aucun créneau libre ce jour-là. Essayez-en un autre.",
+    "pas4": "Vos coordonnées",
+    "confirmar": "Prendre rendez-vous",
+    "enviant": "Envoi…",
+    "errors": {
+      "dades": "Vérifiez les champs signalés.",
+      "franja": "Ce créneau vient d'être pris. Choisissez-en un autre.",
+      "serveis": "Choisissez au moins un service.",
+      "xarxa": "L'envoi a échoué. Réessayez ou appelez-nous au +34 972 66 29 51."
+    },
+    "fet": {
+      "titol": "Rendez-vous confirmé",
+      "text": "Rendez-vous le {data} à {hora}. Nous vous donnerons un devis avant de toucher à quoi que ce soit et vous préviendrons sur WhatsApp quand il sera prêt*.",
+      "altra": "Prendre un autre rendez-vous"
+    }
+  }
+}

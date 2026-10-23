@@ -1,0 +1,236 @@
+.flota {
+  background: var(--blanc);
+}
+
+.cap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filtre {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--escenari);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+.filtre:hover {
+  background: var(--escenari-2);
+}
+.filtre[aria-selected='true'] {
+  background: var(--grafit);
+  color: var(--blanc);
+}
+
+.graella {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+  gap: 20px;
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.targeta {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radi);
+  background: var(--escenari);
+  overflow: hidden;
+  transition: box-shadow 0.25s var(--ease);
+}
+.targeta:hover {
+  box-shadow: 0 24px 48px -30px rgb(18 20 23 / 0.45);
+}
+
+/* L'escenari gris clar de la fitxa de Scott; les fotos amb fons blanc s'hi fonen amb multiply. */
+.escenari {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  padding: 18px 20px 6px;
+}
+.escenari img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: transform 0.5s var(--ease);
+}
+.targeta:hover .escenari img {
+  transform: scale(1.04) translateX(4px);
+}
+
+.etiqueta {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--taronja);
+  color: var(--grafit);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cos {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 22px 22px;
+  background: var(--blanc);
+  margin: 0 8px 8px;
+  border-radius: calc(var(--radi) - 6px);
+  padding-top: 18px;
+}
+
+.categoria {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+
+.nom {
+  font-size: 30px;
+}
+
+.model {
+  font-size: 14px;
+  color: var(--tinta-2);
+}
+
+.peu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.preu {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--tinta-2);
+  font-variant-numeric: tabular-nums;
+}
+.preu strong {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--tinta);
+  font-variation-settings: 'wdth' 80;
+}
+
+.talles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--linia-fina);
+  list-style: none;
+}
+.talles li {
+  min-width: 34px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px var(--linia);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ── Taula de tarifes ── */
+
+.tarifes {
+  margin-top: 40px;
+  border-radius: var(--radi);
+  background: var(--escenari);
+}
+
+.tarifes summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  padding: 0 24px;
+  font-weight: 800;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-variation-settings: 'wdth' 80;
+  cursor: pointer;
+  list-style: none;
+}
+.tarifes summary::-webkit-details-marker {
+  display: none;
+}
+
+.mes {
+  font-size: 28px;
+  font-weight: 400;
+  transition: transform 0.25s var(--ease);
+}
+.tarifes[open] .mes {
+  transform: rotate(45deg);
+}
+
+.taulaEmbolcall {
+  padding: 0 24px 24px;
+  overflow-x: auto;
+}
+
+.taula {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.taula th,
+.taula td {
+  padding: 12px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--linia);
+  font-size: 15px;
+}
+.taula th:first-child {
+  text-align: left;
+}
+.taula thead th {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+}
+.taula tbody th {
+  font-weight: 700;
+}
+
+.nota {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--tinta-2);
+}
