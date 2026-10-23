@@ -1,4 +1,4 @@
-import { aturat, MOMENTS, ORDRE_PECES, pasActiu, progresDePeca, tempsVideo } from './anatomia-fases';
+import { aturat, FINAL, MOMENTS, ORDRE_PECES, pasActiu, progresDePeca, seguentBanner, tempsVideo } from './anatomia-fases';
 
 describe("línia de temps de l'anatomia", () => {
   it('comença amb la bici sencera i acaba al final del vídeo', () => {
@@ -43,5 +43,27 @@ describe("salts des de l'índex de peces", () => {
       expect(aturat(p)).toBe(true);
       expect(tempsVideo(p)).toBeCloseTo(m.t);
     });
+  });
+
+  it('el bàner següent mai no repeteix la peça i les pot treure totes', () => {
+    for (let actual = 0; actual < MOMENTS.length; actual++) {
+      const vistes = new Set<number>();
+      for (let a = 0; a < 1; a += 0.01) {
+        const seguent = seguentBanner(actual, a);
+        expect(seguent).not.toBe(actual);
+        expect(seguent).toBeGreaterThanOrEqual(0);
+        expect(seguent).toBeLessThan(MOMENTS.length);
+        vistes.add(seguent);
+      }
+      expect(vistes.size).toBe(MOMENTS.length - 1);
+    }
+    expect(seguentBanner(-1, 0.999)).toBe(MOMENTS.length - 1);
+  });
+
+  it('cada peça té posició final i bàner dins del fotograma', () => {
+    for (const peca of ORDRE_PECES) {
+      const { x, y, bx, by } = FINAL[peca];
+      for (const v of [x, y, bx, by]) expect(v >= 0 && v <= 100).toBe(true);
+    }
   });
 });

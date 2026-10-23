@@ -37,10 +37,13 @@ Versions que **no** són l'última, i per què:
   preu el calcula la plataforma. El rellotge només entra aquí (`araABotiga`), en hora de Madrid.
 - **Portada** (`src/components/Portada.tsx`): vídeo en bucle (`public/video/hero*.mp4`) d'un
   ciclista que passa per platja, poble, muntanya i costa.
-- **Anatomia** (`src/components/anatomia/`), dins la secció de taller: vídeo lligat al scroll
+- **Anatomia** (`src/components/anatomia/`), dins la secció de taller: sobre un fons de taller
+  (`public/img/taller/fons-taller.webp`, generat amb IA), un vídeo lligat al scroll
   (`public/video/anatomia*.mp4`, component `ScrollVideo` de la skill `scroll-video`) on una bici
-  real es desmunta peça a peça. La línia de temps i les aturades són a `anatomia-fases.ts`, amb
-  proves; els segons de cada peça es van mesurar fotograma a fotograma.
+  real es desmunta peça a peça. Desmuntada, surten a l'atzar bàners amb fil que expliquen cada peça
+  (es paren amb el ratolí a sobre). Un cop passada de llarg, queda fixa i no es repeteix. La línia de
+  temps, les posicions finals i el triador de bàners són a `anatomia-fases.ts`, amb proves.
+- **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`).
 - **Vídeos generats amb IA** (Higgsfield: Nano Banana 2.1 per als fotogrames clau i Kling 4.0 per
   als vídeos) a partir de les fotos reals de la Pinarello del client. No són gravacions: s'ha de dir
   al client. Els originals i les tires de control són a `recursos/ia/` (fora del repositori).

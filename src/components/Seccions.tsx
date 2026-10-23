@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
-import type { Producte, Ressenya, Valoracio } from '@/lib/plataforma/esquema';
+import type { Ressenya, Valoracio } from '@/lib/plataforma/esquema';
 import { Link } from '@/i18n/navigation';
 import { enllacWhatsapp, TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
 import { AnatomiaTaller } from './anatomia/AnatomiaTaller';
@@ -35,7 +35,7 @@ export async function ComFunciona() {
   );
 }
 
-export async function Taller({ productes }: { productes: Producte[] }) {
+export async function Taller() {
   const t = await getTranslations('taller');
   return (
     <section id="taller" className={styles.taller} aria-labelledby="taller-titol">
@@ -47,7 +47,7 @@ export async function Taller({ productes }: { productes: Producte[] }) {
         <p className={`intro ${styles.introClara}`}>{t('intro')}</p>
       </div>
 
-      <AnatomiaTaller productes={productes} />
+      <AnatomiaTaller />
     </section>
   );
 }

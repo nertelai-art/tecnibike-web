@@ -79,6 +79,17 @@ pagament, botiga en línia, pàgines legals pròpies i logo en SVG.
 - **Marques:** el carrusel passa sol i sense final, s'atura amb el ratolí, i en canviar de
   categoria les targetes surten i entren amb un fos.
 
+## Estat (23-10-2026, cinquena volta)
+
+- **Taller nou:** fons d'un taller de bicis (imatge generada amb IA; no és la botiga), la bici que es
+  desmunta amb el scroll i, un cop desmuntada, bàners que surten a l'atzar d'una peça amb un fil i
+  n'expliquen la qualitat; amb el ratolí a sobre es queden quiets. Botó de cita taronja i gran. Un
+  cop vista, l'escena queda desmuntada i no es torna a reproduir.
+- **WhatsApp:** fora del taller; ara és la icona flotant de sempre, a baix a la dreta de la landing.
+- **Lloguer:** tota la targeta porta a la fitxa; en canviar de tipus de bici, sortida i entrada suaus.
+- **Marques:** el carrusel ocupa tota l'amplada, sense el text d'ajuda.
+- **Barra de la bici:** sense restes blanques (fons tret per zones, menys les lletres del quadre).
+
 ## 1. Objectiu
 
 Que un ciclista **reservi una bici o una cita al taller en menys de dos minuts**, des del

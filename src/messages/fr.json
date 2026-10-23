@@ -40,73 +40,45 @@
   "anatomia": {
     "situacio": "Anatomie d'un vélo",
     "titol": "On le démonte pièce par pièce.",
-    "intro": "Un vélo de route haut de gamme, comme ceux que nous réparons chaque jour. Descendez et, pour chaque partie, découvrez les meilleures pièces en stock et nos réparations.",
+    "intro": "Un vélo de route haut de gamme, comme ceux que nous réparons chaque jour. Descendez et regardez-le se démonter : ensuite, chaque pièce vous parle de sa qualité.",
     "pista": "Faites défiler pour le démonter",
-    "reservar": "Réservez",
-    "preguntar": "Demandez-nous",
-    "missatgeWhatsapp": "Bonjour ! J'aimerais améliorer : {peca}. Que me conseillez-vous ?",
+    "reservar": "Réservez une révision",
     "sr": "Un vélo de route rouge se démonte pièce par pièce sur une route de montagne : roues, freins, transmission, cintre, selle et enfin le cadre seul.",
     "peces": {
       "rodes": {
         "nom": "Roues",
         "servei": "Crevaisons, tubeless et dévoilage",
-        "reparacions": {
-          "a": "Crevaisons et tubeless",
-          "b": "Dévoilage des roues",
-          "c": "Montage de pneus"
-        }
+        "qualitat": "Roues carbone à profil moyen et pneus tubeless : moins de poids, plus d’adhérence et adieu aux petites crevaisons."
       },
       "frens": {
         "nom": "Freins",
         "servei": "Purge et plaquettes",
-        "reparacions": {
-          "a": "Purge des freins hydrauliques",
-          "b": "Plaquettes et disques",
-          "c": "Réglage des étriers"
-        }
+        "qualitat": "Freins à disque hydrauliques : freinage puissant et constant sur sec comme sur mouillé, à deux doigts."
       },
       "transmissio": {
         "nom": "Transmission",
         "servei": "Réglage des vitesses, chaîne et cassette",
-        "reparacions": {
-          "a": "Réglage des vitesses",
-          "b": "Chaîne et cassette",
-          "c": "Nettoyage de transmission"
-        }
+        "qualitat": "Groupe 12 vitesses aux passages précis du premier coup, même en montée et en charge."
       },
       "direccio": {
         "nom": "Direction",
         "servei": "Jeu de direction, potence et ruban",
-        "reparacions": {
-          "a": "Jeu de direction",
-          "b": "Guidoline",
-          "c": "Réglage des leviers"
-        }
+        "qualitat": "Cintre et potence carbone avec câbles intégrés : rigides, légers et nets."
       },
       "seient": {
         "nom": "Selle",
         "servei": "Réglage de position (bike fitting)",
-        "reparacions": {
-          "a": "Étude posturale",
-          "b": "Hauteur et recul de selle",
-          "c": "Changement de selle"
-        }
+        "qualitat": "Selle évidée et tige carbone : confort et bonne position sur les longues sorties."
       },
       "quadre": {
         "nom": "Cadre",
         "servei": "Révision complète",
-        "reparacions": {
-          "a": "Révision complète",
-          "b": "Contrôle du cadre",
-          "c": "Diagnostic e-bike"
-        }
+        "qualitat": "Cadre carbone monocoque : rigide là où l’on pousse, confortable là où il faut absorber. Le cœur du vélo."
       }
     },
     "desDe": "dès {preu}",
-    "index": "Pièces du vélo",
     "ctaCita": "Rendez-vous à l'atelier",
-    "millorsPeces": "Les meilleures pièces",
-    "reparacions": "Réparations"
+    "qualitat": "Qualité"
   },
   "flota": {
     "situacio": "Location",
@@ -269,8 +241,7 @@
     "carrusel": "{n} marques du magasin",
     "pregunta": "Demander pour {marca} sur WhatsApp",
     "missatge": "Bonjour ! Avez-vous du matériel {marca} ?",
-    "preguntar": "Demandez-nous",
-    "pista": "Survolez pour mettre en pause"
+    "preguntar": "Demandez-nous"
   },
   "botiga": {
     "situacio": "La boutique",

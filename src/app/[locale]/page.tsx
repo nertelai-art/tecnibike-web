@@ -3,18 +3,18 @@ import { BarraBici } from '@/components/BarraBici';
 import { DialegCita } from '@/components/cita/DialegCita';
 import { Flota } from '@/components/Flota';
 import { Portada } from '@/components/Portada';
+import { WhatsappFlotant } from '@/components/WhatsappFlotant';
 import { Botiga, ComFunciona, Equipament, Marques, Peu, Preguntes, Ressenyes, Rutes, Taller, Visita } from '@/components/Seccions';
 import { plataforma } from '@/lib/plataforma';
 
 export default async function Inici({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [flota, serveis, valoracio, ressenyes, productes] = await Promise.all([
+  const [flota, serveis, valoracio, ressenyes] = await Promise.all([
     plataforma.flota(),
     plataforma.serveisTaller(),
     plataforma.valoracio(),
     plataforma.ressenyes(),
-    plataforma.productes(),
   ]);
 
   return (
@@ -23,7 +23,7 @@ export default async function Inici({ params }: { params: Promise<{ locale: stri
         <Portada valoracio={valoracio} />
         <Flota flota={flota} />
         <ComFunciona />
-        <Taller productes={productes} />
+        <Taller />
         <Rutes />
         <Botiga />
         <Equipament />
@@ -35,6 +35,7 @@ export default async function Inici({ params }: { params: Promise<{ locale: stri
       <Peu />
       <DialegCita serveis={serveis} />
       <BarraBici />
+      <WhatsappFlotant />
     </>
   );
 }

@@ -1,0 +1,35 @@
+/* Botó rodó de WhatsApp, fix a baix a la dreta (a l'esquerra del carril de la bici a escriptori). */
+
+.boto {
+  position: fixed;
+  z-index: 65;
+  right: 18px;
+  bottom: 18px;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  /* Verd de WhatsApp. La icona és blanca i gran: s'entén sense text. */
+  background: #25d366;
+  color: var(--blanc);
+  box-shadow: 0 14px 30px -10px rgb(0 0 0 / 0.45);
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+.boto:hover {
+  transform: scale(1.08);
+  box-shadow: 0 18px 36px -10px rgb(0 0 0 / 0.5);
+}
+.boto:focus-visible {
+  outline: 3px solid var(--grafit);
+  outline-offset: 3px;
+}
+
+@media (min-width: 1000px) and (pointer: fine) {
+  .boto {
+    right: 22px;
+    bottom: 22px;
+  }
+}

@@ -31,6 +31,8 @@ interface ScrollVideoProps {
   fade?: number;
   /** Contingut HTML de sobre del vídeo. */
   children?: ReactNode;
+  /** Fons de l'escenari, per sota del vídeo (quan el vídeo va dins d'una caixa). */
+  background?: ReactNode;
   /**
    * Converteix la posició dins del clip (0–1) en la posició del vídeo (0–1). Serveix per fer
    * aturades: trams de scroll on el vídeo no avança.
@@ -71,7 +73,7 @@ const cover: CSSProperties = { position: "absolute", inset: 0, width: "100%", he
  * Cada clip es baixa com a `Blob` (sempre cercable, encara que el servidor no
  * serveixi peticions de rang) i només es carreguen l'actual i els veïns.
  */
-export function ScrollVideo({ clips, label, onFrame, offsetTop = 0, fade = 0.06, children, remap, mediaClassName, smoothing = 14 }: ScrollVideoProps) {
+export function ScrollVideo({ clips, label, onFrame, offsetTop = 0, fade = 0.06, children, background, remap, mediaClassName, smoothing = 14 }: ScrollVideoProps) {
   const reduced = useSyncExternalStore(
     subscribeReducedMotion,
     () => window.matchMedia(reducedMotionQuery).matches,
@@ -253,6 +255,7 @@ export function ScrollVideo({ clips, label, onFrame, offsetTop = 0, fade = 0.06,
           overflow: "hidden",
         }}
       >
+        {background}
         <div role="img" aria-label={label} className={mediaClassName} style={mediaClassName ? undefined : { position: "absolute", inset: 0 }}>
           {clips.map((clip, i) => (
             <div

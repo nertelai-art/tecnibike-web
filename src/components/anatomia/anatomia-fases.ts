@@ -66,3 +66,26 @@ export function aturat(p: number): boolean {
 export function progresDePeca(i: number): number {
   return INTRO + ((i + MOVIMENT + (1 - MOVIMENT) / 2) * (1 - INTRO)) / MOMENTS.length;
 }
+
+/**
+ * On queda cada peça a l'últim fotograma (bici desmuntada), en % del fotograma, i on va el bàner que
+ * l'explica (cantonada de dalt a l'esquerra, en %), triat en una zona buida del fons.
+ */
+export const FINAL: Readonly<Record<Peca, { x: number; y: number; bx: number; by: number }>> = {
+  rodes: { x: 88, y: 57, bx: 62, by: 70 },
+  frens: { x: 75.5, y: 62, bx: 62, by: 70 },
+  transmissio: { x: 59, y: 72, bx: 3, by: 68 },
+  direccio: { x: 75, y: 24, bx: 4, by: 5 },
+  seient: { x: 49, y: 13, bx: 4, by: 5 },
+  quadre: { x: 63, y: 47, bx: 4, by: 5 },
+};
+
+/**
+ * Peça del bàner següent, a l'atzar però mai la mateixa que ara. L'atzar entra per paràmetre
+ * (`aleatori` entre 0 i 1) perquè sigui determinista a les proves.
+ */
+export function seguentBanner(actual: number, aleatori: number): number {
+  const n = MOMENTS.length;
+  if (actual < 0 || actual >= n) return Math.min(n - 1, Math.floor(aleatori * n));
+  return (actual + 1 + Math.min(n - 2, Math.floor(aleatori * (n - 1)))) % n;
+}

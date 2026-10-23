@@ -40,73 +40,45 @@
   "anatomia": {
     "situacio": "Anatomy of a bike",
     "titol": "We take it apart, piece by piece.",
-    "intro": "A high-end road bike, like the ones we fix every day. Scroll down and, for each part, see the best upgrades we stock and the repairs we do.",
+    "intro": "A high-end road bike, like the ones we fix every day. Scroll down and watch it come apart: then each part tells you about its quality.",
     "pista": "Scroll to take it apart",
-    "reservar": "Book it",
-    "preguntar": "Ask us",
-    "missatgeWhatsapp": "Hi! I'd like to upgrade: {peca}. What do you recommend?",
+    "reservar": "Book a service",
     "sr": "A red road bike comes apart piece by piece on a mountain road: wheels, brakes, drivetrain, handlebar, saddle and finally the bare frame.",
     "peces": {
       "rodes": {
         "nom": "Wheels",
         "servei": "Punctures, tubeless and truing",
-        "reparacions": {
-          "a": "Punctures and tubeless",
-          "b": "Wheel truing",
-          "c": "Tyre fitting"
-        }
+        "qualitat": "Mid-depth carbon wheels with tubeless tyres: less weight, more grip and goodbye to small punctures."
       },
       "frens": {
         "nom": "Brakes",
         "servei": "Bleed and pads",
-        "reparacions": {
-          "a": "Hydraulic brake bleed",
-          "b": "Pads and rotors",
-          "c": "Caliper alignment"
-        }
+        "qualitat": "Hydraulic disc brakes: strong, consistent braking in the dry or the wet, with two fingers."
       },
       "transmissio": {
         "nom": "Drivetrain",
         "servei": "Gear, chain and cassette tune-up",
-        "reparacions": {
-          "a": "Gear tuning",
-          "b": "Chain and cassette",
-          "c": "Drivetrain cleaning"
-        }
+        "qualitat": "12-speed groupset with crisp shifts first time, even climbing and under load."
       },
       "direccio": {
         "nom": "Cockpit",
         "servei": "Headset, stem and bar tape",
-        "reparacions": {
-          "a": "Headset service",
-          "b": "Bar tape",
-          "c": "Lever setup"
-        }
+        "qualitat": "Carbon bar and stem with integrated cables: stiff, light and clean."
       },
       "seient": {
         "nom": "Saddle",
         "servei": "Position adjustment (bike fitting)",
-        "reparacions": {
-          "a": "Bike fitting",
-          "b": "Saddle height and setback",
-          "c": "Saddle swap"
-        }
+        "qualitat": "Cut-out saddle and carbon seatpost: comfort and a good position on long rides."
       },
       "quadre": {
         "nom": "Frame",
         "servei": "Full service",
-        "reparacions": {
-          "a": "Full service",
-          "b": "Frame inspection",
-          "c": "E-bike diagnostics"
-        }
+        "qualitat": "Monocoque carbon frame: stiff where you push and compliant where it needs to absorb. The heart of the bike."
       }
     },
     "desDe": "from {preu}",
-    "index": "Bike parts",
     "ctaCita": "Book the workshop",
-    "millorsPeces": "The best parts",
-    "reparacions": "Repairs"
+    "qualitat": "Quality"
   },
   "flota": {
     "situacio": "Rental",
@@ -269,8 +241,7 @@
     "carrusel": "{n} brands in the shop",
     "pregunta": "Ask about {marca} on WhatsApp",
     "missatge": "Hi! Do you have any {marca} gear?",
-    "preguntar": "Ask us",
-    "pista": "Hover to pause"
+    "preguntar": "Ask us"
   },
   "botiga": {
     "situacio": "The shop",

@@ -219,7 +219,6 @@ export function CarruselMarques() {
         <div className={styles.progres} aria-hidden="true">
           <div ref={barra} />
         </div>
-        <p className={styles.ajuda}>{t('pista')}</p>
       </div>
     </div>
   );

@@ -40,73 +40,45 @@
   "anatomia": {
     "situacio": "Anatomía de una bici",
     "titol": "La desmontamos pieza a pieza.",
-    "intro": "Una bici de carretera de gama alta, como las que reparamos cada día. Baja y, para cada parte, mira las mejores piezas que tenemos y las reparaciones que hacemos.",
+    "intro": "Una bici de carretera de gama alta, como las que reparamos cada día. Baja y mira cómo se desmonta: después, cada pieza te explica su calidad.",
     "pista": "Haz scroll para desmontarla",
-    "reservar": "Resérvala",
-    "preguntar": "Pregúntanos",
-    "missatgeWhatsapp": "¡Hola! Me interesa mejorar: {peca}. ¿Qué me recomendáis?",
+    "reservar": "Reserva una revisión",
     "sr": "Una bici de carretera roja se desmonta pieza a pieza sobre una carretera de montaña: ruedas, frenos, transmisión, manillar, sillín y, al final, el cuadro solo.",
     "peces": {
       "rodes": {
         "nom": "Ruedas",
         "servei": "Pinchazos, tubeless y centrado",
-        "reparacions": {
-          "a": "Pinchazos y tubeless",
-          "b": "Centrado de ruedas",
-          "c": "Cambio de neumáticos"
-        }
+        "qualitat": "Ruedas de carbono de perfil medio y neumáticos tubeless: menos peso, más agarre y adiós a los pinchazos pequeños."
       },
       "frens": {
         "nom": "Frenos",
         "servei": "Purgado y pastillas",
-        "reparacions": {
-          "a": "Purgado de frenos hidráulicos",
-          "b": "Pastillas y discos",
-          "c": "Ajuste de pinzas"
-        }
+        "qualitat": "Frenos de disco hidráulicos: frenada potente y constante en seco o mojado, con dos dedos."
       },
       "transmissio": {
         "nom": "Transmisión",
         "servei": "Ajuste de cambios, cadena y cassette",
-        "reparacions": {
-          "a": "Ajuste de cambios",
-          "b": "Cadena y cassette",
-          "c": "Limpieza de transmisión"
-        }
+        "qualitat": "Grupo de 12 velocidades con cambios precisos a la primera, también subiendo y bajo carga."
       },
       "direccio": {
         "nom": "Dirección",
         "servei": "Dirección, potencia y cinta",
-        "reparacions": {
-          "a": "Juego de dirección",
-          "b": "Cinta de manillar",
-          "c": "Ajuste de manetas"
-        }
+        "qualitat": "Manillar y potencia de carbono con el cableado integrado: rígidos, ligeros y limpios."
       },
       "seient": {
         "nom": "Sillín",
         "servei": "Ajuste de posición (bike fitting)",
-        "reparacions": {
-          "a": "Bike fitting",
-          "b": "Altura y retroceso del sillín",
-          "c": "Cambio de sillín"
-        }
+        "qualitat": "Sillín con canal central y tija de carbono: comodidad y buena posición en las salidas largas."
       },
       "quadre": {
         "nom": "Cuadro",
         "servei": "Puesta a punto completa",
-        "reparacions": {
-          "a": "Puesta a punto completa",
-          "b": "Revisión del cuadro",
-          "c": "Diagnosis de e-bikes"
-        }
+        "qualitat": "Cuadro de carbono monocasco: rígido donde empujas y cómodo donde hay que absorber. El corazón de la bici."
       }
     },
     "desDe": "desde {preu}",
-    "index": "Piezas de la bici",
     "ctaCita": "Pide cita en el taller",
-    "millorsPeces": "Las mejores piezas",
-    "reparacions": "Reparaciones"
+    "qualitat": "Calidad"
   },
   "flota": {
     "situacio": "Alquiler",
@@ -269,8 +241,7 @@
     "carrusel": "{n} marcas de la tienda",
     "pregunta": "Pregunta por {marca} por WhatsApp",
     "missatge": "¡Hola! ¿Tenéis material de {marca}?",
-    "preguntar": "Pregúntalo",
-    "pista": "Se detiene al pasar el ratón"
+    "preguntar": "Pregúntalo"
   },
   "botiga": {
     "situacio": "La tienda",

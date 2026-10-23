@@ -1,8 +1,7 @@
 /* Carrusel de marques: targetes blanques amb el logo en gris (en color en passar-hi per sobre) i
-   una pista que surt de la columna fins a la vora dreta de la pantalla. */
+   una pista que ocupa tota l'amplada de la pantalla. */
 
 .carrusel {
-  --marge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
   margin-top: 40px;
 }
 
@@ -74,7 +73,8 @@
   display: flex;
   gap: 14px;
   margin: 24px 0 0;
-  padding: 6px var(--marge) 18px;
+  /* De vora a vora de la pantalla: amb el bucle, no queda cap buit a l'esquerra. */
+  padding: 6px 0 18px;
   list-style: none;
   overflow-x: auto;
   scrollbar-width: none;
@@ -237,11 +237,6 @@
   transform: scaleX(0);
 }
 
-.ajuda {
-  font-size: 13px;
-  color: var(--tinta-3);
-  white-space: nowrap;
-}
 
 @media (hover: none) {
   .preguntar {
@@ -268,8 +263,5 @@
   }
   .targeta {
     min-height: 200px;
-  }
-  .ajuda {
-    display: none;
   }
 }

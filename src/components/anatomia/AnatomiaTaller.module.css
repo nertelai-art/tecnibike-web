@@ -1,12 +1,23 @@
-/* Escenari fosc del taller: text i vídeo junts dins l'amplada de la pàgina (a pantalles amples no
-   queden separats per un buit), el vídeo quiet (només es mou amb el scroll) i, sota la fitxa, els
-   botons de cita i WhatsApp grans. */
+/* Escena del taller: fons d'un taller de bicis, el vídeo de la bici que es desmunta en un marc a la
+   dreta, el text i el botó de cita a l'esquerra, i els bàners de les peces sobre el vídeo. Text i
+   vídeo van junts dins l'amplada de la pàgina; el vídeo només es mou amb el scroll. */
 
 .video,
 .text {
   --marge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
   --util: calc(100vw - 2 * var(--marge));
-  --ample-video: min(calc(var(--util) * 0.56), calc((100svh - 200px) * 16 / 9));
+  --ample-video: min(calc(var(--util) * 0.6), calc((100svh - 200px) * 16 / 9));
+}
+
+/* Fons: la foto del taller, fosca i una mica desenfocada perquè mani la bici. */
+.fons {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.42) saturate(0.85) blur(1.5px);
+  transform: scale(1.03);
 }
 
 .video {
@@ -17,7 +28,9 @@
   aspect-ratio: 16 / 9;
   border-radius: var(--radi);
   overflow: hidden;
-  box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.75);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.1),
+    0 50px 90px -40px rgb(0 0 0 / 0.9);
   transform: translateY(-50%);
 }
 
@@ -27,12 +40,29 @@
   color: var(--blanc);
 }
 
-/* La còpia de la caixa que porta les etiquetes no tapa res. */
-.capa > .video {
+/* Les còpies de la caixa del vídeo que porten etiquetes i bàners no tapen res. */
+.capa > .etiquetesCaixa,
+.capa > .capaBanners {
   overflow: visible;
   box-shadow: none;
   pointer-events: none;
 }
+
+.imatgeFinal {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Escena ja vista o sense moviment: un panell d'una pantalla, sense recorregut de scroll. */
+.panell {
+  position: relative;
+  height: 100svh;
+  min-height: 640px;
+  overflow: hidden;
+}
+
+/* ── Etiquetes mentre es desmunta ── */
 
 .etiqueta {
   position: absolute;
@@ -69,7 +99,8 @@
 .etiquetaEsquerra[data-visible='true'] {
   transform: translate(calc(-100% + 12px), -50%) scale(1);
 }
-.etiqueta i {
+.etiqueta i,
+.punt {
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -86,7 +117,99 @@
   }
 }
 
-/* ── Columna de text ── */
+/* ── Bàners de les peces: punt, fil que es dibuixa i targeta ── */
+
+.peca {
+  position: absolute;
+  inset: 0;
+}
+
+.fil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.fil line {
+  stroke: rgb(255 255 255 / 0.9);
+  stroke-width: 1.5;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.peca[data-visible='true'] .fil line {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+
+.punt {
+  position: absolute;
+  margin: -7px 0 0 -7px;
+  opacity: 0;
+  transform: scale(0.3);
+  transition:
+    opacity 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+.peca[data-visible='true'] .punt {
+  opacity: 1;
+  transform: none;
+}
+
+.banner {
+  position: absolute;
+  width: min(300px, 38%);
+  padding: 16px 18px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 14px;
+  background: rgb(18 20 23 / 0.86);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.9);
+  opacity: 0;
+  transform: translateY(10px) scale(0.97);
+  pointer-events: none;
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.35s var(--ease);
+}
+.peca[data-visible='true'] .banner {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition-delay: 0.35s;
+}
+
+.bannerEtiqueta {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--taronja);
+}
+.bannerNom {
+  margin-top: 4px;
+  font-size: 26px;
+}
+.bannerText {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgb(255 255 255 / 0.82);
+}
+.bannerEnllac {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--blanc);
+  text-decoration: none;
+  border-bottom: 2px solid var(--taronja);
+}
+.bannerEnllac:hover {
+  color: var(--taronja);
+}
+
+/* ── Columna de text i botó de cita ── */
 
 .text {
   position: absolute;
@@ -97,92 +220,21 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 20px;
+  align-items: flex-start;
+  gap: 18px;
 }
-
-.index {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.index button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 32px;
-  padding: 0 12px;
-  border: 0;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.06);
-  color: rgb(255 255 255 / 0.55);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition:
-    background-color 0.4s var(--ease),
-    color 0.4s var(--ease);
-}
-.index button span {
-  color: rgb(255 255 255 / 0.35);
-}
-.index button:hover {
-  color: var(--blanc);
-}
-.index li[data-state='fet'] button {
-  color: rgb(255 255 255 / 0.8);
-}
-.index li[data-state='actiu'] button {
-  background: var(--taronja);
-  color: var(--grafit);
-}
-.index li[data-state='actiu'] button span {
-  color: rgb(18 20 23 / 0.6);
-}
-
-.contingut {
-  position: relative;
-  flex: 0 0 auto;
-  height: clamp(260px, calc(100svh - 380px), 400px);
-}
-
-.intro,
-.fitxa {
-  position: absolute;
-  inset: 0;
-  transition:
-    opacity 0.7s var(--ease),
-    transform 0.7s var(--ease),
-    filter 0.7s var(--ease),
-    visibility 0.7s;
-}
-
-.intro {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 16px;
-}
-.intro[data-visible='false'] {
-  opacity: 0;
-  transform: translateY(-20px);
-  filter: blur(6px);
-  visibility: hidden;
-}
-.intro :global(.situacio) {
-  color: rgb(255 255 255 / 0.7);
-}
-.intro p {
-  color: rgb(255 255 255 / 0.78);
-  max-width: 42ch;
+.text :global(.situacio) {
+  color: rgb(255 255 255 / 0.75);
 }
 
 .titol {
   font-size: clamp(40px, 4.4vw, 68px);
+  text-shadow: 0 2px 24px rgb(0 0 0 / 0.5);
+}
+
+.intro {
+  max-width: 40ch;
+  color: rgb(255 255 255 / 0.82);
 }
 
 .pista {
@@ -190,139 +242,35 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--taronja) !important;
-}
-
-.fitxes {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.fitxa {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 12px;
-  opacity: 0;
-  transform: translateY(26px);
-  filter: blur(6px);
-  visibility: hidden;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-.fitxa[data-state='actiu'] {
-  opacity: 1;
-  transform: none;
-  filter: none;
-  visibility: visible;
-}
-.fitxa[data-state='fet'] {
-  transform: translateY(-26px);
-}
-
-/* Número gran de fons, com a les fitxes tècniques. */
-.numeroFons {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-62%);
-  font-size: clamp(120px, 14vw, 200px);
-  font-weight: 800;
-  line-height: 1;
-  font-variation-settings: 'wdth' 62;
-  color: rgb(255 255 255 / 0.04);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.nom {
-  font-size: clamp(40px, 4vw, 60px);
-}
-
-.blocs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.bloc {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 14px;
-  background: rgb(255 255 255 / 0.06);
-}
-
-.etiquetaBloc {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--taronja);
 }
 
-.llista {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 14px;
-  line-height: 1.35;
-}
-.llista small {
-  display: block;
-  font-size: 10px;
+/* El botó de cita, el protagonista: taronja, gran i amb un halo que respira. */
+.cta {
+  --fons: var(--taronja);
+  --text: var(--grafit);
+  min-height: 66px;
+  margin-top: 8px;
+  padding: 0 34px;
+  font-size: 18px;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgb(255 255 255 / 0.5);
+  box-shadow: 0 18px 40px -14px rgb(248 90 0 / 0.75);
+  animation: halo 2.6s var(--ease) infinite;
 }
-
-.enllac {
-  margin-top: auto;
-  align-self: flex-start;
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--blanc);
-  text-decoration: none;
-  border-bottom: 2px solid var(--taronja);
+.cta:hover {
+  --fons: #ff7a2a;
+  box-shadow: 0 22px 46px -14px rgb(248 90 0 / 0.9);
 }
-.enllac:hover {
-  color: var(--taronja);
-}
-
-.fitxa :global(.mostra) {
-  color: var(--taronja);
-}
-
-/* ── Botons sempre a la vista: grans, l'un sota l'altre ── */
-
-.accions {
-  display: grid;
-  gap: 12px;
-}
-.accions :global(.boto) {
-  justify-content: center;
-  width: 100%;
-  min-height: 62px;
-  padding: 0 24px;
-  font-size: 17px;
-  box-shadow: 0 18px 36px -18px rgb(0 0 0 / 0.8);
-}
-.accions :global(.boto--blau) {
-  box-shadow: 0 18px 36px -16px rgb(61 95 158 / 0.9);
-}
-
-.botoWhatsapp {
-  /* Verd de WhatsApp enfosquit perquè el text blanc es llegeixi (5,4:1). */
-  --fons: #0f7a3c;
-  --text: var(--blanc);
-}
-.botoWhatsapp:hover {
-  --fons: #0b6331;
+@keyframes halo {
+  0%,
+  100% {
+    outline: 0 solid rgb(248 90 0 / 0.45);
+    outline-offset: 0;
+  }
+  60% {
+    outline: 10px solid rgb(248 90 0 / 0);
+    outline-offset: 4px;
+  }
 }
 
 .progres {
@@ -338,54 +286,23 @@
   transform: scaleX(0);
 }
 
-/* Pantalles baixes: tot més compacte perquè hi càpiga. */
-@media (min-width: 981px) and (max-height: 820px) {
-  .nom {
-    font-size: clamp(34px, 3.2vw, 46px);
+/* Pantalles baixes: més compacte. */
+@media (min-width: 981px) and (max-height: 760px) {
+  .titol {
+    font-size: clamp(34px, 3.4vw, 50px);
   }
-  .text {
-    gap: 14px;
+  .intro {
+    font-size: 15px;
   }
-  .accions :global(.boto) {
-    min-height: 52px;
-    font-size: 16px;
+  .banner {
+    padding: 12px 14px;
   }
-  .llista li:nth-child(n + 3) {
-    display: none;
+  .bannerNom {
+    font-size: 22px;
   }
 }
 
-/* ── Sense moviment ── */
-
-.estatic {
-  display: grid;
-  gap: 32px;
-  padding-inline: var(--gutter);
-  max-width: var(--max);
-  margin-inline: auto;
-  color: var(--blanc);
-}
-.fotoEstatica {
-  width: 100%;
-  border-radius: var(--radi);
-}
-.llistaEstatica {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
-  gap: 32px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.llistaEstatica .fitxa {
-  position: relative;
-  opacity: 1;
-  transform: none;
-  filter: none;
-  visibility: visible;
-}
-
-/* ── Mòbil: vídeo a dalt, fitxa a sota i botons al peu ── */
+/* ── Mòbil: vídeo a dalt, bàner a sota del vídeo i text i botó al peu ── */
 
 @media (max-width: 980px) {
   .video {
@@ -396,68 +313,38 @@
     transform: none;
   }
 
-  .text {
-    top: calc(var(--header-h) + 34px + (100vw - var(--gutter) * 2) * 9 / 16);
-    left: var(--gutter);
-    right: var(--gutter);
-    bottom: 14px;
-    width: auto;
-    justify-content: flex-start;
-    gap: 10px;
-  }
-
-  .contingut {
-    flex: 1;
-    height: auto;
-    min-height: 0;
-  }
-
-  .index {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .index button {
-    white-space: nowrap;
-  }
-
-  .fitxa {
-    justify-content: flex-start;
-    gap: 8px;
-  }
-
-  .nom {
-    font-size: 32px;
-  }
-
-  .blocs {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .bloc {
-    padding: 10px 12px;
-    gap: 6px;
-  }
-
-  .llista {
-    font-size: 13px;
-    gap: 4px;
-  }
-  .llista li:nth-child(n + 3) {
+  .fil {
     display: none;
   }
+  .banner {
+    /* Sota el vídeo, d'amplada sencera (la posició de cada peça és per a escriptori). */
+    left: 0 !important;
+    top: calc(100% + 12px) !important;
+    width: 100%;
+  }
+  .bannerNom {
+    font-size: 22px;
+  }
 
+  .text {
+    top: auto;
+    left: var(--gutter);
+    right: var(--gutter);
+    /* Per sobre del botó flotant de WhatsApp. */
+    bottom: 92px;
+    width: auto;
+    gap: 10px;
+  }
   .titol {
-    font-size: 34px;
+    font-size: 32px;
   }
-
-  .accions {
-    gap: 8px;
+  .intro {
+    display: none;
   }
-  .accions :global(.boto) {
-    min-height: 50px;
-    font-size: 15px;
+  .cta {
+    width: 100%;
+    min-height: 56px;
+    font-size: 16px;
   }
 
   .etiqueta {
@@ -466,5 +353,11 @@
   }
   .etiquetaEsquerra {
     padding: 4px 4px 4px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta {
+    animation: none;
   }
 }
