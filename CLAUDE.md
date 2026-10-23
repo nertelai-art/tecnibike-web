@@ -74,6 +74,9 @@ Versions que **no** són l'última, i per què:
   accepta `main` fins que existeixi), i per això l'«Ignored Build Step» és «Only build
   pre-production». Quan existeixi `main`, cal posar-la com a branca de producció (Settings →
   Environments → Production) i tornar l'Ignored Build Step a «Automatic».
+- **Publicar a producció** (només quan l'usuari ho digui, cada vegada): posar l'Ignored Build Step a
+  «Automatic», crear el desplegament de producció del commit (API de Vercel, `target: production`) i,
+  quan ja construeix, tornar-lo a «Only build pre-production». Últim: `d0d293e` (23-10-2026).
 
 ## Pendent abans de publicar
 
