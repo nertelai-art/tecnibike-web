@@ -38,12 +38,8 @@
     }
   },
   "anatomia": {
-    "situacio": "Anatomía de una bici",
-    "titol": "La desmontamos pieza a pieza.",
-    "intro": "Una bici de carretera de gama alta, como las que reparamos cada día. Baja y mira cómo se desmonta: después, cada pieza te explica su calidad.",
-    "pista": "Haz scroll para desmontarla",
     "reservar": "Reserva una revisión",
-    "sr": "Una bici de carretera roja se desmonta pieza a pieza sobre una carretera de montaña: ruedas, frenos, transmisión, manillar, sillín y, al final, el cuadro solo.",
+    "sr": "Una bici de carretera roja, en un taller, se desmonta pieza a pieza: ruedas, frenos, transmisión, manillar, sillín y, al final, el cuadro solo.",
     "peces": {
       "rodes": {
         "nom": "Ruedas",

@@ -1,65 +1,60 @@
-/* Escena del taller: fons d'un taller de bicis, el vídeo de la bici que es desmunta en un marc a la
-   dreta, el text i el botó de cita a l'esquerra, i els bàners de les peces sobre el vídeo. Text i
-   vídeo van junts dins l'amplada de la pàgina; el vídeo només es mou amb el scroll. */
+/* Secció de taller: l'escena (taller clar amb la bici, 16:9) cobreix tota la pantalla, ancorada a
+   la dreta; a l'esquerra, un vel clar sota el text. Els textos entren quan la bici ja és desmuntada.
+   Al mòbil, l'escena es retalla a la zona de la bici i el text va a sota. */
 
-.video,
-.text {
+.escenari {
   --marge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
-  --util: calc(100vw - 2 * var(--marge));
-  --ample-video: min(calc(var(--util) * 0.6), calc((100svh - 200px) * 16 / 9));
-}
-
-/* Fons: la foto del taller, fosca i una mica desenfocada perquè mani la bici. */
-.fons {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.42) saturate(0.85) blur(1.5px);
-  transform: scale(1.03);
-}
-
-.video {
-  position: absolute;
-  right: var(--marge);
-  top: 50%;
-  width: var(--ample-video);
-  aspect-ratio: 16 / 9;
-  border-radius: var(--radi);
-  overflow: hidden;
-  box-shadow:
-    0 0 0 1px rgb(255 255 255 / 0.1),
-    0 50px 90px -40px rgb(0 0 0 / 0.9);
-  transform: translateY(-50%);
-}
-
-.capa {
-  position: absolute;
-  inset: 0;
-  color: var(--blanc);
-}
-
-/* Les còpies de la caixa del vídeo que porten etiquetes i bàners no tapen res. */
-.capa > .etiquetesCaixa,
-.capa > .capaBanners {
-  overflow: visible;
-  box-shadow: none;
-  pointer-events: none;
-}
-
-.imatgeFinal {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Escena ja vista o sense moviment: un panell d'una pantalla, sense recorregut de scroll. */
-.panell {
   position: relative;
   height: 100svh;
   min-height: 640px;
   overflow: hidden;
+  container-type: size;
+  background: #ecebe8;
+}
+
+.marc {
+  position: absolute;
+  inset: 0;
+}
+/* Vel clar a l'esquerra perquè el text es llegeixi sobre el banc d'eines. */
+.marc::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(244 245 247 / 0.94) 0%, rgb(244 245 247 / 0.78) 24%, rgb(244 245 247 / 0) 44%);
+  pointer-events: none;
+}
+
+.escena {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: max(100cqw, calc(100cqh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  transform: translateY(-50%);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bici {
+  position: absolute;
+}
+
+.capaEtiquetes,
+.capaBanners {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.capaBanners {
+  z-index: 1;
 }
 
 /* ── Etiquetes mentre es desmunta ── */
@@ -71,8 +66,9 @@
   gap: 8px;
   padding: 6px 12px 6px 6px;
   border-radius: 999px;
-  background: rgb(18 20 23 / 0.8);
+  background: rgb(18 20 23 / 0.85);
   backdrop-filter: blur(6px);
+  color: var(--blanc);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -82,9 +78,9 @@
   opacity: 0;
   filter: blur(4px);
   transition:
-    opacity 0.6s var(--ease),
-    transform 0.6s var(--ease),
-    filter 0.6s var(--ease);
+    opacity 0.5s var(--ease),
+    transform 0.5s var(--ease),
+    filter 0.5s var(--ease);
 }
 .etiqueta[data-visible='true'] {
   opacity: 1;
@@ -117,7 +113,7 @@
   }
 }
 
-/* ── Bàners de les peces: punt, fil que es dibuixa i targeta ── */
+/* ── Bàners de les peces: punt, fil i targeta ── */
 
 .peca {
   position: absolute;
@@ -132,7 +128,7 @@
   overflow: visible;
 }
 .fil line {
-  stroke: rgb(255 255 255 / 0.9);
+  stroke: rgb(18 20 23 / 0.7);
   stroke-width: 1.5;
   opacity: 0;
   transition: opacity 0.3s var(--ease);
@@ -160,11 +156,11 @@
   position: absolute;
   width: min(300px, 38%);
   padding: 16px 18px;
-  border: 1px solid rgb(255 255 255 / 0.14);
   border-radius: 14px;
-  background: rgb(18 20 23 / 0.86);
+  background: rgb(18 20 23 / 0.9);
   backdrop-filter: blur(10px);
-  box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.9);
+  box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.6);
+  color: var(--blanc);
   opacity: 0;
   transform: translateY(10px) scale(0.97);
   pointer-events: none;
@@ -194,7 +190,7 @@
   margin-top: 6px;
   font-size: 14px;
   line-height: 1.45;
-  color: rgb(255 255 255 / 0.82);
+  color: rgb(255 255 255 / 0.85);
 }
 .bannerEnllac {
   display: inline-block;
@@ -209,40 +205,48 @@
   color: var(--taronja);
 }
 
-/* ── Columna de text i botó de cita ── */
+/* ── Text i botó de cita: entren quan la bici ja és desmuntada ── */
 
 .text {
   position: absolute;
+  z-index: 2;
   left: var(--marge);
-  top: calc(var(--header-h) + 28px);
-  bottom: 28px;
-  width: calc(var(--util) - var(--ample-video) - clamp(32px, 4vw, 64px));
+  top: 50%;
+  width: min(460px, 34vw);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
   gap: 18px;
+  color: var(--grafit);
+  transform: translateY(-50%);
 }
-.text :global(.situacio) {
-  color: rgb(255 255 255 / 0.75);
+.text > * {
+  opacity: 0;
+  translate: 0 24px;
+  transition:
+    opacity 0.8s var(--ease),
+    translate 0.8s var(--ease);
+}
+.text[data-visible='true'] > * {
+  opacity: 1;
+  translate: none;
+}
+.text[data-visible='true'] > :nth-child(2) {
+  transition-delay: 0.12s;
+}
+.text[data-visible='true'] > :nth-child(3) {
+  transition-delay: 0.24s;
+}
+.text[data-visible='true'] > :nth-child(4) {
+  transition-delay: 0.36s;
 }
 
 .titol {
   font-size: clamp(40px, 4.4vw, 68px);
-  text-shadow: 0 2px 24px rgb(0 0 0 / 0.5);
 }
 
 .intro {
-  max-width: 40ch;
-  color: rgb(255 255 255 / 0.82);
-}
-
-.pista {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--taronja);
+  color: var(--tinta-2);
 }
 
 /* El botó de cita, el protagonista: taronja, gran i amb un halo que respira. */
@@ -250,7 +254,7 @@
   --fons: var(--taronja);
   --text: var(--grafit);
   min-height: 66px;
-  margin-top: 8px;
+  margin-top: 6px;
   padding: 0 34px;
   font-size: 18px;
   font-weight: 800;
@@ -273,26 +277,10 @@
   }
 }
 
-.progres {
-  position: absolute;
-  inset: auto 0 0;
-  height: 3px;
-  background: rgb(255 255 255 / 0.08);
-}
-.progres div {
-  height: 100%;
-  background: var(--taronja);
-  transform-origin: left;
-  transform: scaleX(0);
-}
-
 /* Pantalles baixes: més compacte. */
 @media (min-width: 981px) and (max-height: 760px) {
   .titol {
     font-size: clamp(34px, 3.4vw, 50px);
-  }
-  .intro {
-    font-size: 15px;
   }
   .banner {
     padding: 12px 14px;
@@ -302,14 +290,32 @@
   }
 }
 
-/* ── Mòbil: vídeo a dalt, bàner a sota del vídeo i text i botó al peu ── */
+/* ── Mòbil: l'escena retallada a la zona de la bici, el bàner a sota i el text després ── */
 
 @media (max-width: 980px) {
-  .video {
-    top: calc(var(--header-h) + 22px);
-    left: var(--gutter);
-    right: var(--gutter);
-    width: auto;
+  .escenari {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    overflow-x: clip;
+    container-type: normal;
+    padding: calc(var(--header-h) + 20px) 0 40px;
+  }
+
+  .marc {
+    position: relative;
+    inset: auto;
+    /* Es veu la part dreta de l'escena (de l'x = 32,5 % al final): 0,675 × 16 / 9 = 1,2. */
+    aspect-ratio: 1.2;
+  }
+  .marc::after {
+    display: none;
+  }
+  .escena {
+    top: 0;
+    right: auto;
+    left: -48.15%;
+    width: 148.15%;
     transform: none;
   }
 
@@ -317,9 +323,9 @@
     display: none;
   }
   .banner {
-    /* Sota el vídeo, d'amplada sencera (la posició de cada peça és per a escriptori). */
+    /* Sota la bici, d'amplada sencera (la posició de cada peça és per a escriptori). */
     left: 0 !important;
-    top: calc(100% + 12px) !important;
+    top: calc(100% + 14px) !important;
     width: 100%;
   }
   .bannerNom {
@@ -327,19 +333,18 @@
   }
 
   .text {
+    position: relative;
+    left: auto;
     top: auto;
-    left: var(--gutter);
-    right: var(--gutter);
-    /* Per sobre del botó flotant de WhatsApp. */
-    bottom: 92px;
     width: auto;
-    gap: 10px;
+    /* Espai per al bàner, que surt just a sota de la bici. */
+    margin-top: 176px;
+    padding-inline: var(--gutter);
+    gap: 12px;
+    transform: none;
   }
   .titol {
-    font-size: 32px;
-  }
-  .intro {
-    display: none;
+    font-size: 34px;
   }
   .cta {
     width: 100%;

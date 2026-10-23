@@ -37,12 +37,13 @@ Versions que **no** són l'última, i per què:
   preu el calcula la plataforma. El rellotge només entra aquí (`araABotiga`), en hora de Madrid.
 - **Portada** (`src/components/Portada.tsx`): vídeo en bucle (`public/video/hero*.mp4`) d'un
   ciclista que passa per platja, poble, muntanya i costa.
-- **Anatomia** (`src/components/anatomia/`), dins la secció de taller: sobre un fons de taller
-  (`public/img/taller/fons-taller.webp`, generat amb IA), un vídeo lligat al scroll
-  (`public/video/anatomia*.mp4`, component `ScrollVideo` de la skill `scroll-video`) on una bici
-  real es desmunta peça a peça. Desmuntada, surten a l'atzar bàners amb fil que expliquen cada peça
-  (es paren amb el ratolí a sobre). Un cop passada de llarg, queda fixa i no es repeteix. La línia de
-  temps, les posicions finals i el triador de bàners són a `anatomia-fases.ts`, amb proves.
+- **Taller** (`src/components/anatomia/`): escena d'una pantalla. Un taller clar (imatge generada
+  amb IA) amb la Pinarello sencera; en arribar-hi, la bici es desmunta sola (`public/video/taller.mp4`)
+  i en acabar entren els textos i, a l'atzar, bàners amb fil que expliquen cada peça (es paren amb el
+  ratolí a sobre). Només es reprodueix una vegada. El vídeo es munta amb `scripts/taller-video.py`:
+  la bici es retalla fotograma a fotograma del vídeo de l'anatomia (`rembg`, model
+  `isnet-general-use`) i es posa sobre el fons (`recursos/ia/taller/`). L'enquadrament de la bici
+  (`ENQUADRE`), els moments i les posicions dels bàners són a `anatomia-fases.ts`, amb proves.
 - **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`).
 - **Vídeos generats amb IA** (Higgsfield: Nano Banana 2.1 per als fotogrames clau i Kling 4.0 per
   als vídeos) a partir de les fotos reals de la Pinarello del client. No són gravacions: s'ha de dir

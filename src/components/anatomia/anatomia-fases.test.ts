@@ -1,48 +1,24 @@
-import { aturat, FINAL, MOMENTS, ORDRE_PECES, pasActiu, progresDePeca, seguentBanner, tempsVideo } from './anatomia-fases';
+import { ENQUADRE, etiquetaActiva, FINAL, MOMENTS, ORDRE_PECES, seguentBanner } from './anatomia-fases';
 
-describe("línia de temps de l'anatomia", () => {
-  it('comença amb la bici sencera i acaba al final del vídeo', () => {
-    expect(tempsVideo(0)).toBe(0);
-    expect(tempsVideo(1)).toBeCloseTo(MOMENTS.at(-1)!.t);
-  });
-
-  it('el temps del vídeo mai no va enrere quan es baixa', () => {
-    let anterior = 0;
-    for (let p = 0; p <= 1; p += 0.002) {
-      const t = tempsVideo(p);
-      expect(t).toBeGreaterThanOrEqual(anterior - 1e-9);
-      anterior = t;
-    }
-  });
-
-  it('recorre les sis peces en ordre i totes acaben aturades a lloc', () => {
-    const vistes: number[] = [];
-    for (let p = 0; p <= 1; p += 0.002) {
-      const pas = pasActiu(p);
-      if (pas >= 0 && !vistes.includes(pas)) vistes.push(pas);
-    }
-    expect(vistes).toEqual(ORDRE_PECES.map((_, i) => i));
-    for (let i = 0; i < MOMENTS.length; i++) {
-      const fiDelTram = 0.1 + ((i + 0.95) * 0.9) / MOMENTS.length;
-      expect(aturat(fiDelTram)).toBe(true);
-      expect(tempsVideo(fiDelTram)).toBeCloseTo(MOMENTS[i]!.t);
-    }
-  });
-
+describe("escena del taller", () => {
   it('els moments són dins del vídeo i en ordre', () => {
     for (let i = 1; i < MOMENTS.length; i++) expect(MOMENTS[i]!.t).toBeGreaterThan(MOMENTS[i - 1]!.t);
     expect(MOMENTS.at(-1)!.t).toBeLessThan(10.04);
   });
-});
 
-describe("salts des de l'índex de peces", () => {
-  it('cada salt cau dins de la seva peça, amb el vídeo ja a lloc', () => {
-    MOMENTS.forEach((m, i) => {
-      const p = progresDePeca(i);
-      expect(pasActiu(p)).toBe(i);
-      expect(aturat(p)).toBe(true);
-      expect(tempsVideo(p)).toBeCloseTo(m.t);
-    });
+  it('cada peça té la seva etiqueta just quan surt, una darrere l’altra i mai dues alhora', () => {
+    const ordre: number[] = [];
+    for (let t = 0; t <= 10.04; t += 0.01) {
+      const i = etiquetaActiva(t);
+      if (i >= 0 && ordre.at(-1) !== i) ordre.push(i);
+    }
+    expect(ordre).toEqual(ORDRE_PECES.map((_, i) => i));
+    MOMENTS.forEach((m, i) => expect(etiquetaActiva(m.t - 0.05)).toBe(i));
+  });
+
+  it('amb la bici sencera no hi ha cap etiqueta', () => {
+    expect(etiquetaActiva(0)).toBe(-1);
+    expect(etiquetaActiva(MOMENTS[0]!.t - 1)).toBe(-1);
   });
 
   it('el bàner següent mai no repeteix la peça i les pot treure totes', () => {
@@ -65,5 +41,10 @@ describe("salts des de l'índex de peces", () => {
       const { x, y, bx, by } = FINAL[peca];
       for (const v of [x, y, bx, by]) expect(v >= 0 && v <= 100).toBe(true);
     }
+  });
+
+  it('el fotograma de la bici cap dins de l’escena', () => {
+    expect(ENQUADRE.x + ENQUADRE.ample).toBeLessThanOrEqual(100);
+    expect(ENQUADRE.y + ENQUADRE.alt).toBeLessThanOrEqual(100);
   });
 });

@@ -38,12 +38,8 @@
     }
   },
   "anatomia": {
-    "situacio": "Anatomy of a bike",
-    "titol": "We take it apart, piece by piece.",
-    "intro": "A high-end road bike, like the ones we fix every day. Scroll down and watch it come apart: then each part tells you about its quality.",
-    "pista": "Scroll to take it apart",
     "reservar": "Book a service",
-    "sr": "A red road bike comes apart piece by piece on a mountain road: wheels, brakes, drivetrain, handlebar, saddle and finally the bare frame.",
+    "sr": "A red road bike in a workshop comes apart piece by piece: wheels, brakes, drivetrain, handlebar, saddle and finally the bare frame.",
     "peces": {
       "rodes": {
         "nom": "Wheels",

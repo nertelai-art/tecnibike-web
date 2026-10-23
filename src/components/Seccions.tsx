@@ -35,18 +35,10 @@ export async function ComFunciona() {
   );
 }
 
-export async function Taller() {
-  const t = await getTranslations('taller');
+export function Taller() {
+  // Tota la secció és l'escena del taller: la bici que es desmunta, els bàners i el botó de cita.
   return (
     <section id="taller" className={styles.taller} aria-labelledby="taller-titol">
-      <div className={`contenidor ${styles.capTaller}`}>
-        <p className={`situacio ${styles.situacioClara}`}>{t('situacio')}</p>
-        <h2 id="taller-titol" className="titol-seccio">
-          {t('titol')}
-        </h2>
-        <p className={`intro ${styles.introClara}`}>{t('intro')}</p>
-      </div>
-
       <AnatomiaTaller />
     </section>
   );

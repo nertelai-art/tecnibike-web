@@ -38,12 +38,8 @@
     }
   },
   "anatomia": {
-    "situacio": "Anatomia d'una bici",
-    "titol": "Desmuntem-la peça a peça.",
-    "intro": "Una bici de carretera de gamma alta, com les que reparem cada dia. Baixa i mira com es desmunta: després, cada peça t’explica la seva qualitat.",
-    "pista": "Fes scroll per desmuntar-la",
     "reservar": "Reserva una revisió",
-    "sr": "Una bici de carretera vermella es desmunta peça a peça sobre una carretera de muntanya: rodes, frens, transmissió, manillar, sella i, al final, el quadre sol.",
+    "sr": "Una bici de carretera vermella, en un taller, es desmunta peça a peça: rodes, frens, transmissió, manillar, sella i, al final, el quadre sol.",
     "peces": {
       "rodes": {
         "nom": "Rodes",

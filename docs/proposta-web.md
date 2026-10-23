@@ -90,6 +90,13 @@ pagament, botiga en línia, pàgines legals pròpies i logo en SVG.
 - **Marques:** el carrusel ocupa tota l'amplada, sense el text d'ajuda.
 - **Barra de la bici:** sense restes blanques (fons tret per zones, menys les lletres del quadre).
 
+## Estat (23-10-2026, sisena volta)
+
+- **Taller, versió final:** ja no hi ha carretera ni muntanya. La bici s'ha retallat fotograma a
+  fotograma del mateix vídeo i és sobre un taller clar i modern (imatge generada amb IA). En arribar
+  a la secció es veu la bici sencera, es desmunta sola (uns 7 s) i després entren el text, el botó de
+  cita i els bàners de les peces. Vídeo d'1,9 MB. Ja no cal fer scroll per desmuntar-la.
+
 ## 1. Objectiu
 
 Que un ciclista **reservi una bici o una cita al taller en menys de dos minuts**, des del

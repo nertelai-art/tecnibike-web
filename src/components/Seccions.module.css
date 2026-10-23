@@ -56,23 +56,10 @@
   }
 }
 
-/* ── Taller (fosc) ── */
+/* ── Taller: l'escena ocupa tota la secció ── */
 
 .taller {
-  background: var(--grafit);
-  color: var(--blanc);
-}
-
-.capTaller {
-  padding-top: var(--section);
-  padding-bottom: 24px;
-}
-
-.situacioClara {
-  color: rgb(255 255 255 / 0.7);
-}
-.introClara {
-  color: rgb(255 255 255 / 0.75);
+  background: #ecebe8;
 }
 
 /* ── Rutes ── */

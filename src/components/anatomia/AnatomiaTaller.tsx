@@ -1,146 +1,141 @@
 'use client';
 
-// Anatomia d'una bici, dins la secció de taller. Sobre el fons d'un taller, una bici real es desmunta
-// peça a peça amb el scroll (vídeo generat a partir de les fotos de la Pinarello del client). Quan ja
-// està desmuntada, de les peces surten a l'atzar un fil i un bàner que explica la peça i la seva
-// qualitat; amb el ratolí a sobre, el bàner es queda quiet. Un cop vista i passada de llarg, l'escena
-// queda desmuntada i no es torna a reproduir. Sempre a la vista: el botó de demanar cita.
+// Secció de taller. Quan s'hi arriba, es veu el taller amb la bici sencera; la bici es desmunta sola
+// peça a peça (vídeo de la Pinarello del client, retallada i posada sobre el fons del taller) i, en
+// acabar, entren els textos i, a l'atzar, bàners amb un fil que expliquen cada peça i la seva
+// qualitat. Amb el ratolí a sobre, el bàner es queda quiet. L'animació només es fa una vegada; si es
+// surt de la secció a mitges, s'atura i continua en tornar-hi.
 
 import { useTranslations } from 'next-intl';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { BotoCita } from '@/components/cita/BotoCita';
-import { ScrollVideo, type ScrollVideoFrame } from '@/components/video/ScrollVideo';
 import { useReducedMotion } from '@/lib/scroll-scene';
-import { aturat, FINAL, MOMENTS, pasActiu, seguentBanner, tempsVideo } from './anatomia-fases';
+import { ENQUADRE, etiquetaActiva, FINAL, MOMENTS, seguentBanner } from './anatomia-fases';
 import styles from './AnatomiaTaller.module.css';
 
-const DURADA = 10.04;
-/** Inèrcia del vídeo respecte del scroll: suavitza la roda del ratolí però s'atura de seguida. */
-const SUAVITAT = 12;
-/** Progrés a partir del qual la bici ja és desmuntada del tot i comencen els bàners. */
-const DESMUNTADA = 0.96;
+/** Velocitat de reproducció: el desmuntatge dura uns 7 s en lloc de 10. */
+const VELOCITAT = 1.4;
 /** Quant es veu cada bàner i quant temps queda buit fins al següent. */
 const VISIBLE_MS = 3400;
 const PAUSA_MS = 700;
 
+type Fase = 'espera' | 'desmunta' | 'final';
+
 export function AnatomiaTaller() {
   const t = useTranslations('anatomia');
+  const tt = useTranslations('taller');
   const reduced = useReducedMotion();
-  const pista = useRef<HTMLDivElement>(null);
+  const escenari = useRef<HTMLDivElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
   const etiquetes = useRef<HTMLDivElement>(null);
-  const barra = useRef<HTMLDivElement>(null);
-  const [desmuntada, setDesmuntada] = useState(false);
-  const [acabada, setAcabada] = useState(false);
-  const fiAbans = useRef<number | null>(null);
+  const [fase, setFase] = useState<Fase>('espera');
+  const final = reduced || fase === 'final';
 
-  // En sortir per baix del recorregut, l'escena queda acabada: el recorregut llarg es canvia per un
-  // panell d'una pantalla i es compensa el scroll perquè el que hi ha a la vista no es mogui.
   useEffect(() => {
-    if (acabada || reduced) return;
-    const comprova = () => {
-      const el = pista.current;
-      const final = el?.getBoundingClientRect().bottom ?? 0;
-      if (el && final < 0) {
-        fiAbans.current = final;
-        setAcabada(true);
-      }
+    const el = escenari.current;
+    const v = video.current;
+    if (reduced || !el || !v) return;
+    let acabat = false;
+    let frame = 0;
+
+    // Etiqueta de la peça que acaba de sortir, seguint el vídeo fotograma a fotograma.
+    const segueix = () => {
+      const actiu = etiquetaActiva(v.currentTime);
+      etiquetes.current?.querySelectorAll<HTMLElement>('[data-peca]').forEach((e, i) => (e.dataset.visible = String(i === actiu)));
+      if (!v.paused && !v.ended) frame = requestAnimationFrame(segueix);
     };
-    comprova();
-    window.addEventListener('scroll', comprova, { passive: true });
-    return () => window.removeEventListener('scroll', comprova);
-  }, [acabada, reduced]);
+    const enReproduir = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(segueix);
+    };
+    const enAcabar = () => {
+      acabat = true;
+      cancelAnimationFrame(frame);
+      etiquetes.current?.querySelectorAll<HTMLElement>('[data-peca]').forEach((e) => (e.dataset.visible = 'false'));
+      setFase('final');
+    };
+    v.addEventListener('play', enReproduir);
+    v.addEventListener('ended', enAcabar);
 
-  // El que hi ha sota l'escena ha de quedar on era. Es mesura en lloc de restar alçades perquè
-  // alguns navegadors ja ho compensen sols (scroll anchoring) i no s'ha de fer dues vegades.
-  useLayoutEffect(() => {
-    if (!acabada || fiAbans.current === null || !pista.current) return;
-    const desplaçament = pista.current.getBoundingClientRect().bottom - fiAbans.current;
-    if (Math.abs(desplaçament) > 1) window.scrollBy({ top: desplaçament, behavior: 'instant' });
-    fiAbans.current = null;
-  }, [acabada]);
-
-  // Mentre es desmunta, el que canvia amb el scroll va directament al DOM; només l'entrada i la
-  // sortida de l'estat «desmuntada» passen per React (una vegada, no a cada fotograma).
-  const onFrame = ({ progress }: ScrollVideoFrame) => {
-    const pas = pasActiu(progress);
-    const fora = aturat(progress);
-    const final = progress >= DESMUNTADA;
-    etiquetes.current?.querySelectorAll<HTMLElement>('[data-peca]').forEach((el, i) => (el.dataset.visible = String(!final && i === pas && fora)));
-    if (barra.current) barra.current.style.transform = `scaleX(${progress})`;
-    setDesmuntada((abans) => (abans === final ? abans : final));
-  };
-
-  const text = (
-    <div className={styles.text}>
-      <p className="situacio">{t('situacio')}</p>
-      <h2 className={styles.titol}>{t('titol')}</h2>
-      <p className={styles.intro}>{t('intro')}</p>
-      {!acabada && !reduced && <p className={styles.pista}>{t('pista')}</p>}
-      <BotoCita className={`boto ${styles.cta}`}>
-        {t('ctaCita')} <span className="fletxa">→</span>
-      </BotoCita>
-    </div>
-  );
-
-  const fons = (
-    // eslint-disable-next-line @next/next/no-img-element -- fons decoratiu de l'escenari, a pantalla completa
-    <img src="/img/taller/fons-taller.webp" alt="" className={styles.fons} aria-hidden="true" />
-  );
-
-  if (reduced || acabada) {
-    // Sense moviment, o ja vista: la bici desmuntada (últim fotograma) amb els bàners.
-    return (
-      <div ref={pista} className={styles.panell}>
-        {fons}
-        <div className={styles.capa}>
-          <div className={styles.video}>
-            {/* eslint-disable-next-line @next/next/no-img-element -- fotograma final exacte del vídeo */}
-            <img src="/video/anatomia-final.webp" alt={t('sr')} className={styles.imatgeFinal} />
-          </div>
-          <Banners actius />
-          {text}
-        </div>
-      </div>
+    // A prop: es comença a baixar el vídeo. A la vista (més de mitja secció): es reprodueix.
+    const aProp = new IntersectionObserver(
+      ([e]) => {
+        if (e?.isIntersecting && v.preload === 'none') {
+          v.preload = 'auto';
+          v.load();
+        }
+      },
+      { rootMargin: '900px 0px' },
     );
-  }
+    const aLaVista = new IntersectionObserver(
+      ([e]) => {
+        if (acabat) return;
+        if (e && e.intersectionRatio >= 0.55) {
+          v.playbackRate = VELOCITAT;
+          v.play()
+            .then(() => setFase('desmunta'))
+            // Si el navegador no el deixa reproduir, es mostra directament la bici desmuntada.
+            .catch(() => enAcabar());
+        } else {
+          v.pause();
+        }
+      },
+      { threshold: [0, 0.55] },
+    );
+    aProp.observe(el);
+    aLaVista.observe(el);
+    return () => {
+      cancelAnimationFrame(frame);
+      aProp.disconnect();
+      aLaVista.disconnect();
+      v.removeEventListener('play', enReproduir);
+      v.removeEventListener('ended', enAcabar);
+    };
+  }, [reduced]);
+
+  const enquadre: CSSProperties = { left: `${ENQUADRE.x}%`, top: `${ENQUADRE.y}%`, width: `${ENQUADRE.ample}%`, height: `${ENQUADRE.alt}%` };
 
   return (
-    <div ref={pista}>
-      <ScrollVideo
-        clips={[{ src: '/video/anatomia.mp4', srcMobile: '/video/anatomia-m.mp4', poster: '/video/anatomia-poster.webp', scroll: 6 }]}
-        label={t('sr')}
-        offsetTop={0}
-        fade={0}
-        smoothing={SUAVITAT}
-        remap={(local) => tempsVideo(local) / DURADA}
-        mediaClassName={styles.video}
-        background={fons}
-        onFrame={onFrame}
-      >
-        <div className={styles.capa}>
-          {/* Mateixa caixa que el vídeo, per situar les etiquetes en % del fotograma. */}
-          <div ref={etiquetes} className={`${styles.video} ${styles.etiquetesCaixa}`} aria-hidden="true">
-            {MOMENTS.map((m) => (
-              <span
-                key={m.peca}
-                data-peca={m.peca}
-                data-visible="false"
-                // A la part dreta del fotograma, el text va a l'esquerra del punt perquè no surti de la caixa.
-                className={`${styles.etiqueta} ${m.x > 70 ? styles.etiquetaEsquerra : ''}`}
-                style={{ left: `${m.x}%`, top: `${m.y}%` }}
-              >
-                <i />
-                {t(`peces.${m.peca}.nom`)}
-              </span>
-            ))}
-          </div>
-          <Banners actius={desmuntada} />
-          {text}
-          <div className={styles.progres} aria-hidden="true">
-            <div ref={barra} />
+    <div ref={escenari} className={styles.escenari} data-fase={reduced ? 'final' : fase}>
+      <div className={styles.marc}>
+        <div className={styles.escena} role="img" aria-label={t('sr')}>
+          {reduced ? (
+            // eslint-disable-next-line @next/next/no-img-element -- últim fotograma exacte del vídeo
+            <img src="/video/taller-final.webp" alt="" className={styles.media} />
+          ) : (
+            <video ref={video} className={styles.media} src="/video/taller.mp4" poster="/video/taller-poster.webp" muted playsInline preload="none" aria-hidden="true" tabIndex={-1} />
+          )}
+          <div className={styles.bici} style={enquadre}>
+            <div ref={etiquetes} className={styles.capaEtiquetes} aria-hidden="true">
+              {MOMENTS.map((m) => (
+                <span
+                  key={m.peca}
+                  data-peca={m.peca}
+                  data-visible="false"
+                  // A la part dreta de la bici, el text va a l'esquerra del punt perquè no surti.
+                  className={`${styles.etiqueta} ${m.x > 70 ? styles.etiquetaEsquerra : ''}`}
+                  style={{ left: `${m.x}%`, top: `${m.y}%` }}
+                >
+                  <i />
+                  {t(`peces.${m.peca}.nom`)}
+                </span>
+              ))}
+            </div>
+            <Banners actius={final} />
           </div>
         </div>
-      </ScrollVideo>
+      </div>
+
+      <div className={styles.text} data-visible={final}>
+        <p className="situacio">{tt('situacio')}</p>
+        <h2 id="taller-titol" className={styles.titol}>
+          {tt('titol')}
+        </h2>
+        <p className={styles.intro}>{tt('intro')}</p>
+        <BotoCita className={`boto ${styles.cta}`}>
+          {t('ctaCita')} <span className="fletxa">→</span>
+        </BotoCita>
+      </div>
     </div>
   );
 }
@@ -168,7 +163,7 @@ function Banners({ actius }: { actius: boolean }) {
   }, [actius, visible, quiet]);
 
   return (
-    <div className={`${styles.video} ${styles.capaBanners}`}>
+    <div className={styles.capaBanners}>
       {MOMENTS.map((m, i) => {
         const pos = FINAL[m.peca];
         const mostra = actius && visible && i === actual;

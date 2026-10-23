@@ -38,12 +38,8 @@
     }
   },
   "anatomia": {
-    "situacio": "Anatomie d'un vélo",
-    "titol": "On le démonte pièce par pièce.",
-    "intro": "Un vélo de route haut de gamme, comme ceux que nous réparons chaque jour. Descendez et regardez-le se démonter : ensuite, chaque pièce vous parle de sa qualité.",
-    "pista": "Faites défiler pour le démonter",
     "reservar": "Réservez une révision",
-    "sr": "Un vélo de route rouge se démonte pièce par pièce sur une route de montagne : roues, freins, transmission, cintre, selle et enfin le cadre seul.",
+    "sr": "Un vélo de route rouge, dans un atelier, se démonte pièce par pièce : roues, freins, transmission, cintre, selle et enfin le cadre seul.",
     "peces": {
       "rodes": {
         "nom": "Roues",
