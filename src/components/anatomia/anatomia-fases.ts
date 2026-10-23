@@ -1,7 +1,7 @@
 import type { Peca } from '@/lib/plataforma/esquema';
 
 // Dades de l'escena del taller: el vídeo (public/video/taller.mp4, 10 s) on la bici, retallada sobre
-// el fons del taller, es desmunta peça a peça; després surten els bàners de les peces.
+// el fons del taller, es desmunta peça a peça amb el scroll; després surten els bàners de les peces.
 // Sense dependències de React ni del DOM, perquè es pugui provar.
 
 export type Moment = {
@@ -30,6 +30,25 @@ export const ORDRE_PECES: readonly Peca[] = MOMENTS.map((m) => m.peca);
  * amb X0, Y0 i AMPLE de scripts/taller-video.py, que és qui munta el vídeo.
  */
 export const ENQUADRE = { x: 36, y: 28.9, ample: 62, alt: 61.4 } as const;
+
+export const DURADA = 10.04;
+
+/** Part del recorregut de scroll del principi amb la bici sencera, abans que comenci a desmuntar-se. */
+export const INICI = 0.06;
+/** A partir d'aquí la bici ja és desmuntada del tot: el que queda de scroll és per als bàners. */
+export const DESMUNTADA = 0.88;
+/** Quan entren els textos de la secció. */
+export const TEXTOS = 0.1;
+
+/**
+ * Segon del vídeo per a un progrés de scroll (0–1): quiet al principi i al final, i entremig avança
+ * amb una corba suau perquè les peces surtin i s'aturin sense cops.
+ */
+export function tempsDeProgres(p: number): number {
+  const x = Math.min(1, Math.max(0, (p - INICI) / (DESMUNTADA - INICI)));
+  const suau = x * x * (3 - 2 * x);
+  return suau * DURADA;
+}
 
 /** Quant abans i després del seu moment es veu l'etiqueta d'una peça, en segons de vídeo. */
 const ABANS = 0.5;

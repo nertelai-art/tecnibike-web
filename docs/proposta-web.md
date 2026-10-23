@@ -95,7 +95,10 @@ pagament, botiga en línia, pàgines legals pròpies i logo en SVG.
 - **Taller, versió final:** ja no hi ha carretera ni muntanya. La bici s'ha retallat fotograma a
   fotograma del mateix vídeo i és sobre un taller clar i modern (imatge generada amb IA). En arribar
   a la secció es veu la bici sencera, es desmunta sola (uns 7 s) i després entren el text, el botó de
-  cita i els bàners de les peces. Vídeo d'1,9 MB. Ja no cal fer scroll per desmuntar-la.
+  cita i els bàners de les peces.
+- **Taller amb scroll (setena volta):** la secció torna a anar amb el scroll: es queda fixa, la bici
+  es desmunta en baixar i entren els textos; al final, bàners més petits i sempre per sobre del text.
+  Vídeo de 4,4 MB (escriptori) i 2,3 MB (mòbil), amb fotogrames clau curts per moure'l fi.
 
 ## 1. Objectiu
 

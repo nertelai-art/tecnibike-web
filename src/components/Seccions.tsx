@@ -36,7 +36,7 @@ export async function ComFunciona() {
 }
 
 export function Taller() {
-  // Tota la secció és l'escena del taller: la bici que es desmunta, els bàners i el botó de cita.
+  // Tota la secció és l'escena del taller: la bici que es desmunta amb el scroll, els bàners i la cita.
   return (
     <section id="taller" className={styles.taller} aria-labelledby="taller-titol">
       <AnatomiaTaller />

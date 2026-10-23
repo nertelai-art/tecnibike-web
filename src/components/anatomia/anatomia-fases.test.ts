@@ -1,4 +1,4 @@
-import { ENQUADRE, etiquetaActiva, FINAL, MOMENTS, ORDRE_PECES, seguentBanner } from './anatomia-fases';
+import { DESMUNTADA, DURADA, ENQUADRE, etiquetaActiva, FINAL, INICI, MOMENTS, ORDRE_PECES, seguentBanner, tempsDeProgres } from './anatomia-fases';
 
 describe("escena del taller", () => {
   it('els moments són dins del vídeo i en ordre', () => {
@@ -46,5 +46,18 @@ describe("escena del taller", () => {
   it('el fotograma de la bici cap dins de l’escena', () => {
     expect(ENQUADRE.x + ENQUADRE.ample).toBeLessThanOrEqual(100);
     expect(ENQUADRE.y + ENQUADRE.alt).toBeLessThanOrEqual(100);
+  });
+
+  it('amb el scroll, la bici sencera al principi i desmuntada al final, sense tornar mai enrere', () => {
+    expect(tempsDeProgres(0)).toBe(0);
+    expect(tempsDeProgres(INICI)).toBe(0);
+    expect(tempsDeProgres(DESMUNTADA)).toBeCloseTo(DURADA);
+    expect(tempsDeProgres(1)).toBeCloseTo(DURADA);
+    let anterior = 0;
+    for (let p = 0; p <= 1; p += 0.002) {
+      const t = tempsDeProgres(p);
+      expect(t).toBeGreaterThanOrEqual(anterior - 1e-9);
+      anterior = t;
+    }
   });
 });
