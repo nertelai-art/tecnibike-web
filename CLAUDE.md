@@ -35,7 +35,16 @@ Versions que **no** són l'última, i per què:
   afegeix la implementació remota i la resta de la web no canvia. El nom del proveïdor no surt de
   `src/lib/plataforma/`.
 - **Accions de servidor** (`src/app/[locale]/accions.ts`): tornen a validar-ho tot amb Zod i el
-  preu el calcula la plataforma. El rellotge només entra aquí (`araABotiga`), en hora de Madrid.
+  preu, l'horari i l'estoc els comprova la plataforma. El rellotge només entra aquí (`araABotiga`,
+  en hora de Madrid) i, a la plataforma de proves, per paràmetre (`rellotge`).
+- **Reserva de lloguer** (`src/components/reserva/`), inspirada en Sescapada (myR3nt): dia i hora
+  de recollida i retorn dins de l'horari de la botiga (`src/lib/horari.ts`), diverses bicis amb les
+  mateixes dates, talla amb les unitats que queden, alçada del ciclista i del seient, pedals
+  obligatoris i extres amb foto, preu (per reserva o per dia) i estoc. El pagament (senyal o
+  total, amb retenció de l'estoc) i els participants amb signatura estan fets però **apagats**
+  (`configuracioReserves` a `dades-prova.ts`) fins que la plataforma els tingui. Què li cal a la
+  plataforma: [docs/guia-plataforma-lloguer.md](docs/guia-plataforma-lloguer.md). Les fotos dels
+  extres són de Wikimedia Commons, amb crèdits al peu (`src/content/fotos-extres.ts`).
 - **Portada** (`src/components/Portada.tsx`): vídeo en bucle (`public/video/hero*.mp4`) d'un
   ciclista que passa per platja, poble, muntanya i costa.
 - **Taller** (`src/components/anatomia/`): la secció es queda fixa; a l'esquerra, el taller
@@ -89,5 +98,7 @@ Versions que **no** són l'última, i per què:
   en canviar-les, treu-ne els crèdits.
 - Logo bo de SiS (la web antiga hi tenia el de Shimano Index System; ara surt el nom en text).
 - Pàgines legals pròpies (ara enllacen a les de la web antiga), galetes i 404 pròpia.
-- Connexió real amb app.nertel.ai i els avisos per correu i WhatsApp.
+- Connexió real amb app.nertel.ai i els avisos per correu i WhatsApp. El mòdul de lloguer per
+  unitats, el pagament i la signatura són feina de la plataforma (guia a `docs/`).
+- Preus i estoc dels extres i pedals, festius que tanquen, fiança i política de cancel·lació.
 - Validar amb el client les tres rutes proposades i ensenyar-li els vídeos generats amb IA.

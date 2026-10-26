@@ -1,4 +1,4 @@
-import type { Accessori, Article, BiciLloguer, Producte, Ressenya, ServeiTaller, Valoracio } from './esquema';
+import type { Article, BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, Producte, Ressenya, ServeiTaller, Valoracio } from './esquema';
 
 // Dades de la implementació de proves. Les tarifes són les oficials del PDF de 2026; el que porta
 // `ficticia: true` és inventat perquè es vegi com queda i no es pot publicar sense confirmar-ho.
@@ -110,13 +110,44 @@ export const flota: BiciLloguer[] = [
   },
 ];
 
-/** Preu de cada accessori per bici i per reserva. Inventats: el casc inclòs és una suposició. */
-export const preusAccessoris: Record<Accessori, number> = {
-  casc: 0,
-  cadenat: 300,
-  cadiraNado: 800,
-  alforges: 600,
-  comptaquilometres: 400,
+/**
+ * Extres del lloguer. Els pedals són les opcions del formulari de la web antiga; preus, cobrament i
+ * estoc són inventats (el casc inclòs és una suposició) i s'han de confirmar amb el client.
+ */
+export const extres: Extra[] = [
+  { id: 'pedals-plans', grup: 'pedals', imatge: '/img/extres/pedals-plans.webp', preu: 0, cobrament: 'perReserva', estoc: 30, ficticia: true },
+  { id: 'pedals-spd', grup: 'pedals', imatge: '/img/extres/pedals-spd.webp', preu: 0, cobrament: 'perReserva', estoc: 12, ficticia: true },
+  { id: 'pedals-spdSl', grup: 'pedals', imatge: '/img/extres/pedals-spdSl.webp', preu: 0, cobrament: 'perReserva', estoc: 10, ficticia: true },
+  { id: 'pedals-look', grup: 'pedals', imatge: '/img/extres/pedals-look.webp', preu: 0, cobrament: 'perReserva', estoc: 6, ficticia: true },
+  { id: 'pedals-propis', grup: 'pedals', preu: 0, cobrament: 'perReserva', estoc: null, ficticia: true },
+  { id: 'casc', grup: 'extres', imatge: '/img/extres/casc.webp', preu: 0, cobrament: 'perReserva', estoc: 40, ficticia: true },
+  { id: 'cadenat', grup: 'extres', imatge: '/img/extres/cadenat.webp', preu: 300, cobrament: 'perReserva', estoc: 20, ficticia: true },
+  { id: 'cadiraNado', grup: 'extres', imatge: '/img/extres/cadiraNado.webp', preu: 800, cobrament: 'perReserva', estoc: 2, ficticia: true },
+  { id: 'alforges', grup: 'extres', imatge: '/img/extres/alforges.webp', preu: 600, cobrament: 'perReserva', estoc: 6, ficticia: true },
+  { id: 'comptaquilometres', grup: 'extres', imatge: '/img/extres/comptaquilometres.webp', preu: 200, cobrament: 'perDia', estoc: 8, ficticia: true },
+];
+
+const FEINER = [
+  { obre: '09:00', tanca: '13:00' },
+  { obre: '16:00', tanca: '20:00' },
+];
+
+/**
+ * Horari de la web i de Google: de dilluns a dissabte, 9–13 h i 16–20 h. Falta saber si a l'estiu
+ * canvia (`periodes`) i quins festius tanquen: els d'aquí són els oficials, sense confirmar.
+ */
+export const horari: HorariBotiga = {
+  setmana: [[], FEINER, FEINER, FEINER, FEINER, FEINER, FEINER],
+  periodes: [],
+  tancats: ['2026-12-08', '2026-12-25', '2026-12-26', '2027-01-01', '2027-01-06', '2027-03-26', '2027-03-29', '2027-05-01'].map((dia) => ({ dia, ficticia: true })),
+  pasMinuts: 30,
+};
+
+/** Pagament i participants, preparats a la web però apagats: la plataforma encara no els té. */
+export const configuracioReserves: ConfiguracioReserves = {
+  pagament: { actiu: false, modalitats: ['senyal', 'total'], senyalPercent: 30 },
+  participants: { actiu: false },
+  retencioMinuts: 15,
 };
 
 /** Tots els preus i terminis del taller són inventats: no n'hi ha cap llista publicada. */

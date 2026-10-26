@@ -1,75 +1,103 @@
 'use client';
 
-// Panell de reserva a l'estil de la fitxa de Scott: talla amb punt de disponibilitat, pedals,
-// dates, nombre de bicis i accessoris, amb el preu total recalculat a cada canvi. El servidor el
-// torna a calcular en confirmar.
+// Formulari de reserva de lloguer, amb el recorregut de Sescapada en una sola pantalla: dia i hora
+// de recollida i de retorn dins de l'horari de la botiga, una o més bicis (model, talla amb les
+// unitats que queden, qui la portarà, pedals i extres amb foto i estoc), les dades i el resum. El
+// preu es recalcula a cada canvi; el servidor el torna a calcular en confirmar.
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useId, useState, useSyncExternalStore, useTransition, type FormEvent } from 'react';
+import { useEffect, useId, useRef, useState, useSyncExternalStore, useTransition, type FormEvent } from 'react';
 import { consultarDisponibilitat, reservarLloguer, type ResultatReserva } from '@/app/[locale]/accions';
-import { dataLocal } from '@/lib/calendari';
-import type { Accessori, BiciLloguer, Durada, Pedals } from '@/lib/plataforma/esquema';
-import { formatEuros, preuPerDia, totalReserva } from '@/lib/preus';
-import { tallaSuggerida, TRAMS_ALCADA } from '@/lib/talles';
+import { araABotiga, esPassat, sumaDies, type Instant } from '@/lib/calendari';
+import { blocsDelDia, diesEntre, horesRecollida, horesRetorn, MAX_DIES_LLOGUER, minutsEntre, validaFranja } from '@/lib/horari';
+import type { Disponibilitat } from '@/lib/plataforma';
+import type { BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, ModalitatPagament, Moment } from '@/lib/plataforma/esquema';
+import { formatEuros, preuLinia } from '@/lib/preus';
+import { extresLliures, primeraRecollida, retornPerDefecte, tallesLliures } from '@/lib/reserva';
+import { BiciDelCarro, type LiniaFormulari } from './BiciDelCarro';
+import { Participants } from './Participants';
 import styles from './Reserva.module.css';
 
-const PEDALS: Pedals[] = ['plans', 'spd', 'spdSl', 'look'];
-const ACCESSORIS: Accessori[] = ['casc', 'cadenat', 'cadiraNado', 'alforges', 'comptaquilometres'];
-const MAX_DIES = 14;
+const MAX_BICIS = 8;
+const PEDALS_PER_DEFECTE = 'pedals-plans';
 
 const noop = () => () => {};
-/** «Avui» del navegador; al servidor és buit perquè la data no surti d'un altre fus horari. */
-function useAvui() {
-  return useSyncExternalStore(noop, () => dataLocal(new Date()), () => '');
+/** «Ara» a la botiga segons el rellotge del navegador; al servidor és buit (no hi ha hora fiable). */
+function useAra(): Instant | null {
+  const text = useSyncExternalStore(
+    noop,
+    () => {
+      const ara = araABotiga(new Date());
+      return `${ara.dia}T${ara.hora}`;
+    },
+    () => '',
+  );
+  if (!text) return null;
+  const [dia, hora] = text.split('T') as [string, string];
+  return { dia, hora };
 }
 
-type Props = { bici: BiciLloguer; preusAccessoris: Record<Accessori, number> };
+type Props = {
+  bici: BiciLloguer;
+  flota: readonly BiciLloguer[];
+  extres: readonly Extra[];
+  horari: HorariBotiga;
+  configuracio: ConfiguracioReserves;
+};
 
-export function ReservaLloguer({ bici, preusAccessoris }: Props) {
+export function ReservaLloguer({ bici, flota, extres, horari, configuracio }: Props) {
   const t = useTranslations('reserva');
   const locale = useLocale();
   const id = useId();
-  const avui = useAvui();
+  const ara = useAra();
 
-  const [tallaTriada, setTalla] = useState<string | null>(null);
-  const [alcada, setAlcada] = useState('');
-  const [pedals, setPedals] = useState<Pedals>('plans');
-  const [dataTriada, setDataTriada] = useState('');
-  const [durada, setDurada] = useState<Durada>({ tipus: 'dies', dies: 1 });
-  const [bicis, setBicis] = useState(1);
-  const [accessoris, setAccessoris] = useState<Accessori[]>(['casc']);
-  const [disponibilitat, setDisponibilitat] = useState<Record<string, number> | null>(null);
+  const novaLinia = (clau: number, biciId: string): LiniaFormulari => ({
+    clau, biciId, talla: null, pedals: PEDALS_PER_DEFECTE, extres: ['casc'], nom: '', alcada: '', seient: '',
+  });
+  const seguentClau = useRef(1);
+  const [linies, setLinies] = useState<LiniaFormulari[]>(() => [novaLinia(0, bici.id)]);
+  const [recollidaTriada, setRecollida] = useState<Moment | null>(null);
+  const [retornTriat, setRetorn] = useState<Moment | null>(null);
+  const [disponibilitat, setDisponibilitat] = useState<Disponibilitat | null>(null);
+  const [modalitat, setModalitat] = useState<ModalitatPagament>(configuracio.pagament.modalitats[0]!);
   const [errorsCamps, setErrorsCamps] = useState<Set<string>>(new Set());
   const [resultat, setResultat] = useState<ResultatReserva | null>(null);
   // Puja amb cada reserva feta, perquè la disponibilitat es torni a consultar.
   const [reservesFetes, setReservesFetes] = useState(0);
   const [enviant, iniciaEnviament] = useTransition();
 
-  const recollida = dataTriada || avui;
-  // Si la talla triada s'esgota en canviar les dates, deixa d'estar triada.
-  const talla = tallaTriada && disponibilitat?.[tallaTriada] !== 0 ? tallaTriada : null;
-  const dies = durada.tipus === 'migDia' ? 1 : durada.dies;
+  const recollida = recollidaTriada ?? (ara ? primeraRecollida(ara, horari) : null);
+  const retorn = retornTriat ?? (recollida ? retornPerDefecte(recollida, horari) : null);
+  const biciIds = [...new Set(linies.map((l) => l.biciId))].sort().join(',');
 
-  // Disponibilitat de cada talla per a les dates triades.
+  // Unitats lliures de les bicis del carro i dels extres per als dies triats.
   useEffect(() => {
-    if (!recollida) return;
+    if (!recollida || !retorn || diesEntre(recollida.dia, retorn.dia) < 1) return;
     let viu = true;
-    consultarDisponibilitat(bici.id, recollida, dies).then((d) => {
+    consultarDisponibilitat(recollida.dia, retorn.dia, biciIds.split(',')).then((d) => {
       if (viu) setDisponibilitat(d);
     });
     return () => {
       viu = false;
     };
-  }, [bici.id, recollida, dies, reservesFetes]);
+  }, [recollida?.dia, retorn?.dia, biciIds, reservesFetes]); // eslint-disable-line react-hooks/exhaustive-deps -- n'hi ha prou amb els dies
 
-  const unitats = talla && disponibilitat ? (disponibilitat[talla] ?? 0) : null;
-  const total = totalReserva(bici.tarifa, durada, bicis, accessoris, preusAccessoris);
-  const perDia = preuPerDia(bici.tarifa, durada);
-  const suggerida = alcada ? tallaSuggerida(Number(alcada), bici.talles) : null;
+  const perId = new Map(extres.map((e) => [e.id, e]));
+  const pedals = extres.filter((e) => e.grup === 'pedals');
+  const opcionals = extres.filter((e) => e.grup === 'extres');
   const euros = (centims: number) => formatEuros(centims, locale);
+  const errorFranja = recollida && retorn && ara ? validaFranja({ recollida, retorn }, horari, ara) : null;
 
-  if (resultat?.ok) {
-    const dataLlarga = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${recollida}T12:00:00`));
+  const preus = linies.map((l) => {
+    const b = flota.find((f) => f.id === l.biciId);
+    if (!b || !recollida || !retorn || errorFranja) return null;
+    const triats = [l.pedals, ...l.extres].map((x) => perId.get(x)).filter((e): e is Extra => e !== undefined);
+    return preuLinia({ tarifa: b.tarifa, extres: triats }, recollida, retorn);
+  });
+  const total = preus.every((p) => p !== null) ? preus.reduce((a, p) => a + p!, 0) : null;
+
+  if (resultat?.ok && 'codi' in resultat && recollida) {
+    const dataLlarga = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${recollida.dia}T12:00:00`));
     return (
       <div className={styles.fet} role="status">
         <p className={styles.fetMarca} aria-hidden="true">
@@ -80,13 +108,14 @@ export function ReservaLloguer({ bici, preusAccessoris }: Props) {
           <span>{t('fet.codi')}</span>
           <strong>{resultat.codi}</strong>
         </p>
-        <p>{t('fet.text', { data: dataLlarga })}</p>
+        <p>{t('fet.text', { data: dataLlarga, hora: recollida.hora })}</p>
         <p className={styles.adreca}>{t('fet.adreca')}</p>
         {resultat.totalCentims !== undefined && (
           <p className={styles.totalFet}>
             {t('total')}: <strong>{euros(resultat.totalCentims)}</strong>
           </p>
         )}
+        {configuracio.participants.actiu && <Participants codi={resultat.codi} noms={linies.map((l) => l.nom)} />}
         <button type="button" className="boto boto--clar" onClick={() => setResultat(null)}>
           {t('fet.altra')}
         </button>
@@ -94,31 +123,94 @@ export function ReservaLloguer({ bici, preusAccessoris }: Props) {
     );
   }
 
+  // ── Dates i hores ──
+  const horesLliures = (dia: string) => (ara ? horesRecollida(dia, horari).filter((h) => !esPassat(dia, h, ara)) : []);
+  const ajustaRetorn = (rec: Moment, ret: Moment | null) => {
+    if (!ret || minutsEntre(rec, ret) <= 0 || diesEntre(rec.dia, ret.dia) > MAX_DIES_LLOGUER) setRetorn(retornPerDefecte(rec, horari));
+  };
+  const canviaRecollida = (canvi: Partial<Moment>) => {
+    if (!recollida) return;
+    const dia = canvi.dia ?? recollida.dia;
+    const hores = horesLliures(dia);
+    const hora = canvi.hora ?? (hores.includes(recollida.hora) ? recollida.hora : (hores[0] ?? recollida.hora));
+    const nova = { dia, hora };
+    setRecollida(nova);
+    ajustaRetorn(nova, retorn);
+  };
+  const canviaRetorn = (canvi: Partial<Moment>) => {
+    if (!retorn) return;
+    const dia = canvi.dia ?? retorn.dia;
+    const hores = horesRetorn(dia, horari);
+    setRetorn({ dia, hora: canvi.hora ?? (hores.includes(retorn.hora) ? retorn.hora : (hores.at(-1) ?? retorn.hora)) });
+  };
+  const obert = (dia: string) => {
+    const blocs = blocsDelDia(dia, horari);
+    if (blocs.length === 0) return null;
+    return t('obertDia', { blocs: new Intl.ListFormat(locale, { type: 'conjunction' }).format(blocs.map((b) => t('bloc', b))) });
+  };
+
+  // ── Bicis ──
+  const canviaLinia = (clau: number, canvi: Partial<LiniaFormulari>) => setLinies((ls) => ls.map((l) => (l.clau === clau ? { ...l, ...canvi } : l)));
+  const afegeix = () => setLinies((ls) => [...ls, novaLinia(seguentClau.current++, ls.at(-1)?.biciId ?? bici.id)]);
+  const treu = (clau: number) => setLinies((ls) => ls.filter((l) => l.clau !== clau));
+
   function enviar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!recollida || !retorn) return;
     const form = new FormData(event.currentTarget);
     const nom = String(form.get('nom') ?? '').trim();
     const telefon = String(form.get('telefon') ?? '').trim();
     const correu = String(form.get('correu') ?? '').trim();
+    const comentaris = String(form.get('comentaris') ?? '').trim();
     const privacitat = form.get('privacitat') === 'on';
 
     const errors = new Set<string>();
-    if (!talla || unitats === 0) errors.add('talla');
+    const numero = (text: string, min: number, max: number, camp: string) => {
+      if (!text) return undefined;
+      const n = Number(text);
+      if (!Number.isInteger(n) || n < min || n > max) errors.add(camp);
+      return n;
+    };
+    const bicis = linies.map((l, i) => {
+      const talles = tallesLliures(disponibilitat, linies, i);
+      if (!l.talla || talles?.[l.talla] === 0) errors.add(`bicis.${i}.talla`);
+      if (extresLliures(disponibilitat, linies, i)[l.pedals] === 0) errors.add(`bicis.${i}.pedals`);
+      return {
+        biciId: l.biciId,
+        talla: l.talla ?? '',
+        pedals: l.pedals,
+        extres: l.extres,
+        ciclista: {
+          nom: l.nom.trim() || undefined,
+          alcadaCm: numero(l.alcada, 100, 220, `bicis.${i}.ciclista.alcadaCm`),
+          alcadaSeientCm: numero(l.seient, 50, 100, `bicis.${i}.ciclista.alcadaSeientCm`),
+        },
+      };
+    });
     if (nom.length < 2) errors.add('nom');
     if (!/^\+?[\d\s().-]{9,20}$/.test(telefon)) errors.add('telefon');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correu)) errors.add('correu');
     if (!privacitat) errors.add('privacitat');
     setErrorsCamps(errors);
+    if (errorFranja) {
+      setResultat({ ok: false, error: 'franja' });
+      return;
+    }
     if (errors.size > 0) {
-      setResultat({ ok: false, error: errors.has('talla') ? 'talla' : 'dades' });
+      setResultat({ ok: false, error: [...errors].some((e) => e.endsWith('.talla')) ? 'talla' : 'dades' });
       return;
     }
 
     iniciaEnviament(async () => {
       try {
-        const r = await reservarLloguer({
-          biciId: bici.id, talla, pedals, recollida, durada, bicis, accessoris, nom, telefon, correu, idioma: locale, privacitat,
-        });
+        const r = await reservarLloguer(
+          { recollida, retorn, bicis, comentaris: comentaris || undefined, nom, telefon, correu, idioma: locale, privacitat },
+          configuracio.pagament.actiu ? modalitat : undefined,
+        );
+        if (r.ok && 'pagament' in r) {
+          window.location.assign(r.pagament);
+          return;
+        }
         if (!r.ok && r.camps) setErrorsCamps(new Set(r.camps));
         if (r.ok) setReservesFetes((n) => n + 1);
         setResultat(r);
@@ -128,141 +220,89 @@ export function ReservaLloguer({ bici, preusAccessoris }: Props) {
     });
   }
 
-  const commutaAccessori = (a: Accessori) =>
-    setAccessoris((actuals) => (actuals.includes(a) ? actuals.filter((x) => x !== a) : [...actuals, a]));
   const error = (camp: string) => errorsCamps.has(camp);
-  const maxBicis = Math.max(1, Math.min(5, unitats ?? 5));
+  const minRetorn = recollida?.dia;
+  const maxRetorn = recollida ? sumaDies(recollida.dia, MAX_DIES_LLOGUER - 1) : undefined;
 
   return (
     <form className={styles.panell} onSubmit={enviar} noValidate aria-describedby={resultat && !resultat.ok ? `${id}-error` : undefined}>
-      {/* Talla */}
-      <fieldset className={styles.grup} aria-invalid={error('talla') || undefined}>
-        <legend>{t('talla')}</legend>
-        <div className={styles.talles}>
-          {bici.talles.map((tl) => {
-            const n = disponibilitat?.[tl];
-            const estat = n === undefined ? 'carregant' : n === 0 ? 'esgotada' : n === 1 ? 'poques' : 'lliure';
+      {/* Quan */}
+      <fieldset className={styles.grup}>
+        <legend>{t('quan')}</legend>
+        <div className={styles.franges}>
+          {(['recollida', 'retorn'] as const).map((quin) => {
+            const moment = quin === 'recollida' ? recollida : retorn;
+            const hores = moment ? (quin === 'recollida' ? horesLliures(moment.dia) : horesRetorn(moment.dia, horari)) : [];
+            const canvia = quin === 'recollida' ? canviaRecollida : canviaRetorn;
+            const text = moment ? obert(moment.dia) : null;
             return (
-              <label key={tl} className={styles.talla} data-estat={estat} data-suggerida={suggerida === tl || undefined}>
-                <input
-                  type="radio"
-                  name="talla"
-                  value={tl}
-                  checked={talla === tl}
-                  disabled={n === 0}
-                  onChange={() => {
-                    setTalla(tl);
-                    setBicis((b) => Math.min(b, Math.max(1, n ?? 5)));
-                  }}
-                />
-                <span>{tl}</span>
-                <i aria-hidden="true" />
-                <span className="sr-only">{n === undefined ? t('carregant') : t('disponibles', { n })}</span>
-              </label>
+              <div key={quin} className={styles.franja} data-error={(errorFranja && (errorFranja === quin || (quin === 'recollida' && errorFranja === 'passat'))) || undefined}>
+                <p className={styles.etiquetaGrup}>{t(quin)}</p>
+                <div className={styles.fila}>
+                  <label className={styles.camp}>
+                    <span className="sr-only">{t('dia')}</span>
+                    <input
+                      type="date"
+                      value={moment?.dia ?? ''}
+                      min={quin === 'recollida' ? ara?.dia : minRetorn}
+                      max={quin === 'retorn' ? maxRetorn : undefined}
+                      disabled={!moment}
+                      required
+                      onChange={(e) => e.target.value && canvia({ dia: e.target.value })}
+                    />
+                  </label>
+                  <label className={styles.camp}>
+                    <span className="sr-only">{t('hora')}</span>
+                    <select value={moment && hores.includes(moment.hora) ? moment.hora : ''} disabled={hores.length === 0} onChange={(e) => canvia({ hora: e.target.value })}>
+                      {hores.length === 0 && <option value="">—</option>}
+                      {hores.map((h) => (
+                        <option key={h} value={h}>
+                          {h}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <p className={styles.ajuda}>{moment && (hores.length === 0 ? t('tancat') : text)}</p>
+              </div>
             );
           })}
         </div>
-        {unitats !== null && <p className={styles.ajuda}>{t('disponibles', { n: unitats })}</p>}
-        <details className={styles.ajudaTalla}>
-          <summary>{t('tallaAjuda')}</summary>
-          <label className={styles.camp}>
-            <span>{t('alcada')}</span>
-            <select value={alcada} onChange={(e) => setAlcada(e.target.value)}>
-              <option value="">—</option>
-              {TRAMS_ALCADA.map((tram) => (
-                <option key={tram.min} value={tram.min + 4}>
-                  {t('alcadaOpcio', tram)}
-                </option>
-              ))}
-            </select>
-          </label>
-          {suggerida && (
-            <p className={styles.suggerida}>
-              {t('suggerida', { talla: suggerida })}{' '}
-              <button type="button" className={styles.enllac} onClick={() => setTalla(suggerida)} disabled={disponibilitat?.[suggerida] === 0}>
-                ✓
-              </button>
-            </p>
-          )}
-        </details>
+        {recollida && retorn && !errorFranja && (
+          <p className={styles.durada}>
+            {t('durada')}: <strong>{t('dies', { n: diesEntre(recollida.dia, retorn.dia) })}</strong>
+          </p>
+        )}
+        {errorFranja && errorFranja !== 'recollida' && <em className={styles.errorSolt}>{t('errors.franja')}</em>}
       </fieldset>
 
-      {/* Pedals */}
-      <fieldset className={styles.grup}>
-        <legend>{t('pedals')}</legend>
-        <div className={styles.segments}>
-          {PEDALS.map((p) => (
-            <label key={p} className={styles.segment}>
-              <input type="radio" name="pedals" value={p} checked={pedals === p} onChange={() => setPedals(p)} />
-              <span>{t(`pedalsOpcions.${p}`)}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      {/* Quan */}
-      <div className={styles.fila}>
-        <label className={styles.camp}>
-          <span>{t('recollida')}</span>
-          <input type="date" value={recollida} min={avui || undefined} required onChange={(e) => setDataTriada(e.target.value)} />
-        </label>
-        <div className={styles.camp}>
-          <span id={`${id}-durada`}>{t('durada')}</span>
-          <div className={styles.comptador} role="group" aria-labelledby={`${id}-durada`}>
-            <button
-              type="button"
-              aria-label={t('menys')}
-              disabled={durada.tipus === 'migDia' || (durada.tipus === 'dies' && durada.dies <= 1 && bici.tarifa.migDia === undefined)}
-              onClick={() =>
-                setDurada((d) => (d.tipus === 'dies' && d.dies > 1 ? { tipus: 'dies', dies: d.dies - 1 } : bici.tarifa.migDia !== undefined ? { tipus: 'migDia' } : d))
-              }
-            >
-              −
-            </button>
-            <output aria-live="polite">{durada.tipus === 'migDia' ? t('migDia') : t('dies', { n: durada.dies })}</output>
-            <button
-              type="button"
-              aria-label={t('mes')}
-              disabled={durada.tipus === 'dies' && durada.dies >= MAX_DIES}
-              onClick={() => setDurada((d) => (d.tipus === 'migDia' ? { tipus: 'dies', dies: 1 } : { tipus: 'dies', dies: Math.min(MAX_DIES, d.dies + 1) }))}
-            >
-              +
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.camp}>
-        <span id={`${id}-bicis`}>{t('bicis')}</span>
-        <div className={styles.comptador} role="group" aria-labelledby={`${id}-bicis`}>
-          <button type="button" aria-label={t('menys')} disabled={bicis <= 1} onClick={() => setBicis((b) => Math.max(1, b - 1))}>
-            −
+      {/* Bicis */}
+      <div className={styles.carro}>
+        {linies.map((l, i) => (
+          <BiciDelCarro
+            key={l.clau}
+            index={i}
+            linia={l}
+            flota={flota}
+            pedals={pedals}
+            extres={opcionals}
+            talles={tallesLliures(disponibilitat, linies, i)}
+            lliures={extresLliures(disponibilitat, linies, i)}
+            errors={errorsCamps}
+            onCanvi={(canvi) => canviaLinia(l.clau, canvi)}
+            onTreure={linies.length > 1 ? () => treu(l.clau) : undefined}
+          />
+        ))}
+        {linies.length < MAX_BICIS && (
+          <button type="button" className={styles.afegir} onClick={afegeix}>
+            <span aria-hidden="true">+</span>
+            <span>
+              <strong>{t('afegir')}</strong>
+              <small>{t('afegirAjuda')}</small>
+            </span>
           </button>
-          <output aria-live="polite">{bicis}</output>
-          <button type="button" aria-label={t('mes')} disabled={bicis >= maxBicis} onClick={() => setBicis((b) => Math.min(maxBicis, b + 1))}>
-            +
-          </button>
-        </div>
+        )}
       </div>
-
-      {/* Accessoris */}
-      <fieldset className={styles.grup}>
-        <legend>{t('accessoris')}</legend>
-        <ul className={styles.accessoris}>
-          {ACCESSORIS.map((a) => (
-            <li key={a}>
-              <label>
-                <input type="checkbox" checked={accessoris.includes(a)} onChange={() => commutaAccessori(a)} />
-                <span>{t(`accessorisOpcions.${a}`)}</span>
-                <small>
-                  {preusAccessoris[a] === 0 ? t('inclos') : t('perBici', { preu: euros(preusAccessoris[a]) })}
-                  <span className="mostra">*</span>
-                </small>
-              </label>
-            </li>
-          ))}
-        </ul>
-      </fieldset>
 
       {/* Dades */}
       <fieldset className={styles.grup}>
@@ -284,6 +324,10 @@ export function ReservaLloguer({ bici, preusAccessoris }: Props) {
             {error('correu') && <em>{t('camps.correu')}</em>}
           </label>
         </div>
+        <label className={styles.camp}>
+          <span>{t('comentaris')}</span>
+          <textarea name="comentaris" maxLength={500} rows={3} />
+        </label>
         <label className={styles.check} data-error={error('privacitat') || undefined}>
           <input name="privacitat" type="checkbox" required aria-invalid={error('privacitat') || undefined} />
           <span>{t('privacitat')}</span>
@@ -293,27 +337,47 @@ export function ReservaLloguer({ bici, preusAccessoris }: Props) {
 
       {/* Resum */}
       <div className={styles.resum}>
-        {perDia !== null && (
-          <p className={styles.linia}>
-            <span>
-              {durada.tipus === 'migDia'
-                ? t('perMigDia', { preu: euros(perDia), bicis })
-                : t('perDiaX', { preu: euros(perDia), dies, bicis })}
-            </span>
-          </p>
-        )}
+        <p className={styles.etiquetaGrup}>{t('resum')}</p>
+        <ul className={styles.liniesResum}>
+          {linies.map((l, i) => {
+            const b = flota.find((f) => f.id === l.biciId);
+            return (
+              <li key={l.clau}>
+                <span>
+                  {i + 1}. {t('liniaBici', { nom: b?.nom ?? '', talla: l.talla ?? t('senseTalla') })}
+                </span>
+                <strong>{preus[i] === null ? '—' : euros(preus[i]!)}</strong>
+              </li>
+            );
+          })}
+        </ul>
         <p className={styles.total}>
           <span>{t('total')}</span>
           <strong>{total === null ? '—' : euros(total)}</strong>
         </p>
-        <p className={styles.ajuda}>{t('pagament')}</p>
+        {configuracio.pagament.actiu && total !== null ? (
+          <fieldset className={styles.modalitats}>
+            <legend>{t('modalitat')}</legend>
+            {configuracio.pagament.modalitats.map((m) => {
+              const aPagar = m === 'senyal' ? Math.ceil((total * configuracio.pagament.senyalPercent) / 100) : total;
+              return (
+                <label key={m} className={styles.check}>
+                  <input type="radio" name="modalitat" checked={modalitat === m} onChange={() => setModalitat(m)} />
+                  <span>{t(`modalitats.${m}`, { percent: configuracio.pagament.senyalPercent, import: euros(aPagar) })}</span>
+                </label>
+              );
+            })}
+          </fieldset>
+        ) : (
+          <p className={styles.ajuda}>{t('pagament')}</p>
+        )}
         {resultat && !resultat.ok && (
           <p id={`${id}-error`} className={styles.error} role="alert">
-            {t(`errors.${resultat.error === 'franja' ? 'xarxa' : resultat.error}`)}
+            {t(`errors.${resultat.error}`)}
           </p>
         )}
-        <button type="submit" className={`boto boto--blau ${styles.confirmar}`} disabled={enviant || total === null}>
-          {enviant ? t('enviant') : t('confirmar')}
+        <button type="submit" className={`boto boto--blau ${styles.confirmar}`} disabled={enviant || total === null || !ara}>
+          {enviant ? t('enviant') : configuracio.pagament.actiu ? t('pagar') : t('confirmar')}
           {!enviant && total !== null && <span> · {euros(total)}</span>}
         </button>
       </div>

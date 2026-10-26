@@ -1,4 +1,5 @@
-import type { Accessori, Durada, Tarifa } from './plataforma/esquema';
+import { diesEntre, minutsEntre } from './horari';
+import type { Durada, Extra, Moment, Tarifa } from './plataforma/esquema';
 
 // Càlcul del preu d'un lloguer amb els trams de la tarifa de Tecnibike: 1 dia, de 2 a 6 dies i
 // més de 6. El preu és per bici i per dia, i el tram s'aplica a tots els dies.
@@ -23,22 +24,36 @@ export function preuLloguer(tarifa: Tarifa, durada: Durada, bicis = 1): number |
   return perDia * dies * bicis;
 }
 
-/**
- * Total d'una reserva: el lloguer més els accessoris, que es cobren un cop per bici i per
- * reserva. Es recalcula sempre al servidor; el del navegador només és orientatiu.
- */
-export function totalReserva(
-  tarifa: Tarifa,
-  durada: Durada,
-  bicis: number,
-  accessoris: readonly Accessori[],
-  preusAccessoris: Readonly<Record<Accessori, number>>,
-): number | null {
-  const lloguer = preuLloguer(tarifa, durada, bicis);
+/** Fins a quantes hores, el mateix dia, compta com a mig dia (si la tarifa en té). */
+export const MIG_DIA_MINUTS = 4 * 60;
+
+/** Durada d'un lloguer per a una tarifa: dies de calendari, o mig dia si és curt i la bici en té. */
+export function duradaDe(recollida: Moment, retorn: Moment, tarifa: Tarifa): Durada {
+  const dies = diesEntre(recollida.dia, retorn.dia);
+  if (dies === 1 && tarifa.migDia !== undefined && minutsEntre(recollida, retorn) <= MIG_DIA_MINUTS) return { tipus: 'migDia' };
+  return { tipus: 'dies', dies };
+}
+
+export type LiniaPreu = { tarifa: Tarifa; extres: readonly Pick<Extra, 'preu' | 'cobrament'>[] };
+
+/** Preu d'una bici de la reserva: el lloguer i els seus extres (els pedals també en són). */
+export function preuLinia({ tarifa, extres }: LiniaPreu, recollida: Moment, retorn: Moment): number | null {
+  const durada = duradaDe(recollida, retorn, tarifa);
+  const lloguer = preuLloguer(tarifa, durada);
   if (lloguer === null) return null;
-  const extres = new Set(accessoris);
-  let total = lloguer;
-  for (const accessori of extres) total += preusAccessoris[accessori] * bicis;
+  const dies = durada.tipus === 'migDia' ? 1 : durada.dies;
+  return extres.reduce((total, e) => total + (e.cobrament === 'perDia' ? e.preu * dies : e.preu), lloguer);
+}
+
+/** Total d'una reserva. Es recalcula sempre al servidor; el del navegador només és orientatiu. */
+export function totalReserva(linies: readonly LiniaPreu[], recollida: Moment, retorn: Moment): number | null {
+  if (linies.length === 0) return null;
+  let total = 0;
+  for (const linia of linies) {
+    const preu = preuLinia(linia, recollida, retorn);
+    if (preu === null) return null;
+    total += preu;
+  }
   return total;
 }
 

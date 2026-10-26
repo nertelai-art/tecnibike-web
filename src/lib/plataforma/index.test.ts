@@ -1,16 +1,16 @@
-import { crearPlataformaProva, ErrorReserva, plataforma } from './index';
-import { categoriaEquipament, type ReservaLloguer } from './esquema';
+import { crearPlataformaProva, plataforma } from './index';
+import { categoriaEquipament, type BiciReserva, type ReservaLloguer } from './esquema';
 
 const client = { nom: 'Anna Puig', telefon: '+34 600 000 000', correu: 'anna@example.com', idioma: 'ca', privacitat: true } as const;
 
-function nova() {
+function nova(ara = new Date('2026-10-27T07:00:00Z')) {
   let n = 0;
-  return crearPlataformaProva({ generaCodi: () => `TB-PROVA${++n}` });
+  return crearPlataformaProva({ generaCodi: () => `TB-PROVA${++n}`, rellotge: () => ara });
 }
 
 /** Busca una talla amb unitats lliures per no dependre del hash concret. */
-async function tallaLliure(p: ReturnType<typeof nova>, biciId: string, recollida: string, dies: number) {
-  const disponibilitat = await p.disponibilitat(biciId, recollida, dies);
+async function tallaLliure(p: ReturnType<typeof nova>, biciId: string, des: string, fins: string) {
+  const disponibilitat = (await p.disponibilitat(des, fins, [biciId])).bicis[biciId] ?? {};
   const talla = Object.entries(disponibilitat).find(([, unitats]) => unitats > 0);
   if (!talla) throw new Error('cap talla lliure a la prova');
   return { talla: talla[0], unitats: talla[1] };
@@ -49,34 +49,129 @@ describe('plataforma de proves', () => {
 });
 
 describe('reserva de lloguer', () => {
+  // Dimarts 27 d'octubre de 2026 a les 8 del matí, hora de Madrid.
+  const ARA = new Date('2026-10-27T07:00:00Z');
+  const rec = { dia: '2026-11-02', hora: '09:00' };
+  const ret = { dia: '2026-11-04', hora: '19:00' };
+  const linia = (biciId: string, talla: string, extra: Partial<BiciReserva> = {}): BiciReserva => ({
+    biciId, talla, pedals: 'pedals-plans', extres: [], ciclista: {}, ...extra,
+  });
+  const reserva = (bicis: BiciReserva[], franja = { recollida: rec, retorn: ret }): ReservaLloguer => ({ ...franja, bicis, ...client });
+
   it('confirma amb codi i calcula el total al servidor', async () => {
-    const p = nova();
-    const { talla } = await tallaLliure(p, 'btt', '2026-11-02', 3);
-    const reserva: ReservaLloguer = {
-      biciId: 'btt', talla, pedals: 'plans', recollida: '2026-11-02', durada: { tipus: 'dies', dies: 3 }, bicis: 1, accessoris: ['cadenat'], ...client,
-    };
-    await expect(p.crearReservaLloguer(reserva)).resolves.toEqual({ codi: 'TB-PROVA1', totalCentims: 2520 * 3 + 300 });
+    const p = nova(ARA);
+    const { talla } = await tallaLliure(p, 'btt', rec.dia, ret.dia);
+    const r = reserva([linia('btt', talla, { extres: ['cadenat'], ciclista: { alcadaCm: 178, alcadaSeientCm: 74 } })]);
+    await expect(p.crearReservaLloguer(r)).resolves.toEqual({ codi: 'TB-PROVA1', totalCentims: 2520 * 3 + 300 });
   });
 
-  it('una reserva ocupa unitats i no es pot sobrevendre', async () => {
-    const p = nova();
-    const { talla, unitats } = await tallaLliure(p, 'gravel', '2026-11-04', 1);
-    const base: Omit<ReservaLloguer, 'bicis'> = { biciId: 'gravel', talla, pedals: 'spd', recollida: '2026-11-04', durada: { tipus: 'dies', dies: 1 }, accessoris: [], ...client };
-    await p.crearReservaLloguer({ ...base, bicis: unitats });
-    expect((await p.disponibilitat('gravel', '2026-11-04', 1))[talla]).toBe(0);
-    await expect(p.crearReservaLloguer({ ...base, bicis: 1 })).rejects.toThrow(ErrorReserva);
+  it('diverses bicis de models diferents en una sola reserva', async () => {
+    const p = nova(ARA);
+    const btt = await tallaLliure(p, 'btt', rec.dia, ret.dia);
+    const carretera = await tallaLliure(p, 'carretera', rec.dia, ret.dia);
+    const confirmacio = await p.crearReservaLloguer(
+      reserva([linia('btt', btt.talla), linia('carretera', carretera.talla, { pedals: 'pedals-look', extres: ['casc', 'comptaquilometres'] })]),
+    );
+    expect(confirmacio.totalCentims).toBe(2520 * 3 + 2800 * 3 + 200 * 3);
   });
 
-  it('rebutja el mig dia en una bici que no el té', async () => {
-    const p = nova();
-    const reserva: ReservaLloguer = { biciId: 'btt', talla: 'M', pedals: 'plans', recollida: '2026-11-02', durada: { tipus: 'migDia' }, bicis: 1, accessoris: [], ...client };
-    await expect(p.crearReservaLloguer(reserva)).rejects.toMatchObject({ motiu: 'durada' });
+  it('una reserva ocupa unitats i no es pot sobrevendre, tampoc amb dues línies iguals', async () => {
+    const p = nova(ARA);
+    const { talla, unitats } = await tallaLliure(p, 'gravel', rec.dia, rec.dia);
+    const un = { recollida: rec, retorn: { dia: rec.dia, hora: '19:00' } };
+    await expect(p.crearReservaLloguer(reserva(Array.from({ length: unitats + 1 }, () => linia('gravel', talla)), un))).rejects.toMatchObject({ motiu: 'esgotat' });
+    await p.crearReservaLloguer(reserva(Array.from({ length: unitats }, () => linia('gravel', talla)), un));
+    expect((await p.disponibilitat(rec.dia, rec.dia, ['gravel'])).bicis.gravel![talla]).toBe(0);
+  });
+
+  it("els extres tenen estoc i s'esgoten", async () => {
+    const p = nova(ARA);
+    const cadira = (await p.extres()).find((e) => e.id === 'cadiraNado')!;
+    expect(cadira.estoc).toBe(2);
+    const bicis: BiciReserva[] = [];
+    for (const id of ['btt', 'carretera', 'gravel']) bicis.push(linia(id, (await tallaLliure(p, id, rec.dia, ret.dia)).talla, { extres: ['cadiraNado'] }));
+    await expect(p.crearReservaLloguer(reserva(bicis))).rejects.toMatchObject({ motiu: 'extra' });
+    await p.crearReservaLloguer(reserva(bicis.slice(0, 2)));
+    expect((await p.disponibilitat(rec.dia, ret.dia, [])).extres.cadiraNado).toBe(0);
+  });
+
+  it('els pedals han de ser del grup de pedals i els extres, de la resta', async () => {
+    const p = nova(ARA);
+    const { talla } = await tallaLliure(p, 'btt', rec.dia, ret.dia);
+    await expect(p.crearReservaLloguer(reserva([linia('btt', talla, { pedals: 'casc' })]))).rejects.toMatchObject({ motiu: 'extra' });
+    await expect(p.crearReservaLloguer(reserva([linia('btt', talla, { extres: ['pedals-spd'] })]))).rejects.toMatchObject({ motiu: 'extra' });
+    await expect(p.crearReservaLloguer(reserva([linia('btt', talla, { extres: ['res'] })]))).rejects.toMatchObject({ motiu: 'extra' });
+  });
+
+  it("rebutja recollides fora de l'horari o en dies tancats", async () => {
+    const p = nova(ARA);
+    const diumenge = { recollida: { dia: '2026-11-01', hora: '10:00' }, retorn: ret };
+    await expect(p.crearReservaLloguer(reserva([linia('btt', 'M')], diumenge))).rejects.toMatchObject({ motiu: 'franja' });
+    const migdia = { recollida: { dia: rec.dia, hora: '14:00' }, retorn: ret };
+    await expect(p.crearReservaLloguer(reserva([linia('btt', 'M')], migdia))).rejects.toMatchObject({ motiu: 'franja' });
   });
 
   it('rebutja dades mal formades', async () => {
-    const p = nova();
-    const dolenta = { biciId: 'btt', talla: 'M', pedals: 'plans', recollida: 'demà', durada: { tipus: 'dies', dies: 1 }, bicis: 1, accessoris: [], ...client };
+    const p = nova(ARA);
+    const dolenta = { ...reserva([linia('btt', 'M')]), recollida: { dia: 'demà', hora: '09:00' } };
     await expect(p.crearReservaLloguer(dolenta as unknown as ReservaLloguer)).rejects.toThrow();
+  });
+});
+
+describe('retenció mentre es paga', () => {
+  const rec = { dia: '2026-11-02', hora: '09:00' };
+  const un = { recollida: rec, retorn: { dia: rec.dia, hora: '19:00' } };
+
+  it('guarda les bicis i les allibera en caducar', async () => {
+    let ara = new Date('2026-10-27T07:00:00Z');
+    const p = crearPlataformaProva({ generaCodi: () => 'TB-R', rellotge: () => ara });
+    const { talla, unitats } = await tallaLliure(p, 'urbana', rec.dia, rec.dia);
+    const retencio = await p.retenirReserva({
+      ...un, bicis: Array.from({ length: unitats }, () => ({ biciId: 'urbana', talla, pedals: 'pedals-plans', extres: [], ciclista: {} })), ...client,
+    });
+    expect(retencio.caducaA).toBe('2026-10-27T07:15:00.000Z');
+    expect((await p.disponibilitat(rec.dia, rec.dia, ['urbana'])).bicis.urbana![talla]).toBe(0);
+    ara = new Date('2026-10-27T07:16:00Z');
+    expect((await p.disponibilitat(rec.dia, rec.dia, ['urbana'])).bicis.urbana![talla]).toBe(unitats);
+  });
+
+  it('alliberar-la retorna les unitats de seguida', async () => {
+    const p = nova(new Date('2026-10-27T07:00:00Z'));
+    const { talla, unitats } = await tallaLliure(p, 'urbana', rec.dia, rec.dia);
+    const retencio = await p.retenirReserva({ ...un, bicis: [{ biciId: 'urbana', talla, pedals: 'pedals-plans', extres: [], ciclista: {} }], ...client });
+    await p.alliberarRetencio(retencio.id);
+    expect((await p.disponibilitat(rec.dia, rec.dia, ['urbana'])).bicis.urbana![talla]).toBe(unitats);
+  });
+
+  it('sense passarel·la de pagament no es pot pagar', async () => {
+    const p = nova(new Date('2026-10-27T07:00:00Z'));
+    await expect(p.iniciarPagament('qualsevol', 'senyal', 'https://example.com/tornada')).rejects.toMatchObject({ motiu: 'noDisponible' });
+  });
+});
+
+describe('participants i signatura', () => {
+  const signatura = 'data:image/png;base64,iVBORw0KGgo=';
+  const participants = [{ nom: 'Anna Puig', document: '12345678Z', signatura }];
+
+  it("estan apagats fins que la plataforma els activi", async () => {
+    const p = nova(new Date('2026-10-27T07:00:00Z'));
+    expect((await p.configuracioReserves()).participants.actiu).toBe(false);
+    await expect(p.registrarParticipants({ codi: 'TB-X', participants, condicions: true })).rejects.toMatchObject({ motiu: 'noDisponible' });
+  });
+
+  it('activats, es desen per a una reserva que existeix', async () => {
+    const p = crearPlataformaProva({
+      generaCodi: () => 'TB-P',
+      rellotge: () => new Date('2026-10-27T07:00:00Z'),
+      configuracio: { participants: { actiu: true } },
+    });
+    const { talla } = await tallaLliure(p, 'btt', '2026-11-02', '2026-11-02');
+    const { codi } = await p.crearReservaLloguer({
+      recollida: { dia: '2026-11-02', hora: '09:00' }, retorn: { dia: '2026-11-02', hora: '19:00' },
+      bicis: [{ biciId: 'btt', talla, pedals: 'pedals-plans', extres: [], ciclista: {} }], ...client,
+    });
+    await expect(p.registrarParticipants({ codi, participants, condicions: true })).resolves.toBeUndefined();
+    await expect(p.registrarParticipants({ codi: 'TB-NO', participants, condicions: true })).rejects.toMatchObject({ motiu: 'participants' });
   });
 });
 

@@ -7,7 +7,7 @@ import { marquesDeTipus, type Marca, type TipusMarca } from './marques';
 
 export const CATEGORIES_EQUIPAMENT = categoriaEquipament.options;
 
-type Foto = { src: string; autor: string; llicencia: string; llicenciaUrl: string; font: string };
+export type Foto = { src: string; autor: string; llicencia: string; llicenciaUrl: string; font: string };
 
 const TIPUS: Record<CategoriaEquipament, TipusMarca[]> = {
   cascs: ['cascs'],

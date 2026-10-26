@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
+import { FOTOS_EXTRES } from '@/content/fotos-extres';
 import type { Ressenya, Valoracio } from '@/lib/plataforma/esquema';
 import { Link } from '@/i18n/navigation';
 import { enllacWhatsapp, TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
@@ -326,10 +327,9 @@ export async function Peu() {
         <details className={styles.credits}>
           <summary>{t('credits')}</summary>
           <p>
-            {CATEGORIES_EQUIPAMENT.map((c, i) => {
-              const foto = FOTOS_EQUIPAMENT[c];
+            {[...CATEGORIES_EQUIPAMENT.map((c) => FOTOS_EQUIPAMENT[c]), ...Object.values(FOTOS_EXTRES)].map((foto, i) => {
               return (
-                <span key={c}>
+                <span key={foto.src}>
                   {i > 0 && ' · '}
                   <a href={foto.font} target="_blank" rel="noopener noreferrer">
                     {foto.autor}

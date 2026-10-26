@@ -76,17 +76,52 @@ export const valoracio = z.object({
   font: z.literal('google'),
 });
 
-// ── Reserves (el que la web envia) ──────────────────────────────────────────────────────────
+// ── Horari de la botiga ─────────────────────────────────────────────────────────────────────
 
 const data = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const hora = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/);
+
+export const blocHorari = z.object({ obre: hora, tanca: hora });
+/** Blocs d'obertura de cada dia de la setmana: índex 0 diumenge … 6 dissabte. */
+const setmana = z.array(z.array(blocHorari)).length(7);
+
+export const horariBotiga = z.object({
+  setmana,
+  /** Temporades amb un altre horari (estiu, Setmana Santa…), dates incloses. */
+  periodes: z.array(z.object({ des: data, fins: data, setmana })),
+  /** Dies que la botiga tanca encara que li toqui obrir (festius, vacances). */
+  tancats: z.array(z.object({ dia: data, ficticia: z.boolean() })),
+  /** Cada quants minuts es pot recollir o tornar una bici. */
+  pasMinuts: z.number().int().positive(),
+});
+
+// ── Extres del lloguer ──────────────────────────────────────────────────────────────────────
+
+/**
+ * Pedals, casc, cadenat… El nom de cada extra surt dels missatges de la web per l'`id`. Els pedals
+ * són un grup obligatori (se'n tria un per bici); la resta, opcionals.
+ */
+export const extra = z.object({
+  id: z.string(),
+  grup: z.enum(['pedals', 'extres']),
+  imatge: z.string().optional(),
+  preu: centims,
+  cobrament: z.enum(['perReserva', 'perDia']),
+  /** Unitats que té la botiga; `null` si no se'n porta el compte (p. ex. «porto els meus pedals»). */
+  estoc: z.number().int().nonnegative().nullable(),
+  ficticia: z.boolean(),
+});
+
+// ── Reserves (el que la web envia) ──────────────────────────────────────────────────────────
+
 const telefon = z.string().trim().regex(/^\+?[\d\s().-]{9,20}$/);
 
-export const accessori = z.enum(['casc', 'cadenat', 'cadiraNado', 'alforges', 'comptaquilometres']);
-export const pedals = z.enum(['plans', 'spd', 'spdSl', 'look']);
 export const durada = z.discriminatedUnion('tipus', [
   z.object({ tipus: z.literal('dies'), dies: z.number().int().min(1).max(30) }),
   z.object({ tipus: z.literal('migDia') }),
 ]);
+
+export const moment = z.object({ dia: data, hora });
 
 const client = {
   nom: z.string().trim().min(2).max(80),
@@ -96,32 +131,94 @@ const client = {
   privacitat: z.literal(true),
 };
 
-export const reservaLloguer = z.object({
+/** Qui farà servir la bici: amb l'alçada se suggereix la talla i la bici es prepara a mida. */
+export const ciclista = z.object({
+  nom: z.string().trim().max(60).optional(),
+  alcadaCm: z.number().int().min(100).max(220).optional(),
+  /** Alçada del seient (de l'eix del pedaler a dalt del seient), si ja la sap. */
+  alcadaSeientCm: z.number().int().min(50).max(100).optional(),
+});
+
+/** Una bici de la reserva. Totes comparteixen les dates i la botiga. */
+export const biciReserva = z.object({
   biciId: z.string(),
   talla: z.string(),
-  pedals,
-  recollida: data,
-  durada,
-  bicis: z.number().int().min(1).max(5),
-  accessoris: z.array(accessori).max(5),
+  /** Id de l'extra del grup «pedals». */
+  pedals: z.string(),
+  extres: z.array(z.string()).max(8),
+  ciclista,
+});
+
+export const reservaLloguer = z.object({
+  recollida: moment,
+  retorn: moment,
+  bicis: z.array(biciReserva).min(1).max(8),
+  comentaris: z.string().trim().max(500).optional(),
   ...client,
 });
 
-export const franjaTaller = z.object({ inici: z.string().regex(/^\d{2}:\d{2}$/), places: z.number().int().nonnegative() });
+export const franjaTaller = z.object({ inici: hora, places: z.number().int().nonnegative() });
 
 export const citaTaller = z.object({
   tipusBici: z.enum(['carretera', 'muntanya', 'gravel', 'electrica', 'urbana']),
   serveis: z.array(peca).min(1),
   nota: z.string().trim().max(500).optional(),
   dia: data,
-  hora: z.string().regex(/^\d{2}:\d{2}$/),
+  hora,
   ...client,
 });
 
 export const confirmacio = z.object({ codi: z.string(), totalCentims: z.number().int().optional() });
 
-export type Accessori = z.infer<typeof accessori>;
-export type Pedals = z.infer<typeof pedals>;
+// ── Pagament i participants (preparats, apagats fins que la plataforma ho permeti) ─────────────
+
+export const modalitatPagament = z.enum(['senyal', 'total']);
+
+export const configuracioReserves = z.object({
+  pagament: z.object({
+    actiu: z.boolean(),
+    /** Senyal (un percentatge ara i la resta a la botiga) o tot per avançat. */
+    modalitats: z.array(modalitatPagament).min(1),
+    senyalPercent: z.number().int().min(1).max(100),
+  }),
+  /** Dades de cada ciclista i signatura del contracte abans de recollir. */
+  participants: z.object({ actiu: z.boolean() }),
+  /** Quant temps es guarden les bicis mentre es paga. */
+  retencioMinuts: z.number().int().positive(),
+});
+
+/** Bicis i extres guardats mentre el client paga. Si caduca, tornen a estar lliures. */
+export const retencio = z.object({
+  id: z.string(),
+  caducaA: z.iso.datetime(),
+  totalCentims: centims,
+});
+
+export const participant = z.object({
+  nom: z.string().trim().min(2).max(80),
+  document: z.string().trim().min(5).max(20),
+  /** Signatura feta amb el dit o el ratolí, en PNG. */
+  signatura: z.string().max(300_000).regex(/^data:image\/png;base64,[A-Za-z0-9+/=]+$/),
+});
+
+export const participantsReserva = z.object({
+  codi: z.string(),
+  participants: z.array(participant).min(1).max(8),
+  condicions: z.literal(true),
+});
+
+export type BlocHorari = z.infer<typeof blocHorari>;
+export type HorariBotiga = z.infer<typeof horariBotiga>;
+export type Extra = z.infer<typeof extra>;
+export type Moment = z.infer<typeof moment>;
+export type Ciclista = z.infer<typeof ciclista>;
+export type BiciReserva = z.infer<typeof biciReserva>;
+export type ConfiguracioReserves = z.infer<typeof configuracioReserves>;
+export type ModalitatPagament = z.infer<typeof modalitatPagament>;
+export type Retencio = z.infer<typeof retencio>;
+export type Participant = z.infer<typeof participant>;
+export type ParticipantsReserva = z.infer<typeof participantsReserva>;
+
 export type Durada = z.infer<typeof durada>;
 export type ReservaLloguer = z.infer<typeof reservaLloguer>;
 export type FranjaTaller = z.infer<typeof franjaTaller>;

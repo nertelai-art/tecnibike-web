@@ -56,7 +56,7 @@ export function CitaTaller({ serveis, pecaInicial }: Props) {
 
   const formatDia = (d: string, opcions: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(locale, opcions).format(new Date(`${d}T12:00:00`));
 
-  if (resultat?.ok && hora) {
+  if (resultat?.ok && 'codi' in resultat && hora) {
     return (
       <div className={styles.fet} role="status">
         <p className={styles.fetMarca} aria-hidden="true">

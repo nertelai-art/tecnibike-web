@@ -24,7 +24,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function FitxaLloguer({ params }: Params) {
   const { locale, id } = await params;
   setRequestLocale(locale);
-  const [bici, preusAccessoris] = await Promise.all([plataforma.bici(id), plataforma.preusAccessoris()]);
+  const [bici, flota, extres, horari, configuracio] = await Promise.all([
+    plataforma.bici(id),
+    plataforma.flota(),
+    plataforma.extres(),
+    plataforma.horari(),
+    plataforma.configuracioReserves(),
+  ]);
   if (!bici) notFound();
   const t = await getTranslations('reserva');
   const tf = await getTranslations('flota');
@@ -70,7 +76,7 @@ export default async function FitxaLloguer({ params }: Params) {
                 </p>
                 <p className={styles.desDe}>{t('desDe', { preu: formatEuros(preuMinimPerDia(bici.tarifa), locale) })}</p>
               </div>
-              <ReservaLloguer bici={bici} preusAccessoris={preusAccessoris} />
+              <ReservaLloguer bici={bici} flota={flota} extres={extres} horari={horari} configuracio={configuracio} />
             </aside>
           </div>
         </div>
