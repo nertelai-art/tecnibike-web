@@ -1,17 +1,17 @@
 'use client';
 
-// Secció de taller. Es queda fixa a la pantalla amb el taller i la bici sencera; en fer scroll, la
-// bici es desmunta peça a peça (vídeo de la Pinarello del client, retallada i posada sobre el fons del
-// taller) i entren els textos. Al final del recorregut, la bici queda desmuntada i surten a l'atzar
-// bàners amb un fil que expliquen cada peça i la seva qualitat; amb el ratolí a sobre es queden
-// quiets. Un cop passada de llarg, l'escena queda desmuntada i no es torna a reproduir.
+// Secció de taller. Es queda fixa a la pantalla: a l'esquerra, el taller i el text; a la dreta, en un
+// marc, el vídeo de la Pinarello del client (generat amb IA) on la bici es desmunta peça a peça amb el
+// scroll. Al final del recorregut, la bici queda desmuntada i surten a l'atzar bàners amb un fil que
+// expliquen cada peça i la seva qualitat; amb el ratolí a sobre es queden quiets. Un cop passada de
+// llarg, l'escena queda desmuntada i no es torna a reproduir.
 
 import { useTranslations } from 'next-intl';
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { BotoCita } from '@/components/cita/BotoCita';
 import { ScrollVideo, type ScrollVideoFrame } from '@/components/video/ScrollVideo';
 import { useReducedMotion } from '@/lib/scroll-scene';
-import { DESMUNTADA, DURADA, ENQUADRE, FINAL, MOMENTS, seguentBanner, tempsDeProgres, TEXTOS } from './anatomia-fases';
+import { DESMUNTADA, DURADA, FINAL, MOMENTS, seguentBanner, tempsDeProgres, TEXTOS } from './anatomia-fases';
 import styles from './AnatomiaTaller.module.css';
 
 /** Inèrcia del vídeo respecte del scroll: suavitza la roda del ratolí però s'atura de seguida. */
@@ -19,8 +19,6 @@ const SUAVITAT = 12;
 /** Quant es veu cada bàner i quant temps queda buit fins al següent. */
 const VISIBLE_MS = 3400;
 const PAUSA_MS = 700;
-
-const ENQUADRE_ESTIL: CSSProperties = { left: `${ENQUADRE.x}%`, top: `${ENQUADRE.y}%`, width: `${ENQUADRE.ample}%`, height: `${ENQUADRE.alt}%` };
 
 export function AnatomiaTaller() {
   const t = useTranslations('anatomia');
@@ -79,23 +77,29 @@ export function AnatomiaTaller() {
     </div>
   );
 
-  // Per sobre de tot (també del text i del vel): els bàners, en la mateixa caixa que l'escena perquè
-  // les posicions en % coincideixin amb el vídeo.
+  // Per sobre de tot (també del text i del vel): els bàners, en una còpia de la caixa del vídeo perquè
+  // les posicions en % coincideixin amb el fotograma.
   const capaSuperior = (bannersActius: boolean) => (
-    <div className={`${styles.escena} ${styles.capaSuperior}`} aria-hidden={!bannersActius || undefined}>
-      <div className={styles.bici} style={ENQUADRE_ESTIL}>
-        <Banners actius={bannersActius} />
-      </div>
+    <div className={`${styles.marc} ${styles.capaSuperior}`} aria-hidden={!bannersActius || undefined}>
+      <Banners actius={bannersActius} />
     </div>
+  );
+
+  const fons = (
+    // eslint-disable-next-line @next/next/no-img-element -- fons decoratiu de l'escenari, a pantalla completa
+    <img src="/img/taller/fons-taller.webp" alt="" className={styles.fons} aria-hidden="true" />
   );
 
   if (reduced || acabada) {
     // Sense moviment, o ja vista: la bici desmuntada (últim fotograma), el text i els bàners.
     return (
       <div ref={pista} className={styles.panell}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- últim fotograma exacte del vídeo */}
-        <img src="/video/taller-final.webp" alt={t('sr')} className={styles.escena} />
+        {fons}
         <div className={styles.vel} aria-hidden="true" />
+        <div className={styles.marc}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- últim fotograma exacte del vídeo */}
+          <img src="/video/anatomia-final.webp" alt={t('sr')} className={styles.imatgeFinal} />
+        </div>
         {textos(true)}
         {capaSuperior(true)}
       </div>
@@ -105,16 +109,21 @@ export function AnatomiaTaller() {
   return (
     <div ref={pista}>
       <ScrollVideo
-        clips={[{ src: '/video/taller.mp4', srcMobile: '/video/taller-m.mp4', poster: '/video/taller-poster.webp', scroll: 5 }]}
+        clips={[{ src: '/video/anatomia.mp4', srcMobile: '/video/anatomia-m.mp4', poster: '/video/anatomia-poster.webp', scroll: 5 }]}
         label={t('sr')}
         offsetTop={0}
         fade={0}
         smoothing={SUAVITAT}
         remap={(local) => tempsDeProgres(local) / DURADA}
-        mediaClassName={styles.escena}
+        mediaClassName={styles.marc}
+        background={
+          <>
+            {fons}
+            <div className={styles.vel} aria-hidden="true" />
+          </>
+        }
         onFrame={onFrame}
       >
-        <div className={styles.vel} aria-hidden="true" />
         {textos(false)}
         {capaSuperior(desmuntada)}
       </ScrollVideo>

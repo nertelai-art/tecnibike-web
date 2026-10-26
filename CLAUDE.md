@@ -20,7 +20,8 @@ Versions que **no** són l'última, i per què:
 ## Ordres
 
 - `pnpm dev`: servidor de desenvolupament (`next dev --webpack`; en aquesta màquina el SWC natiu
-  pot estar bloquejat). Previsualització: `.claude/launch.json` → `tecnibike-dev`.
+  pot estar bloquejat). Previsualització: `.claude/launch.json` → `tecnibike-dev`, o
+  `tecnibike-dev-node` (Next directament amb Node) si el binari natiu de pnpm no s'executa.
 - `pnpm check`: typecheck, lint i proves. És el que fa el hook de pre-push (`.githooks/`).
 - `pnpm build:local`: build de producció amb webpack.
 
@@ -37,15 +38,14 @@ Versions que **no** són l'última, i per què:
   preu el calcula la plataforma. El rellotge només entra aquí (`araABotiga`), en hora de Madrid.
 - **Portada** (`src/components/Portada.tsx`): vídeo en bucle (`public/video/hero*.mp4`) d'un
   ciclista que passa per platja, poble, muntanya i costa.
-- **Taller** (`src/components/anatomia/`): un taller clar (imatge generada amb IA) amb la Pinarello.
-  La secció es queda fixa i, amb el scroll, la bici es desmunta (sense etiquetes) (`public/video/taller*.mp4`,
-  component `ScrollVideo` de la skill `scroll-video`) i entren els textos; al final surten a l'atzar
-  bàners amb fil que expliquen cada peça (es paren amb el ratolí a sobre), en una capa per sobre de
-  tot. Un cop passada de llarg, queda desmuntada i no es repeteix. El vídeo es munta amb
-  `scripts/taller-video.py`: la bici es retalla fotograma a fotograma del vídeo de l'anatomia
-  (`rembg`, model `isnet-general-use`) i es posa sobre el fons (`recursos/ia/taller/`).
-  L'enquadrament (`ENQUADRE`), la línia de temps i les posicions dels bàners són a
-  `anatomia-fases.ts`, amb proves.
+- **Taller** (`src/components/anatomia/`): la secció es queda fixa; a l'esquerra, el taller
+  (`public/img/taller/fons-taller.webp`, generat amb IA) i el text centrat; a la dreta, en un marc,
+  el vídeo original de l'anatomia (`public/video/anatomia*.mp4`, amb la carretera) on la bici es
+  desmunta amb el scroll (component `ScrollVideo` de la skill `scroll-video`). Al final surten a
+  l'atzar bàners amb fil que expliquen cada peça (es paren amb el ratolí a sobre), en una capa per
+  sobre de tot. Un cop passada de llarg, queda desmuntada i no es repeteix. La línia de temps i les
+  posicions dels bàners (en % del fotograma) són a `anatomia-fases.ts`, amb proves. (Es va provar
+  de retallar la bici i posar-la sobre el taller, però el retall es veia malament.)
 - **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`).
 - **Vídeos generats amb IA** (Higgsfield: Nano Banana 2.1 per als fotogrames clau i Kling 4.0 per
   als vídeos) a partir de les fotos reals de la Pinarello del client. No són gravacions: s'ha de dir

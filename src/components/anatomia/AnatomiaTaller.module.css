@@ -1,20 +1,51 @@
-/* Secció de taller: l'escena (taller clar amb la bici, 16:9) cobreix tota la pantalla, ancorada a
-   la dreta; a l'esquerra, un vel clar sota el text. Per sobre de tot, en una còpia de la caixa de
-   l'escena, els bàners, perquè ni el text ni el vel els tapin. Al mòbil, l'escena es
-   retalla a la zona de la bici i el text va al peu. */
+/* Secció de taller: el taller a tot l'escenari; a l'esquerra, el text centrat sobre un vel clar; a la
+   dreta, en un marc, el vídeo de la bici que es desmunta. Per sobre de tot, en una còpia del marc,
+   els bàners, perquè ni el text ni el vel els tapin. Al mòbil, el vídeo va a dalt i el text al peu. */
 
-.escena {
+.marc,
+.text {
+  --marge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  --util: calc(100vw - 2 * var(--marge));
+  /* El vídeo fa 1600 × 892: tan ample com es pugui sense passar de l'alçada disponible. */
+  --ample-marc: min(calc(var(--util) * 0.6), calc((100svh - 200px) * 1600 / 892));
+}
+
+/* Fons: la foto del taller, a pantalla completa. */
+.fons {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+}
+
+/* Vel clar a l'esquerra perquè el text es llegeixi sense amagar el taller. */
+.vel {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(244 245 247 / 0.72) 0%, rgb(244 245 247 / 0.6) 30%, rgb(244 245 247 / 0) 50%);
+  pointer-events: none;
+}
+
+.marc {
+  position: absolute;
+  right: var(--marge);
   top: 50%;
-  right: 0;
-  width: max(100vw, calc(100svh * 16 / 9));
-  aspect-ratio: 16 / 9;
+  width: var(--ample-marc);
+  aspect-ratio: 1600 / 892;
+  border-radius: var(--radi);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgb(18 20 23 / 0.08),
+    0 40px 80px -36px rgb(18 20 23 / 0.55);
   transform: translateY(-50%);
 }
-/* L'últim fotograma (escena acabada) fa de vídeo. */
-img.escena {
+
+.imatgeFinal {
   display: block;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -26,44 +57,18 @@ img.escena {
   overflow: hidden;
 }
 
-/* Vel clar a l'esquerra perquè el text es llegeixi sobre el banc d'eines. */
-.vel {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgb(244 245 247 / 0.94) 0%, rgb(244 245 247 / 0.78) 24%, rgb(244 245 247 / 0) 44%);
-  pointer-events: none;
-}
-
+/* La còpia del marc que porta els bàners: no talla res i no fa ombra. */
 .capaSuperior {
   z-index: 3;
+  overflow: visible;
+  box-shadow: none;
   pointer-events: none;
-}
-
-.bici {
-  position: absolute;
 }
 
 .capaBanners {
   position: absolute;
   inset: 0;
   pointer-events: none;
-}
-
-.punt {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--taronja);
-  box-shadow: 0 0 0 0 rgb(248 90 0 / 0.6);
-  animation: pols 1.8s var(--ease) infinite;
-}
-@keyframes pols {
-  70% {
-    box-shadow: 0 0 0 12px rgb(248 90 0 / 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgb(248 90 0 / 0);
-  }
 }
 
 /* ── Bàners de les peces: punt, fil i targeta (compactes) ── */
@@ -81,7 +86,7 @@ img.escena {
   overflow: visible;
 }
 .fil line {
-  stroke: rgb(18 20 23 / 0.7);
+  stroke: rgb(255 255 255 / 0.9);
   stroke-width: 1.5;
   opacity: 0;
   transition: opacity 0.3s var(--ease);
@@ -93,9 +98,15 @@ img.escena {
 
 .punt {
   position: absolute;
+  width: 14px;
+  height: 14px;
   margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--taronja);
+  box-shadow: 0 0 0 0 rgb(248 90 0 / 0.6);
   opacity: 0;
   transform: scale(0.3);
+  animation: pols 1.8s var(--ease) infinite;
   transition:
     opacity 0.3s var(--ease),
     transform 0.3s var(--ease);
@@ -103,6 +114,14 @@ img.escena {
 .peca[data-visible='true'] .punt {
   opacity: 1;
   transform: none;
+}
+@keyframes pols {
+  70% {
+    box-shadow: 0 0 0 12px rgb(248 90 0 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(248 90 0 / 0);
+  }
 }
 
 .banner {
@@ -158,21 +177,24 @@ img.escena {
   color: var(--taronja);
 }
 
-/* ── Text i botó de cita: entren en començar a desmuntar-se la bici ── */
+/* ── Text i botó de cita, centrats a l'esquerra: entren en començar a desmuntar-se la bici ── */
 
 .text {
-  --marge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
   position: absolute;
   z-index: 2;
   left: var(--marge);
   top: 50%;
-  width: min(460px, 34vw);
+  width: calc(var(--util) - var(--ample-marc) - clamp(32px, 4vw, 64px));
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 18px;
   color: var(--grafit);
+  text-align: center;
   transform: translateY(-50%);
+}
+.text :global(.situacio) {
+  justify-content: center;
 }
 .text > * {
   opacity: 0;
@@ -238,27 +260,26 @@ img.escena {
   }
 }
 
-/* ── Mòbil: l'escena retallada a la zona de la bici, el bàner a sota i el text al peu ── */
+/* ── Mòbil: el vídeo a dalt, el bàner a sota i el text al peu ── */
 
 @media (max-width: 980px) {
-  .escena {
-    /* Es veu la part dreta de l'escena (de l'x = 32,5 % al final). */
+  .marc {
     top: calc(var(--header-h) + 16px);
-    right: auto;
-    left: -48.15vw;
-    width: 148.15vw;
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
     transform: none;
   }
 
   .vel {
-    display: none;
+    background: rgb(244 245 247 / 0.55);
   }
 
   .fil {
     display: none;
   }
   .banner {
-    /* Sota la bici, d'amplada sencera (la posició de cada peça és per a escriptori). */
+    /* Sota el vídeo, d'amplada sencera (la posició de cada peça és per a escriptori). */
     left: 0 !important;
     top: calc(100% + 14px) !important;
     width: 100%;
@@ -285,7 +306,6 @@ img.escena {
     min-height: 56px;
     font-size: 16px;
   }
-
 }
 
 @media (prefers-reduced-motion: reduce) {

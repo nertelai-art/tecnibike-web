@@ -1,14 +1,14 @@
 import type { Peca } from '@/lib/plataforma/esquema';
 
-// Dades de l'escena del taller: el vídeo (public/video/taller.mp4, 10 s) on la bici, retallada sobre
-// el fons del taller, es desmunta peça a peça amb el scroll; després surten els bàners de les peces.
+// Dades de l'escena del taller: el vídeo (public/video/anatomia.mp4, 10 s) on la bici es desmunta peça
+// a peça amb el scroll; després surten els bàners de les peces. Les posicions són en % del fotograma.
 // Sense dependències de React ni del DOM, perquè es pugui provar.
 
 export type Moment = {
   peca: Peca;
   /** Segon del vídeo en què la peça ja ha sortit del tot. */
   t: number;
-  /** On és la peça en aquell moment, en % del fotograma de la bici. */
+  /** On és la peça en aquell moment, en % del fotograma. */
   x: number;
   y: number;
 };
@@ -24,12 +24,6 @@ export const MOMENTS: readonly Moment[] = [
 ];
 
 export const ORDRE_PECES: readonly Peca[] = MOMENTS.map((m) => m.peca);
-
-/**
- * On va el fotograma de la bici dins l'escena del taller, en % de l'escena (16:9). Ha de coincidir
- * amb X0, Y0 i AMPLE de scripts/taller-video.py, que és qui munta el vídeo.
- */
-export const ENQUADRE = { x: 36, y: 28.9, ample: 62, alt: 61.4 } as const;
 
 export const DURADA = 10.04;
 
@@ -51,7 +45,7 @@ export function tempsDeProgres(p: number): number {
 }
 
 /**
- * On queda cada peça a l'últim fotograma (bici desmuntada), en % del fotograma de la bici, i on va
+ * On queda cada peça a l'últim fotograma (bici desmuntada), en % del fotograma, i on va
  * el bàner que l'explica (cantonada de dalt a l'esquerra, en %), en una zona buida.
  */
 export const FINAL: Readonly<Record<Peca, { x: number; y: number; bx: number; by: number }>> = {
