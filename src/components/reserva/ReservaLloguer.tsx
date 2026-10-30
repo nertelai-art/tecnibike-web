@@ -224,6 +224,7 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
   }
 
   const error = (camp: string) => errorsCamps.has(camp);
+  const horariIgual = Boolean(recollida && retorn && obert(recollida.dia) && obert(recollida.dia) === obert(retorn.dia));
   const minRetorn = recollida?.dia;
   const maxRetorn = recollida ? sumaDies(recollida.dia, MAX_DIES_LLOGUER - 1) : undefined;
 
@@ -351,13 +352,12 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
           <form ref={formulari} id={`${id}-form`} className={styles.panell} onSubmit={enviar} noValidate aria-describedby={resultat && !resultat.ok ? `${id}-error` : undefined}>
             {/* Quan */}
             <fieldset className={styles.grup}>
-              <legend>{t('quan')}</legend>
+              <legend className="sr-only">{t('quan')}</legend>
               <div className={styles.franges}>
                 {(['recollida', 'retorn'] as const).map((quin) => {
                   const moment = quin === 'recollida' ? recollida : retorn;
                   const hores = moment ? (quin === 'recollida' ? horesLliures(moment.dia) : horesRetorn(moment.dia, horari)) : [];
                   const canvia = quin === 'recollida' ? canviaRecollida : canviaRetorn;
-                  const text = moment ? obert(moment.dia) : null;
                   return (
                     <div key={quin} className={styles.franja} data-error={(errorFranja && (errorFranja === quin || (quin === 'recollida' && errorFranja === 'passat'))) || undefined}>
                       <p className={styles.etiquetaGrup}>{t(quin)}</p>
@@ -386,11 +386,14 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
                           </select>
                         </label>
                       </div>
-                      <p className={styles.ajuda}>{moment && (hores.length === 0 ? t('tancat') : text)}</p>
+                      {moment && hores.length === 0 && <p className={styles.ajuda}>{t('tancat')}</p>}
+                      {moment && hores.length > 0 && !horariIgual && <p className={styles.ajuda}>{obert(moment.dia)}</p>}
                     </div>
                   );
                 })}
               </div>
+              {/* Si els dos dies tenen el mateix horari, n'hi ha prou de dir-ho una vegada. */}
+              {horariIgual && recollida && <p className={styles.ajuda}>{obert(recollida.dia)}</p>}
               {errorFranja && errorFranja !== 'recollida' && <em className={styles.errorSolt}>{t('errors.franja')}</em>}
             </fieldset>
 

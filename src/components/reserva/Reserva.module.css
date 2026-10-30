@@ -2,29 +2,45 @@
    perquè les dades quedin juntes i faci falta poc scroll. */
 
 .pagina {
-  padding-top: calc(var(--header-h) + 40px);
+  padding-top: calc(var(--header-h) + 28px);
   padding-bottom: var(--section);
 }
 
 .graella {
   display: grid;
-  grid-template-columns: minmax(340px, 0.72fr) minmax(0, 1.28fr);
+  grid-template-columns: minmax(356px, 0.72fr) minmax(0, 1.28fr);
   gap: clamp(24px, 3vw, 48px);
   align-items: start;
 }
 
+/* Tornar a la llista: una fletxa sobre la foto, a la cantonada de dalt a l'esquerra, on no hi ha bici. */
 .tornar {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  font-size: 14px;
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  left: 12px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--blanc);
+  box-shadow: 0 6px 16px -8px rgb(18 20 23 / 0.45);
+  font-size: 18px;
   font-weight: 700;
+  color: var(--tinta);
   text-decoration: none;
-  color: var(--tinta-2);
+  transition:
+    background-color 0.15s var(--ease),
+    color 0.15s var(--ease);
 }
 .tornar:hover {
-  color: var(--tinta);
+  background: var(--grafit);
+  color: var(--blanc);
+}
+.tornar:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
 }
 
 .columnaFixa {
@@ -33,9 +49,9 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  /* La columna sempre cap a la pantalla, també abans de fer scroll (quan comença sota l'enllaç de
-     tornar): si hi ha moltes bicis, fa scroll el desglossament, i el total i el botó no es mouen. */
-  max-height: calc(100svh - var(--header-h) - 100px);
+  /* La columna sempre cap a la pantalla: si hi ha moltes bicis, fa scroll el desglossament, i el total
+     i el botó no es mouen. */
+  max-height: calc(100svh - var(--header-h) - 40px);
 }
 
 .escenari {
@@ -45,7 +61,7 @@
   flex-shrink: 0;
   grid-template-rows: minmax(0, 1fr);
   aspect-ratio: 16 / 10;
-  max-height: 30svh;
+  max-height: 28svh;
   padding: 14px 20px;
   border-radius: var(--radi);
   background: radial-gradient(90% 80% at 50% 45%, var(--blanc), var(--escenari) 70%);
@@ -55,28 +71,6 @@
   height: 100%;
   object-fit: contain;
   mix-blend-mode: multiply;
-}
-
-.etiquetes {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  display: flex;
-  gap: 8px;
-}
-.etiqueta {
-  padding: 5px 11px;
-  border-radius: 999px;
-  background: var(--taronja);
-  color: var(--grafit);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.etiqueta--fosca {
-  background: var(--grafit);
-  color: var(--blanc);
 }
 
 .inclou {
@@ -113,30 +107,35 @@
 .banner {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   min-height: 0;
-  padding: 18px 20px;
+  padding: 14px 16px;
   border-radius: var(--radi);
   background: var(--blanc);
   box-shadow: 0 24px 60px -36px rgb(18 20 23 / 0.35);
 }
 .bannerCap {
   flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 7px;
 }
 .categoria {
-  font-size: 12px;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--tinta-3);
 }
+.categoria::after {
+  content: ' ·';
+}
 .nom {
-  margin-top: 4px;
-  font-size: clamp(28px, 2.6vw, 38px);
+  font-size: clamp(21px, 1.9vw, 28px);
 }
 .model {
-  margin-top: 2px;
-  font-size: 14px;
+  font-size: 11.5px;
   color: var(--tinta-2);
 }
 /* ── Panell ── */
@@ -448,7 +447,8 @@
 .desglos {
   min-height: 0;
   overflow-y: auto;
-  padding-top: 12px;
+  scrollbar-width: thin;
+  padding-top: 10px;
   border-top: 1px dashed var(--linia);
 }
 .desglos .etiquetaGrup {
@@ -538,10 +538,13 @@
 
 .franges {
   display: grid;
-  gap: 10px;
+  gap: 8px;
+}
+.franges + .ajuda {
+  margin-top: 6px;
 }
 .franja {
-  padding: 14px;
+  padding: 10px 12px;
   border-radius: 14px;
   box-shadow: inset 0 0 0 1.5px var(--linia);
 }
@@ -549,18 +552,17 @@
   box-shadow: inset 0 0 0 2px #b42318;
 }
 .franja .fila {
-  grid-template-columns: 1fr 96px;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) 88px;
+  gap: 6px;
 }
 .franja .camp input,
 .franja .camp select {
-  height: 48px;
+  min-height: 0;
+  height: 44px;
+  padding: 0 10px;
 }
 .franja .etiquetaGrup {
-  margin-bottom: 8px;
-}
-.franja .ajuda {
-  min-height: 1.4em;
+  margin-bottom: 6px;
 }
 /* ── Bicis del carro ── */
 
@@ -639,21 +641,29 @@
   margin-top: 12px;
 }
 
-@container (min-width: 560px) {
+/* A partir d'aquí, recollida i devolució hi caben l'una al costat de l'altra. */
+@container (min-width: 440px) {
   .franges {
     grid-template-columns: 1fr 1fr;
   }
-  .biciCap {
-    grid-template-columns: auto auto 1fr auto;
-  }
-  .biciMiniatura {
-    display: block;
+  .franja .camp input,
+  .franja .camp select {
+    font-size: 15px;
   }
   .fila3 {
     grid-template-columns: 1.2fr 1fr 1fr;
   }
   .fila3 > :first-child {
     grid-column: auto;
+  }
+}
+
+@container (min-width: 560px) {
+  .biciCap {
+    grid-template-columns: auto auto 1fr auto;
+  }
+  .biciMiniatura {
+    display: block;
   }
 }
 
@@ -806,6 +816,7 @@
 }
 .extraText em {
   justify-self: start;
+  white-space: nowrap;
   margin-top: 2px;
   padding: 1px 8px;
   border-radius: 999px;
@@ -822,6 +833,24 @@
 .extra[data-esgotat] .extraText em {
   background: #fef3f2;
   color: #b42318;
+}
+
+@container (min-width: 440px) and (max-width: 559px) {
+  .extres {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  .extra {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 8px;
+    padding: 6px 8px 6px 6px;
+  }
+  .extraFoto {
+    width: 46px;
+    height: 46px;
+  }
+  .extraText strong {
+    font-size: 12.5px;
+  }
 }
 
 /* ── Línies del desglossament ── */
@@ -1095,7 +1124,7 @@
     grid-template-columns: 1fr;
   }
   .franja .fila {
-    grid-template-columns: 1fr 96px;
+    grid-template-columns: minmax(0, 1fr) 88px;
   }
   .biciCarro {
     padding: 14px;

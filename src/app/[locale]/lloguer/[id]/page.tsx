@@ -33,16 +33,12 @@ export default async function FitxaLloguer({ params }: Params) {
   ]);
   if (!bici) notFound();
   const t = await getTranslations('reserva');
-  const tf = await getTranslations('flota');
   const inclou = ['revisada', 'talla', 'casc', 'kit'] as const;
 
   return (
     <>
       <main id="contingut" className={styles.pagina}>
         <div className="contenidor">
-          <Link href="/#flota" className={styles.tornar}>
-            ← {t('tornar')}
-          </Link>
           <ReservaLloguer
             bici={bici}
             flota={flota}
@@ -53,10 +49,10 @@ export default async function FitxaLloguer({ params }: Params) {
               // El mateix nom que a la targeta de la flota: la bici creix i es col·loca (vegeu globals.css).
               <ViewTransition name={`bici-${bici.id}`} share="morph" default="none">
                 <div className={styles.escenari}>
-                  <div className={styles.etiquetes}>
-                    <span className={`${styles.etiqueta} ${styles['etiqueta--fosca']}`}>{t('nova')}</span>
-                    {bici.electrica && <span className={styles.etiqueta}>{tf('electrica')}</span>}
-                  </div>
+                  {/* Sobre la foto i sense text, a la cantonada on no hi ha bici: així no ocupa una línia sencera. */}
+                  <Link href="/#flota" className={styles.tornar} aria-label={t('tornar')} title={t('tornar')}>
+                    <span aria-hidden="true">←</span>
+                  </Link>
                   {/* A escriptori, la mateixa mida que la targeta: la foto ja és baixada i la transició no l'espera. */}
                   <Image src={bici.imatge} alt={bici.nom} width={1200} height={720} priority sizes="(min-width: 1100px) 400px, 90vw" />
                 </div>
