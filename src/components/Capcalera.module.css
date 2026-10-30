@@ -1,6 +1,7 @@
 /* Barra flotant blanca, com la de la referència de Scott, amb el botó de reserva sempre a la vista. */
 
 .capcalera {
+  view-transition-name: capcalera;
   position: fixed;
   inset: 12px 0 auto;
   z-index: 50;

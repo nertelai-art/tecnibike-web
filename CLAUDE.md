@@ -37,14 +37,19 @@ Versions que **no** són l'última, i per què:
 - **Accions de servidor** (`src/app/[locale]/accions.ts`): tornen a validar-ho tot amb Zod i el
   preu, l'horari i l'estoc els comprova la plataforma. El rellotge només entra aquí (`araABotiga`,
   en hora de Madrid) i, a la plataforma de proves, per paràmetre (`rellotge`).
-- **Reserva de lloguer** (`src/components/reserva/`), inspirada en Sescapada (myR3nt): dia i hora
-  de recollida i retorn dins de l'horari de la botiga (`src/lib/horari.ts`), diverses bicis amb les
-  mateixes dates, talla amb les unitats que queden, alçada del ciclista i del seient, pedals
+- **Reserva de lloguer** (`src/components/reserva/`), inspirada en Sescapada (myR3nt). A l'esquerra,
+  fixos, la foto, el títol i el preu que es va desglossant; a la dreta, el formulari: dia i hora de
+  recollida i retorn dins de l'horari de la botiga (`src/lib/horari.ts`), diverses bicis amb les
+  mateixes dates (la primera és sempre la de la fitxa; `biciId` és el **tipus** de bici de la tarifa,
+  no un model), talla amb les unitats que queden, alçada del ciclista i del seient, pedals
   obligatoris i extres amb foto, preu (per reserva o per dia) i estoc. El pagament (senyal o
   total, amb retenció de l'estoc) i els participants amb signatura estan fets però **apagats**
   (`configuracioReserves` a `dades-prova.ts`) fins que la plataforma els tingui. Què li cal a la
   plataforma: [docs/guia-plataforma-lloguer.md](docs/guia-plataforma-lloguer.md). Les fotos dels
   extres són de Wikimedia Commons, amb crèdits al peu (`src/content/fotos-extres.ts`).
+- **Transició de la flota a la fitxa:** `<ViewTransition>` de React amb el mateix nom (`bici-<id>`) a
+  la targeta i a la fitxa, i la coreografia a `globals.css`: la bici creix, s'encaixa i la fitxa es
+  construeix al voltant (`construeix`, a `Reserva.module.css`). Sense suport del navegador, navega normal.
 - **Portada** (`src/components/Portada.tsx`): vídeo en bucle (`public/video/hero*.mp4`) d'un
   ciclista que passa per platja, poble, muntanya i costa.
 - **Taller** (`src/components/anatomia/`): la secció es queda fixa; a l'esquerra, el taller

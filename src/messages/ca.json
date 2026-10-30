@@ -311,7 +311,6 @@
   "reserva": {
     "tornar": "Totes les bicis",
     "nova": "Lloguer",
-    "desDe": "des de {preu}/dia",
     "quan": "Quan",
     "recollida": "Recollida",
     "retorn": "Retorn",
@@ -320,11 +319,9 @@
     "tancat": "La botiga tanca aquest dia. Tria'n un altre.",
     "obertDia": "Aquest dia obrim {blocs}.",
     "bloc": "de {obre} a {tanca}",
-    "durada": "Durada",
     "dies": "{n, plural, one {1 dia} other {# dies}}",
     "migDia": "Mig dia",
     "bici": "Bici {n}",
-    "model": "Model",
     "treure": "Treu la bici {n}",
     "afegir": "Afegeix una altra bici",
     "afegirAjuda": "Amb les mateixes dates i hores.",
@@ -351,10 +348,9 @@
     "correu": "Correu electrònic",
     "comentaris": "Comentaris (opcional)",
     "privacitat": "He llegit i accepto la política de privacitat.",
-    "resum": "Resum",
+    "resum": "La teva reserva",
     "liniaBici": "{nom} · talla {talla}",
     "senseTalla": "falta la talla",
-    "liniaExtres": "Extres",
     "total": "Total",
     "pagament": "Pagues a la botiga en recollir la bici*.",
     "modalitat": "Com vols pagar?",
@@ -426,7 +422,9 @@
       "cadiraNado": "Cadira per a nadó",
       "alforges": "Alforges",
       "comptaquilometres": "Compta­quilòmetres"
-    }
+    },
+    "tipusBici": "Tipus de bici",
+    "calculDies": "{preu}/dia × {dies}"
   },
   "cita": {
     "titol": "Demana cita al taller",

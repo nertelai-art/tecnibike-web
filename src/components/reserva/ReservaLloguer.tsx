@@ -1,19 +1,21 @@
 'use client';
 
-// Formulari de reserva de lloguer, amb el recorregut de Sescapada en una sola pantalla: dia i hora
-// de recollida i de retorn dins de l'horari de la botiga, una o més bicis (model, talla amb les
-// unitats que queden, qui la portarà, pedals i extres amb foto i estoc), les dades i el resum. El
-// preu es recalcula a cada canvi; el servidor el torna a calcular en confirmar.
+// Fitxa de lloguer, amb el recorregut de Sescapada en una sola pantalla. A l'esquerra, fixos, la
+// foto, el títol i el preu, que es va desglossant a cada canvi. A la dreta, el formulari: dia i hora
+// de recollida i de retorn dins de l'horari de la botiga, una o més bicis (talla amb les unitats que
+// queden, qui la portarà, pedals i extres amb foto i estoc) i les dades. El servidor torna a
+// calcular el preu en confirmar.
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useId, useRef, useState, useSyncExternalStore, useTransition, type FormEvent } from 'react';
+import { useEffect, useId, useRef, useState, useSyncExternalStore, useTransition, type FormEvent, type ReactNode } from 'react';
 import { consultarDisponibilitat, reservarLloguer, type ResultatReserva } from '@/app/[locale]/accions';
 import { araABotiga, esPassat, sumaDies, type Instant } from '@/lib/calendari';
 import { blocsDelDia, diesEntre, horesRecollida, horesRetorn, MAX_DIES_LLOGUER, minutsEntre, validaFranja } from '@/lib/horari';
 import type { Disponibilitat } from '@/lib/plataforma';
 import type { BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, ModalitatPagament, Moment } from '@/lib/plataforma/esquema';
-import { formatEuros, preuLinia } from '@/lib/preus';
+import { desglosLinia, duradaDe, formatEuros, preuPerDia } from '@/lib/preus';
 import { extresLliures, primeraRecollida, retornPerDefecte, tallesLliures } from '@/lib/reserva';
+import { useReducedMotion } from '@/lib/scroll-scene';
 import { BiciDelCarro, type LiniaFormulari } from './BiciDelCarro';
 import { Participants } from './Participants';
 import styles from './Reserva.module.css';
@@ -43,13 +45,20 @@ type Props = {
   extres: readonly Extra[];
   horari: HorariBotiga;
   configuracio: ConfiguracioReserves;
+  /** La foto de la bici, que ve del servidor. */
+  foto: ReactNode;
+  /** El que inclou el lloguer, al peu del formulari. */
+  inclou: ReactNode;
 };
 
-export function ReservaLloguer({ bici, flota, extres, horari, configuracio }: Props) {
+export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto, inclou }: Props) {
   const t = useTranslations('reserva');
+  const tf = useTranslations('flota');
   const locale = useLocale();
   const id = useId();
   const ara = useAra();
+  const reduced = useReducedMotion();
+  const formulari = useRef<HTMLFormElement>(null);
 
   const novaLinia = (clau: number, biciId: string): LiniaFormulari => ({
     clau, biciId, talla: null, pedals: PEDALS_PER_DEFECTE, extres: ['casc'], nom: '', alcada: '', seient: '',
@@ -88,40 +97,34 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio }: Pr
   const euros = (centims: number) => formatEuros(centims, locale);
   const errorFranja = recollida && retorn && ara ? validaFranja({ recollida, retorn }, horari, ara) : null;
 
-  const preus = linies.map((l) => {
+  const desglossos = linies.map((l) => {
     const b = flota.find((f) => f.id === l.biciId);
     if (!b || !recollida || !retorn || errorFranja) return null;
     const triats = [l.pedals, ...l.extres].map((x) => perId.get(x)).filter((e): e is Extra => e !== undefined);
-    return preuLinia({ tarifa: b.tarifa, extres: triats }, recollida, retorn);
+    return desglosLinia({ tarifa: b.tarifa, extres: triats }, recollida, retorn);
   });
-  const total = preus.every((p) => p !== null) ? preus.reduce((a, p) => a + p!, 0) : null;
+  const total = desglossos.every((d) => d !== null) ? desglossos.reduce((suma, d) => suma + d!.total, 0) : null;
 
-  if (resultat?.ok && 'codi' in resultat && recollida) {
-    const dataLlarga = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${recollida.dia}T12:00:00`));
-    return (
-      <div className={styles.fet} role="status">
-        <p className={styles.fetMarca} aria-hidden="true">
-          ✓
-        </p>
-        <h2>{t('fet.titol')}</h2>
-        <p className={styles.codi}>
-          <span>{t('fet.codi')}</span>
-          <strong>{resultat.codi}</strong>
-        </p>
-        <p>{t('fet.text', { data: dataLlarga, hora: recollida.hora })}</p>
-        <p className={styles.adreca}>{t('fet.adreca')}</p>
-        {resultat.totalCentims !== undefined && (
-          <p className={styles.totalFet}>
-            {t('total')}: <strong>{euros(resultat.totalCentims)}</strong>
-          </p>
-        )}
-        {configuracio.participants.actiu && <Participants codi={resultat.codi} noms={linies.map((l) => l.nom)} />}
-        <button type="button" className="boto boto--clar" onClick={() => setResultat(null)}>
-          {t('fet.altra')}
-        </button>
-      </div>
-    );
-  }
+  /** El que costa de debò cada tipus de bici per a aquestes dates, no el tram més barat. */
+  const preuDe = (b: BiciLloguer) => {
+    if (!recollida || !retorn || errorFranja) return null;
+    const durada = duradaDe(recollida, retorn, b.tarifa);
+    const preu = preuPerDia(b.tarifa, durada);
+    if (preu === null) return null;
+    return durada.tipus === 'migDia' ? `${t('migDia')}: ${euros(preu)}` : t('preuDia', { preu: euros(preu) });
+  };
+
+  const confirmada = resultat?.ok && 'codi' in resultat ? resultat : null;
+
+  // El botó de confirmar és sempre a la vista, i el que passa pot ser lluny: la pàgina hi porta.
+  const moviment: ScrollBehavior = reduced ? 'auto' : 'smooth';
+  useEffect(() => {
+    if (errorsCamps.size > 0) formulari.current?.querySelector('[aria-invalid="true"], [data-error]')?.scrollIntoView({ block: 'center', behavior: moviment });
+  }, [errorsCamps]); // eslint-disable-line react-hooks/exhaustive-deps -- només quan hi ha errors nous
+  const codiConfirmat = confirmada?.codi;
+  useEffect(() => {
+    if (codiConfirmat) window.scrollTo({ top: 0, behavior: moviment });
+  }, [codiConfirmat]); // eslint-disable-line react-hooks/exhaustive-deps -- només en confirmar
 
   // ── Dates i hores ──
   const horesLliures = (dia: string) => (ara ? horesRecollida(dia, horari).filter((h) => !esPassat(dia, h, ara)) : []);
@@ -225,162 +228,236 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio }: Pr
   const maxRetorn = recollida ? sumaDies(recollida.dia, MAX_DIES_LLOGUER - 1) : undefined;
 
   return (
-    <form className={styles.panell} onSubmit={enviar} noValidate aria-describedby={resultat && !resultat.ok ? `${id}-error` : undefined}>
-      {/* Quan */}
-      <fieldset className={styles.grup}>
-        <legend>{t('quan')}</legend>
-        <div className={styles.franges}>
-          {(['recollida', 'retorn'] as const).map((quin) => {
-            const moment = quin === 'recollida' ? recollida : retorn;
-            const hores = moment ? (quin === 'recollida' ? horesLliures(moment.dia) : horesRetorn(moment.dia, horari)) : [];
-            const canvia = quin === 'recollida' ? canviaRecollida : canviaRetorn;
-            const text = moment ? obert(moment.dia) : null;
-            return (
-              <div key={quin} className={styles.franja} data-error={(errorFranja && (errorFranja === quin || (quin === 'recollida' && errorFranja === 'passat'))) || undefined}>
-                <p className={styles.etiquetaGrup}>{t(quin)}</p>
-                <div className={styles.fila}>
-                  <label className={styles.camp}>
-                    <span className="sr-only">{t('dia')}</span>
-                    <input
-                      type="date"
-                      value={moment?.dia ?? ''}
-                      min={quin === 'recollida' ? ara?.dia : minRetorn}
-                      max={quin === 'retorn' ? maxRetorn : undefined}
-                      disabled={!moment}
-                      required
-                      onChange={(e) => e.target.value && canvia({ dia: e.target.value })}
-                    />
-                  </label>
-                  <label className={styles.camp}>
-                    <span className="sr-only">{t('hora')}</span>
-                    <select value={moment && hores.includes(moment.hora) ? moment.hora : ''} disabled={hores.length === 0} onChange={(e) => canvia({ hora: e.target.value })}>
-                      {hores.length === 0 && <option value="">—</option>}
-                      {hores.map((h) => (
-                        <option key={h} value={h}>
-                          {h}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-                <p className={styles.ajuda}>{moment && (hores.length === 0 ? t('tancat') : text)}</p>
+    <div className={styles.graella}>
+      {/* A l'esquerra, fixa: la foto, el títol i el preu que va pujant. */}
+      <div className={styles.columnaFixa}>
+        {foto}
+        <aside className={styles.banner} aria-labelledby="bici-nom">
+          <div className={styles.bannerCap}>
+            <p className={styles.categoria}>{tf(`categories.${bici.categoria}`)}</p>
+            <h1 id="bici-nom" className={styles.nom}>
+              {bici.nom}
+            </h1>
+            <p className={styles.model}>
+              {bici.model.valor}
+              {bici.model.ficticia && <span className="mostra">*</span>}
+            </p>
+          </div>
+
+          {!confirmada && (
+            <>
+              <div className={styles.desglos}>
+                <p className={styles.etiquetaGrup}>{t('resum')}</p>
+                <ul className={styles.liniesResum}>
+                  {linies.map((l, i) => {
+                    const b = flota.find((f) => f.id === l.biciId);
+                    const d = desglossos[i];
+                    return (
+                      <li key={l.clau}>
+                        <p className={styles.liniaBici}>
+                          <span>{l.talla ? t('liniaBici', { nom: b?.nom ?? '', talla: l.talla }) : `${b?.nom ?? ''} · ${t('senseTalla')}`}</span>
+                          <strong>{d ? euros(d.total) : '—'}</strong>
+                        </p>
+                        {d && (
+                          <>
+                            <p className={styles.liniaDetall}>
+                              <span>
+                                {d.durada.tipus === 'migDia'
+                                  ? t('migDia')
+                                  : t('calculDies', { preu: euros(d.perDia), dies: t('dies', { n: d.dies }) })}
+                              </span>
+                              <span>{euros(d.lloguer)}</span>
+                            </p>
+                            {d.extres.map((e) => (
+                              <p key={e.id} className={styles.liniaDetall}>
+                                <span>+ {t(`extresNoms.${e.id}`)}</span>
+                                <span>{euros(e.import)}</span>
+                              </p>
+                            ))}
+                          </>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+                {configuracio.pagament.actiu && total !== null ? (
+                  <fieldset className={styles.modalitats}>
+                    <legend>{t('modalitat')}</legend>
+                    {configuracio.pagament.modalitats.map((m) => {
+                      const aPagar = m === 'senyal' ? Math.ceil((total * configuracio.pagament.senyalPercent) / 100) : total;
+                      return (
+                        <label key={m} className={styles.check}>
+                          <input type="radio" name="modalitat" checked={modalitat === m} onChange={() => setModalitat(m)} />
+                          <span>{t(`modalitats.${m}`, { percent: configuracio.pagament.senyalPercent, import: euros(aPagar) })}</span>
+                        </label>
+                      );
+                    })}
+                  </fieldset>
+                ) : (
+                  <p className={styles.ajuda}>{t('pagament')}</p>
+                )}
               </div>
-            );
-          })}
-        </div>
-        {recollida && retorn && !errorFranja && (
-          <p className={styles.durada}>
-            {t('durada')}: <strong>{t('dies', { n: diesEntre(recollida.dia, retorn.dia) })}</strong>
-          </p>
-        )}
-        {errorFranja && errorFranja !== 'recollida' && <em className={styles.errorSolt}>{t('errors.franja')}</em>}
-      </fieldset>
 
-      {/* Bicis */}
-      <div className={styles.carro}>
-        {linies.map((l, i) => (
-          <BiciDelCarro
-            key={l.clau}
-            index={i}
-            linia={l}
-            flota={flota}
-            pedals={pedals}
-            extres={opcionals}
-            talles={tallesLliures(disponibilitat, linies, i)}
-            lliures={extresLliures(disponibilitat, linies, i)}
-            errors={errorsCamps}
-            onCanvi={(canvi) => canviaLinia(l.clau, canvi)}
-            onTreure={linies.length > 1 ? () => treu(l.clau) : undefined}
-          />
-        ))}
-        {linies.length < MAX_BICIS && (
-          <button type="button" className={styles.afegir} onClick={afegeix}>
-            <span aria-hidden="true">+</span>
-            <span>
-              <strong>{t('afegir')}</strong>
-              <small>{t('afegirAjuda')}</small>
-            </span>
-          </button>
-        )}
+              <div className={styles.peuPreu}>
+                {resultat && !resultat.ok && (
+                  <p id={`${id}-error`} className={styles.error} role="alert">
+                    {t(`errors.${resultat.error}`)}
+                  </p>
+                )}
+                <p className={styles.total} aria-live="polite">
+                  <span>{t('total')}</span>
+                  {/* La clau fa que el número es torni a animar cada vegada que canvia. */}
+                  <strong key={total ?? 'cap'}>{total === null ? '—' : euros(total)}</strong>
+                </p>
+                <button type="submit" form={`${id}-form`} className={`boto boto--blau ${styles.confirmar}`} disabled={enviant || total === null || !ara}>
+                  {enviant ? t('enviant') : configuracio.pagament.actiu ? t('pagar') : t('confirmar')}
+                </button>
+              </div>
+            </>
+          )}
+        </aside>
       </div>
 
-      {/* Dades */}
-      <fieldset className={styles.grup}>
-        <legend>{t('dades')}</legend>
-        <label className={styles.camp} data-error={error('nom') || undefined}>
-          <span>{t('nom')}</span>
-          <input name="nom" autoComplete="name" required aria-invalid={error('nom') || undefined} />
-          {error('nom') && <em>{t('camps.nom')}</em>}
-        </label>
-        <div className={styles.fila}>
-          <label className={styles.camp} data-error={error('telefon') || undefined}>
-            <span>{t('telefon')}</span>
-            <input name="telefon" type="tel" autoComplete="tel" inputMode="tel" required aria-invalid={error('telefon') || undefined} />
-            {error('telefon') && <em>{t('camps.telefon')}</em>}
-          </label>
-          <label className={styles.camp} data-error={error('correu') || undefined}>
-            <span>{t('correu')}</span>
-            <input name="correu" type="email" autoComplete="email" required aria-invalid={error('correu') || undefined} />
-            {error('correu') && <em>{t('camps.correu')}</em>}
-          </label>
-        </div>
-        <label className={styles.camp}>
-          <span>{t('comentaris')}</span>
-          <textarea name="comentaris" maxLength={500} rows={3} />
-        </label>
-        <label className={styles.check} data-error={error('privacitat') || undefined}>
-          <input name="privacitat" type="checkbox" required aria-invalid={error('privacitat') || undefined} />
-          <span>{t('privacitat')}</span>
-        </label>
-        {error('privacitat') && <em className={styles.errorSolt}>{t('camps.privacitat')}</em>}
-      </fieldset>
-
-      {/* Resum */}
-      <div className={styles.resum}>
-        <p className={styles.etiquetaGrup}>{t('resum')}</p>
-        <ul className={styles.liniesResum}>
-          {linies.map((l, i) => {
-            const b = flota.find((f) => f.id === l.biciId);
-            return (
-              <li key={l.clau}>
-                <span>
-                  {i + 1}. {t('liniaBici', { nom: b?.nom ?? '', talla: l.talla ?? t('senseTalla') })}
-                </span>
-                <strong>{preus[i] === null ? '—' : euros(preus[i]!)}</strong>
-              </li>
-            );
-          })}
-        </ul>
-        <p className={styles.total}>
-          <span>{t('total')}</span>
-          <strong>{total === null ? '—' : euros(total)}</strong>
-        </p>
-        {configuracio.pagament.actiu && total !== null ? (
-          <fieldset className={styles.modalitats}>
-            <legend>{t('modalitat')}</legend>
-            {configuracio.pagament.modalitats.map((m) => {
-              const aPagar = m === 'senyal' ? Math.ceil((total * configuracio.pagament.senyalPercent) / 100) : total;
-              return (
-                <label key={m} className={styles.check}>
-                  <input type="radio" name="modalitat" checked={modalitat === m} onChange={() => setModalitat(m)} />
-                  <span>{t(`modalitats.${m}`, { percent: configuracio.pagament.senyalPercent, import: euros(aPagar) })}</span>
-                </label>
-              );
-            })}
-          </fieldset>
+      {/* A la dreta, el que fa scroll. */}
+      <div className={styles.columna}>
+        {confirmada && recollida ? (
+          <div className={styles.fet} role="status">
+            <p className={styles.fetMarca} aria-hidden="true">
+              ✓
+            </p>
+            <h2>{t('fet.titol')}</h2>
+            <p className={styles.codi}>
+              <span>{t('fet.codi')}</span>
+              <strong>{confirmada.codi}</strong>
+            </p>
+            <p>
+              {t('fet.text', {
+                data: new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${recollida.dia}T12:00:00`)),
+                hora: recollida.hora,
+              })}
+            </p>
+            <p className={styles.adreca}>{t('fet.adreca')}</p>
+            {confirmada.totalCentims !== undefined && (
+              <p className={styles.totalFet}>
+                {t('total')}: <strong>{euros(confirmada.totalCentims)}</strong>
+              </p>
+            )}
+            {configuracio.participants.actiu && <Participants codi={confirmada.codi} noms={linies.map((l) => l.nom)} />}
+            <button type="button" className="boto boto--clar" onClick={() => setResultat(null)}>
+              {t('fet.altra')}
+            </button>
+          </div>
         ) : (
-          <p className={styles.ajuda}>{t('pagament')}</p>
+          <form ref={formulari} id={`${id}-form`} className={styles.panell} onSubmit={enviar} noValidate aria-describedby={resultat && !resultat.ok ? `${id}-error` : undefined}>
+            {/* Quan */}
+            <fieldset className={styles.grup}>
+              <legend>{t('quan')}</legend>
+              <div className={styles.franges}>
+                {(['recollida', 'retorn'] as const).map((quin) => {
+                  const moment = quin === 'recollida' ? recollida : retorn;
+                  const hores = moment ? (quin === 'recollida' ? horesLliures(moment.dia) : horesRetorn(moment.dia, horari)) : [];
+                  const canvia = quin === 'recollida' ? canviaRecollida : canviaRetorn;
+                  const text = moment ? obert(moment.dia) : null;
+                  return (
+                    <div key={quin} className={styles.franja} data-error={(errorFranja && (errorFranja === quin || (quin === 'recollida' && errorFranja === 'passat'))) || undefined}>
+                      <p className={styles.etiquetaGrup}>{t(quin)}</p>
+                      <div className={styles.fila}>
+                        <label className={styles.camp}>
+                          <span className="sr-only">{t('dia')}</span>
+                          <input
+                            type="date"
+                            value={moment?.dia ?? ''}
+                            min={quin === 'recollida' ? ara?.dia : minRetorn}
+                            max={quin === 'retorn' ? maxRetorn : undefined}
+                            disabled={!moment}
+                            required
+                            onChange={(e) => e.target.value && canvia({ dia: e.target.value })}
+                          />
+                        </label>
+                        <label className={styles.camp}>
+                          <span className="sr-only">{t('hora')}</span>
+                          <select value={moment && hores.includes(moment.hora) ? moment.hora : ''} disabled={hores.length === 0} onChange={(e) => canvia({ hora: e.target.value })}>
+                            {hores.length === 0 && <option value="">—</option>}
+                            {hores.map((h) => (
+                              <option key={h} value={h}>
+                                {h}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </div>
+                      <p className={styles.ajuda}>{moment && (hores.length === 0 ? t('tancat') : text)}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              {errorFranja && errorFranja !== 'recollida' && <em className={styles.errorSolt}>{t('errors.franja')}</em>}
+            </fieldset>
+
+            {/* Bicis */}
+            <div className={styles.carro}>
+              {linies.map((l, i) => (
+                <BiciDelCarro
+                  key={l.clau}
+                  index={i}
+                  linia={l}
+                  flota={flota}
+                  pedals={pedals}
+                  extres={opcionals}
+                  talles={tallesLliures(disponibilitat, linies, i)}
+                  lliures={extresLliures(disponibilitat, linies, i)}
+                  errors={errorsCamps}
+                  ambCapcalera={linies.length > 1}
+                  preuDe={preuDe}
+                  onCanvi={(canvi) => canviaLinia(l.clau, canvi)}
+                  onTreure={i > 0 ? () => treu(l.clau) : undefined}
+                />
+              ))}
+              {linies.length < MAX_BICIS && (
+                <button type="button" className={styles.afegir} onClick={afegeix}>
+                  <span aria-hidden="true">+</span>
+                  <span>
+                    <strong>{t('afegir')}</strong>
+                    <small>{t('afegirAjuda')}</small>
+                  </span>
+                </button>
+              )}
+            </div>
+
+            {/* Dades */}
+            <fieldset className={styles.grup}>
+              <legend>{t('dades')}</legend>
+              <div className={styles.fila3}>
+                <label className={styles.camp} data-error={error('nom') || undefined}>
+                  <span>{t('nom')}</span>
+                  <input name="nom" autoComplete="name" required aria-invalid={error('nom') || undefined} />
+                  {error('nom') && <em>{t('camps.nom')}</em>}
+                </label>
+                <label className={styles.camp} data-error={error('telefon') || undefined}>
+                  <span>{t('telefon')}</span>
+                  <input name="telefon" type="tel" autoComplete="tel" inputMode="tel" required aria-invalid={error('telefon') || undefined} />
+                  {error('telefon') && <em>{t('camps.telefon')}</em>}
+                </label>
+                <label className={styles.camp} data-error={error('correu') || undefined}>
+                  <span>{t('correu')}</span>
+                  <input name="correu" type="email" autoComplete="email" required aria-invalid={error('correu') || undefined} />
+                  {error('correu') && <em>{t('camps.correu')}</em>}
+                </label>
+              </div>
+              <label className={`${styles.camp} ${styles.campSeparat}`}>
+                <span>{t('comentaris')}</span>
+                <textarea name="comentaris" maxLength={500} rows={2} />
+              </label>
+              <label className={styles.check} data-error={error('privacitat') || undefined}>
+                <input name="privacitat" type="checkbox" required aria-invalid={error('privacitat') || undefined} />
+                <span>{t('privacitat')}</span>
+              </label>
+              {error('privacitat') && <em className={styles.errorSolt}>{t('camps.privacitat')}</em>}
+            </fieldset>
+          </form>
         )}
-        {resultat && !resultat.ok && (
-          <p id={`${id}-error`} className={styles.error} role="alert">
-            {t(`errors.${resultat.error}`)}
-          </p>
-        )}
-        <button type="submit" className={`boto boto--blau ${styles.confirmar}`} disabled={enviant || total === null || !ara}>
-          {enviant ? t('enviant') : configuracio.pagament.actiu ? t('pagar') : t('confirmar')}
-          {!enviant && total !== null && <span> · {euros(total)}</span>}
-        </button>
+        {inclou}
       </div>
-    </form>
+    </div>
   );
 }

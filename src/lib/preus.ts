@@ -34,15 +34,32 @@ export function duradaDe(recollida: Moment, retorn: Moment, tarifa: Tarifa): Dur
   return { tipus: 'dies', dies };
 }
 
-export type LiniaPreu = { tarifa: Tarifa; extres: readonly Pick<Extra, 'preu' | 'cobrament'>[] };
+export type LiniaPreu = { tarifa: Tarifa; extres: readonly Pick<Extra, 'id' | 'preu' | 'cobrament'>[] };
 
-/** Preu d'una bici de la reserva: el lloguer i els seus extres (els pedals també en són). */
-export function preuLinia({ tarifa, extres }: LiniaPreu, recollida: Moment, retorn: Moment): number | null {
+export type Desglos = {
+  durada: Durada;
+  /** Preu real per dia per a aquestes dates (el del tram que toca), o el del mig dia. */
+  perDia: number;
+  dies: number;
+  lloguer: number;
+  /** Només els extres de pagament: els inclosos no sumen res. */
+  extres: { id: string; import: number }[];
+  total: number;
+};
+
+/** D'on surt el preu d'una bici de la reserva: el lloguer i els seus extres (els pedals també en són). */
+export function desglosLinia({ tarifa, extres }: LiniaPreu, recollida: Moment, retorn: Moment): Desglos | null {
   const durada = duradaDe(recollida, retorn, tarifa);
+  const perDia = preuPerDia(tarifa, durada);
   const lloguer = preuLloguer(tarifa, durada);
-  if (lloguer === null) return null;
+  if (perDia === null || lloguer === null) return null;
   const dies = durada.tipus === 'migDia' ? 1 : durada.dies;
-  return extres.reduce((total, e) => total + (e.cobrament === 'perDia' ? e.preu * dies : e.preu), lloguer);
+  const ambPreu = extres.map((e) => ({ id: e.id, import: e.cobrament === 'perDia' ? e.preu * dies : e.preu })).filter((e) => e.import > 0);
+  return { durada, perDia, dies, lloguer, extres: ambPreu, total: ambPreu.reduce((suma, e) => suma + e.import, lloguer) };
+}
+
+export function preuLinia(linia: LiniaPreu, recollida: Moment, retorn: Moment): number | null {
+  return desglosLinia(linia, recollida, retorn)?.total ?? null;
 }
 
 /** Total d'una reserva. Es recalcula sempre al servidor; el del navegador només és orientatiu. */

@@ -293,3 +293,60 @@ p {
     transform: none;
   }
 }
+
+/* ── Transició de la targeta de la flota a la fitxa: la bici creix i es col·loca (View Transitions).
+   Els navegadors que no en saben naveguen normal. ── */
+
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-group(.morph) {
+  z-index: 50;
+  animation-duration: 0.95s;
+  animation-timing-function: cubic-bezier(0.45, 0, 0.15, 1);
+}
+/* Pel camí es fa gran i després s'encaixa al seu lloc. */
+::view-transition-image-pair(.morph) {
+  animation: 0.95s cubic-bezier(0.45, 0, 0.15, 1) both biciCreix;
+}
+@keyframes biciCreix {
+  45% {
+    transform: scale(1.4);
+    filter: drop-shadow(0 30px 40px rgb(18 20 23 / 0.28));
+  }
+}
+::view-transition-old(root) {
+  animation: 0.28s ease both surtFitxa;
+}
+::view-transition-new(root) {
+  animation: 0.4s ease both entraFitxa;
+}
+@keyframes surtFitxa {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes entraFitxa {
+  from {
+    opacity: 0;
+  }
+}
+/* La capçalera és a totes dues pàgines: es queda quieta. */
+::view-transition-group(capcalera) {
+  z-index: 100;
+  animation: none;
+}
+::view-transition-old(capcalera) {
+  display: none;
+}
+::view-transition-new(capcalera) {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

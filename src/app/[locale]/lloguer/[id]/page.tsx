@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { ViewTransition } from 'react';
 import { ReservaLloguer } from '@/components/reserva/ReservaLloguer';
 import { Peu } from '@/components/Seccions';
 import { Link } from '@/i18n/navigation';
 import { plataforma } from '@/lib/plataforma';
-import { formatEuros, preuMinimPerDia } from '@/lib/preus';
 import styles from '@/components/reserva/Reserva.module.css';
 
 type Params = { params: Promise<{ locale: string; id: string }> };
@@ -43,16 +43,26 @@ export default async function FitxaLloguer({ params }: Params) {
           <Link href="/#flota" className={styles.tornar}>
             ← {t('tornar')}
           </Link>
-          <div className={styles.graella}>
-            {/* La columna esquerra es queda fixa i la dreta (el panell de reserva) fa scroll. */}
-            <div className={styles.columnaFixa}>
-              <div className={styles.escenari}>
-                <div className={styles.etiquetes}>
-                  <span className={`${styles.etiqueta} ${styles['etiqueta--fosca']}`}>{t('nova')}</span>
-                  {bici.electrica && <span className={styles.etiqueta}>{tf('electrica')}</span>}
+          <ReservaLloguer
+            bici={bici}
+            flota={flota}
+            extres={extres}
+            horari={horari}
+            configuracio={configuracio}
+            foto={
+              // El mateix nom que a la targeta de la flota: la bici creix i es col·loca (vegeu globals.css).
+              <ViewTransition name={`bici-${bici.id}`} share="morph" default="none">
+                <div className={styles.escenari}>
+                  <div className={styles.etiquetes}>
+                    <span className={`${styles.etiqueta} ${styles['etiqueta--fosca']}`}>{t('nova')}</span>
+                    {bici.electrica && <span className={styles.etiqueta}>{tf('electrica')}</span>}
+                  </div>
+                  {/* A escriptori, la mateixa mida que la targeta: la foto ja és baixada i la transició no l'espera. */}
+                  <Image src={bici.imatge} alt={bici.nom} width={1200} height={720} priority sizes="(min-width: 1100px) 400px, 90vw" />
                 </div>
-                <Image src={bici.imatge} alt={bici.nom} width={1200} height={720} priority sizes="(min-width: 980px) 60vw, 100vw" />
-              </div>
+              </ViewTransition>
+            }
+            inclou={
               <section className={styles.inclou} aria-labelledby="inclou-titol">
                 <h2 id="inclou-titol">{t('fitxa.titol')}</h2>
                 <ul>
@@ -61,24 +71,8 @@ export default async function FitxaLloguer({ params }: Params) {
                   ))}
                 </ul>
               </section>
-            </div>
-
-            <aside className={styles.columna} aria-labelledby="bici-nom">
-              <div className={styles.capPanell}>
-                <p className={styles.categoria}>{tf(`categories.${bici.categoria}`)}</p>
-                <h1 id="bici-nom" className={styles.nom}>
-                  {bici.nom}
-                </h1>
-                <div className={styles.ratlla} aria-hidden="true" />
-                <p className={styles.model}>
-                  {bici.model.valor}
-                  {bici.model.ficticia && <span className="mostra">*</span>}
-                </p>
-                <p className={styles.desDe}>{t('desDe', { preu: formatEuros(preuMinimPerDia(bici.tarifa), locale) })}</p>
-              </div>
-              <ReservaLloguer bici={bici} flota={flota} extres={extres} horari={horari} configuracio={configuracio} />
-            </aside>
-          </div>
+            }
+          />
         </div>
       </main>
       <Peu />

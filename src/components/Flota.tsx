@@ -5,7 +5,7 @@
 
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
-import { useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { useId, useLayoutEffect, useRef, useState, ViewTransition, type CSSProperties } from 'react';
 import type { BiciLloguer, CategoriaLloguer } from '@/lib/plataforma/esquema';
 import { Link } from '@/i18n/navigation';
 import { formatEuros, preuMinimPerDia, preuPerDia } from '@/lib/preus';
@@ -65,10 +65,13 @@ export function Flota({ flota }: { flota: BiciLloguer[] }) {
 
   const targeta = (bici: BiciLloguer) => (
     <Link className={styles.enllac} href={`/lloguer/${bici.id}`} aria-label={`${t('reservar')}: ${bici.nom}`}>
-      <div className={styles.escenari}>
-        {bici.electrica && <span className={styles.etiqueta}>{t('electrica')}</span>}
-        <Image src={bici.imatge} alt="" width={640} height={380} sizes="(min-width: 1100px) 400px, (min-width: 700px) 45vw, 90vw" />
-      </div>
+      {/* El mateix nom que a la fitxa: en entrar-hi, la bici creix i es col·loca (vegeu globals.css). */}
+      <ViewTransition name={`bici-${bici.id}`} share="morph" default="none">
+        <div className={styles.escenari}>
+          {bici.electrica && <span className={styles.etiqueta}>{t('electrica')}</span>}
+          <Image src={bici.imatge} alt="" width={640} height={380} sizes="(min-width: 1100px) 400px, (min-width: 700px) 45vw, 90vw" />
+        </div>
+      </ViewTransition>
       <div className={styles.cos}>
         <p className={styles.categoria}>{t(`categories.${bici.categoria}`)}</p>
         <h3 className={styles.nom}>{bici.nom}</h3>

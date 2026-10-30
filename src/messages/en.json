@@ -311,7 +311,6 @@
   "reserva": {
     "tornar": "All bikes",
     "nova": "Rental",
-    "desDe": "from {preu}/day",
     "quan": "When",
     "recollida": "Pick-up",
     "retorn": "Return",
@@ -320,11 +319,9 @@
     "tancat": "The shop is closed that day. Choose another one.",
     "obertDia": "That day we're open {blocs}.",
     "bloc": "from {obre} to {tanca}",
-    "durada": "Duration",
     "dies": "{n, plural, one {1 day} other {# days}}",
     "migDia": "Half day",
     "bici": "Bike {n}",
-    "model": "Model",
     "treure": "Remove bike {n}",
     "afegir": "Add another bike",
     "afegirAjuda": "Same dates and times.",
@@ -351,10 +348,9 @@
     "correu": "Email",
     "comentaris": "Comments (optional)",
     "privacitat": "I've read and accept the privacy policy.",
-    "resum": "Summary",
+    "resum": "Your booking",
     "liniaBici": "{nom} · size {talla}",
     "senseTalla": "size missing",
-    "liniaExtres": "Extras",
     "total": "Total",
     "pagament": "You pay at the shop when you pick up the bike*.",
     "modalitat": "How would you like to pay?",
@@ -426,7 +422,9 @@
       "cadiraNado": "Child seat",
       "alforges": "Panniers",
       "comptaquilometres": "Bike computer"
-    }
+    },
+    "tipusBici": "Bike type",
+    "calculDies": "{preu}/day × {dies}"
   },
   "cita": {
     "titol": "Book the workshop",

@@ -311,7 +311,6 @@
   "reserva": {
     "tornar": "Tous les vélos",
     "nova": "Location",
-    "desDe": "dès {preu}/jour",
     "quan": "Quand",
     "recollida": "Retrait",
     "retorn": "Retour",
@@ -320,11 +319,9 @@
     "tancat": "La boutique est fermée ce jour-là. Choisissez-en un autre.",
     "obertDia": "Ce jour-là, nous ouvrons {blocs}.",
     "bloc": "de {obre} à {tanca}",
-    "durada": "Durée",
     "dies": "{n, plural, one {1 jour} other {# jours}}",
     "migDia": "Demi-journée",
     "bici": "Vélo {n}",
-    "model": "Modèle",
     "treure": "Retirer le vélo {n}",
     "afegir": "Ajouter un autre vélo",
     "afegirAjuda": "Mêmes dates et heures.",
@@ -351,10 +348,9 @@
     "correu": "E-mail",
     "comentaris": "Commentaires (facultatif)",
     "privacitat": "J'ai lu et j'accepte la politique de confidentialité.",
-    "resum": "Récapitulatif",
+    "resum": "Votre réservation",
     "liniaBici": "{nom} · taille {talla}",
     "senseTalla": "taille à choisir",
-    "liniaExtres": "Options",
     "total": "Total",
     "pagament": "Vous payez à la boutique au retrait du vélo*.",
     "modalitat": "Comment voulez-vous payer ?",
@@ -426,7 +422,9 @@
       "cadiraNado": "Siège bébé",
       "alforges": "Sacoches",
       "comptaquilometres": "Compteur"
-    }
+    },
+    "tipusBici": "Type de vélo",
+    "calculDies": "{preu}/jour × {dies}"
   },
   "cita": {
     "titol": "Rendez-vous à l'atelier",

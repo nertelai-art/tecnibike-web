@@ -311,7 +311,6 @@
   "reserva": {
     "tornar": "Todas las bicis",
     "nova": "Alquiler",
-    "desDe": "desde {preu}/día",
     "quan": "Cuándo",
     "recollida": "Recogida",
     "retorn": "Devolución",
@@ -320,11 +319,9 @@
     "tancat": "La tienda cierra este día. Elige otro.",
     "obertDia": "Este día abrimos {blocs}.",
     "bloc": "de {obre} a {tanca}",
-    "durada": "Duración",
     "dies": "{n, plural, one {1 día} other {# días}}",
     "migDia": "Medio día",
     "bici": "Bici {n}",
-    "model": "Modelo",
     "treure": "Quita la bici {n}",
     "afegir": "Añade otra bici",
     "afegirAjuda": "Con las mismas fechas y horas.",
@@ -351,10 +348,9 @@
     "correu": "Correo electrónico",
     "comentaris": "Comentarios (opcional)",
     "privacitat": "He leído y acepto la política de privacidad.",
-    "resum": "Resumen",
+    "resum": "Tu reserva",
     "liniaBici": "{nom} · talla {talla}",
     "senseTalla": "falta la talla",
-    "liniaExtres": "Extras",
     "total": "Total",
     "pagament": "Pagas en la tienda al recoger la bici*.",
     "modalitat": "¿Cómo quieres pagar?",
@@ -426,7 +422,9 @@
       "cadiraNado": "Silla para bebé",
       "alforges": "Alforjas",
       "comptaquilometres": "Cuenta­kilómetros"
-    }
+    },
+    "tipusBici": "Tipo de bici",
+    "calculDies": "{preu}/día × {dies}"
   },
   "cita": {
     "titol": "Pide cita en el taller",

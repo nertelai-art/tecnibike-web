@@ -105,6 +105,8 @@
   display: grid;
   place-items: center;
   padding: 18px 20px 6px;
+  /* El mateix fons que la targeta: en la transició, la foto es captura amb el seu multiply. */
+  background: var(--escenari);
 }
 .escenari img {
   width: 100%;

@@ -1,4 +1,5 @@
-/* Fitxa de reserva: escenari gris a l'esquerra, panell blanc enganxat a la dreta (Scott). */
+/* Fitxa de reserva: a l'esquerra, fixos, la foto, el títol i el preu; a la dreta, el formulari, ample
+   perquè les dades quedin juntes i faci falta poc scroll. */
 
 .pagina {
   padding-top: calc(var(--header-h) + 40px);
@@ -7,7 +8,7 @@
 
 .graella {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(360px, 0.75fr);
+  grid-template-columns: minmax(340px, 0.72fr) minmax(0, 1.28fr);
   gap: clamp(24px, 3vw, 48px);
   align-items: start;
 }
@@ -28,21 +29,31 @@
 
 .columnaFixa {
   position: sticky;
-  top: calc(var(--header-h) + 32px);
+  top: calc(var(--header-h) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* La columna sempre cap a la pantalla, també abans de fer scroll (quan comença sota l'enllaç de
+     tornar): si hi ha moltes bicis, fa scroll el desglossament, i el total i el botó no es mouen. */
+  max-height: calc(100svh - var(--header-h) - 100px);
 }
 
 .escenari {
   position: relative;
   display: grid;
   place-items: center;
-  aspect-ratio: 4 / 3;
-  padding: clamp(24px, 4vw, 64px);
+  flex-shrink: 0;
+  grid-template-rows: minmax(0, 1fr);
+  aspect-ratio: 16 / 10;
+  max-height: 30svh;
+  padding: 14px 20px;
   border-radius: var(--radi);
   background: radial-gradient(90% 80% at 50% 45%, var(--blanc), var(--escenari) 70%);
 }
 .escenari img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
   mix-blend-mode: multiply;
 }
 
@@ -69,18 +80,21 @@
 }
 
 .inclou {
-  margin-top: 32px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--linia);
 }
 .inclou h2 {
-  font-size: 28px;
+  font-size: 22px;
 }
 .inclou ul {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px 24px;
-  margin: 18px 0 0;
+  gap: 8px 24px;
+  margin: 12px 0 0;
   padding: 0;
   list-style: none;
+  font-size: 14px;
 }
 .inclou li {
   display: flex;
@@ -94,10 +108,20 @@
   font-weight: 800;
 }
 
-/* ── Capçalera del panell ── */
+/* ── El bàner: el títol i el preu que va pujant ── */
 
-.capPanell {
-  margin-bottom: 8px;
+.banner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  padding: 18px 20px;
+  border-radius: var(--radi);
+  background: var(--blanc);
+  box-shadow: 0 24px 60px -36px rgb(18 20 23 / 0.35);
+}
+.bannerCap {
+  flex-shrink: 0;
 }
 .categoria {
   font-size: 12px;
@@ -107,29 +131,19 @@
   color: var(--tinta-3);
 }
 .nom {
-  margin-top: 8px;
-  font-size: clamp(36px, 3.6vw, 52px);
-}
-.ratlla {
-  width: 28px;
-  height: 3px;
-  margin: 16px 0;
-  background: var(--grafit);
+  margin-top: 4px;
+  font-size: clamp(28px, 2.6vw, 38px);
 }
 .model {
+  margin-top: 2px;
+  font-size: 14px;
   color: var(--tinta-2);
 }
-.desDe {
-  margin-top: 8px;
-  font-size: 22px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ── Panell ── */
 
 .columna {
-  padding: 28px;
+  min-width: 0;
+  padding: 24px;
   border-radius: var(--radi);
   background: var(--blanc);
   box-shadow: 0 24px 60px -36px rgb(18 20 23 / 0.35);
@@ -137,8 +151,7 @@
 
 .panell {
   display: grid;
-  gap: 22px;
-  margin-top: 20px;
+  gap: 20px;
   /* El panell és estret a escriptori i ample al mòbil: la disposició va per l'amplada del panell. */
   container-type: inline-size;
 }
@@ -361,6 +374,11 @@
 .fila + .check {
   margin-top: 12px;
 }
+/* Dins d'una fila, els camps van l'un al costat de l'altre. */
+.fila > .camp + .camp,
+.fila3 > .camp + .camp {
+  margin-top: 0;
+}
 
 .comptador {
   display: grid;
@@ -427,28 +445,65 @@
   color: #b42318;
 }
 
-.resum {
-  display: grid;
-  gap: 6px;
-  padding-top: 18px;
+.desglos {
+  min-height: 0;
+  overflow-y: auto;
+  padding-top: 12px;
   border-top: 1px dashed var(--linia);
 }
-.linia {
-  font-size: 14px;
-  color: var(--tinta-2);
+.desglos .etiquetaGrup {
+  margin-bottom: 6px;
+}
+.liniaBici,
+.liniaDetall {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
   font-variant-numeric: tabular-nums;
+}
+.liniaBici {
+  font-size: 14px;
+  font-weight: 700;
+}
+.liniaDetall {
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+
+.peuPreu {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--linia);
+}
+.peuPreu .error {
+  grid-column: 1 / -1;
+  margin-top: 0;
 }
 .total {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  font-size: 12px;
   font-weight: 700;
-  font-size: 18px;
+}
+.total span,
+.total strong {
+  display: block;
 }
 .total strong {
-  font-size: 34px;
+  font-size: 30px;
+  line-height: 1;
   font-variation-settings: 'wdth' 78;
   font-variant-numeric: tabular-nums;
+  animation: preuCanvia 0.45s var(--ease);
+}
+/* Cada vegada que el preu canvia, el número fa un petit salt. */
+@keyframes preuCanvia {
+  from {
+    color: var(--taronja);
+    transform: translateY(-4px) scale(1.06);
+  }
 }
 
 .error {
@@ -463,8 +518,7 @@
 
 .confirmar {
   width: 100%;
-  margin-top: 10px;
-  min-height: 56px;
+  min-height: 52px;
 }
 .confirmar:disabled {
   opacity: 0.6;
@@ -498,21 +552,16 @@
   grid-template-columns: 1fr 96px;
   gap: 8px;
 }
+.franja .camp input,
+.franja .camp select {
+  height: 48px;
+}
 .franja .etiquetaGrup {
   margin-bottom: 8px;
 }
 .franja .ajuda {
   min-height: 1.4em;
 }
-.durada {
-  margin-top: 10px;
-  font-size: 14px;
-  color: var(--tinta-2);
-}
-.durada strong {
-  color: var(--tinta);
-}
-
 /* ── Bicis del carro ── */
 
 .carro {
@@ -522,7 +571,7 @@
 
 .biciCarro {
   display: grid;
-  gap: 20px;
+  gap: 16px;
   margin: 0;
   padding: 18px;
   border: 0;
@@ -532,6 +581,11 @@
   min-width: 0;
 }
 
+.biciNomFix {
+  align-self: center;
+  margin-bottom: 8px;
+  grid-column: span 2;
+}
 .biciCap {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -580,6 +634,9 @@
 }
 .fila3 > :first-child {
   grid-column: 1 / -1;
+}
+.campSeparat {
+  margin-top: 12px;
 }
 
 @container (min-width: 560px) {
@@ -665,6 +722,11 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+@container (min-width: 560px) {
+  .extres {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
 }
 .extra {
   position: relative;
@@ -762,25 +824,14 @@
   color: #b42318;
 }
 
-/* ── Resum ── */
+/* ── Línies del desglossament ── */
 
 .liniesResum {
   display: grid;
-  gap: 4px;
-  margin: 0 0 6px;
+  gap: 8px;
+  margin: 0 0 8px;
   padding: 0;
   list-style: none;
-  font-size: 14px;
-  color: var(--tinta-2);
-  font-variant-numeric: tabular-nums;
-}
-.liniesResum li {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-.liniesResum strong {
-  color: var(--tinta);
 }
 
 .modalitats {
@@ -843,6 +894,53 @@
   font-size: 12px;
   color: var(--tinta-3);
   pointer-events: none;
+}
+
+/* ── La fitxa es construeix mentre la bici es col·loca (vegeu globals.css) ── */
+
+@keyframes construeix {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+.bannerCap,
+.desglos,
+.peuPreu,
+.columna,
+.panell > * {
+  animation: construeix 0.6s var(--ease) backwards;
+}
+.columna {
+  animation-delay: 0.3s;
+}
+.panell > :nth-child(1) {
+  animation-delay: 0.4s;
+}
+.panell > :nth-child(2) {
+  animation-delay: 0.5s;
+}
+.panell > :nth-child(3) {
+  animation-delay: 0.6s;
+}
+.bannerCap {
+  animation-delay: 0.45s;
+}
+.desglos {
+  animation-delay: 0.55s;
+}
+.peuPreu {
+  animation-delay: 0.65s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bannerCap,
+  .desglos,
+  .peuPreu,
+  .columna,
+  .panell > *,
+  .total strong {
+    animation: none;
+  }
 }
 
 /* ── Pàgina de cita ── */
@@ -948,13 +1046,47 @@
   .graella {
     grid-template-columns: 1fr;
   }
+  .graella:has(.columnaFixa) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
   .columnaFixa,
+  .banner {
+    display: contents;
+  }
   .costat {
     position: relative;
     top: 0;
   }
+  .escenari {
+    order: 1;
+    width: 100%;
+    max-height: none;
+  }
+  .bannerCap {
+    order: 2;
+  }
   .columna {
+    order: 3;
     padding: 22px 18px;
+  }
+  .desglos {
+    order: 4;
+    padding: 18px;
+    border-top: 0;
+    border-radius: var(--radi);
+    background: var(--blanc);
+  }
+  .peuPreu {
+    order: 5;
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+    background: var(--blanc);
+    box-shadow: 0 -12px 30px -18px rgb(18 20 23 / 0.45);
   }
 }
 

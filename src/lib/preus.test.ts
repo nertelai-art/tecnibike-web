@@ -1,4 +1,4 @@
-import { duradaDe, formatEuros, preuLinia, preuLloguer, preuMinimPerDia, preuPerDia, totalReserva } from './preus';
+import { desglosLinia, duradaDe, formatEuros, preuLinia, preuLloguer, preuMinimPerDia, preuPerDia, totalReserva } from './preus';
 
 const btt = { dia: 2800, de2a6: 2520, mesDe6: 2100 };
 const eDoble = { dia: 5500, migDia: 4200, de2a6: 4800, mesDe6: 3900 };
@@ -67,9 +67,9 @@ describe('duradaDe', () => {
 describe('preuLinia i totalReserva', () => {
   const rec = { dia: '2026-10-27', hora: '09:00' };
   const ret = { dia: '2026-10-29', hora: '19:00' };
-  const casc = { preu: 0, cobrament: 'perReserva' } as const;
-  const cadenat = { preu: 300, cobrament: 'perReserva' } as const;
-  const look = { preu: 200, cobrament: 'perDia' } as const;
+  const casc = { id: 'casc', preu: 0, cobrament: 'perReserva' } as const;
+  const cadenat = { id: 'cadenat', preu: 300, cobrament: 'perReserva' } as const;
+  const look = { id: 'look', preu: 200, cobrament: 'perDia' } as const;
 
   it('suma el lloguer, els extres per reserva i els extres per dia', () => {
     expect(preuLinia({ tarifa: btt, extres: [casc, cadenat, look] }, rec, ret)).toBe(2520 * 3 + 300 + 200 * 3);
@@ -83,6 +83,26 @@ describe('preuLinia i totalReserva', () => {
   it('un extra per dia en mig dia es cobra una vegada', () => {
     const migDia = { dia: '2026-10-27', hora: '13:00' };
     expect(preuLinia({ tarifa: eDoble, extres: [look] }, rec, migDia)).toBe(4200 + 200);
+  });
+
+  it('el desglos diu el preu real per dia de les dates triades, no el més barat', () => {
+    const undia = { dia: '2026-10-27', hora: '19:00' };
+    expect(desglosLinia({ tarifa: carretera, extres: [] }, rec, undia)).toMatchObject({ perDia: 3500, dies: 1, lloguer: 3500, total: 3500 });
+    expect(desglosLinia({ tarifa: carretera, extres: [] }, rec, ret)).toMatchObject({ perDia: 2800, dies: 3, lloguer: 8400, total: 8400 });
+  });
+
+  it("el desglos detalla cada extra de pagament i n'amaga els inclosos", () => {
+    const d = desglosLinia({ tarifa: btt, extres: [casc, cadenat, look] }, rec, ret);
+    expect(d?.extres).toEqual([
+      { id: 'cadenat', import: 300 },
+      { id: 'look', import: 600 },
+    ]);
+    expect(d?.total).toBe(2520 * 3 + 300 + 600);
+  });
+
+  it('el desglos del mig dia ho indica i no multiplica per dies', () => {
+    const migDia = { dia: '2026-10-27', hora: '13:00' };
+    expect(desglosLinia({ tarifa: eDoble, extres: [] }, rec, migDia)).toMatchObject({ durada: { tipus: 'migDia' }, perDia: 4200, dies: 1, total: 4200 });
   });
 
   it('sense bicis no hi ha total', () => {

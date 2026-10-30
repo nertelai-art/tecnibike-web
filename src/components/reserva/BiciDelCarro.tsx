@@ -1,13 +1,13 @@
 'use client';
 
-// Una bici de la reserva: model, talla amb les unitats que queden, qui la portarà (alçada per
-// suggerir la talla i alçada del seient per deixar-la a punt), pedals i extres.
+// Una bici de la reserva: talla amb les unitats que queden, qui la portarà (alçada per suggerir la
+// talla i alçada del seient per deixar-la a punt), pedals i extres. La primera és sempre la de la
+// fitxa; només les que s'afegeixen trien el tipus de bici.
 
 import Image from 'next/image';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useId } from 'react';
 import type { BiciLloguer, Extra } from '@/lib/plataforma/esquema';
-import { formatEuros, preuMinimPerDia } from '@/lib/preus';
 import { tallaSuggerida } from '@/lib/talles';
 import { Extres } from './Extres';
 import styles from './Reserva.module.css';
@@ -33,13 +33,17 @@ type Props = {
   talles: Record<string, number> | null;
   lliures: Record<string, number | null>;
   errors: ReadonlySet<string>;
+  /** Si n'hi ha més d'una, cal dir de quina es parla. */
+  ambCapcalera: boolean;
+  /** Preu d'un tipus de bici per a les dates triades, per al desplegable. */
+  preuDe: (bici: BiciLloguer) => string | null;
   onCanvi: (canvi: Partial<LiniaFormulari>) => void;
+  /** Sense aquesta funció, és la bici de la fitxa: no es pot canviar ni treure. */
   onTreure?: () => void;
 };
 
-export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliures, errors, onCanvi, onTreure }: Props) {
+export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliures, errors, ambCapcalera, preuDe, onCanvi, onTreure }: Props) {
   const t = useTranslations('reserva');
-  const locale = useLocale();
   const id = useId();
   const bici = flota.find((b) => b.id === linia.biciId) ?? flota[0]!;
   const alcada = Number(linia.alcada);
@@ -50,27 +54,36 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
   return (
     <fieldset className={styles.biciCarro}>
       <legend className="sr-only">{t('bici', { n: index + 1 })}</legend>
-      <div className={styles.biciCap}>
-        <span className={styles.biciNumero} aria-hidden="true">
-          {index + 1}
-        </span>
-        <Image src={bici.imatge} alt="" width={120} height={72} className={styles.biciMiniatura} />
-        <label className={styles.camp}>
-          <span>{t('model')}</span>
-          <select value={bici.id} onChange={(e) => onCanvi({ biciId: e.target.value, talla: null })}>
-            {flota.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.nom} · {t('desDe', { preu: formatEuros(preuMinimPerDia(b.tarifa), locale) })}
-              </option>
-            ))}
-          </select>
-        </label>
-        {onTreure && (
-          <button type="button" className={styles.treure} onClick={onTreure} aria-label={t('treure', { n: index + 1 })}>
-            ×
-          </button>
-        )}
-      </div>
+      {ambCapcalera && (
+        <div className={styles.biciCap}>
+          <span className={styles.biciNumero} aria-hidden="true">
+            {index + 1}
+          </span>
+          <Image src={bici.imatge} alt="" width={120} height={72} className={styles.biciMiniatura} />
+          {onTreure ? (
+            <>
+              <label className={styles.camp}>
+                <span>{t('tipusBici')}</span>
+                <select value={bici.id} onChange={(e) => onCanvi({ biciId: e.target.value, talla: null })}>
+                  {flota.map((b) => {
+                    const preu = preuDe(b);
+                    return (
+                      <option key={b.id} value={b.id}>
+                        {preu ? `${b.nom} · ${preu}` : b.nom}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+              <button type="button" className={styles.treure} onClick={onTreure} aria-label={t('treure', { n: index + 1 })}>
+                ×
+              </button>
+            </>
+          ) : (
+            <strong className={styles.biciNomFix}>{bici.nom}</strong>
+          )}
+        </div>
+      )}
 
       {/* Talla, amb les unitats que queden per a les dates triades */}
       <div className={styles.grup} role="radiogroup" aria-labelledby={`${id}-talla`} aria-invalid={error('talla') || undefined}>

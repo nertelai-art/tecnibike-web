@@ -161,6 +161,14 @@ payments             id, booking_id, provider, provider_ref, amount_cents, kind
                      (deposit|full|balance|refund), status, at
 ```
 
+**Tipus, model i unitat (cal no barrejar-los):**
+
+- **Tipus de bici:** el que tarifa el PDF de Tecnibike, com ara «E-bike rígida» o «Gravel». N'hi ha 10, i el preu va per tipus.
+- **Model:** la bici concreta, com ara «Cannondale Trail Neo 4». Pot haver-n'hi diversos per tipus. Avui la web en mostra un per tipus, i és **inventat** (`ficticia: true`), perquè el client encara no ha donat la llista.
+- **Unitat:** cada bici física, amb la seva talla i el seu QR.
+
+A la web, `biciId` és el **tipus**, i a la fitxa no es tria model perquè encara no n'hi ha de reals. Si la flota real té diversos models per tipus amb el mateix preu, caldrà decidir si el client tria el model o només el tipus i la talla. `rental_tariffs` hauria de penjar del tipus, no del model.
+
 **Decisions de model que us deixem:**
 
 - **Unitat assignada quan?** Proposta: la reserva guarda model i talla; la unitat concreta
