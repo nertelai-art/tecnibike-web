@@ -103,6 +103,9 @@
   position: relative;
   aspect-ratio: 16 / 10;
   display: grid;
+  /* L'escenari mana: una foto alta no l'estira ni descompensa les targetes de la mateixa fila. */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  min-height: 0;
   place-items: center;
   padding: 18px 20px 6px;
   /* El mateix fons que la targeta: en la transició, la foto es captura amb el seu multiply. */

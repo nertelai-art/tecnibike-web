@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { crearPlataformaProva, plataforma } from './index';
 import { categoriaEquipament, type BiciReserva, type ReservaLloguer } from './esquema';
 
@@ -21,6 +23,12 @@ describe('plataforma de proves', () => {
     await expect(plataforma.flota()).resolves.toHaveLength(10);
     await expect(plataforma.serveisTaller()).resolves.toHaveLength(6);
     await expect(plataforma.ressenyes()).resolves.not.toHaveLength(0);
+  });
+
+  it('totes les fotos de la flota existeixen', async () => {
+    for (const bici of await plataforma.flota()) {
+      expect(existsSync(join(__dirname, '../../../public', bici.imatge)), bici.imatge).toBe(true);
+    }
   });
 
   it('cada peça de l\'escena d\'anatomia té un servei de taller', async () => {

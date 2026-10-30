@@ -42,7 +42,7 @@ export const flota: BiciLloguer[] = [
     nom: 'Carretera disc',
     categoria: 'carretera',
     electrica: false,
-    imatge: '/img/flota/carretera.jpg',
+    imatge: '/img/flota/carretera-fitxa.jpg',
     talles: TALLES_CARRETERA,
     tarifa: { dia: 3500, de2a6: 2800 },
     model: { valor: 'Pinarello X3 · Shimano 105', ficticia: true },
@@ -52,7 +52,7 @@ export const flota: BiciLloguer[] = [
     nom: 'Carretera disc Di2',
     categoria: 'carretera',
     electrica: false,
-    imatge: '/img/flota/carretera-di2.png',
+    imatge: '/img/flota/carretera-di2-sencera.png',
     talles: TALLES_CARRETERA,
     tarifa: { dia: 6500, de2a6: 5500 },
     // La foto de la web antiga és una Trek: el model inventat ha de quadrar amb la foto.
