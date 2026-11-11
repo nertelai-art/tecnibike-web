@@ -497,7 +497,6 @@
     "situacio": "Nutrición deportiva",
     "titol": "Combustible para cada kilómetro",
     "intro": "Geles, barritas y bebidas de Maurten, 226ERS, Nutrinovex y SiS, los mismos que tenemos en la tienda. Te los dejamos a punto con la bici de alquiler, o pasa a buscarlos antes de salir.",
-    "expositors": "Las marcas de la tienda",
     "veure": "{n, plural, one {Ver el producto} other {Ver los # productos}}",
     "totesMarques": "Todas las marcas",
     "quan": "Cuándo tomarlo",
@@ -590,7 +589,7 @@
     "ambLaBici": "Añádela a tu bici de alquiler",
     "perWhatsapp": "O pídela por WhatsApp",
     "missatge": "¡Hola! Quería reservar nutrición para la ruta (geles, barritas…). ¿Qué tenéis?",
-    "nota": "Ilustraciones propias: no son fotos de los productos. Precios y stock de muestra*.",
+    "nota": "Fotos de producto de las webs de las marcas. Precios y stock de muestra*.",
     "marca": "Marca",
     "totes": "Todas",
     "sabor": "Sabor",
@@ -606,6 +605,9 @@
       "intro": "Geles, barritas y bebidas de la tienda. Te los dejamos a punto con la bici y se pagan con la reserva.",
       "triats": "En la reserva"
     },
-    "demanaWhatsapp": "Resérvala por WhatsApp"
+    "demanaWhatsapp": "Resérvala por WhatsApp",
+    "veureMes": "Ver más ({n})",
+    "veureMenys": "Ver menos",
+    "escenaSr": "Los productos de cada marca giran sobre sí mismos a medida que bajas."
   }
 }

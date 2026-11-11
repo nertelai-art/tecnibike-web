@@ -24,3 +24,15 @@ describe('nutrició: textos i colors del catàleg de prova', () => {
     }
   });
 });
+
+describe('nutrició: fotos del catàleg de prova', () => {
+  it('cada foto de producte i de sabor existeix a public/', async () => {
+    const { existsSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    for (const p of productesNutricio) {
+      for (const img of [p.imatge, ...p.sabors.map((s) => s.imatge)].filter(Boolean)) {
+        expect(existsSync(join(process.cwd(), 'public', img!)), img).toBe(true);
+      }
+    }
+  });
+});

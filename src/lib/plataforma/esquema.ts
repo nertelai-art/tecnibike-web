@@ -138,6 +138,8 @@ export const saborNutricio = z.object({
   id: z.string().min(1).max(40),
   /** El nom que hi ha posat la botiga. Sense, surt dels missatges de la web per l'`id`. */
   nom: z.string().optional(),
+  /** La foto d'aquest sabor, si l'envàs canvia. Sense, la del producte. */
+  imatge: z.string().optional(),
   estoc: z.number().int().nonnegative().nullable(),
 });
 

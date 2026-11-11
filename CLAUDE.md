@@ -77,10 +77,19 @@ Versions que **no** són l'última, i per què:
 - **Variants d'extres:** un extra pot tenir variants (la talla del casc), cadascuna amb el seu estoc.
   Un cop triat, la rajola demana quina; la plataforma les rep a `items[].options[].variant`.
 - **Nutrició esportiva** (`src/components/nutricio/`, recerca a
-  [docs/nutricio-productes.md](docs/nutricio-productes.md)). A la portada, després de Rutes, hi ha els
-  quatre expositors de la botiga (Maurten, 226ERS, Nutrinovex i SiS). Pugen amb el scroll en CSS
-  amb línia de temps de vista, cadascun amb els colors de la seva marca (`src/content/nutricio.ts`).
-  Després ve l'explorador per marca i moment de la ruta. A la reserva, la nutrició és de la reserva
+  [docs/nutricio-productes.md](docs/nutricio-productes.md)). A la portada, després de Rutes, hi ha una escena
+  fixa amb un capítol per marca (Maurten, 226ERS, Nutrinovex i SiS, amb els seus colors de
+  `src/content/nutricio.ts`). Amb el scroll, els productes entren girant sobre si mateixos (CSS 3D,
+  sense three.js), es queden de cara i surten. La coreografia és a `escena-marques.ts`, amb proves.
+  Sense JavaScript o amb menys moviment, els capítols surten un sota l'altre. Després ve la graella
+  per marca i moment de la ruta: en ensenya 8 i la resta, amb «Veure'n més». A la reserva, n'ensenya
+  6. **Fotos de producte:** baixades de les webs de les marques (`public/img/nutricio/`, retallades
+  amb fons transparent, una per sabor quan l'envàs canvia; el sabor canvia la foto). Les va triar
+  l'usuari el 11-11-2026 per a local i previsualització. **No es pugen al repositori** (és públic:
+  seria publicar-les) i estan al `.gitignore`. Es baixen amb `node scripts/fotos-nutricio.mjs <dir>`
+  i es retallen amb `py -3.12 scripts/retalla-fotos-nutricio.py <dir> public/img/nutricio` (Pillow
+  i NumPy). On no hi són (Vercel, un clon nou) surt la il·lustració. Per publicar-les cal el permís
+  de les marques (vegeu `docs/nutricio-productes.md`). A la reserva, la nutrició és de la reserva
   sencera, no d'una bici: línies `{producteId, sabor, quantitat}`. Els sabors són variants amb estoc
   propi, i l'estoc es ven i no torna (no depèn de les dates). Està **apagada**
   (`configuracioReserves.nutricio.actiu`) a producció, a les previsualitzacions i amb la plataforma
@@ -88,9 +97,7 @@ Versions que **no** són l'última, i per què:
   11-11-2026). Només s'encén amb `pnpm dev` (`index.ts`), per ensenyar-la. Apagada, la portada
   demana la nutrició per WhatsApp i una reserva que en porti es rebutja. Si tira endavant, la
   plataforma provarà de reutilitzar el catàleg i les comandes que ja té (una reserva amb una comanda
-  de botiga lligada, amb estoc per variant), i el contracte es tornarà a copiar. Els paquets són il·lustracions pròpies (`Paquet.tsx`): no són fotos
-  ni dissenys de les marques. Abans de posar-hi fotos de producte cal decidir-ne l'origen (vegeu el
-  document). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
+  de botiga lligada, amb estoc per variant), i el contracte es tornarà a copiar. Si un producte no té foto, surt una il·lustració pròpia (`Paquet.tsx`). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
 - **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`).
 - **Vídeos generats amb IA** (Higgsfield: Nano Banana 2.1 per als fotogrames clau i Kling 4.0 per
   als vídeos) a partir de les fotos reals de la Pinarello del client. No són gravacions: s'ha de dir

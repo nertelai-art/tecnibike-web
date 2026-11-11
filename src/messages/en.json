@@ -497,7 +497,6 @@
     "situacio": "Sports nutrition",
     "titol": "Fuel for every kilometre",
     "intro": "Gels, bars and drinks from Maurten, 226ERS, Nutrinovex and SiS, the same ones we stock in the shop. We'll have them ready with your rental bike, or drop by before you ride.",
-    "expositors": "The brands in our shop",
     "veure": "{n, plural, one {See the product} other {See all # products}}",
     "totesMarques": "All brands",
     "quan": "When to take it",
@@ -590,7 +589,7 @@
     "ambLaBici": "Add it to your rental bike",
     "perWhatsapp": "Or order it on WhatsApp",
     "missatge": "Hi! I'd like to book some nutrition for my ride (gels, bars…). What do you have?",
-    "nota": "Our own illustrations, not photos of the products. Sample prices and stock*.",
+    "nota": "Product photos from the brands' websites. Sample prices and stock*.",
     "marca": "Brand",
     "totes": "All",
     "sabor": "Flavour",
@@ -606,6 +605,9 @@
       "intro": "Gels, bars and drinks from the shop. We'll have them ready with your bike, and you pay for them with your booking.",
       "triats": "In your booking"
     },
-    "demanaWhatsapp": "Book it on WhatsApp"
+    "demanaWhatsapp": "Book it on WhatsApp",
+    "veureMes": "See more ({n})",
+    "veureMenys": "See less",
+    "escenaSr": "Each brand's products spin around as you scroll down."
   }
 }

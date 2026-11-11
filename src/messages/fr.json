@@ -497,7 +497,6 @@
     "situacio": "Nutrition sportive",
     "titol": "Du carburant pour chaque kilomètre",
     "intro": "Gels, barres et boissons de Maurten, 226ERS, Nutrinovex et SiS, les mêmes que dans notre boutique. Nous les préparons avec votre vélo de location, ou passez les chercher avant de partir.",
-    "expositors": "Les marques de la boutique",
     "veure": "{n, plural, one {Voir le produit} other {Voir les # produits}}",
     "totesMarques": "Toutes les marques",
     "quan": "Quand le prendre",
@@ -590,7 +589,7 @@
     "ambLaBici": "Ajoutez-la à votre vélo de location",
     "perWhatsapp": "Ou commandez-la sur WhatsApp",
     "missatge": "Bonjour ! Je voudrais réserver de la nutrition pour ma sortie (gels, barres…). Qu’avez-vous ?",
-    "nota": "Illustrations maison : ce ne sont pas des photos des produits. Prix et stock indicatifs*.",
+    "nota": "Photos de produits issues des sites des marques. Prix et stock indicatifs*.",
     "marca": "Marque",
     "totes": "Toutes",
     "sabor": "Parfum",
@@ -606,6 +605,9 @@
       "intro": "Gels, barres et boissons de la boutique. Nous les préparons avec votre vélo et ils se paient avec la réservation.",
       "triats": "Dans la réservation"
     },
-    "demanaWhatsapp": "Réservez-la sur WhatsApp"
+    "demanaWhatsapp": "Réservez-la sur WhatsApp",
+    "veureMes": "Voir plus ({n})",
+    "veureMenys": "Voir moins",
+    "escenaSr": "Les produits de chaque marque tournent sur eux-mêmes à mesure que vous descendez."
   }
 }

@@ -82,3 +82,15 @@ export function colorSabor(id: string): string {
 
 /** Les marques en l'ordre de la secció, com els expositors de la botiga d'esquerra a dreta. */
 export const ORDRE_MARQUES = ['Maurten', '226ERS', 'Nutrinovex', 'SiS'] as const;
+
+/** La foto d'un producte en un sabor: la del sabor si l'envàs canvia, si no la del producte. */
+export function imatgeDe(producte: { imatge?: string; sabors: readonly { id: string; imatge?: string }[] }, sabor: string): string | undefined {
+  return producte.sabors.find((s) => s.id === sabor)?.imatge ?? producte.imatge;
+}
+
+/** Els productes que surten a l'escena d'una marca: com a molt `quants`, primer un de cada tipus. */
+export function destacats<T extends { tipus: string }>(productes: readonly T[], quants = 4): T[] {
+  const vistos = new Set<string>();
+  const unDeCada = productes.filter((p) => !vistos.has(p.tipus) && vistos.add(p.tipus));
+  return [...unDeCada, ...productes.filter((p) => !unDeCada.includes(p))].slice(0, quants);
+}
