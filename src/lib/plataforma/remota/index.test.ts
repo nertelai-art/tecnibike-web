@@ -216,6 +216,20 @@ describe('plataforma remota: disponibilitat i reserva', () => {
     await expect(plataforma.crearReservaLloguer(reserva)).rejects.toMatchObject({ motiu });
   });
 
+  it('el refús guarda el camp i la frase de la plataforma, perquè es vegin als registres', async () => {
+    const problema = { code: 'outside_hours', field: 'pickup', message: 'Cal reservar amb més antelació.' };
+    const { plataforma } = remota({ [`POST ${R}/bookings`]: { estat: 422, cos: { error: problema } } });
+    await expect(plataforma.crearReservaLloguer(reserva)).rejects.toMatchObject({
+      motiu: 'franja',
+      message: expect.stringContaining('pickup: Cal reservar amb més antelació.'),
+    });
+  });
+
+  it('un error de la plataforma sense motiu de la web també en guarda la frase', async () => {
+    const { plataforma } = remota({ [`POST ${R}/bookings`]: { estat: 400, cos: { error: { code: 'invalid_request', field: 'items', message: 'Falta el model.' } } } });
+    await expect(plataforma.crearReservaLloguer(reserva)).rejects.toThrow('items: Falta el model.');
+  });
+
   it('un error de la clau o del servei no és culpa de qui reserva', async () => {
     const { plataforma } = remota({ [`POST ${R}/bookings`]: { estat: 401, cos: { error: { code: 'unauthorized', message: 'no' } } } });
     const error = await plataforma.crearReservaLloguer(reserva).catch((e: unknown) => e);

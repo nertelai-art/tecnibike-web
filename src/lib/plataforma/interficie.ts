@@ -26,8 +26,10 @@ import type {
 export class ErrorReserva extends Error {
   constructor(
     readonly motiu: 'bici' | 'talla' | 'durada' | 'esgotat' | 'extra' | 'franja' | 'retencio' | 'participants' | 'noDisponible',
+    /** Per als registres: què ha dit la plataforma, si n'ha dit res. La web decideix pel motiu. */
+    detall?: string,
   ) {
-    super(`Reserva rebutjada: ${motiu}`);
+    super(`Reserva rebutjada: ${motiu}${detall ? ` (${detall})` : ''}`);
   }
 }
 

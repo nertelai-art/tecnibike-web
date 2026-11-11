@@ -151,10 +151,11 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
     if (resposta.ok) return json;
     const problema = RentalErrorResponseSchema.safeParse(json);
     const codi = problema.success ? problema.data.error.code : undefined;
+    const detall = problema.success ? [problema.data.error.field, problema.data.error.message].filter(Boolean).join(': ') : undefined;
     const motiu = codi && MOTIUS[codi];
-    if (motiu) throw new ErrorReserva(motiu);
+    if (motiu) throw new ErrorReserva(motiu, detall);
     // La clau, el servei o un cos mal format: no és culpa de qui reserva.
-    throw new Error(`La plataforma ha respost ${resposta.status} ${codi ?? ''} a ${metode} ${ruta}`.trim());
+    throw new Error(`La plataforma ha respost ${resposta.status} ${codi ?? ''} a ${metode} ${ruta}${detall ? ` (${detall})` : ''}`.replace(/ {2,}/g, ' '));
   }
 
   const cataleg = async () => RentalCatalogResponseSchema.parse(await crida('/catalog', { revalida: true }));
