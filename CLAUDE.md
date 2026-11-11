@@ -82,11 +82,13 @@ Versions que **no** són l'última, i per què:
   amb línia de temps de vista, cadascun amb els colors de la seva marca (`src/content/nutricio.ts`).
   Després ve l'explorador per marca i moment de la ruta. A la reserva, la nutrició és de la reserva
   sencera, no d'una bici: línies `{producteId, sabor, quantitat}`. Els sabors són variants amb estoc
-  propi, i l'estoc es ven i no torna (no depèn de les dates). A les dades de prova
-  (`dades-nutricio.ts`) està encesa. Amb la plataforma real està apagada
-  (`configuracioReserves.nutricio.actiu`) fins que el contracte porti els productes de botiga i el
-  seu estoc. Si no, una reserva amb nutrició es rebutja abans d'enviar-la. La proposta és a la
-  coordinadora de la plataforma. Els paquets són il·lustracions pròpies (`Paquet.tsx`): no són fotos
+  propi, i l'estoc es ven i no torna (no depèn de les dates). Està **apagada**
+  (`configuracioReserves.nutricio.actiu`) a producció, a les previsualitzacions i amb la plataforma
+  real: és feina nova fora del pressupost i l'ha de decidir l'Enric (coordinadora de la plataforma,
+  11-11-2026). Només s'encén amb `pnpm dev` (`index.ts`), per ensenyar-la. Apagada, la portada
+  demana la nutrició per WhatsApp i una reserva que en porti es rebutja. Si tira endavant, la
+  plataforma provarà de reutilitzar el catàleg i les comandes que ja té (una reserva amb una comanda
+  de botiga lligada, amb estoc per variant), i el contracte es tornarà a copiar. Els paquets són il·lustracions pròpies (`Paquet.tsx`): no són fotos
   ni dissenys de les marques. Abans de posar-hi fotos de producte cal decidir-ne l'origen (vegeu el
   document). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
 - **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`).

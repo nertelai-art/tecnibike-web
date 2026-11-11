@@ -11,12 +11,13 @@ import { plataforma } from '@/lib/plataforma';
 export default async function Inici({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [flota, serveis, valoracio, ressenyes, nutricio] = await Promise.all([
+  const [flota, serveis, valoracio, ressenyes, nutricio, configuracio] = await Promise.all([
     plataforma.flota(),
     plataforma.serveisTaller(),
     plataforma.valoracio(),
     plataforma.ressenyes(),
     plataforma.nutricio(),
+    plataforma.configuracioReserves(),
   ]);
 
   return (
@@ -27,7 +28,7 @@ export default async function Inici({ params }: { params: Promise<{ locale: stri
         <ComFunciona />
         <Taller />
         <Rutes />
-        <NutricioPortada productes={nutricio} />
+        <NutricioPortada productes={nutricio} ambReserva={configuracio.nutricio.actiu} />
         <Botiga />
         <Equipament />
         <Marques />

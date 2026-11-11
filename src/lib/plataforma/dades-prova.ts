@@ -147,14 +147,14 @@ export const horari: HorariBotiga = {
 };
 
 /**
- * Pagament i participants, preparats a la web però apagats: la plataforma encara no els té. La
- * nutrició, encesa a les dades de prova perquè es pugui provar; amb la plataforma real, apagada fins
- * que en porti l'estoc.
+ * Pagament, participants i nutrició, preparats a la web però apagats: la plataforma encara no els
+ * té. La nutrició no es ven amb la reserva fins que el client ho decideixi i la plataforma en porti
+ * l'estoc; en desenvolupament (`pnpm dev`) s'encén per poder-la ensenyar (vegeu index.ts).
  */
 export const configuracioReserves: ConfiguracioReserves = {
   pagament: { actiu: false, modalitats: ['senyal', 'total'], senyalPercent: 30 },
   participants: { actiu: false },
-  nutricio: { actiu: true },
+  nutricio: { actiu: false },
   retencioMinuts: 15,
   antelacioMinuts: 0,
 };

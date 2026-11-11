@@ -15,14 +15,18 @@ import { formatEuros } from '@/lib/preus';
 import { Paquet } from './Paquet';
 import styles from './Nutricio.module.css';
 
-type Props = { productes: readonly ProducteNutricio[] };
+type Props = {
+  productes: readonly ProducteNutricio[];
+  /** Si es pot afegir a la reserva de lloguer. Si no, es demana per WhatsApp o a la botiga. */
+  ambReserva: boolean;
+};
 
 const estil = (marca: string) => {
   const tema = temaDe(marca);
   return { '--fons': tema.fons, '--text': tema.text, '--accent': tema.accent } as React.CSSProperties;
 };
 
-export function NutricioPortada({ productes }: Props) {
+export function NutricioPortada({ productes, ambReserva }: Props) {
   const t = useTranslations('nutricio');
   const locale = useLocale();
   const [marca, setMarca] = useState<string | null>(null);
@@ -160,12 +164,20 @@ export function NutricioPortada({ productes }: Props) {
         {visibles.length === 0 && <p className={styles.buit}>{t('buit')}</p>}
 
         <div className={styles.peu}>
-          <a href="#flota" className="boto boto--fosc-sobre-fosc">
-            {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
-          </a>
-          <a className={styles.whatsapp} href={enllacWhatsapp(t('missatge'))} target="_blank" rel="noopener noreferrer">
-            {t('perWhatsapp')}
-          </a>
+          {ambReserva ? (
+            <>
+              <a href="#flota" className="boto boto--fosc-sobre-fosc">
+                {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
+              </a>
+              <a className={styles.whatsapp} href={enllacWhatsapp(t('missatge'))} target="_blank" rel="noopener noreferrer">
+                {t('perWhatsapp')}
+              </a>
+            </>
+          ) : (
+            <a className="boto boto--fosc-sobre-fosc" href={enllacWhatsapp(t('missatge'))} target="_blank" rel="noopener noreferrer">
+              {t('demanaWhatsapp')} <span className="fletxa" aria-hidden="true">→</span>
+            </a>
+          )}
           <p className={styles.nota}>{t('nota')}</p>
         </div>
       </div>

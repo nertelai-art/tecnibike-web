@@ -147,6 +147,8 @@ describe('reserva de lloguer', () => {
 
 describe('nutrició amb la reserva', () => {
   const ARA = new Date('2026-10-27T07:00:00Z');
+  // Apagada per defecte: aquí s'encén, com fa la web en desenvolupament.
+  const nova = (ara: Date) => crearPlataformaProva({ generaCodi: () => 'TB-PROVA1', rellotge: () => ara, configuracio: { nutricio: { actiu: true } } });
   const rec = { dia: '2026-11-02', hora: '09:00' };
   const ret = { dia: '2026-11-02', hora: '19:00' };
   const bici = (talla: string): BiciReserva => ({ biciId: 'btt', talla, pedals: 'pedals-plans', extres: [], ciclista: {} });
@@ -184,8 +186,9 @@ describe('nutrició amb la reserva', () => {
     await expect(amb([{ producteId: gel.id, sabor: 'pebrot', quantitat: 1 }])).rejects.toMatchObject({ motiu: 'extra' });
   });
 
-  it('apagada, la reserva no admet nutrició', async () => {
-    const p = crearPlataformaProva({ generaCodi: () => 'TB-N', rellotge: () => ARA, configuracio: { nutricio: { actiu: false } } });
+  it('per defecte és apagada, i apagada la reserva no admet nutrició', async () => {
+    const p = crearPlataformaProva({ generaCodi: () => 'TB-N', rellotge: () => ARA });
+    expect((await p.configuracioReserves()).nutricio.actiu).toBe(false);
     const { talla } = await tallaLliure(p, 'btt', rec.dia, ret.dia);
     await expect(
       p.crearReservaLloguer({ recollida: rec, retorn: ret, bicis: [bici(talla)], nutricio: [{ producteId: 'maurten-gel-100', sabor: 'neutre', quantitat: 1 }], ...client }),

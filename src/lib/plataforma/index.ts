@@ -17,7 +17,13 @@ function codiAleatori() {
   return `TB-${Array.from(bytes, (b) => lletres[b % lletres.length]).join('')}`;
 }
 
-const proves = crearPlataformaProva({ generaCodi: codiAleatori, rellotge: () => new Date() });
+// La nutrició amb la reserva, només en desenvolupament: a producció i a les previsualitzacions,
+// apagada fins que el client la decideixi i la plataforma en porti l'estoc.
+const proves = crearPlataformaProva({
+  generaCodi: codiAleatori,
+  rellotge: () => new Date(),
+  configuracio: { nutricio: { actiu: process.env.NODE_ENV === 'development' } },
+});
 const { PLATAFORMA_API_URL: url, PLATAFORMA_API_CLAU: clau } = process.env;
 
 export const plataformaRemota = Boolean(url && clau);
