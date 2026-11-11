@@ -164,6 +164,10 @@
 .pista[data-animada] {
   height: calc(100svh + var(--capitols) * 85svh);
 }
+/* Un cop vista, el recorregut es plega: queda l'escenari sol, com un aparador. */
+.pista[data-animada][data-plegada] {
+  height: 100svh;
+}
 .pista[data-animada] .escenari {
   position: sticky;
   top: 0;
@@ -374,8 +378,6 @@
     0 0 0 1px var(--linia-fina),
     0 8px 20px -14px rgb(18 20 23 / 0.35);
   overflow: hidden;
-  animation: entra 0.4s var(--ease) both;
-  animation-delay: calc(var(--i) * 35ms);
   transition:
     transform 0.25s var(--ease),
     box-shadow 0.25s var(--ease);
@@ -386,10 +388,32 @@
     0 0 0 1px var(--linia),
     0 16px 30px -16px rgb(18 20 23 / 0.4);
 }
-@keyframes entra {
+/* Les targetes surten d'una en una amb un bot quan el catàleg arriba a la pantalla, i tornen a
+   sortir en canviar de filtre. Sense JavaScript o amb menys moviment, ja hi són. */
+@media (prefers-reduced-motion: no-preference) {
+  .productes[data-espera]:not([data-visible]) .targeta {
+    opacity: 0;
+  }
+  .productes[data-visible] .targeta {
+    animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--i) * 70ms);
+  }
+  .productes[data-visible] .foto img,
+  .productes[data-visible] .foto svg {
+    animation: pop-foto 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--i) * 70ms + 140ms);
+  }
+}
+@keyframes pop {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(28px) scale(0.86);
+  }
+}
+@keyframes pop-foto {
+  from {
+    opacity: 0;
+    transform: scale(0.35) rotate(-14deg);
   }
 }
 .foto {
@@ -407,14 +431,7 @@
   min-height: 0;
   object-fit: contain;
   filter: drop-shadow(0 10px 12px rgb(18 20 23 / 0.22));
-  animation: canvia 0.35s var(--ease) both;
   transition: transform 0.35s var(--ease);
-}
-@keyframes canvia {
-  from {
-    opacity: 0;
-    transform: rotateY(-70deg) scale(0.92);
-  }
 }
 .targeta:hover .foto img,
 .targeta:hover .foto svg {

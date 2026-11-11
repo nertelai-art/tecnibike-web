@@ -1265,9 +1265,10 @@
 .nutricioProducte {
   display: grid;
   grid-template-columns: 56px minmax(0, 1fr) auto;
+  /* El sabor i les unitats, a baix d'amplada sencera: la foto i el botó no els estrenyen. */
   grid-template-areas:
     "foto text afegir"
-    "foto tria estoc";
+    "tria tria estoc";
   align-items: center;
   gap: 6px 10px;
   padding: 10px 10px 10px 14px;
@@ -1364,22 +1365,21 @@
   color: var(--tinta);
 }
 .nutricioDades {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 4px;
-}
-.nutricioDades span {
-  padding: 1px 7px;
-  border-radius: 999px;
-  background: var(--escenari);
-  font-size: 11px;
-  font-weight: 700;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
   color: var(--tinta-2);
 }
 .nutricioDades span[data-cafeina] {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 7px;
+  border-radius: 999px;
   background: #f3e9e1;
   color: #6b4226;
+  font-size: 11px;
+  font-weight: 700;
 }
 .nutricioPreu {
   margin-top: 4px;
@@ -1434,8 +1434,11 @@
 .nutricioAfegir {
   grid-area: afegir;
   align-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   min-height: 40px;
-  padding: 0 16px;
+  padding: 0 14px;
   border: 0;
   border-radius: 12px;
   background: var(--grafit);
@@ -1458,6 +1461,19 @@
 .nutricioAfegir:focus-visible {
   outline: 3px solid var(--taronja);
   outline-offset: 2px;
+}
+.nutricioCompte {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--taronja);
+  color: var(--blanc);
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 .nutricioAfegir:disabled {
   background: var(--escenari-2);

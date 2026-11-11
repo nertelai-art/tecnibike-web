@@ -19,6 +19,25 @@ import styles from './Nutricio.module.css';
 /** Productes que es veuen abans de «Veure'n més». */
 const VISIBLES = 8;
 
+/**
+ * Les targetes esperen amagades fins que el catàleg arriba a la pantalla i llavors surten d'una en
+ * una. Només amb JavaScript: sense, ja hi són (el CSS només les amaga amb `data-espera`).
+ */
+function apareixEnArribar(llista: HTMLUListElement | null) {
+  if (!llista || llista.dataset.visible || typeof IntersectionObserver === 'undefined') return;
+  llista.dataset.espera = 'true';
+  const observador = new IntersectionObserver(
+    ([entrada]) => {
+      if (!entrada?.isIntersecting) return;
+      llista.dataset.visible = 'true';
+      observador.disconnect();
+    },
+    { rootMargin: '0px 0px -15% 0px' },
+  );
+  observador.observe(llista);
+  return () => observador.disconnect();
+}
+
 type Props = {
   productes: readonly ProducteNutricio[];
   /** Si es pot afegir a la reserva de lloguer. Si no, es demana per WhatsApp o a la botiga. */
@@ -88,7 +107,7 @@ export function NutricioPortada({ productes, ambReserva }: Props) {
         </div>
         {moment && <p className={styles.momentText}>{t(`momentsText.${moment}`)}</p>}
 
-        <ul id="nutricio-productes" className={styles.productes} aria-live="polite">
+        <ul ref={apareixEnArribar} id="nutricio-productes" className={styles.productes} aria-live="polite">
           {visibles.map((p, i) => {
             const sabor = sabors[p.id] ?? p.sabors[0]!.id;
             const img = imatgeDe(p, sabor);

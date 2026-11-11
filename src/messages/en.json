@@ -595,7 +595,6 @@
     "sabor": "Flavour",
     "esgotat": "sold out",
     "afegir": "Add",
-    "afegirMes": "Add more ({n})",
     "afegirA": "Add {producte}, {sabor}",
     "menys": "One less {producte}",
     "mes": "One more {producte}",

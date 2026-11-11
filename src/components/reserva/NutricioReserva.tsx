@@ -83,8 +83,8 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
                 <p className={styles.nutricioMarca}>{p.marca}</p>
                 <p className={styles.nutricioNom}>{p.nom}</p>
                 <p className={styles.nutricioDades}>
-                  <span>{p.format}</span>
-                  {p.carbohidratsG !== undefined && <span>{t('carbohidrats', { g: p.carbohidratsG })}</span>}
+                  {p.format}
+                  {p.carbohidratsG !== undefined && <> · {t('carbohidrats', { g: p.carbohidratsG })}</>}
                   {p.cafeinaMg !== undefined && <span data-cafeina>{t('cafeina', { mg: p.cafeinaMg })}</span>}
                 </p>
                 <p className={styles.nutricioPreu}>
@@ -122,7 +122,8 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
                   onClick={() => onCanvi(afegeixNutricio(linies, p.id, sabor))}
                   aria-label={t('afegirA', { producte: `${p.marca} ${p.nom}`, sabor: nomSabor(p, sabor) })}
                 >
-                  {enReserva > 0 ? t('afegirMes', { n: enReserva }) : t('afegir')}
+                  {t('afegir')}
+                  {enReserva > 0 && <span className={styles.nutricioCompte}>{enReserva}</span>}
                 </button>
               </div>
             </li>

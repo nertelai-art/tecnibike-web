@@ -595,7 +595,6 @@
     "sabor": "Sabor",
     "esgotat": "agotado",
     "afegir": "Añadir",
-    "afegirMes": "Añadir más ({n})",
     "afegirA": "Añadir {producte}, {sabor}",
     "menys": "Uno menos de {producte}",
     "mes": "Uno más de {producte}",
