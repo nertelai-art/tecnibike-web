@@ -1,0 +1,111 @@
+name: Promou developer a main (producció)
+
+# Publicar a producció és avançar `main`: Vercel desplega a producció cada canvi de `main`, i
+# `developer` només fa previsualitzacions. A `main` no s'hi puja a mà: hi arriba per aquest flux, i
+# el flux només el llança l'usuari, cada vegada (Actions → «Promou developer a main» → Run
+# workflow). Res no el dispara sol.
+#
+# És el mateix flux que servei-tecnic i nertel-platform: no construeix res, no fusiona res i no tria
+# cap commit. Només comprova i avança `main` endavant (fast-forward). Les portes ja han passat abans:
+# - El ganxo de pre-push (`pnpm check`: tipus, lint i proves) abans que el commit arribés a GitHub.
+# - El build de la previsualització de Vercel d'aquell mateix commit: aquí es comprova que hagi
+#   acabat bé (l'estat «Vercel» del commit). Tornar-lo a construir aquí seria pagar dues vegades
+#   pel mateix arbre.
+# Si `main` no fos avantpassat del candidat, el push falla i no publica res.
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: "Commit de developer a publicar (per defecte, el seu cap)"
+        required: false
+
+# Dues promocions alhora es farien la traveta. En sèrie, la segona veu el resultat de la primera i
+# diu «res a fer». No es cancel·la: aquest flux dura segons i no construeix res.
+concurrency:
+  group: promou-main
+  cancel-in-progress: false
+
+# El testimoni només ha de poder escriure el repositori (moure `main`) i llegir l'estat dels commits.
+permissions:
+  contents: write
+  statuses: read
+
+jobs:
+  promou:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Cal la història sencera: sense ella no es pot comprovar si el candidat descendeix de `main`.
+          fetch-depth: 0
+
+      - name: Quin commit publiquem
+        id: candidat
+        run: |
+          if [ -n "${{ inputs.sha }}" ]; then
+            sha="$(git rev-parse "${{ inputs.sha }}^{commit}")"
+          else
+            sha="$(git rev-parse origin/developer)"
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "Candidat: $sha"
+          git --no-pager log -1 --format='  %h %s' "$sha"
+
+      - name: El candidat ha de ser de developer
+        run: |
+          # Amb un SHA qualsevol es podria publicar una cosa que no ha passat mai per `developer`.
+          if ! git merge-base --is-ancestor "${{ steps.candidat.outputs.sha }}" origin/developer; then
+            echo "::error::${{ steps.candidat.outputs.sha }} no és a developer. No es publica."
+            exit 1
+          fi
+
+      - name: La previsualització de Vercel d'aquest commit ha d'haver acabat bé
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          estat="$(gh api "repos/${{ github.repository }}/commits/${{ steps.candidat.outputs.sha }}/status" \
+            --jq '[.statuses[] | select(.context == "Vercel")][0].state // "cap"')"
+          echo "Estat de Vercel: $estat"
+          if [ "$estat" != "success" ]; then
+            echo "::error::La previsualització de Vercel d'aquest commit no ha acabat bé (estat: $estat). Si encara construeix, espera i torna-ho a llançar."
+            exit 1
+          fi
+
+      - name: Res a fer?
+        id: res
+        run: |
+          if git rev-parse --verify -q origin/main >/dev/null && [ "$(git rev-parse origin/main)" = "${{ steps.candidat.outputs.sha }}" ]; then
+            echo "main ja hi és. Res a fer."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Només endavant, mai reescrivint
+        if: steps.res.outputs.skip == 'false'
+        run: |
+          # La primera vegada `main` encara no existeix: aquest flux la crea.
+          if ! git rev-parse --verify -q origin/main >/dev/null; then
+            echo "main encara no existeix: es crea al candidat."
+            exit 0
+          fi
+          # Si `main` no és avantpassat del candidat, avançar-hi seria reescriure història publicada.
+          if ! git merge-base --is-ancestor origin/main "${{ steps.candidat.outputs.sha }}"; then
+            echo "::error::main no és avantpassat del candidat: han divergit. Cal mirar-ho a mà; des d'aquí no es força res."
+            git --no-pager log --oneline origin/developer..origin/main
+            exit 1
+          fi
+
+      - name: Avança main
+        if: steps.res.outputs.skip == 'false'
+        run: |
+          # Sense `--force`: si deixés de ser un fast-forward entre la comprovació i ara, falla.
+          git push origin "${{ steps.candidat.outputs.sha }}:refs/heads/main"
+          {
+            echo "### main → \`$(git rev-parse --short "${{ steps.candidat.outputs.sha }}")\`"
+            git --no-pager log -1 --format='%s' "${{ steps.candidat.outputs.sha }}"
+            echo
+            echo "Vercel en fa ara el desplegament de producció."
+          } >> "$GITHUB_STEP_SUMMARY"

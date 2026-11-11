@@ -120,17 +120,20 @@ Versions que **no** són l'última, i per què:
 
 ## Repositori i Vercel
 
-- GitHub: `nertelai-art/tecnibike-web` (públic). Només hi ha `developer`; a `main` s'hi arriba per
-  promoció, mai a mà.
+- GitHub: `nertelai-art/tecnibike-web` (públic). `developer` és la branca de treball; `main` és
+  el que hi ha publicat a producció. A `main` no s'hi puja mai a mà: hi arriba amb el flux
+  **«Promou developer a main (producció)»** (`.github/workflows/promou-produccio.yml`), que només
+  llança l'usuari (Actions → Run workflow; opcionalment, un SHA concret de `developer`). El flux no
+  construeix res: comprova que el commit és de `developer` i que la seva previsualització de Vercel
+  ha acabat bé, i avança `main` endavant (fast-forward, sense `--force`).
 - Vercel: projecte `tecnibike-web` (equip nertelai-7298's projects), amb l'avatar TCNBK. URL:
   https://tecnibike-web.vercel.app. El primer desplegament (en importar, 23-10-2026) és de producció.
-- **Cap push publica sol a producció:** Vercel encara té `developer` com a branca de producció (no
-  accepta `main` fins que existeixi), i per això l'«Ignored Build Step» és «Only build
-  pre-production». Quan existeixi `main`, cal posar-la com a branca de producció (Settings →
-  Environments → Production) i tornar l'Ignored Build Step a «Automatic».
-- **Publicar a producció** (només quan l'usuari ho digui, cada vegada): posar l'Ignored Build Step a
-  «Automatic», crear el desplegament de producció del commit (API de Vercel, `target: production`) i,
-  quan ja construeix, tornar-lo a «Only build pre-production». Últim: `5a635ac` (11-11-2026). Amb la clau de l’API només es pot crear el desplegament: l’Ignored Build Step es canvia al tauler (Settings → Build and Deployment).
+- **Producció = `main`.** Vercel desplega a producció cada canvi de `main` i fa previsualitzacions
+  de `developer` (i de qualsevol altra branca). L'«Ignored Build Step» és «Automatic». Publicar a
+  producció és, doncs, llançar el flux de promoció, i només quan l'usuari ho digui, cada vegada.
+  (Fins al 11-11-2026 la branca de producció de Vercel era `developer` i es publicava canviant
+  l'Ignored Build Step a mà; l'últim desplegament així va ser `5a635ac`.) Amb la clau de l'API de
+  Vercel no es poden canviar els ajustos del projecte: es fa al tauler.
 
 ## Pendent abans de publicar
 
