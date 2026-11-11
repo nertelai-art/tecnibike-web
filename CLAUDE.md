@@ -130,7 +130,7 @@ Versions que **no** són l'última, i per què:
   Environments → Production) i tornar l'Ignored Build Step a «Automatic».
 - **Publicar a producció** (només quan l'usuari ho digui, cada vegada): posar l'Ignored Build Step a
   «Automatic», crear el desplegament de producció del commit (API de Vercel, `target: production`) i,
-  quan ja construeix, tornar-lo a «Only build pre-production». Últim: `4553481` (30-10-2026).
+  quan ja construeix, tornar-lo a «Only build pre-production». Últim: `5a635ac` (11-11-2026). Amb la clau de l’API només es pot crear el desplegament: l’Ignored Build Step es canvia al tauler (Settings → Build and Deployment).
 
 ## Pendent abans de publicar
 
