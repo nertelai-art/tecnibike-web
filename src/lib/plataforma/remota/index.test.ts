@@ -155,6 +155,10 @@ describe('plataforma remota: horari i ajustos', () => {
       pagament: { actiu: true, modalitats: ['senyal'], senyalPercent: 30 }, participants: { actiu: false }, retencioMinuts: 15,
     });
   });
+
+  it("l'antelació mínima per reservar és la de la botiga", async () => {
+    expect((await remota().plataforma.configuracioReserves()).antelacioMinuts).toBe(60);
+  });
 });
 
 describe('plataforma remota: disponibilitat i reserva', () => {

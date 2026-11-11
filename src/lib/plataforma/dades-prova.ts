@@ -148,6 +148,7 @@ export const configuracioReserves: ConfiguracioReserves = {
   pagament: { actiu: false, modalitats: ['senyal', 'total'], senyalPercent: 30 },
   participants: { actiu: false },
   retencioMinuts: 15,
+  antelacioMinuts: 0,
 };
 
 /** Tots els preus i terminis del taller són inventats: no n'hi ha cap llista publicada. */

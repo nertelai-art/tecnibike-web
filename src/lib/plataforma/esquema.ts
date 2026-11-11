@@ -197,6 +197,8 @@ export const configuracioReserves = z.object({
   participants: z.object({ actiu: z.boolean() }),
   /** Quant temps es guarden les bicis mentre es paga. */
   retencioMinuts: z.number().int().positive(),
+  /** Amb quanta antelació, com a mínim, s'ha de reservar: abans d'això no s'ofereix cap hora. */
+  antelacioMinuts: z.number().int().min(0),
 });
 
 /** Bicis i extres guardats mentre el client paga. Si caduca, tornen a estar lliures. */

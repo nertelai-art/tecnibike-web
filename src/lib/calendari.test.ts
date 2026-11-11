@@ -1,4 +1,4 @@
-import { araABotiga, dataLocal, diaSetmana, esData, esObert, esPassat, propersDiesOberts, sumaDies } from './calendari';
+import { araABotiga, primerMomentReservable, dataLocal, diaSetmana, esData, esObert, esPassat, propersDiesOberts, sumaDies } from './calendari';
 
 describe('calendari', () => {
   it('valida dates reals', () => {
@@ -40,5 +40,12 @@ describe('hores passades', () => {
   it("l'hora de la botiga és la de Madrid, sigui on sigui el servidor", () => {
     expect(araABotiga(new Date('2026-10-23T12:20:00Z'))).toEqual({ dia: '2026-10-23', hora: '14:20' });
     expect(araABotiga(new Date('2026-12-31T23:30:00Z'))).toEqual({ dia: '2027-01-01', hora: '00:30' });
+  });
+
+  it("el primer moment reservable és ara més l'antelació que demana la botiga", () => {
+    const ara = new Date('2026-11-11T14:35:00Z'); // 15:35 a Madrid
+    expect(primerMomentReservable(ara, 0)).toEqual({ dia: '2026-11-11', hora: '15:35' });
+    expect(primerMomentReservable(ara, 60)).toEqual({ dia: '2026-11-11', hora: '16:35' });
+    expect(primerMomentReservable(ara, 1440)).toEqual({ dia: '2026-11-12', hora: '15:35' });
   });
 });

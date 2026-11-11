@@ -249,6 +249,7 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
         },
         participants: { actiu: false },
         retencioMinuts: ajustos.holdMinutes,
+        antelacioMinuts: ajustos.minNoticeMinutes,
       };
     },
     disponibilitat: async (recollida, retorn, biciIds) => {

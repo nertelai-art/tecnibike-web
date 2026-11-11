@@ -1,4 +1,4 @@
-import { araABotiga, sumaDies } from '../calendari';
+import { primerMomentReservable, sumaDies } from '../calendari';
 import { diesEntre, validaFranja } from '../horari';
 import { totalReserva } from '../preus';
 import { articles, configuracioReserves, extres, flota, horari, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
@@ -53,6 +53,7 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
     pagament: { ...configuracioReserves.pagament, ...configuracio.pagament },
     participants: { ...configuracioReserves.participants, ...configuracio.participants },
     retencioMinuts: configuracio.retencioMinuts ?? configuracioReserves.retencioMinuts,
+    antelacioMinuts: configuracio.antelacioMinuts ?? configuracioReserves.antelacioMinuts,
   });
 
   const diesDe = (des: string, fins: string) => Array.from({ length: Math.max(0, diesEntre(des, fins)) }, (_, i) => sumaDies(des, i));
@@ -80,7 +81,7 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
   /** Valida una reserva contra l'horari, el catàleg i les unitats lliures, i en calcula el total. */
   const comprova = (entrada: ReservaLloguer) => {
     const reserva = reservaLloguer.parse(entrada);
-    if (validaFranja(reserva, horari, araABotiga(rellotge()))) throw new ErrorReserva('franja');
+    if (validaFranja(reserva, horari, primerMomentReservable(rellotge(), config.antelacioMinuts))) throw new ErrorReserva('franja');
     const dies = diesDe(reserva.recollida.dia, reserva.retorn.dia);
     const perId = new Map(extres.map((e) => [e.id, e]));
     const linies = reserva.bicis.map((b) => {

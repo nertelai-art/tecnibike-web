@@ -119,6 +119,12 @@ describe('reserva de lloguer', () => {
     await expect(p.crearReservaLloguer(reserva([linia('btt', 'M')], migdia))).rejects.toMatchObject({ motiu: 'franja' });
   });
 
+  it("rebutja recollides abans de l'antelació mínima de la botiga", async () => {
+    // Deu dies d'antelació: la recollida del 2 de novembre (d'aquí a sis) ja no hi arriba.
+    const p = crearPlataformaProva({ generaCodi: () => 'TB-A', rellotge: () => ARA, configuracio: { antelacioMinuts: 10 * 1440 } });
+    await expect(p.crearReservaLloguer(reserva([linia('btt', 'M')]))).rejects.toMatchObject({ motiu: 'franja' });
+  });
+
   it('rebutja dades mal formades', async () => {
     const p = nova(ARA);
     const dolenta = { ...reserva([linia('btt', 'M')]), recollida: { dia: 'demà', hora: '09:00' } };

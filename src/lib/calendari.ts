@@ -65,3 +65,8 @@ export function araABotiga(instant: Date): Instant {
   );
   return { dia: `${parts.year}-${parts.month}-${parts.day}`, hora: `${parts.hour}:${parts.minute}` };
 }
+
+/** El primer moment en què es pot recollir: ara més l'antelació mínima que demana la botiga. */
+export function primerMomentReservable(instant: Date, antelacioMinuts: number): Instant {
+  return araABotiga(new Date(instant.getTime() + antelacioMinuts * 60_000));
+}

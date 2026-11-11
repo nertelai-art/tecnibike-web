@@ -9,7 +9,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, useState, useSyncExternalStore, useTransition, type FormEvent, type ReactNode } from 'react';
 import { consultarDisponibilitat, reservarLloguer, type ResultatReserva } from '@/app/[locale]/accions';
-import { araABotiga, esPassat, sumaDies, type Instant } from '@/lib/calendari';
+import { primerMomentReservable, esPassat, sumaDies, type Instant } from '@/lib/calendari';
 import { blocsDelDia, diesEntre, horesRecollida, horesRetorn, MAX_DIES_LLOGUER, minutsEntre, validaFranja } from '@/lib/horari';
 import type { Disponibilitat } from '@/lib/plataforma';
 import type { BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, ModalitatPagament, Moment } from '@/lib/plataforma/esquema';
@@ -23,12 +23,16 @@ import styles from './Reserva.module.css';
 const MAX_BICIS = 8;
 
 const noop = () => () => {};
-/** «Ara» a la botiga segons el rellotge del navegador; al servidor és buit (no hi ha hora fiable). */
-function useAra(): Instant | null {
+/**
+ * El primer moment que es pot reservar a la botiga (ara més l'antelació mínima), segons el
+ * rellotge del navegador; al servidor és buit (no hi ha hora fiable). Tot el que és abans es
+ * tracta com si ja hagués passat.
+ */
+function useAra(antelacioMinuts: number): Instant | null {
   const text = useSyncExternalStore(
     noop,
     () => {
-      const ara = araABotiga(new Date());
+      const ara = primerMomentReservable(new Date(), antelacioMinuts);
       return `${ara.dia}T${ara.hora}`;
     },
     () => '',
@@ -55,7 +59,7 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
   const tf = useTranslations('flota');
   const locale = useLocale();
   const id = useId();
-  const ara = useAra();
+  const ara = useAra(configuracio.antelacioMinuts);
   const reduced = useReducedMotion();
   const formulari = useRef<HTMLFormElement>(null);
 
