@@ -362,7 +362,7 @@
     "enviant": "Enviando…",
     "errors": {
       "dades": "Revisa los campos marcados.",
-      "esgotat": "Alguna bici o talla ya no queda para estos días. Prueba otra talla u otras fechas.",
+      "esgotat": "Alguna bici, talla o producto ya no queda. Prueba otro u otras fechas.",
       "extra": "Algún extra o pedal ya no queda para estos días. Elige otro.",
       "durada": "Alguna bici no se alquila para esta duración.",
       "talla": "Elige una talla disponible para cada bici.",
@@ -378,7 +378,8 @@
       "talla": "Elige una talla.",
       "pedals": "Elige unos pedales.",
       "alcada": "Entre 100 y 220 cm.",
-      "seient": "Entre 50 y 100 cm."
+      "seient": "Entre 50 y 100 cm.",
+      "variant": "Elige una."
     },
     "fet": {
       "titol": "Reserva confirmada",
@@ -425,7 +426,9 @@
       "comptaquilometres": "Cuenta­kilómetros"
     },
     "tipusBici": "Tipo de bici",
-    "calculDies": "{preu}/día × {dies}"
+    "calculDies": "{preu}/día × {dies}",
+    "variantDe": "Opciones de {extra}",
+    "nutricio": "Nutrición para la ruta"
   },
   "cita": {
     "titol": "Pide cita en el taller",
@@ -488,6 +491,120 @@
     "caducat": {
       "titol": "La reserva ha caducado",
       "text": "Ha pasado demasiado tiempo y las bicis vuelven a estar libres. Vuelve a intentarlo."
+    }
+  },
+  "nutricio": {
+    "situacio": "Nutrición deportiva",
+    "titol": "Combustible para cada kilómetro",
+    "intro": "Geles, barritas y bebidas de Maurten, 226ERS, Nutrinovex y SiS, los mismos que tenemos en la tienda. Te los dejamos a punto con la bici de alquiler, o pasa a buscarlos antes de salir.",
+    "expositors": "Las marcas de la tienda",
+    "veure": "{n, plural, one {Ver el producto} other {Ver los # productos}}",
+    "totesMarques": "Todas las marcas",
+    "quan": "Cuándo tomarlo",
+    "tot": "Todo",
+    "moments": {
+      "abans": "Antes",
+      "durant": "Durante",
+      "despres": "Después"
+    },
+    "momentsText": {
+      "abans": "Para cargar antes de salir: una barrita o una bebida de carbohidratos un rato antes de subir a la bici.",
+      "durant": "Para no quedarte sin energía a media ruta: geles, barritas y bebidas que se toman pedaleando.",
+      "despres": "Para recuperar al volver: proteína y carbohidratos para las piernas de mañana."
+    },
+    "marques": {
+      "maurten": "Sueca. Pocas referencias, sin sabor ni colorantes y una sola idea: el hidrogel, suave para el estómago.",
+      "226ers": "De Alicante. Un catálogo enorme: geles, barritas y bebidas de muchos sabores, también salados y con cafeína.",
+      "nutrinovex": "De Castellón. Geles y barritas para resistencia, y un gel específico para los calambres.",
+      "sis": "Science in Sport, británica: geles isotónicos que se toman sin agua.",
+      "altres": ""
+    },
+    "productes": {
+      "maurten-gel-100": "Gel de hidrogel sin colorantes ni aromas: denso, suave para el estómago y sin tener que beber agua.",
+      "maurten-gel-100-caf": "El Gel 100 con 100 mg de cafeína, para el tramo final o una salida larga.",
+      "maurten-gel-160": "El gel grande de Maurten: 40 g de carbohidratos en un solo sobre, para los esfuerzos largos.",
+      "maurten-drink-mix-160": "Bebida de carbohidratos que se convierte en hidrogel en el estómago. Un sobre por bidón; el sabor lo da un sobrecito Addition.",
+      "maurten-drink-mix-320": "La versión concentrada: 80 g de carbohidratos por bidón, para salidas largas e intensas.",
+      "maurten-solid-160": "Barrita de avena que se parte en dos, para comer sólido las primeras horas. También de cacao (Solid C 160).",
+      "226ers-high-fructose-gel-xs": "Gel pequeño con 30 g de carbohidratos (glucosa y fructosa). El de cola lleva 55 mg de cafeína.",
+      "226ers-high-energy-gel": "Gel grande de 50 g de carbohidratos y sales. El de café lleva 80 mg de cafeína.",
+      "226ers-isotonic-gel": "Gel isotónico en stick, líquido: se toma sin agua. El de cola lleva 100 mg de cafeína.",
+      "226ers-race-day-bar": "Barrita blanda para comer pedaleando, cada 30–60 minutos. Dulces y una salada.",
+      "226ers-isotonic-drink": "Sobre de bebida isotónica para un bidón de medio litro, sin azúcar añadido.",
+      "226ers-hydrazero": "Pastillas efervescentes de sales para el bidón, sin calorías: para el calor y las salidas largas.",
+      "226ers-recovery-drink": "Batido de recuperación con 20–22 g de proteína de suero y carbohidratos, para cuando vuelves.",
+      "nutrinovex-longovit-30": "Gel de 30 g de carbohidratos y sales, en muchos sabores. El de manzana verde lleva 60 mg de cafeína.",
+      "nutrinovex-glucomin": "Gel líquido con hidrogel, que se toma sin agua y sienta bien también al recuperar.",
+      "nutrinovex-glucobar": "Barrita de pasta de fruta con 33 g de carbohidratos. Las de cola y manzana llevan 100 mg de cafeína.",
+      "nutrinovex-cramp-rescuer": "Gel de emergencia para cuando aparece un calambre: sales y vinagre de manzana.",
+      "sis-go-isotonic": "Gel isotónico de 22 g de carbohidratos, pensado para tomarse sin agua.",
+      "sis-go-cafeina": "El GO Isotonic con 75 mg de cafeína, una hora antes o en el tramo final.",
+      "sis-go-electrolyte": "El GO Isotonic con sales, para los días de calor y las salidas largas.",
+      "sis-beta-fuel-chews": "Gominolas de 46 g de carbohidratos para masticar pedaleando.",
+      "sis-go-hydro": "Pastillas efervescentes de sales para el bidón, casi sin calorías."
+    },
+    "sabors": {
+      "neutre": "Neutro",
+      "civada": "Avena",
+      "cacau": "Cacao",
+      "poma": "Manzana",
+      "pomaVerda": "Manzana verde (con cafeína)",
+      "cola": "Cola",
+      "mentol": "Mentol",
+      "taronja": "Naranja",
+      "maduixa": "Fresa",
+      "speculoos": "Speculoos",
+      "xocolataDubai": "Chocolate Dubái",
+      "llimona": "Limón",
+      "platan": "Plátano",
+      "maduixaSalada": "Fresa salada",
+      "cafe": "Café expreso (con cafeína)",
+      "sindria": "Sandía",
+      "llima": "Lima",
+      "xocolataNegra": "Chocolate negro",
+      "pomaCanyella": "Manzana y canela",
+      "platanGingebre": "Plátano y jengibre",
+      "xocolataBlancaMaduixa": "Chocolate blanco y fresa",
+      "ametllesLlavors": "Almendras y semillas (salada)",
+      "fruitsVermells": "Frutos rojos",
+      "tropical": "Tropical",
+      "xocolata": "Chocolate",
+      "vainilla": "Vainilla",
+      "mangoMandarina": "Mango y mandarina",
+      "maduixaKiwi": "Fresa y kiwi",
+      "llimaLlimona": "Lima y limón",
+      "citric": "Cítrico",
+      "eucaliptusMentol": "Eucalipto y mentol",
+      "gerdLlimona": "Frambuesa y limón",
+      "herbasanaRegalessia": "Hierbabuena y regaliz",
+      "llimonaMenta": "Limón y menta",
+      "pomeloRosat": "Pomelo rosa",
+      "maduixaLlima": "Fresa y lima",
+      "variat": "Según stock"
+    },
+    "saborDe": "Sabor de {producte}",
+    "carbohidrats": "{g} g de carbohidratos",
+    "cafeina": "{mg} mg de cafeína",
+    "perUnitat": "{preu} la unidad",
+    "buit": "No hay ningún producto de esta marca para este momento. Prueba otro filtro.",
+    "ambLaBici": "Añádela a tu bici de alquiler",
+    "perWhatsapp": "O pídela por WhatsApp",
+    "missatge": "¡Hola! Quería reservar nutrición para la ruta (geles, barritas…). ¿Qué tenéis?",
+    "nota": "Ilustraciones propias: no son fotos de los productos. Precios y stock de muestra*.",
+    "marca": "Marca",
+    "totes": "Todas",
+    "sabor": "Sabor",
+    "esgotat": "agotado",
+    "afegir": "Añadir",
+    "afegirMes": "Añadir más ({n})",
+    "afegirA": "Añadir {producte}, {sabor}",
+    "menys": "Uno menos de {producte}",
+    "mes": "Uno más de {producte}",
+    "quantitat": "Cantidad",
+    "reserva": {
+      "titol": "Nutrición para la ruta",
+      "intro": "Geles, barritas y bebidas de la tienda. Te los dejamos a punto con la bici y se pagan con la reserva.",
+      "triats": "En la reserva"
     }
   }
 }

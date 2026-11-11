@@ -1130,3 +1130,385 @@
     padding: 14px;
   }
 }
+
+/* ── Variants d'un extra (la talla del casc), sota la rajola un cop triat ── */
+
+.extres > li[data-amb-variants] {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+.variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.variants[data-error] .variant > span {
+  box-shadow: inset 0 0 0 1.5px #b42318;
+}
+.variants .errorSolt {
+  flex-basis: 100%;
+  margin-top: 0;
+}
+.variant {
+  position: relative;
+  cursor: pointer;
+}
+.variant input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.variant > span {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1.5px var(--linia);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.1;
+  transition:
+    background-color 0.15s var(--ease),
+    box-shadow 0.15s var(--ease);
+}
+.variant small {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--tinta-3);
+}
+.variant:hover > span {
+  box-shadow: inset 0 0 0 1.5px var(--grafit);
+}
+.variant input:checked + span {
+  background: var(--grafit);
+  color: var(--blanc);
+  box-shadow: none;
+}
+.variant input:checked + span small {
+  color: rgb(255 255 255 / 0.75);
+}
+.variant input:focus-visible + span {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+.variant[data-esgotada] > span {
+  background: var(--escenari);
+  color: var(--tinta-3);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+/* ── Nutrició per a la ruta ── */
+
+.nutricio {
+  padding-top: 8px;
+}
+.filtreMarques {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 12px;
+}
+.filtreMarques button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--escenari);
+  color: var(--tinta);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.15s var(--ease),
+    color 0.15s var(--ease);
+}
+.filtreMarques button span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--marca);
+  box-shadow:
+    0 0 0 1.5px var(--blanc),
+    0 0 0 2.5px var(--linia);
+}
+.filtreMarques button:hover {
+  background: var(--escenari-2);
+}
+.filtreMarques button[aria-pressed="true"] {
+  background: var(--grafit);
+  color: var(--blanc);
+}
+.filtreMarques button:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+
+.nutricioProductes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nutricioProducte {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-areas:
+    "foto text"
+    "tria tria";
+  gap: 10px 12px;
+  padding: 12px 12px 12px 16px;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1.5px var(--linia);
+  /* La vora de color de la marca, a l'esquerra, com l'expositor a la botiga. */
+  background: linear-gradient(90deg, var(--marca) 0 5px, transparent 5px);
+  animation: nutricio-entra 0.35s var(--ease) both;
+}
+@keyframes nutricio-entra {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+.nutricioFoto {
+  grid-area: foto;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 76px;
+  border-radius: 10px;
+  background: var(--escenari);
+}
+.nutricioFoto svg {
+  width: 52px;
+  height: 72px;
+  transition:
+    rotate 0.3s var(--ease),
+    scale 0.3s var(--ease);
+}
+.nutricioProducte:hover .nutricioFoto svg {
+  rotate: -6deg;
+  scale: 1.06;
+}
+.nutricioFoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.nutricioText {
+  grid-area: text;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+.nutricioMarca {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+.nutricioNom {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--tinta);
+}
+.nutricioDades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.nutricioDades span {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--escenari);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tinta-2);
+}
+.nutricioDades span[data-cafeina] {
+  background: #f3e9e1;
+  color: #6b4226;
+}
+.nutricioPreu {
+  margin-top: 4px;
+  font-weight: 800;
+  color: var(--tinta);
+  font-variant-numeric: tabular-nums;
+}
+.nutricioTria {
+  grid-area: tria;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 8px;
+}
+.nutricioTria .camp select {
+  min-height: 44px;
+  font-size: 15px;
+}
+.nutricioTria em {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #e7f6ec;
+  color: #17643a;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+}
+.nutricioTria em[data-poques] {
+  background: #fff1e8;
+  color: var(--taronja-fosc);
+}
+.nutricioSaborUnic {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.nutricioSaborUnic span,
+.nutricioPunt {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--linia);
+}
+.nutricioAfegir {
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--grafit);
+  color: var(--blanc);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.15s var(--ease),
+    scale 0.15s var(--ease);
+}
+.nutricioAfegir:hover:not(:disabled) {
+  background: var(--blau-fosc);
+}
+.nutricioAfegir:active:not(:disabled) {
+  scale: 0.96;
+}
+.nutricioAfegir:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+.nutricioAfegir:disabled {
+  background: var(--escenari-2);
+  color: var(--tinta-3);
+  cursor: not-allowed;
+}
+
+.nutricioTriats {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--escenari);
+}
+.nutricioTriats ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nutricioTriats li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  animation: nutricio-entra 0.3s var(--ease) both;
+}
+.nutricioLinia {
+  display: grid;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.25;
+}
+.nutricioLinia small {
+  color: var(--tinta-2);
+}
+.quantitat {
+  display: grid;
+  grid-template-columns: 36px 28px 36px;
+  align-items: center;
+  border-radius: 10px;
+  background: var(--blanc);
+  box-shadow: inset 0 0 0 1.5px var(--linia);
+}
+.quantitat button {
+  height: 36px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  color: var(--tinta);
+}
+.quantitat button:disabled {
+  color: var(--tinta-3);
+  cursor: not-allowed;
+}
+.quantitat button:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+.quantitat output {
+  text-align: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.nutricioImport {
+  min-width: 56px;
+  text-align: right;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 480px) {
+  .nutricioTriats li {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  .nutricioImport {
+    grid-column: 2 / -1;
+    text-align: left;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nutricioProducte,
+  .nutricioTriats li {
+    animation: none;
+  }
+  .nutricioFoto svg {
+    transition: none;
+  }
+}

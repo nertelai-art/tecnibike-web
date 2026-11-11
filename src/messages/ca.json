@@ -362,7 +362,7 @@
     "enviant": "Enviant…",
     "errors": {
       "dades": "Revisa els camps marcats.",
-      "esgotat": "Alguna bici o talla ja no queda per a aquests dies. Prova una altra talla o unes altres dates.",
+      "esgotat": "Alguna bici, talla o producte ja no queda. Prova'n un altre o unes altres dates.",
       "extra": "Algun extra o pedal ja no queda per a aquests dies. Tria-ne un altre.",
       "durada": "Alguna bici no es lloga per a aquesta durada.",
       "talla": "Tria una talla disponible per a cada bici.",
@@ -378,7 +378,8 @@
       "talla": "Tria una talla.",
       "pedals": "Tria uns pedals.",
       "alcada": "Entre 100 i 220 cm.",
-      "seient": "Entre 50 i 100 cm."
+      "seient": "Entre 50 i 100 cm.",
+      "variant": "Tria-ne una."
     },
     "fet": {
       "titol": "Reserva confirmada",
@@ -425,7 +426,9 @@
       "comptaquilometres": "Compta­quilòmetres"
     },
     "tipusBici": "Tipus de bici",
-    "calculDies": "{preu}/dia × {dies}"
+    "calculDies": "{preu}/dia × {dies}",
+    "variantDe": "Opcions de {extra}",
+    "nutricio": "Nutrició per a la ruta"
   },
   "cita": {
     "titol": "Demana cita al taller",
@@ -488,6 +491,120 @@
     "caducat": {
       "titol": "La reserva ha caducat",
       "text": "Ha passat massa estona i les bicis tornen a estar lliures. Torna-ho a provar."
+    }
+  },
+  "nutricio": {
+    "situacio": "Nutrició esportiva",
+    "titol": "Combustible per a cada quilòmetre",
+    "intro": "Gels, barretes i begudes de Maurten, 226ERS, Nutrinovex i SiS, els mateixos que tenim a la botiga. Te'ls deixem a punt amb la bici de lloguer, o passa a buscar-los abans de sortir.",
+    "expositors": "Les marques de la botiga",
+    "veure": "{n, plural, one {Mira'n el producte} other {Mira'n els # productes}}",
+    "totesMarques": "Totes les marques",
+    "quan": "Quan el prens",
+    "tot": "Tot",
+    "moments": {
+      "abans": "Abans",
+      "durant": "Durant",
+      "despres": "Després"
+    },
+    "momentsText": {
+      "abans": "Per carregar abans de sortir: una barreta o una beguda de carbohidrats una estona abans de pujar a la bici.",
+      "durant": "Per no quedar-te sense energia a mitja ruta: gels, barretes i begudes que es prenen pedalant.",
+      "despres": "Per recuperar quan tornes: proteïna i carbohidrats per a les cames de demà."
+    },
+    "marques": {
+      "maurten": "Sueca. Poques referències, sense sabor ni colorants i una sola idea: l'hidrogel, suau per a l'estómac.",
+      "226ers": "D'Alacant. Un catàleg enorme: gels, barretes i begudes de molts sabors, també salats i amb cafeïna.",
+      "nutrinovex": "De Castelló. Gels i barretes per a resistència, i un gel específic per a les rampes.",
+      "sis": "Science in Sport, britànica: gels isotònics que es prenen sense aigua.",
+      "altres": ""
+    },
+    "productes": {
+      "maurten-gel-100": "Gel d'hidrogel sense colorants ni aromes: dens, suau per a l'estómac i sense haver de beure aigua.",
+      "maurten-gel-100-caf": "El Gel 100 amb 100 mg de cafeïna, per al tram final o una sortida llarga.",
+      "maurten-gel-160": "El gel gran de Maurten: 40 g de carbohidrats en un sol sobre, per als esforços llargs.",
+      "maurten-drink-mix-160": "Beguda de carbohidrats que es fa hidrogel a l'estómac. Un sobre per bidó; el sabor el dona un sobret Addition.",
+      "maurten-drink-mix-320": "La versió concentrada: 80 g de carbohidrats per bidó, per a sortides llargues i intenses.",
+      "maurten-solid-160": "Barreta de civada que es parteix en dues, per menjar sòlid les primeres hores. També de cacau (Solid C 160).",
+      "226ers-high-fructose-gel-xs": "Gel petit amb 30 g de carbohidrats (glucosa i fructosa). El de cola porta 55 mg de cafeïna.",
+      "226ers-high-energy-gel": "Gel gran de 50 g de carbohidrats i sals. El de cafè porta 80 mg de cafeïna.",
+      "226ers-isotonic-gel": "Gel isotònic en stick, líquid: es pren sense aigua. El de cola porta 100 mg de cafeïna.",
+      "226ers-race-day-bar": "Barreta tova per menjar pedalant, cada 30–60 minuts. Dolces i una de salada.",
+      "226ers-isotonic-drink": "Sobre de beguda isotònica per a un bidó de mig litre, sense sucre afegit.",
+      "226ers-hydrazero": "Pastilles efervescents de sals per al bidó, sense calories: per a la calor i les sortides llargues.",
+      "226ers-recovery-drink": "Batut de recuperació amb 20–22 g de proteïna de sèrum i carbohidrats, per quan tornes.",
+      "nutrinovex-longovit-30": "Gel de 30 g de carbohidrats i sals, en molts sabors. El de poma verda porta 60 mg de cafeïna.",
+      "nutrinovex-glucomin": "Gel líquid amb hidrogel, que es pren sense aigua i passa bé també en recuperar.",
+      "nutrinovex-glucobar": "Barreta de pasta de fruita amb 33 g de carbohidrats. Les de cola i poma porten 100 mg de cafeïna.",
+      "nutrinovex-cramp-rescuer": "Gel d'emergència per quan apareix una rampa: sals i vinagre de poma.",
+      "sis-go-isotonic": "Gel isotònic de 22 g de carbohidrats, pensat per prendre’s sense aigua.",
+      "sis-go-cafeina": "El GO Isotonic amb 75 mg de cafeïna, una hora abans o al tram final.",
+      "sis-go-electrolyte": "El GO Isotonic amb sals, per als dies de calor i les sortides llargues.",
+      "sis-beta-fuel-chews": "Gominoles de 46 g de carbohidrats per mastegar pedalant.",
+      "sis-go-hydro": "Pastilles efervescents de sals per al bidó, gairebé sense calories."
+    },
+    "sabors": {
+      "neutre": "Neutre",
+      "civada": "Civada",
+      "cacau": "Cacau",
+      "poma": "Poma",
+      "pomaVerda": "Poma verda (amb cafeïna)",
+      "cola": "Cola",
+      "mentol": "Mentol",
+      "taronja": "Taronja",
+      "maduixa": "Maduixa",
+      "speculoos": "Speculoos",
+      "xocolataDubai": "Xocolata Dubai",
+      "llimona": "Llimona",
+      "platan": "Plàtan",
+      "maduixaSalada": "Maduixa salada",
+      "cafe": "Cafè exprés (amb cafeïna)",
+      "sindria": "Síndria",
+      "llima": "Llima",
+      "xocolataNegra": "Xocolata negra",
+      "pomaCanyella": "Poma i canyella",
+      "platanGingebre": "Plàtan i gingebre",
+      "xocolataBlancaMaduixa": "Xocolata blanca i maduixa",
+      "ametllesLlavors": "Ametlles i llavors (salada)",
+      "fruitsVermells": "Fruits vermells",
+      "tropical": "Tropical",
+      "xocolata": "Xocolata",
+      "vainilla": "Vainilla",
+      "mangoMandarina": "Mango i mandarina",
+      "maduixaKiwi": "Maduixa i kiwi",
+      "llimaLlimona": "Llima i llimona",
+      "citric": "Cítric",
+      "eucaliptusMentol": "Eucaliptus i mentol",
+      "gerdLlimona": "Gerd i llimona",
+      "herbasanaRegalessia": "Herba-sana i regalèssia",
+      "llimonaMenta": "Llimona i menta",
+      "pomeloRosat": "Pomelo rosat",
+      "maduixaLlima": "Maduixa i llima",
+      "variat": "Segons estoc"
+    },
+    "saborDe": "Sabor de {producte}",
+    "carbohidrats": "{g} g de carbohidrats",
+    "cafeina": "{mg} mg de cafeïna",
+    "perUnitat": "{preu} la unitat",
+    "buit": "No hi ha cap producte d'aquesta marca per a aquest moment. Prova un altre filtre.",
+    "ambLaBici": "Afegeix-la a la teva bici de lloguer",
+    "perWhatsapp": "O demana-la per WhatsApp",
+    "missatge": "Hola! Voldria reservar nutrició per a la ruta (gels, barretes…). Què teniu?",
+    "nota": "Il·lustracions pròpies: no són fotos dels productes. Preus i estoc de mostra*.",
+    "marca": "Marca",
+    "totes": "Totes",
+    "sabor": "Sabor",
+    "esgotat": "esgotat",
+    "afegir": "Afegeix",
+    "afegirMes": "Afegeix-ne més ({n})",
+    "afegirA": "Afegeix {producte}, {sabor}",
+    "menys": "Una menys de {producte}",
+    "mes": "Una més de {producte}",
+    "quantitat": "Quantitat",
+    "reserva": {
+      "titol": "Nutrició per a la ruta",
+      "intro": "Gels, barretes i begudes de la botiga. Te les deixem a punt amb la bici i es paguen amb la reserva.",
+      "triats": "A la reserva"
     }
   }
 }

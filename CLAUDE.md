@@ -42,8 +42,7 @@ Versions que **no** són l'última, i per què:
   El contracte de la plataforma (`remota/contracte.ts`) és generat: es copia del repositori de la
   plataforma amb `node scripts/sincronitza-contracte.mjs [camí]` i no es toca a mà. Taller, botiga,
   ressenyes i participants encara van per les dades de proves, perquè l'API no en té. Limitacions:
-  el preu de la fitxa és orientatiu (mana el que torna la plataforma), no hi ha variants d'extres,
-  només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
+  el preu de la fitxa és orientatiu (mana el que torna la plataforma), només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
   La primera hora que s'ofereix és ara més l'antelació mínima dels ajustos de la plataforma
   (`antelacioMinuts`; a les dades de proves, 0): la plataforma rebutja qualsevol recollida abans.
   Quan la plataforma rebutja una cosa, el camp i la frase que dona surten als registres de Vercel.
@@ -75,6 +74,21 @@ Versions que **no** són l'última, i per què:
   sobre de tot. Un cop passada de llarg, queda desmuntada i no es repeteix. La línia de temps i les
   posicions dels bàners (en % del fotograma) són a `anatomia-fases.ts`, amb proves. (Es va provar
   de retallar la bici i posar-la sobre el taller, però el retall es veia malament.)
+- **Variants d'extres:** un extra pot tenir variants (la talla del casc), cadascuna amb el seu estoc.
+  Un cop triat, la rajola demana quina; la plataforma les rep a `items[].options[].variant`.
+- **Nutrició esportiva** (`src/components/nutricio/`, recerca a
+  [docs/nutricio-productes.md](docs/nutricio-productes.md)). A la portada, després de Rutes, hi ha els
+  quatre expositors de la botiga (Maurten, 226ERS, Nutrinovex i SiS). Pugen amb el scroll en CSS
+  amb línia de temps de vista, cadascun amb els colors de la seva marca (`src/content/nutricio.ts`).
+  Després ve l'explorador per marca i moment de la ruta. A la reserva, la nutrició és de la reserva
+  sencera, no d'una bici: línies `{producteId, sabor, quantitat}`. Els sabors són variants amb estoc
+  propi, i l'estoc es ven i no torna (no depèn de les dates). A les dades de prova
+  (`dades-nutricio.ts`) està encesa. Amb la plataforma real està apagada
+  (`configuracioReserves.nutricio.actiu`) fins que el contracte porti els productes de botiga i el
+  seu estoc. Si no, una reserva amb nutrició es rebutja abans d'enviar-la. La proposta és a la
+  coordinadora de la plataforma. Els paquets són il·lustracions pròpies (`Paquet.tsx`): no són fotos
+  ni dissenys de les marques. Abans de posar-hi fotos de producte cal decidir-ne l'origen (vegeu el
+  document). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
 - **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`).
 - **Vídeos generats amb IA** (Higgsfield: Nano Banana 2.1 per als fotogrames clau i Kling 4.0 per
   als vídeos) a partir de les fotos reals de la Pinarello del client. No són gravacions: s'ha de dir
@@ -121,5 +135,7 @@ Versions que **no** són l'última, i per què:
 - Posar la clau de la botiga a Vercel (la connexió ja és feta i provada contra una API falsa, no
   contra la real) i els avisos per correu i WhatsApp. El mòdul de lloguer per
   unitats, el pagament i la signatura són feina de la plataforma (guia a `docs/`).
+- Preus de la botiga i estoc de la nutrició, i ingredients i al·lèrgens si es ven en línia
+  (Reglament UE 1169/2011; vegeu docs/nutricio-productes.md).
 - Preus i estoc dels extres i pedals, festius que tanquen, fiança i política de cancel·lació.
 - Validar amb el client les tres rutes proposades i ensenyar-li els vídeos generats amb IA.

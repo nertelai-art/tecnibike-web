@@ -1,6 +1,7 @@
 import { primerMomentReservable, sumaDies } from '../calendari';
 import { diesEntre, validaFranja } from '../horari';
-import { totalReserva } from '../preus';
+import { importNutricio, totalReserva } from '../preus';
+import { productesNutricio } from './dades-nutricio';
 import { articles, configuracioReserves, extres, flota, horari, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
 import { frangesTaller, unitatsLliures } from './disponibilitat-prova';
 import {
@@ -12,6 +13,7 @@ import {
   horariBotiga,
   participantsReserva,
   producte,
+  producteNutricio,
   reservaLloguer,
   ressenya,
   serveiTaller,
@@ -21,6 +23,7 @@ import {
   type Confirmacio,
   type ConfiguracioReserves,
   type Extra,
+  type LiniaNutricio,
   type ParticipantsReserva,
   type ReservaLloguer,
 } from './esquema';
@@ -30,7 +33,7 @@ import { ErrorReserva, type Disponibilitat, type Plataforma } from './interficie
 // És la que fa servir la web quan no té la clau de la plataforma (en local i a les proves), i la
 // que encara dona el taller, la botiga i les ressenyes, que la plataforma no té a l'API.
 
-type Ocupacio = { dies: readonly string[]; bicis: readonly BiciReserva[] };
+type Ocupacio = { dies: readonly string[]; bicis: readonly BiciReserva[]; nutricio: readonly LiniaNutricio[] };
 type Retinguda = Ocupacio & { id: string; caducaA: number };
 
 type Opcions = {
@@ -52,6 +55,7 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
   const config = esquemaConfiguracio.parse({
     pagament: { ...configuracioReserves.pagament, ...configuracio.pagament },
     participants: { ...configuracioReserves.participants, ...configuracio.participants },
+    nutricio: { ...configuracioReserves.nutricio, ...configuracio.nutricio },
     retencioMinuts: configuracio.retencioMinuts ?? configuracioReserves.retencioMinuts,
     antelacioMinuts: configuracio.antelacioMinuts ?? configuracioReserves.antelacioMinuts,
   });
@@ -77,6 +81,31 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
     e.estoc === null
       ? null
       : Math.max(0, dies.reduce((minim, dia) => Math.min(minim, e.estoc! - comptaEl(dia, (b) => Number(b.pedals === e.id) + b.extres.filter((x) => x === e.id).length)), e.estoc));
+  const lliuresVariant = (e: Extra, variant: string, estoc: number | null, dies: readonly string[]) =>
+    estoc === null
+      ? null
+      : Math.max(0, dies.reduce((minim, dia) => Math.min(minim, estoc - comptaEl(dia, (b) => Number(b.extres.includes(e.id) && b.variants?.[e.id] === variant))), estoc));
+  const lliuresVariants = (dies: readonly string[]) =>
+    Object.fromEntries(
+      extres.filter((e) => e.variants?.length).map((e) => [e.id, Object.fromEntries(e.variants!.map((v) => [v.nom, lliuresVariant(e, v.nom, v.estoc, dies)]))]),
+    );
+
+  /** La nutrició es ven: el que s'ha reservat o es reté ja no hi és, sigui quina sigui la data. */
+  const lliuresNutricio = (): Record<string, Record<string, number | null>> => {
+    const ara = rellotge().getTime();
+    const venudes = [...reserves, ...retencions.filter((r) => r.caducaA > ara)].flatMap((o) => o.nutricio);
+    return Object.fromEntries(
+      productesNutricio.map((p) => [
+        p.id,
+        Object.fromEntries(
+          p.sabors.map((s) => [
+            s.id,
+            s.estoc === null ? null : Math.max(0, s.estoc - venudes.filter((l) => l.producteId === p.id && l.sabor === s.id).reduce((n, l) => n + l.quantitat, 0)),
+          ]),
+        ),
+      ]),
+    );
+  };
 
   /** Valida una reserva contra l'horari, el catàleg i les unitats lliures, i en calcula el total. */
   const comprova = (entrada: ReservaLloguer) => {
@@ -93,6 +122,11 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
       if (pedals?.grup !== 'pedals' || triats.some((e) => e?.grup !== 'extres') || new Set(b.extres).size !== b.extres.length) {
         throw new ErrorReserva('extra');
       }
+      // Un extra amb variants en demana una de les seves; un sense, cap.
+      for (const e of triats as Extra[]) {
+        const variant = b.variants?.[e.id];
+        if (e.variants?.length ? !e.variants.some((v) => v.nom === variant) : variant !== undefined) throw new ErrorReserva('extra');
+      }
       return { tarifa: bici.tarifa, extres: [pedals, ...(triats as Extra[])] };
     });
     // Unitats que demana la reserva sencera, sumant les línies iguals.
@@ -107,9 +141,27 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
       const lliures = lliuresExtra(e, dies);
       if (n > 0 && lliures !== null && lliures < n) throw new ErrorReserva('extra');
     }
-    const total = totalReserva(linies, reserva.recollida, reserva.retorn);
-    if (total === null) throw new ErrorReserva('durada');
-    return { reserva, dies, total };
+    for (const e of extres) {
+      for (const v of e.variants ?? []) {
+        const n = reserva.bicis.filter((b) => b.extres.includes(e.id) && b.variants?.[e.id] === v.nom).length;
+        const lliures = lliuresVariant(e, v.nom, v.estoc, dies);
+        if (n > 0 && lliures !== null && lliures < n) throw new ErrorReserva('esgotat');
+      }
+    }
+    const nutricio = reserva.nutricio ?? [];
+    if (nutricio.length > 0 && !config.nutricio.actiu) throw new ErrorReserva('noDisponible');
+    const lliuresN = lliuresNutricio();
+    for (const l of nutricio) {
+      const producte = productesNutricio.find((p) => p.id === l.producteId);
+      if (!producte?.sabors.some((s) => s.id === l.sabor)) throw new ErrorReserva('extra');
+      const demanades = nutricio.filter((m) => m.producteId === l.producteId && m.sabor === l.sabor).reduce((n, m) => n + m.quantitat, 0);
+      const lliure = lliuresN[l.producteId]?.[l.sabor];
+      if (lliure !== null && lliure !== undefined && lliure < demanades) throw new ErrorReserva('esgotat');
+    }
+    const lloguer = totalReserva(linies, reserva.recollida, reserva.retorn);
+    if (lloguer === null) throw new ErrorReserva('durada');
+    const total = lloguer + (importNutricio(nutricio, productesNutricio) ?? 0);
+    return { reserva, dies, total, nutricio };
   };
 
   const plataforma: Plataforma = {
@@ -129,19 +181,24 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
         const bici = flota.find((b) => b.id === id);
         if (bici) bicis[id] = Object.fromEntries(bici.talles.map((talla) => [talla, lliuresBici(id, talla, dies)]));
       }
-      return { bicis, extres: Object.fromEntries(extres.map((e) => [e.id, lliuresExtra(e, dies)])) };
+      return {
+        bicis,
+        extres: Object.fromEntries(extres.map((e) => [e.id, lliuresExtra(e, dies)])),
+        variantsExtres: lliuresVariants(dies),
+        nutricio: config.nutricio.actiu ? lliuresNutricio() : {},
+      };
     },
     crearReservaLloguer: async (entrada) => {
-      const { reserva, dies, total } = comprova(entrada);
+      const { reserva, dies, total, nutricio } = comprova(entrada);
       const confirmacio = { codi: generaCodi(), totalCentims: total };
-      reserves.push({ dies, bicis: reserva.bicis, ...confirmacio });
+      reserves.push({ dies, bicis: reserva.bicis, nutricio, ...confirmacio });
       return confirmacio;
     },
     retenirReserva: async (entrada) => {
-      const { reserva, dies, total } = comprova(entrada);
+      const { reserva, dies, total, nutricio } = comprova(entrada);
       const caducaA = rellotge().getTime() + config.retencioMinuts * 60_000;
       const id = generaCodi();
-      retencions.push({ id, caducaA, dies, bicis: reserva.bicis });
+      retencions.push({ id, caducaA, dies, bicis: reserva.bicis, nutricio });
       return { id, caducaA: new Date(caducaA).toISOString(), totalCentims: total };
     },
     alliberarRetencio: async (id) => {
@@ -178,6 +235,7 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
       cites.push({ ...cita, ...confirmacio });
       return confirmacio;
     },
+    nutricio: async () => producteNutricio.array().parse(productesNutricio),
     productes: async () => producte.array().parse(productes),
     articles: async (categoria) => article.array().parse(articles.filter((a) => a.categoria === categoria)),
     valoracio: async () => valoracio.parse(valoracioGoogle),

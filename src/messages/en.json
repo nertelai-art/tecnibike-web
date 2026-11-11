@@ -362,7 +362,7 @@
     "enviant": "Sending…",
     "errors": {
       "dades": "Please check the highlighted fields.",
-      "esgotat": "One of the bikes or sizes is no longer available for those days. Try another size or other dates.",
+      "esgotat": "A bike, size or product is no longer available. Try another one or different dates.",
       "extra": "One of the extras or pedals is no longer available for those days. Choose another one.",
       "durada": "One of the bikes can't be rented for that duration.",
       "talla": "Choose an available size for each bike.",
@@ -378,7 +378,8 @@
       "talla": "Choose a size.",
       "pedals": "Choose some pedals.",
       "alcada": "Between 100 and 220 cm.",
-      "seient": "Between 50 and 100 cm."
+      "seient": "Between 50 and 100 cm.",
+      "variant": "Choose one."
     },
     "fet": {
       "titol": "Booking confirmed",
@@ -425,7 +426,9 @@
       "comptaquilometres": "Bike computer"
     },
     "tipusBici": "Bike type",
-    "calculDies": "{preu}/day × {dies}"
+    "calculDies": "{preu}/day × {dies}",
+    "variantDe": "{extra} options",
+    "nutricio": "Ride nutrition"
   },
   "cita": {
     "titol": "Book the workshop",
@@ -488,6 +491,120 @@
     "caducat": {
       "titol": "The booking has expired",
       "text": "Too much time has passed and the bikes are free again. Please try again."
+    }
+  },
+  "nutricio": {
+    "situacio": "Sports nutrition",
+    "titol": "Fuel for every kilometre",
+    "intro": "Gels, bars and drinks from Maurten, 226ERS, Nutrinovex and SiS, the same ones we stock in the shop. We'll have them ready with your rental bike, or drop by before you ride.",
+    "expositors": "The brands in our shop",
+    "veure": "{n, plural, one {See the product} other {See all # products}}",
+    "totesMarques": "All brands",
+    "quan": "When to take it",
+    "tot": "All",
+    "moments": {
+      "abans": "Before",
+      "durant": "During",
+      "despres": "After"
+    },
+    "momentsText": {
+      "abans": "To top up before you set off: a bar or a carb drink a little while before getting on the bike.",
+      "durant": "So you don't run out of energy mid-ride: gels, bars and drinks to take while pedalling.",
+      "despres": "To recover when you're back: protein and carbs for tomorrow's legs."
+    },
+    "marques": {
+      "maurten": "Swedish. A short range, no flavours or colourings and one idea: hydrogel, easy on the stomach.",
+      "226ers": "From Alicante. A huge range: gels, bars and drinks in lots of flavours, salty and caffeinated too.",
+      "nutrinovex": "From Castellón. Endurance gels and bars, plus a gel made for cramps.",
+      "sis": "Science in Sport, from the UK: isotonic gels you take without water.",
+      "altres": ""
+    },
+    "productes": {
+      "maurten-gel-100": "Hydrogel gel with no colourings or flavourings: thick, easy on the stomach, no water needed.",
+      "maurten-gel-100-caf": "Gel 100 with 100 mg of caffeine, for the final stretch or a long ride.",
+      "maurten-gel-160": "Maurten's big gel: 40 g of carbs in a single pack, for long efforts.",
+      "maurten-drink-mix-160": "Carb drink that turns into a hydrogel in your stomach. One sachet per bottle; an Addition sachet adds the flavour.",
+      "maurten-drink-mix-320": "The concentrated version: 80 g of carbs per bottle, for long, hard rides.",
+      "maurten-solid-160": "Oat bar that snaps in two, for solid food in the first hours. Also in cocoa (Solid C 160).",
+      "226ers-high-fructose-gel-xs": "Small gel with 30 g of carbs (glucose and fructose). The cola one has 55 mg of caffeine.",
+      "226ers-high-energy-gel": "Big gel with 50 g of carbs and salts. The espresso one has 80 mg of caffeine.",
+      "226ers-isotonic-gel": "Liquid isotonic gel in a stick: no water needed. The cola one has 100 mg of caffeine.",
+      "226ers-race-day-bar": "Soft bar to eat on the bike every 30–60 minutes. Sweet flavours and a salty one.",
+      "226ers-isotonic-drink": "Isotonic drink sachet for a half-litre bottle, no added sugar.",
+      "226ers-hydrazero": "Effervescent electrolyte tablets for your bottle, calorie-free: for heat and long rides.",
+      "226ers-recovery-drink": "Recovery shake with 20–22 g of whey protein and carbs, for when you get back.",
+      "nutrinovex-longovit-30": "Gel with 30 g of carbs and salts, in lots of flavours. The green apple one has 60 mg of caffeine.",
+      "nutrinovex-glucomin": "Liquid hydrogel gel, taken without water and easy to get down after the ride too.",
+      "nutrinovex-glucobar": "Fruit-paste bar with 33 g of carbs. The cola and apple ones have 100 mg of caffeine.",
+      "nutrinovex-cramp-rescuer": "Emergency gel for when a cramp hits: salts and apple cider vinegar.",
+      "sis-go-isotonic": "Isotonic gel with 22 g of carbs, designed to be taken without water.",
+      "sis-go-cafeina": "GO Isotonic with 75 mg of caffeine, an hour before or for the final stretch.",
+      "sis-go-electrolyte": "GO Isotonic with electrolytes, for hot days and long rides.",
+      "sis-beta-fuel-chews": "Energy chews with 46 g of carbs to eat while pedalling.",
+      "sis-go-hydro": "Effervescent electrolyte tablets for your bottle, almost calorie-free."
+    },
+    "sabors": {
+      "neutre": "Neutral",
+      "civada": "Oat",
+      "cacau": "Cocoa",
+      "poma": "Apple",
+      "pomaVerda": "Green apple (with caffeine)",
+      "cola": "Cola",
+      "mentol": "Menthol",
+      "taronja": "Orange",
+      "maduixa": "Strawberry",
+      "speculoos": "Speculoos",
+      "xocolataDubai": "Dubai chocolate",
+      "llimona": "Lemon",
+      "platan": "Banana",
+      "maduixaSalada": "Salty strawberry",
+      "cafe": "Espresso (with caffeine)",
+      "sindria": "Watermelon",
+      "llima": "Lime",
+      "xocolataNegra": "Dark chocolate",
+      "pomaCanyella": "Apple & cinnamon",
+      "platanGingebre": "Banana & ginger",
+      "xocolataBlancaMaduixa": "White chocolate & strawberry",
+      "ametllesLlavors": "Almonds & seeds (salty)",
+      "fruitsVermells": "Red berries",
+      "tropical": "Tropical",
+      "xocolata": "Chocolate",
+      "vainilla": "Vanilla",
+      "mangoMandarina": "Mango & mandarin",
+      "maduixaKiwi": "Strawberry & kiwi",
+      "llimaLlimona": "Lime & lemon",
+      "citric": "Citrus",
+      "eucaliptusMentol": "Eucalyptus & menthol",
+      "gerdLlimona": "Raspberry & lemon",
+      "herbasanaRegalessia": "Spearmint & liquorice",
+      "llimonaMenta": "Lemon & mint",
+      "pomeloRosat": "Pink grapefruit",
+      "maduixaLlima": "Strawberry & lime",
+      "variat": "Depending on stock"
+    },
+    "saborDe": "{producte} flavour",
+    "carbohidrats": "{g} g carbs",
+    "cafeina": "{mg} mg caffeine",
+    "perUnitat": "{preu} each",
+    "buit": "No products from this brand for this moment. Try another filter.",
+    "ambLaBici": "Add it to your rental bike",
+    "perWhatsapp": "Or order it on WhatsApp",
+    "missatge": "Hi! I'd like to book some nutrition for my ride (gels, bars…). What do you have?",
+    "nota": "Our own illustrations, not photos of the products. Sample prices and stock*.",
+    "marca": "Brand",
+    "totes": "All",
+    "sabor": "Flavour",
+    "esgotat": "sold out",
+    "afegir": "Add",
+    "afegirMes": "Add more ({n})",
+    "afegirA": "Add {producte}, {sabor}",
+    "menys": "One less {producte}",
+    "mes": "One more {producte}",
+    "quantitat": "Quantity",
+    "reserva": {
+      "titol": "Ride nutrition",
+      "intro": "Gels, bars and drinks from the shop. We'll have them ready with your bike, and you pay for them with your booking.",
+      "triats": "In your booking"
     }
   }
 }

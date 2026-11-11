@@ -78,7 +78,7 @@ describe('reserva de lloguer', () => {
     const btt = await tallaLliure(p, 'btt', rec.dia, ret.dia);
     const carretera = await tallaLliure(p, 'carretera', rec.dia, ret.dia);
     const confirmacio = await p.crearReservaLloguer(
-      reserva([linia('btt', btt.talla), linia('carretera', carretera.talla, { pedals: 'pedals-look', extres: ['casc', 'comptaquilometres'] })]),
+      reserva([linia('btt', btt.talla), linia('carretera', carretera.talla, { pedals: 'pedals-look', extres: ['casc', 'comptaquilometres'], variants: { casc: 'M' } })]),
     );
     expect(confirmacio.totalCentims).toBe(2520 * 3 + 2800 * 3 + 200 * 3);
   });
@@ -111,6 +111,19 @@ describe('reserva de lloguer', () => {
     await expect(p.crearReservaLloguer(reserva([linia('btt', talla, { extres: ['res'] })]))).rejects.toMatchObject({ motiu: 'extra' });
   });
 
+  it("un extra amb variants demana triar-ne una de vàlida, i cada variant té el seu estoc", async () => {
+    const p = nova(ARA);
+    const casc = (await p.extres()).find((e) => e.id === 'casc')!;
+    expect(casc.variants?.map((v) => v.nom)).toEqual(['S', 'M', 'L']);
+    const { talla } = await tallaLliure(p, 'btt', rec.dia, ret.dia);
+    await expect(p.crearReservaLloguer(reserva([linia('btt', talla, { extres: ['casc'] })]))).rejects.toMatchObject({ motiu: 'extra' });
+    await expect(p.crearReservaLloguer(reserva([linia('btt', talla, { extres: ['casc'], variants: { casc: 'XXL' } })]))).rejects.toMatchObject({ motiu: 'extra' });
+    await p.crearReservaLloguer(reserva([linia('btt', talla, { extres: ['casc'], variants: { casc: 'S' } })]));
+    const d = await p.disponibilitat(rec, ret, []);
+    expect(d.variantsExtres.casc).toEqual({ S: 9, M: 18, L: 12 });
+    expect(d.extres.casc).toBe(39);
+  });
+
   it("rebutja recollides fora de l'horari o en dies tancats", async () => {
     const p = nova(ARA);
     const diumenge = { recollida: { dia: '2026-11-01', hora: '10:00' }, retorn: ret };
@@ -129,6 +142,55 @@ describe('reserva de lloguer', () => {
     const p = nova(ARA);
     const dolenta = { ...reserva([linia('btt', 'M')]), recollida: { dia: 'demà', hora: '09:00' } };
     await expect(p.crearReservaLloguer(dolenta as unknown as ReservaLloguer)).rejects.toThrow();
+  });
+});
+
+describe('nutrició amb la reserva', () => {
+  const ARA = new Date('2026-10-27T07:00:00Z');
+  const rec = { dia: '2026-11-02', hora: '09:00' };
+  const ret = { dia: '2026-11-02', hora: '19:00' };
+  const bici = (talla: string): BiciReserva => ({ biciId: 'btt', talla, pedals: 'pedals-plans', extres: [], ciclista: {} });
+
+  it("el catàleg compleix l'esquema, té les quatre marques i tot és de mostra", async () => {
+    const productes = await nova(ARA).nutricio();
+    expect(new Set(productes.map((p) => p.marca))).toEqual(new Set(['Maurten', '226ERS', 'Nutrinovex', 'SiS']));
+    expect(productes.every((p) => p.ficticia && p.sabors.length > 0)).toBe(true);
+    expect(new Set(productes.map((p) => p.id)).size).toBe(productes.length);
+  });
+
+  it("suma al total i en gasta l'estoc, sigui quina sigui la data", async () => {
+    const p = nova(ARA);
+    const gel = (await p.nutricio()).find((x) => x.id === '226ers-high-energy-gel')!;
+    const llimona = gel.sabors.find((s) => s.id === 'llimona')!;
+    const { talla } = await tallaLliure(p, 'btt', rec.dia, ret.dia);
+    const confirmacio = await p.crearReservaLloguer({
+      recollida: rec, retorn: ret, bicis: [bici(talla)], nutricio: [{ producteId: gel.id, sabor: 'llimona', quantitat: 2 }], ...client,
+    });
+    expect(confirmacio.totalCentims).toBe(2800 + gel.preu * 2);
+    // Un mes més tard, el que s'ha venut continua venut.
+    const d = await p.disponibilitat({ dia: '2026-12-01', hora: '09:00' }, { dia: '2026-12-01', hora: '19:00' }, []);
+    expect(d.nutricio[gel.id]!.llimona).toBe(llimona.estoc! - 2);
+  });
+
+  it('no es pot vendre més del que hi ha, ni un producte o sabor que no existeix', async () => {
+    const p = nova(ARA);
+    const gel = (await p.nutricio()).find((x) => x.id === '226ers-high-energy-gel')!;
+    const estoc = gel.sabors.find((s) => s.id === 'platan')!.estoc!;
+    const { talla } = await tallaLliure(p, 'btt', rec.dia, ret.dia);
+    const amb = (nutricio: ReservaLloguer['nutricio']) => p.crearReservaLloguer({ recollida: rec, retorn: ret, bicis: [bici(talla)], nutricio, ...client });
+    const meitat = Math.ceil((estoc + 1) / 2);
+    await expect(amb([{ producteId: gel.id, sabor: 'platan', quantitat: meitat }, { producteId: gel.id, sabor: 'platan', quantitat: meitat }])).rejects.toMatchObject({ motiu: 'esgotat' });
+    await expect(amb([{ producteId: 'res', sabor: 'platan', quantitat: 1 }])).rejects.toMatchObject({ motiu: 'extra' });
+    await expect(amb([{ producteId: gel.id, sabor: 'pebrot', quantitat: 1 }])).rejects.toMatchObject({ motiu: 'extra' });
+  });
+
+  it('apagada, la reserva no admet nutrició', async () => {
+    const p = crearPlataformaProva({ generaCodi: () => 'TB-N', rellotge: () => ARA, configuracio: { nutricio: { actiu: false } } });
+    const { talla } = await tallaLliure(p, 'btt', rec.dia, ret.dia);
+    await expect(
+      p.crearReservaLloguer({ recollida: rec, retorn: ret, bicis: [bici(talla)], nutricio: [{ producteId: 'maurten-gel-100', sabor: 'neutre', quantitat: 1 }], ...client }),
+    ).rejects.toMatchObject({ motiu: 'noDisponible' });
+    expect((await p.disponibilitat(rec, ret, [])).nutricio).toEqual({});
   });
 });
 

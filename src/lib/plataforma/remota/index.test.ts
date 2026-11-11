@@ -56,7 +56,7 @@ const cataleg = RentalCatalogResponseSchema.parse({
   options: [
     { id: PLANS, name: 'Pedals plans', description: null, imageUrl: null, groupId: G_PEDALS, priceCents: 0, priceUnit: 'booking', limited: false, variants: [] },
     { id: SPD, name: 'Shimano SPD', description: null, imageUrl: null, groupId: G_PEDALS, priceCents: 0, priceUnit: 'booking', limited: true, variants: [] },
-    { id: CASC, name: 'Casc', description: null, imageUrl: null, groupId: G_CASC, priceCents: 0, priceUnit: 'booking', limited: true, variants: [] },
+    { id: CASC, name: 'Casc', description: null, imageUrl: null, groupId: G_CASC, priceCents: 0, priceUnit: 'booking', limited: true, variants: ['S', 'M'] },
     { id: CADENAT, name: 'Cadenat', description: null, imageUrl: null, groupId: G_ACCESSORIS, priceCents: 300, priceUnit: 'booking', limited: true, variants: [] },
     { id: COMPTA, name: 'Comptaquilòmetres', description: null, imageUrl: null, groupId: G_ACCESSORIS, priceCents: 200, priceUnit: 'day', limited: true, variants: [] },
   ],
@@ -169,10 +169,19 @@ describe('plataforma remota: disponibilitat i reserva', () => {
     const lliures = RentalAvailabilityResponseSchema.parse({
       timeZone: 'Europe/Madrid', pickup: { date: '2026-11-02', time: '09:00' }, return: { date: '2026-11-04', time: '19:00' },
       models: [{ modelId: BTT, variants: [{ variant: 'S', free: 2 }, { variant: 'M', free: 0 }] }],
-      options: [{ optionId: SPD, variants: [{ variant: null, free: 3 }] }, { optionId: PLANS, variants: [{ variant: null, free: null }] }],
+      options: [
+        { optionId: SPD, variants: [{ variant: null, free: 3 }] },
+        { optionId: PLANS, variants: [{ variant: null, free: null }] },
+        { optionId: CASC, variants: [{ variant: 'S', free: 1 }, { variant: 'M', free: 4 }] },
+      ],
     });
     const { plataforma, crides } = remota({ [`GET ${R}/availability`]: { cos: lliures } });
-    expect(await plataforma.disponibilitat(recollida, retorn, ['btt'])).toEqual({ bicis: { btt: { S: 2, M: 0 } }, extres: { [SPD]: 3, [PLANS]: null } });
+    expect(await plataforma.disponibilitat(recollida, retorn, ['btt'])).toEqual({
+      bicis: { btt: { S: 2, M: 0 } },
+      extres: { [SPD]: 3, [PLANS]: null, [CASC]: 5 },
+      variantsExtres: { [CASC]: { S: 1, M: 4 } },
+      nutricio: {},
+    });
     const url = crides.find((c) => c.url.pathname.endsWith('/availability'))!.url;
     expect(Object.fromEntries(url.searchParams)).toEqual({ pickupDate: '2026-11-02', pickupTime: '09:00', returnDate: '2026-11-04', returnTime: '19:00', models: BTT });
   });
@@ -200,6 +209,25 @@ describe('plataforma remota: disponibilitat i reserva', () => {
       customer: { name: 'Anna Puig', phone: '+34 600 000 000', email: 'anna@example.com', language: 'ca' },
       notes: 'Arribem a les 9', privacyAccepted: true,
     });
+  });
+
+  it('envia la variant triada de cada opció que en té', async () => {
+    const { plataforma, crides } = remota({ [`POST ${R}/bookings`]: { estat: 201, cos: feta } });
+    await plataforma.crearReservaLloguer({ ...reserva, bicis: [{ ...reserva.bicis[0]!, extres: [CASC, CADENAT], variants: { [CASC]: 'M' } }] });
+    expect((crides.find((c) => c.metode === 'POST')!.cos as { items: { options: unknown[] }[] }).items[0]!.options).toEqual([
+      { optionId: PLANS, variant: null },
+      { optionId: CASC, variant: 'M' },
+      { optionId: CADENAT, variant: null },
+    ]);
+  });
+
+  it("la nutrició hi és apagada fins que la plataforma en porti l'estoc, i no se n'envia cap", async () => {
+    const { plataforma, crides } = remota({ [`POST ${R}/bookings`]: { estat: 201, cos: feta } });
+    expect((await plataforma.configuracioReserves()).nutricio.actiu).toBe(false);
+    await expect(plataforma.crearReservaLloguer({ ...reserva, nutricio: [{ producteId: 'maurten-gel-100', sabor: 'neutre', quantitat: 1 }] })).rejects.toMatchObject({
+      motiu: 'noDisponible',
+    });
+    expect(crides.some((c) => c.metode === 'POST')).toBe(false);
   });
 
   it("sense pedals configurats, la bici va sense l'opció", async () => {

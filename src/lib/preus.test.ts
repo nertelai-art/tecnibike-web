@@ -1,4 +1,4 @@
-import { desglosLinia, duradaDe, formatEuros, preuLinia, preuLloguer, preuMinimPerDia, preuPerDia, totalReserva } from './preus';
+import { desglosLinia, duradaDe, formatEuros, importNutricio, preuLinia, preuLloguer, preuMinimPerDia, preuPerDia, totalReserva } from './preus';
 
 const btt = { dia: 2800, de2a6: 2520, mesDe6: 2100 };
 const eDoble = { dia: 5500, migDia: 4200, de2a6: 4800, mesDe6: 3900 };
@@ -103,6 +103,13 @@ describe('preuLinia i totalReserva', () => {
   it('el desglos del mig dia ho indica i no multiplica per dies', () => {
     const migDia = { dia: '2026-10-27', hora: '13:00' };
     expect(desglosLinia({ tarifa: eDoble, extres: [] }, rec, migDia)).toMatchObject({ durada: { tipus: 'migDia' }, perDia: 4200, dies: 1, total: 4200 });
+  });
+
+  it('la nutrició suma preu per quantitat; un producte que no hi és, no es pot calcular', () => {
+    const productes = [{ id: 'gel', preu: 260 }, { id: 'barreta', preu: 250 }];
+    expect(importNutricio([{ producteId: 'gel', quantitat: 3 }, { producteId: 'barreta', quantitat: 1 }], productes)).toBe(260 * 3 + 250);
+    expect(importNutricio([], productes)).toBe(0);
+    expect(importNutricio([{ producteId: 'res', quantitat: 1 }], productes)).toBeNull();
   });
 
   it('sense bicis no hi ha total', () => {

@@ -1,0 +1,543 @@
+/* Secció de nutrició de l'inici. Fosca, com els expositors de la botiga; cada marca hi porta els seus
+   colors (variables --fons, --text i --accent de src/content/nutricio.ts). */
+
+.seccio {
+  position: relative;
+  overflow: clip;
+  padding-block: var(--section);
+  background: #0e1013;
+  color: var(--blanc);
+  color-scheme: dark;
+}
+.seccio :global(.situacio),
+.seccio :global(.intro) {
+  color: rgb(255 255 255 / 0.72);
+}
+
+/* ── La cinta de fons ── */
+
+.cinta {
+  position: absolute;
+  inset: 0 0 auto;
+  top: clamp(40px, 6vw, 80px);
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+.cinta span {
+  display: block;
+  width: max-content;
+  font-size: clamp(64px, 12vw, 180px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255 255 255 / 0.08);
+}
+
+.cap {
+  position: relative;
+}
+.cap :global(.titol-seccio) {
+  max-width: 12ch;
+}
+
+/* ── Els quatre expositors ── */
+
+.expositors {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(10px, 1.4vw, 18px);
+  margin: clamp(40px, 6vw, 72px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.expositor {
+  --prestatge: rgb(255 255 255 / 0.14);
+  --vora: rgb(255 255 255 / 0.1);
+}
+.expositor button {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(380px, 38vw, 520px);
+  padding: clamp(16px, 1.8vw, 24px);
+  border: 0;
+  border-radius: var(--radi);
+  background: var(--fons);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--vora);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
+}
+.expositor button:hover {
+  transform: translateY(-6px);
+}
+.expositor button:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 3px;
+}
+.expositor button[aria-pressed='true'] {
+  box-shadow:
+    inset 0 0 0 1px var(--vora),
+    0 0 0 3px var(--accent);
+}
+.expositorNom {
+  font-size: clamp(26px, 2.6vw, 38px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.expositorLema {
+  max-width: 28ch;
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+.prestatges {
+  display: grid;
+  align-content: end;
+  gap: 14px;
+}
+.prestatge {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  min-height: clamp(76px, 7vw, 96px);
+  padding: 0 6px;
+  border-bottom: 6px solid var(--prestatge);
+  border-radius: 0 0 4px 4px;
+}
+.paquetPrestatge {
+  width: clamp(48px, 4.6vw, 64px);
+  height: clamp(67px, 6.4vw, 90px);
+  filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.35));
+  /* `translate` i `rotate`, i no `transform`, perquè no es barallin amb l'animació de caiguda. */
+  transition:
+    translate 0.35s var(--ease),
+    rotate 0.35s var(--ease);
+}
+.expositor button:hover .paquetPrestatge:nth-child(1) {
+  translate: 0 -6px;
+  rotate: -6deg;
+}
+.expositor button:hover .paquetPrestatge:nth-child(2) {
+  translate: 0 -4px;
+  rotate: 5deg;
+}
+.expositorPeu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--vora);
+  font-size: 14px;
+  font-weight: 700;
+}
+.expositorPeu span {
+  transition: transform 0.2s var(--ease);
+}
+.expositor button:hover .expositorPeu span {
+  transform: translateX(4px);
+}
+
+/* Cada marca, amb el caràcter del seu expositor. */
+.expositor[data-marca='maurten'] .expositorNom {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.expositor[data-marca='maurten'] {
+  --prestatge: #2b2b2b;
+}
+.expositor[data-marca='226ers'] button {
+  /* Els grafits blancs de l'expositor, en traços de fons. */
+  background:
+    radial-gradient(circle at 20% 30%, rgb(255 255 255 / 0.07) 0 2px, transparent 3px) 0 0 / 22px 22px,
+    repeating-linear-gradient(-35deg, transparent 0 18px, rgb(255 255 255 / 0.04) 18px 20px),
+    var(--fons);
+}
+.expositor[data-marca='226ers'] .expositorNom {
+  font-style: italic;
+  font-stretch: condensed;
+  text-transform: uppercase;
+}
+.expositor[data-marca='226ers'] {
+  --prestatge: #000;
+}
+.expositor[data-marca='nutrinovex'] button {
+  background:
+    linear-gradient(160deg, rgb(255 255 255 / 0.12), transparent 40%),
+    var(--fons);
+}
+.expositor[data-marca='nutrinovex'] .expositorNom {
+  text-transform: lowercase;
+  letter-spacing: -0.03em;
+}
+.expositor[data-marca='nutrinovex'] {
+  --prestatge: #3556d6;
+  --vora: rgb(255 255 255 / 0.2);
+}
+.expositor[data-marca='sis'] .expositorNom {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.expositor[data-marca='sis'] {
+  /* Els prestatges grocs de l'expositor de SiS. */
+  --prestatge: var(--accent);
+}
+
+/* ── Filtres ── */
+
+.filtres {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(48px, 6vw, 80px);
+}
+.moments {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.08);
+}
+.moments button,
+.treuMarca {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: rgb(255 255 255 / 0.8);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+.moments button:hover {
+  color: var(--blanc);
+}
+.moments button[aria-pressed='true'] {
+  background: var(--blanc);
+  color: var(--grafit);
+}
+.moments button:focus-visible,
+.treuMarca:focus-visible,
+.sabors button:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+.treuMarca {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--fons);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+.treuMarca span {
+  font-size: 18px;
+}
+.momentText {
+  margin-top: 14px;
+  max-width: 60ch;
+  color: rgb(255 255 255 / 0.72);
+}
+
+/* ── Productes ── */
+
+.productes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: clamp(12px, 1.4vw, 18px);
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.targeta {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--radi);
+  background: var(--fons);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
+  overflow: hidden;
+  animation: entra 0.5s var(--ease) both;
+  animation-delay: calc(min(var(--i), 8) * 45ms);
+}
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+.escena {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 200px;
+  background:
+    radial-gradient(ellipse 60% 18% at 50% 88%, rgb(0 0 0 / 0.35), transparent 70%),
+    radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 65%);
+}
+.paquetGran {
+  width: 120px;
+  height: 168px;
+  transition: transform 0.45s var(--ease);
+}
+.paquetGran :global(.paquet-brill) {
+  transition: transform 0.8s var(--ease);
+}
+.targeta:hover .paquetGran {
+  transform: translateY(-10px) rotate(-6deg) scale(1.04);
+}
+.targeta:focus-within .paquetGran {
+  transform: translateY(-6px) rotate(-3deg);
+}
+.targeta:hover .paquetGran :global(.paquet-brill) {
+  transform: translateX(160px);
+}
+.paquetGran path,
+.paquetGran rect {
+  transition: fill 0.3s var(--ease);
+}
+.dades {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px 20px 22px;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+.marca {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.nom {
+  font-size: 22px;
+  line-height: 1.15;
+}
+.descripcio {
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0.82;
+}
+.xifres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.xifres li {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.1);
+  font-size: 12px;
+  font-weight: 700;
+}
+.xifres li[data-cafeina] {
+  background: #6b4226;
+}
+.xifres li[data-moment] {
+  background: none;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+}
+.sabors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.sabors button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--sabor);
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.2),
+    0 0 0 2px transparent;
+  cursor: pointer;
+  transition:
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+.sabors button:hover {
+  transform: scale(1.1);
+}
+.sabors button[aria-checked='true'] {
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.2),
+    0 0 0 2px var(--fons),
+    0 0 0 4px var(--text);
+}
+.saborNom,
+.saborUnic {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+.preu {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.buit {
+  margin-top: 24px;
+  color: rgb(255 255 255 / 0.72);
+}
+
+.peu {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  margin-top: clamp(32px, 4vw, 48px);
+}
+.whatsapp {
+  color: var(--blanc);
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+.nota {
+  flex-basis: 100%;
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.6);
+}
+
+/* ── Mòbil: els expositors, en una fila que es passa amb el dit ── */
+
+@media (max-width: 900px) {
+  .expositors {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78vw, 320px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 8px var(--gutter) 12px;
+    scrollbar-width: none;
+  }
+  .expositor {
+    scroll-snap-align: center;
+  }
+  .expositor button {
+    min-height: 420px;
+  }
+}
+
+/* ── El moviment amb el scroll: només amb suport i si no es demana menys moviment ── */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cinta span {
+      animation: llisca linear both;
+      /* La pàgina té scroll-padding-top: sense l'inset a 0, la línia de temps començaria avançada. */
+      animation-timeline: view(block 0px);
+      animation-range: cover;
+    }
+    .expositor {
+      animation: puja linear both;
+      animation-timeline: view(block 0px);
+      animation-range: entry 0% cover 30%;
+    }
+    .expositor:nth-child(2) {
+      animation-range: entry 8% cover 36%;
+    }
+    .expositor:nth-child(3) {
+      animation-range: entry 16% cover 42%;
+    }
+    .expositor:nth-child(4) {
+      animation-range: entry 24% cover 48%;
+    }
+    /* Els paquets cauen als prestatges un cop l'expositor ja és a lloc. */
+    .paquetPrestatge {
+      animation: cau linear both;
+      animation-timeline: view(block 0px);
+      animation-range: entry 60% cover 40%;
+    }
+    .prestatge:nth-child(2) .paquetPrestatge {
+      animation-range: entry 70% cover 45%;
+    }
+    .prestatge:nth-child(3) .paquetPrestatge {
+      animation-range: entry 80% cover 50%;
+    }
+  }
+}
+/* En mòbil, la fila es passa de costat: tots pugen alhora. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (max-width: 900px) {
+    .expositor,
+    .expositor:nth-child(n) {
+      animation-range: entry 0% cover 25%;
+    }
+  }
+}
+@keyframes llisca {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-35%);
+  }
+}
+@keyframes puja {
+  from {
+    opacity: 0;
+    transform: translateY(80px) scale(0.96);
+  }
+}
+@keyframes cau {
+  from {
+    opacity: 0;
+    transform: translateY(-90px) rotate(-18deg);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(6px) rotate(3deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .targeta {
+    animation: none;
+  }
+  .expositor button,
+  .paquetPrestatge,
+  .paquetGran,
+  .paquetGran :global(.paquet-brill) {
+    transition: none;
+  }
+  .expositor button:hover,
+  .targeta:hover .paquetGran,
+  .targeta:focus-within .paquetGran {
+    transform: none;
+  }
+  .expositor button:hover .paquetPrestatge:nth-child(n) {
+    translate: none;
+    rotate: none;
+  }
+}

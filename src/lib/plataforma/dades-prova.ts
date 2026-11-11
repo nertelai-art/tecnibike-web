@@ -120,7 +120,10 @@ export const extres: Extra[] = [
   { id: 'pedals-spdSl', grup: 'pedals', imatge: '/img/extres/pedals-spdSl.webp', preu: 0, cobrament: 'perReserva', estoc: 10, ficticia: true },
   { id: 'pedals-look', grup: 'pedals', imatge: '/img/extres/pedals-look.webp', preu: 0, cobrament: 'perReserva', estoc: 6, ficticia: true },
   { id: 'pedals-propis', grup: 'pedals', preu: 0, cobrament: 'perReserva', estoc: null, ficticia: true },
-  { id: 'casc', grup: 'extres', imatge: '/img/extres/casc.webp', preu: 0, cobrament: 'perReserva', estoc: 40, ficticia: true },
+  {
+    id: 'casc', grup: 'extres', imatge: '/img/extres/casc.webp', preu: 0, cobrament: 'perReserva', estoc: 40, ficticia: true,
+    variants: [{ nom: 'S', estoc: 10 }, { nom: 'M', estoc: 18 }, { nom: 'L', estoc: 12 }],
+  },
   { id: 'cadenat', grup: 'extres', imatge: '/img/extres/cadenat.webp', preu: 300, cobrament: 'perReserva', estoc: 20, ficticia: true },
   { id: 'cadiraNado', grup: 'extres', imatge: '/img/extres/cadiraNado.webp', preu: 800, cobrament: 'perReserva', estoc: 2, ficticia: true },
   { id: 'alforges', grup: 'extres', imatge: '/img/extres/alforges.webp', preu: 600, cobrament: 'perReserva', estoc: 6, ficticia: true },
@@ -143,10 +146,15 @@ export const horari: HorariBotiga = {
   pasMinuts: 30,
 };
 
-/** Pagament i participants, preparats a la web però apagats: la plataforma encara no els té. */
+/**
+ * Pagament i participants, preparats a la web però apagats: la plataforma encara no els té. La
+ * nutrició, encesa a les dades de prova perquè es pugui provar; amb la plataforma real, apagada fins
+ * que en porti l'estoc.
+ */
 export const configuracioReserves: ConfiguracioReserves = {
   pagament: { actiu: false, modalitats: ['senyal', 'total'], senyalPercent: 30 },
   participants: { actiu: false },
+  nutricio: { actiu: true },
   retencioMinuts: 15,
   antelacioMinuts: 0,
 };

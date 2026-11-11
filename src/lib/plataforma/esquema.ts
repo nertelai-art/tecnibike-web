@@ -97,6 +97,12 @@ export const horariBotiga = z.object({
 
 // ── Extres del lloguer ──────────────────────────────────────────────────────────────────────
 
+/** Una variant d'un extra (la talla d'un casc): el nom que es tria i les unitats, si se'n porta el compte. */
+export const varianteExtra = z.object({
+  nom: z.string().trim().min(1).max(40),
+  estoc: z.number().int().nonnegative().nullable(),
+});
+
 /**
  * Pedals, casc, cadenat… Els pedals són un grup obligatori (se'n tria un per bici); la resta,
  * opcionals.
@@ -116,7 +122,53 @@ export const extra = z.object({
    * total). El que queda lliure per a unes dates surt de `disponibilitat`.
    */
   estoc: z.number().int().nonnegative().nullable(),
+  /** Si en té (talles d'un casc), cal triar-ne una en afegir l'extra. */
+  variants: z.array(varianteExtra).optional(),
   ficticia: z.boolean(),
+});
+
+// ── Nutrició esportiva ──────────────────────────────────────────────────────────────────────
+
+/** Quan es pren: abans de sortir, durant la ruta o després, per recuperar. */
+export const momentNutricio = z.enum(['abans', 'durant', 'despres']);
+export const tipusNutricio = z.enum(['gel', 'barreta', 'beguda', 'pastilles', 'gominoles', 'recuperacio', 'shot']);
+
+/** Un sabor d'un producte, amb les unitats que en queden a la botiga (`null` si no se'n porta el compte). */
+export const saborNutricio = z.object({
+  id: z.string().min(1).max(40),
+  /** El nom que hi ha posat la botiga. Sense, surt dels missatges de la web per l'`id`. */
+  nom: z.string().optional(),
+  estoc: z.number().int().nonnegative().nullable(),
+});
+
+/**
+ * Gel, barreta, beguda… de la botiga, que es pot afegir a una reserva de lloguer. És un producte que
+ * es ven i es consumeix: l'estoc no torna quan s'acaba el lloguer.
+ */
+export const producteNutricio = z.object({
+  id: z.string(),
+  marca: z.string(),
+  nom: z.string(),
+  tipus: tipusNutricio,
+  moments: z.array(momentNutricio).min(1),
+  /** El format de venda: «40 g», «sobre de 80 g», «tub de 20 pastilles». */
+  format: z.string(),
+  carbohidratsG: z.number().nonnegative().optional(),
+  cafeinaMg: z.number().nonnegative().optional(),
+  /** El text de la botiga. Sense, surt dels missatges de la web per l'`id`. */
+  descripcio: z.string().optional(),
+  imatge: z.string().optional(),
+  /** Preu per unitat. */
+  preu: centims,
+  sabors: z.array(saborNutricio).min(1),
+  ficticia: z.boolean(),
+});
+
+/** Una línia de nutrició de la reserva: és de la reserva sencera, no d'una bici. */
+export const liniaNutricio = z.object({
+  producteId: z.string().min(1),
+  sabor: z.string().min(1).max(40),
+  quantitat: z.number().int().min(1).max(10),
 });
 
 // ── Reserves (el que la web envia) ──────────────────────────────────────────────────────────
@@ -153,6 +205,8 @@ export const biciReserva = z.object({
   /** Id de l'extra del grup «pedals». Res si la botiga no en té cap de configurat. */
   pedals: z.string().min(1).optional(),
   extres: z.array(z.string()).max(8),
+  /** La variant triada de cada extra que en té (la talla del casc), per l'id de l'extra. */
+  variants: z.record(z.string(), z.string().trim().min(1).max(40)).optional(),
   ciclista,
 });
 
@@ -160,6 +214,8 @@ export const reservaLloguer = z.object({
   recollida: moment,
   retorn: moment,
   bicis: z.array(biciReserva).min(1).max(8),
+  /** Gels, barretes i begudes per a la ruta, de la reserva sencera. */
+  nutricio: z.array(liniaNutricio).max(20).optional(),
   comentaris: z.string().trim().max(500).optional(),
   ...client,
 });
@@ -195,6 +251,8 @@ export const configuracioReserves = z.object({
   }),
   /** Dades de cada ciclista i signatura del contracte abans de recollir. */
   participants: z.object({ actiu: z.boolean() }),
+  /** Afegir nutrició a la reserva: només quan la plataforma en porta l'estoc. */
+  nutricio: z.object({ actiu: z.boolean() }),
   /** Quant temps es guarden les bicis mentre es paga. */
   retencioMinuts: z.number().int().positive(),
   /** Amb quanta antelació, com a mínim, s'ha de reservar: abans d'això no s'ofereix cap hora. */
@@ -224,6 +282,12 @@ export const participantsReserva = z.object({
 export type BlocHorari = z.infer<typeof blocHorari>;
 export type HorariBotiga = z.infer<typeof horariBotiga>;
 export type Extra = z.infer<typeof extra>;
+export type VarianteExtra = z.infer<typeof varianteExtra>;
+export type MomentNutricio = z.infer<typeof momentNutricio>;
+export type TipusNutricio = z.infer<typeof tipusNutricio>;
+export type SaborNutricio = z.infer<typeof saborNutricio>;
+export type ProducteNutricio = z.infer<typeof producteNutricio>;
+export type LiniaNutricio = z.infer<typeof liniaNutricio>;
 export type Moment = z.infer<typeof moment>;
 export type Ciclista = z.infer<typeof ciclista>;
 export type BiciReserva = z.infer<typeof biciReserva>;

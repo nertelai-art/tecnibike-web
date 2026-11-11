@@ -74,6 +74,20 @@ export function totalReserva(linies: readonly LiniaPreu[], recollida: Moment, re
   return total;
 }
 
+/** El que costa la nutrició de la reserva: preu per quantitat. `null` si hi ha un producte que no es coneix. */
+export function importNutricio(
+  linies: readonly { producteId: string; quantitat: number }[],
+  productes: readonly { id: string; preu: number }[],
+): number | null {
+  let total = 0;
+  for (const l of linies) {
+    const producte = productes.find((p) => p.id === l.producteId);
+    if (!producte) return null;
+    total += producte.preu * l.quantitat;
+  }
+  return total;
+}
+
 /** El preu més baix per dia que pot arribar a pagar algú: el reclam «des de». */
 export function preuMinimPerDia(tarifa: Tarifa): number {
   return Math.min(tarifa.dia, tarifa.de2a6 ?? tarifa.dia, tarifa.mesDe6 ?? tarifa.dia);

@@ -1,5 +1,5 @@
 import type { HorariBotiga } from './plataforma/esquema';
-import { commutaExtra, extresLliures, primeraRecollida, retornPerDefecte, tallesLliures } from './reserva';
+import { afegeixNutricio, commutaExtra, extresLliures, nutricioLliure, primeraRecollida, retornPerDefecte, tallesLliures, variantsLliures } from './reserva';
 
 const feiner = [
   { obre: '09:00', tanca: '13:00' },
@@ -25,6 +25,46 @@ describe('unitats lliures per a cada bici del carro', () => {
   it("els extres i els pedals també es resten entre bicis; els que no tenen límit, no", () => {
     const linies = [linia('btt', 'M', ['casc', 'cadiraNado']), linia('btt', 'S', ['casc'], 'pedals-propis')];
     expect(extresLliures(disponibilitat, linies, 1)).toEqual({ casc: 2, cadiraNado: 0, 'pedals-propis': null });
+  });
+});
+
+describe('variants dels extres', () => {
+  const disponibilitat = { bicis: {}, extres: { casc: 5 }, variantsExtres: { casc: { S: 1, M: 4 } } };
+  const linia = (variants: Record<string, string>) => ({ biciId: 'btt', talla: 'M', pedals: 'pedals-plans', extres: ['casc'], variants });
+
+  it("resta el que han triat les altres bicis de la mateixa variant", () => {
+    const linies = [linia({ casc: 'S' }), linia({ casc: 'M' }), linia({ casc: 'M' })];
+    expect(variantsLliures(disponibilitat, linies, 0, 'casc')).toEqual({ S: 1, M: 2 });
+    expect(variantsLliures(disponibilitat, linies, 1, 'casc')).toEqual({ S: 0, M: 3 });
+  });
+
+  it("sense disponibilitat o sense variants, res", () => {
+    expect(variantsLliures(null, [linia({})], 0, 'casc')).toEqual({});
+    expect(variantsLliures(disponibilitat, [linia({})], 0, 'cadenat')).toEqual({});
+  });
+});
+
+describe('nutrició de la reserva', () => {
+  it("afegir el mateix producte i sabor en suma la quantitat; un altre sabor és una línia nova", () => {
+    let linies = afegeixNutricio([], 'gel', 'cola');
+    linies = afegeixNutricio(linies, 'gel', 'cola');
+    linies = afegeixNutricio(linies, 'gel', 'llima');
+    expect(linies).toEqual([
+      { producteId: 'gel', sabor: 'cola', quantitat: 2 },
+      { producteId: 'gel', sabor: 'llima', quantitat: 1 },
+    ]);
+  });
+
+  it("no passa del màxim per línia", () => {
+    expect(afegeixNutricio([{ producteId: 'gel', sabor: 'cola', quantitat: 10 }], 'gel', 'cola')).toEqual([{ producteId: 'gel', sabor: 'cola', quantitat: 10 }]);
+  });
+
+  it("el que queda d'un sabor descompta el que ja hi ha a la reserva; sense límit, null", () => {
+    const disponibilitat = { nutricio: { gel: { cola: 5, llima: null } } };
+    const linies = [{ producteId: 'gel', sabor: 'cola', quantitat: 2 }];
+    expect(nutricioLliure(disponibilitat, linies, 'gel', 'cola')).toBe(3);
+    expect(nutricioLliure(disponibilitat, linies, 'gel', 'llima')).toBeNull();
+    expect(nutricioLliure(null, linies, 'gel', 'cola')).toBeUndefined();
   });
 });
 

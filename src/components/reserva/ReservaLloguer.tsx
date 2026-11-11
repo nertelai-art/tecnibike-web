@@ -3,8 +3,8 @@
 // Fitxa de lloguer, amb el recorregut de Sescapada en una sola pantalla. A l'esquerra, fixos, la
 // foto, el títol i el preu, que es va desglossant a cada canvi. A la dreta, el formulari: dia i hora
 // de recollida i de retorn dins de l'horari de la botiga, una o més bicis (talla amb les unitats que
-// queden, qui la portarà, pedals i extres amb foto i estoc) i les dades. El servidor torna a
-// calcular el preu en confirmar.
+// queden, qui la portarà, pedals i extres amb foto i estoc), la nutrició per a la ruta i les dades.
+// El servidor torna a calcular el preu en confirmar.
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, useState, useSyncExternalStore, useTransition, type FormEvent, type ReactNode } from 'react';
@@ -12,11 +12,12 @@ import { consultarDisponibilitat, reservarLloguer, type ResultatReserva } from '
 import { primerMomentReservable, esPassat, sumaDies, type Instant } from '@/lib/calendari';
 import { blocsDelDia, diesEntre, horesRecollida, horesRetorn, MAX_DIES_LLOGUER, minutsEntre, validaFranja } from '@/lib/horari';
 import type { Disponibilitat } from '@/lib/plataforma';
-import type { BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, ModalitatPagament, Moment } from '@/lib/plataforma/esquema';
-import { desglosLinia, duradaDe, formatEuros, preuPerDia } from '@/lib/preus';
-import { extresLliures, primeraRecollida, retornPerDefecte, tallesLliures } from '@/lib/reserva';
+import type { BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, LiniaNutricio, ModalitatPagament, Moment, ProducteNutricio } from '@/lib/plataforma/esquema';
+import { desglosLinia, duradaDe, formatEuros, importNutricio, preuPerDia } from '@/lib/preus';
+import { extresLliures, primeraRecollida, retornPerDefecte, tallesLliures, variantsLliures } from '@/lib/reserva';
 import { useReducedMotion } from '@/lib/scroll-scene';
 import { BiciDelCarro, type LiniaFormulari } from './BiciDelCarro';
+import { NutricioReserva } from './NutricioReserva';
 import { Participants } from './Participants';
 import styles from './Reserva.module.css';
 
@@ -46,6 +47,8 @@ type Props = {
   bici: BiciLloguer;
   flota: readonly BiciLloguer[];
   extres: readonly Extra[];
+  /** Nutrició que es pot afegir a la reserva. Buida si la plataforma encara no l'admet. */
+  nutricio: readonly ProducteNutricio[];
   horari: HorariBotiga;
   configuracio: ConfiguracioReserves;
   /** La foto de la bici, que ve del servidor. */
@@ -54,7 +57,7 @@ type Props = {
   inclou: ReactNode;
 };
 
-export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto, inclou }: Props) {
+export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutricio, horari, configuracio, foto, inclou }: Props) {
   const t = useTranslations('reserva');
   const tf = useTranslations('flota');
   const locale = useLocale();
@@ -67,10 +70,11 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
   const pedalsPerDefecte = extres.find((e) => e.grup === 'pedals')?.id ?? '';
   const extresPerDefecte = extres.some((e) => e.id === 'casc') ? ['casc'] : [];
   const novaLinia = (clau: number, biciId: string): LiniaFormulari => ({
-    clau, biciId, talla: null, pedals: pedalsPerDefecte, extres: extresPerDefecte, nom: '', alcada: '', seient: '',
+    clau, biciId, talla: null, pedals: pedalsPerDefecte, extres: extresPerDefecte, variants: {}, nom: '', alcada: '', seient: '',
   });
   const seguentClau = useRef(1);
   const [linies, setLinies] = useState<LiniaFormulari[]>(() => [novaLinia(0, bici.id)]);
+  const [nutricio, setNutricio] = useState<LiniaNutricio[]>([]);
   const [recollidaTriada, setRecollida] = useState<Moment | null>(null);
   const [retornTriat, setRetorn] = useState<Moment | null>(null);
   const [disponibilitat, setDisponibilitat] = useState<Disponibilitat | null>(null);
@@ -109,7 +113,8 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
     const triats = [l.pedals, ...l.extres].map((x) => perId.get(x)).filter((e): e is Extra => e !== undefined);
     return desglosLinia({ tarifa: b.tarifa, extres: triats }, recollida, retorn);
   });
-  const total = desglossos.every((d) => d !== null) ? desglossos.reduce((suma, d) => suma + d!.total, 0) : null;
+  const importN = importNutricio(nutricio, productesNutricio) ?? 0;
+  const total = desglossos.every((d) => d !== null) ? desglossos.reduce((suma, d) => suma + d!.total, importN) : null;
 
   /** El que costa de debò cada tipus de bici per a aquestes dates, no el tram més barat. */
   const preuDe = (b: BiciLloguer) => {
@@ -184,11 +189,18 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
       const talles = tallesLliures(disponibilitat, linies, i);
       if (!l.talla || talles?.[l.talla] === 0) errors.add(`bicis.${i}.talla`);
       if (pedals.length > 0 && (!l.pedals || extresLliures(disponibilitat, linies, i)[l.pedals] === 0)) errors.add(`bicis.${i}.pedals`);
+      for (const x of l.extres) {
+        const e = perId.get(x);
+        if (!e?.variants?.length) continue;
+        const v = l.variants[x];
+        if (!v || variantsLliures(disponibilitat, linies, i, x)[v] === 0) errors.add(`bicis.${i}.variants.${x}`);
+      }
       return {
         biciId: l.biciId,
         talla: l.talla ?? '',
         pedals: l.pedals || undefined,
         extres: l.extres,
+        variants: Object.keys(l.variants).length ? l.variants : undefined,
         ciclista: {
           nom: l.nom.trim() || undefined,
           alcadaCm: numero(l.alcada, 100, 220, `bicis.${i}.ciclista.alcadaCm`),
@@ -213,7 +225,7 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
     iniciaEnviament(async () => {
       try {
         const r = await reservarLloguer(
-          { recollida, retorn, bicis, comentaris: comentaris || undefined, nom, telefon, correu, idioma: locale, privacitat },
+          { recollida, retorn, bicis, nutricio: nutricio.length ? nutricio : undefined, comentaris: comentaris || undefined, nom, telefon, correu, idioma: locale, privacitat },
           configuracio.pagament.actiu ? modalitat : undefined,
         );
         if (r.ok && 'pagament' in r) {
@@ -288,6 +300,25 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
                       </li>
                     );
                   })}
+                  {nutricio.length > 0 && (
+                    <li>
+                      <p className={styles.liniaBici}>
+                        <span>{t('nutricio')}</span>
+                        <strong>{euros(importN)}</strong>
+                      </p>
+                      {nutricio.map((n) => {
+                        const p = productesNutricio.find((x) => x.id === n.producteId);
+                        return (
+                          <p key={`${n.producteId}-${n.sabor}`} className={styles.liniaDetall}>
+                            <span>
+                              {n.quantitat} × {p?.nom ?? n.producteId}
+                            </span>
+                            <span>{p ? euros(p.preu * n.quantitat) : '—'}</span>
+                          </p>
+                        );
+                      })}
+                    </li>
+                  )}
                 </ul>
                 {configuracio.pagament.actiu && total !== null ? (
                   <fieldset className={styles.modalitats}>
@@ -417,6 +448,7 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
                   extres={opcionals}
                   talles={tallesLliures(disponibilitat, linies, i)}
                   lliures={extresLliures(disponibilitat, linies, i)}
+                  lliuresVariants={(x) => variantsLliures(disponibilitat, linies, i, x)}
                   errors={errorsCamps}
                   ambCapcalera={linies.length > 1}
                   preuDe={preuDe}
@@ -434,6 +466,11 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
                 </button>
               )}
             </div>
+
+            {/* Nutrició per a la ruta, de la reserva sencera */}
+            {productesNutricio.length > 0 && (
+              <NutricioReserva productes={productesNutricio} linies={nutricio} disponibilitat={disponibilitat} onCanvi={setNutricio} />
+            )}
 
             {/* Dades */}
             <fieldset className={styles.grup}>

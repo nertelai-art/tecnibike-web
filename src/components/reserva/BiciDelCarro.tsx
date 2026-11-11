@@ -20,6 +20,8 @@ export type LiniaFormulari = {
   talla: string | null;
   pedals: string;
   extres: string[];
+  /** La variant triada de cada extra que en té (la talla del casc). */
+  variants: Record<string, string>;
   nom: string;
   alcada: string;
   seient: string;
@@ -34,6 +36,8 @@ type Props = {
   /** `null` mentre es consulta la disponibilitat. */
   talles: Record<string, number> | null;
   lliures: Record<string, number | null>;
+  /** El que queda de cada variant d'un extra per a aquesta bici. */
+  lliuresVariants: (extraId: string) => Record<string, number | null>;
   errors: ReadonlySet<string>;
   /** Si n'hi ha més d'una, cal dir de quina es parla. */
   ambCapcalera: boolean;
@@ -44,7 +48,7 @@ type Props = {
   onTreure?: () => void;
 };
 
-export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliures, errors, ambCapcalera, preuDe, onCanvi, onTreure }: Props) {
+export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliures, lliuresVariants, errors, ambCapcalera, preuDe, onCanvi, onTreure }: Props) {
   const t = useTranslations('reserva');
   const id = useId();
   const bici = flota.find((b) => b.id === linia.biciId) ?? flota[0]!;
@@ -181,7 +185,16 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
           triats={linia.extres}
           lliures={lliures}
           multiple
-          onCanvi={(x) => onCanvi({ extres: commutaExtra(linia.extres, x, extres) })}
+          onCanvi={(x) => {
+            const triats = commutaExtra(linia.extres, x, extres);
+            // La variant d'un extra que es treu ja no compta.
+            const variants = Object.fromEntries(Object.entries(linia.variants).filter(([id]) => triats.includes(id)));
+            onCanvi({ extres: triats, variants });
+          }}
+          variants={linia.variants}
+          lliuresVariants={lliuresVariants}
+          onVariant={(x, v) => onCanvi({ variants: { ...linia.variants, [x]: v } })}
+          faltaVariant={new Set(extres.filter((e) => error(`variants.${e.id}`)).map((e) => e.id))}
         />
       </div>
     </fieldset>

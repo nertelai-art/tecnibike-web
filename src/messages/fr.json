@@ -362,7 +362,7 @@
     "enviant": "Envoi…",
     "errors": {
       "dades": "Vérifiez les champs signalés.",
-      "esgotat": "Un des vélos ou une des tailles n'est plus disponible pour ces jours. Essayez une autre taille ou d'autres dates.",
+      "esgotat": "Un vélo, une taille ou un produit n'est plus disponible. Essayez-en un autre ou d'autres dates.",
       "extra": "Une option ou des pédales ne sont plus disponibles pour ces jours. Choisissez-en d'autres.",
       "durada": "Un des vélos ne se loue pas pour cette durée.",
       "talla": "Choisissez une taille disponible pour chaque vélo.",
@@ -378,7 +378,8 @@
       "talla": "Choisissez une taille.",
       "pedals": "Choisissez des pédales.",
       "alcada": "Entre 100 et 220 cm.",
-      "seient": "Entre 50 et 100 cm."
+      "seient": "Entre 50 et 100 cm.",
+      "variant": "Choisissez-en une."
     },
     "fet": {
       "titol": "Réservation confirmée",
@@ -425,7 +426,9 @@
       "comptaquilometres": "Compteur"
     },
     "tipusBici": "Type de vélo",
-    "calculDies": "{preu}/jour × {dies}"
+    "calculDies": "{preu}/jour × {dies}",
+    "variantDe": "Options de {extra}",
+    "nutricio": "Nutrition pour la sortie"
   },
   "cita": {
     "titol": "Rendez-vous à l'atelier",
@@ -488,6 +491,120 @@
     "caducat": {
       "titol": "La réservation a expiré",
       "text": "Trop de temps a passé et les vélos sont à nouveau libres. Réessayez."
+    }
+  },
+  "nutricio": {
+    "situacio": "Nutrition sportive",
+    "titol": "Du carburant pour chaque kilomètre",
+    "intro": "Gels, barres et boissons de Maurten, 226ERS, Nutrinovex et SiS, les mêmes que dans notre boutique. Nous les préparons avec votre vélo de location, ou passez les chercher avant de partir.",
+    "expositors": "Les marques de la boutique",
+    "veure": "{n, plural, one {Voir le produit} other {Voir les # produits}}",
+    "totesMarques": "Toutes les marques",
+    "quan": "Quand le prendre",
+    "tot": "Tout",
+    "moments": {
+      "abans": "Avant",
+      "durant": "Pendant",
+      "despres": "Après"
+    },
+    "momentsText": {
+      "abans": "Pour faire le plein avant de partir : une barre ou une boisson glucidique un peu avant de monter sur le vélo.",
+      "durant": "Pour ne pas manquer d’énergie en pleine sortie : gels, barres et boissons à prendre en pédalant.",
+      "despres": "Pour récupérer au retour : protéines et glucides pour les jambes du lendemain."
+    },
+    "marques": {
+      "maurten": "Suédoise. Peu de références, sans arôme ni colorant et une seule idée : l'hydrogel, doux pour l'estomac.",
+      "226ers": "D'Alicante. Un catalogue immense : gels, barres et boissons de nombreux parfums, salés et caféinés aussi.",
+      "nutrinovex": "De Castellón. Gels et barres d’endurance, et un gel spécial crampes.",
+      "sis": "Science in Sport, britannique : des gels isotoniques à prendre sans eau.",
+      "altres": ""
+    },
+    "productes": {
+      "maurten-gel-100": "Gel à l'hydrogel sans colorants ni arômes : dense, doux pour l'estomac, sans besoin d'eau.",
+      "maurten-gel-100-caf": "Le Gel 100 avec 100 mg de caféine, pour la fin de parcours ou une longue sortie.",
+      "maurten-gel-160": "Le grand gel de Maurten : 40 g de glucides en un seul sachet, pour les efforts longs.",
+      "maurten-drink-mix-160": "Boisson glucidique qui devient hydrogel dans l'estomac. Un sachet par bidon ; un sachet Addition lui donne le goût.",
+      "maurten-drink-mix-320": "La version concentrée : 80 g de glucides par bidon, pour les sorties longues et intenses.",
+      "maurten-solid-160": "Barre à l'avoine qui se coupe en deux, pour manger solide les premières heures. Aussi au cacao (Solid C 160).",
+      "226ers-high-fructose-gel-xs": "Petit gel de 30 g de glucides (glucose et fructose). Celui à la cola contient 55 mg de caféine.",
+      "226ers-high-energy-gel": "Grand gel de 50 g de glucides et de sels. Celui au café contient 80 mg de caféine.",
+      "226ers-isotonic-gel": "Gel isotonique liquide en stick : pas besoin d'eau. Celui à la cola contient 100 mg de caféine.",
+      "226ers-race-day-bar": "Barre moelleuse à manger en pédalant, toutes les 30–60 minutes. Sucrées et une salée.",
+      "226ers-isotonic-drink": "Sachet de boisson isotonique pour un bidon d’un demi-litre, sans sucre ajouté.",
+      "226ers-hydrazero": "Pastilles effervescentes d'électrolytes pour le bidon, sans calories : pour la chaleur et les longues sorties.",
+      "226ers-recovery-drink": "Boisson de récupération avec 20–22 g de protéines de lactosérum et des glucides, pour le retour.",
+      "nutrinovex-longovit-30": "Gel de 30 g de glucides et de sels, en de nombreux parfums. Celui à la pomme verte contient 60 mg de caféine.",
+      "nutrinovex-glucomin": "Gel liquide à l'hydrogel, à prendre sans eau, qui passe bien aussi à la récupération.",
+      "nutrinovex-glucobar": "Barre de pâte de fruits de 33 g de glucides. Celles à la cola et à la pomme contiennent 100 mg de caféine.",
+      "nutrinovex-cramp-rescuer": "Gel d'urgence quand une crampe arrive : sels et vinaigre de cidre.",
+      "sis-go-isotonic": "Gel isotonique de 22 g de glucides, conçu pour se prendre sans eau.",
+      "sis-go-cafeina": "Le GO Isotonic avec 75 mg de caféine, une heure avant ou en fin de parcours.",
+      "sis-go-electrolyte": "Le GO Isotonic avec électrolytes, pour les jours de chaleur et les longues sorties.",
+      "sis-beta-fuel-chews": "Gommes de 46 g de glucides à mâcher en pédalant.",
+      "sis-go-hydro": "Pastilles effervescentes d'électrolytes pour le bidon, presque sans calories."
+    },
+    "sabors": {
+      "neutre": "Neutre",
+      "civada": "Avoine",
+      "cacau": "Cacao",
+      "poma": "Pomme",
+      "pomaVerda": "Pomme verte (avec caféine)",
+      "cola": "Cola",
+      "mentol": "Menthe",
+      "taronja": "Orange",
+      "maduixa": "Fraise",
+      "speculoos": "Spéculoos",
+      "xocolataDubai": "Chocolat Dubaï",
+      "llimona": "Citron",
+      "platan": "Banane",
+      "maduixaSalada": "Fraise salée",
+      "cafe": "Expresso (avec caféine)",
+      "sindria": "Pastèque",
+      "llima": "Citron vert",
+      "xocolataNegra": "Chocolat noir",
+      "pomaCanyella": "Pomme et cannelle",
+      "platanGingebre": "Banane et gingembre",
+      "xocolataBlancaMaduixa": "Chocolat blanc et fraise",
+      "ametllesLlavors": "Amandes et graines (salée)",
+      "fruitsVermells": "Fruits rouges",
+      "tropical": "Tropical",
+      "xocolata": "Chocolat",
+      "vainilla": "Vanille",
+      "mangoMandarina": "Mangue et mandarine",
+      "maduixaKiwi": "Fraise et kiwi",
+      "llimaLlimona": "Citron vert et citron",
+      "citric": "Agrumes",
+      "eucaliptusMentol": "Eucalyptus et menthol",
+      "gerdLlimona": "Framboise et citron",
+      "herbasanaRegalessia": "Menthe et réglisse",
+      "llimonaMenta": "Citron et menthe",
+      "pomeloRosat": "Pamplemousse rose",
+      "maduixaLlima": "Fraise et citron vert",
+      "variat": "Selon le stock"
+    },
+    "saborDe": "Parfum de {producte}",
+    "carbohidrats": "{g} g de glucides",
+    "cafeina": "{mg} mg de caféine",
+    "perUnitat": "{preu} l'unité",
+    "buit": "Aucun produit de cette marque pour ce moment. Essayez un autre filtre.",
+    "ambLaBici": "Ajoutez-la à votre vélo de location",
+    "perWhatsapp": "Ou commandez-la sur WhatsApp",
+    "missatge": "Bonjour ! Je voudrais réserver de la nutrition pour ma sortie (gels, barres…). Qu’avez-vous ?",
+    "nota": "Illustrations maison : ce ne sont pas des photos des produits. Prix et stock indicatifs*.",
+    "marca": "Marque",
+    "totes": "Toutes",
+    "sabor": "Parfum",
+    "esgotat": "épuisé",
+    "afegir": "Ajouter",
+    "afegirMes": "En ajouter ({n})",
+    "afegirA": "Ajouter {producte}, {sabor}",
+    "menys": "Un {producte} de moins",
+    "mes": "Un {producte} de plus",
+    "quantitat": "Quantité",
+    "reserva": {
+      "titol": "Nutrition pour la sortie",
+      "intro": "Gels, barres et boissons de la boutique. Nous les préparons avec votre vélo et ils se paient avec la réservation.",
+      "triats": "Dans la réservation"
     }
   }
 }

@@ -158,6 +158,11 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
     throw new Error(`La plataforma ha respost ${resposta.status} ${codi ?? ''} a ${metode} ${ruta}${detall ? ` (${detall})` : ''}`.replace(/ {2,}/g, ' '));
   }
 
+  /** La plataforma encara no ven productes amb la reserva: millor dir-ho que perdre'ls pel camí. */
+  function senseNutricio(reserva: ReservaLloguer) {
+    if (reserva.nutricio?.length) throw new ErrorReserva('noDisponible', 'la plataforma encara no admet nutrició a la reserva');
+  }
+
   const cataleg = async () => RentalCatalogResponseSchema.parse(await crida('/catalog', { revalida: true }));
 
   /** Les bicis de la web amb el seu model de la plataforma, per traduir l'adreça llegible a l'identificador. */
@@ -199,7 +204,7 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
       reserva.bicis.map(async (b) => ({
         modelId: await modelId(b.biciId),
         variant: b.talla === '—' ? null : b.talla,
-        options: [...(b.pedals ? [b.pedals] : []), ...b.extres].map((optionId) => ({ optionId, variant: null })),
+        options: [...(b.pedals ? [b.pedals] : []), ...b.extres].map((optionId) => ({ optionId, variant: b.variants?.[optionId] ?? null })),
         rider: {
           ...(b.ciclista.nom && { name: b.ciclista.nom }),
           ...(b.ciclista.alcadaCm && { heightCm: b.ciclista.alcadaCm }),
@@ -233,6 +238,7 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
           preu: o.priceCents,
           cobrament: o.priceUnit === 'day' ? 'perDia' : 'perReserva',
           estoc: null,
+          ...(o.variants.length > 0 && { variants: o.variants.map((nom) => ({ nom, estoc: null })) }),
           ficticia: false,
         }),
       );
@@ -248,6 +254,8 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
           senyalPercent: ajustos.payment?.depositPercent ?? 100,
         },
         participants: { actiu: false },
+        // Fins que el contracte porti els productes de botiga i el seu estoc.
+        nutricio: { actiu: false },
         retencioMinuts: ajustos.holdMinutes,
         antelacioMinuts: ajustos.minNoticeMinutes,
       };
@@ -259,7 +267,7 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
       if (demanades.length) consulta.set('models', demanades.map((b) => b.model.id).join(','));
       const lliures = RentalAvailabilityResponseSchema.parse(await crida(`/availability?${consulta}`));
       const perModel = new Map(demanades.map((b) => [b.model.id, b.bici.id]));
-      const resultat: Awaited<ReturnType<Plataforma['disponibilitat']>> = { bicis: {}, extres: {} };
+      const resultat: Awaited<ReturnType<Plataforma['disponibilitat']>> = { bicis: {}, extres: {}, variantsExtres: {}, nutricio: {} };
       for (const m of lliures.models) {
         const id = perModel.get(m.modelId);
         if (id) resultat.bicis[id] = Object.fromEntries(m.variants.map((v) => [v.variant ?? '—', v.free ?? 0]));
@@ -268,15 +276,19 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
         // Sense variants, n'hi ha una sola entrada; amb variants (talles d'un casc), el total.
         const lliure = o.variants.map((v) => v.free);
         resultat.extres[o.optionId] = lliure.includes(null) ? null : lliure.reduce<number>((a, b) => a + (b ?? 0), 0);
+        const ambNom = o.variants.filter((v) => v.variant !== null);
+        if (ambNom.length) resultat.variantsExtres[o.optionId] = Object.fromEntries(ambNom.map((v) => [v.variant!, v.free]));
       }
       return resultat;
     },
     crearReservaLloguer: async (reserva) => {
+      senseNutricio(reserva);
       const feta = RentalBookingResponseSchema.parse(await crida('/bookings', { metode: 'POST', cos: await cosDe(reserva), idempotencia: generaClau() }));
       // El testimoni d'accés (`accessToken`) caldrà per als participants (L10); avui la web no el desa.
       return { codi: feta.reference, totalCentims: feta.totalCents, estat: feta.status === 'pending' ? 'pendent' : 'confirmada' };
     },
     retenirReserva: async (reserva) => {
+      senseNutricio(reserva);
       const retinguda = RentalHoldCreatedResponseSchema.parse(await crida('/holds', { metode: 'POST', cos: await cosDe(reserva), idempotencia: generaClau() }));
       return { id: retinguda.holdId, caducaA: retinguda.expiresAt, totalCentims: retinguda.totalCents };
     },
@@ -303,6 +315,8 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
     serveisTaller: () => proves.serveisTaller(),
     frangesTaller: (dia) => proves.frangesTaller(dia),
     crearCitaTaller: (cita) => proves.crearCitaTaller(cita),
+    // El catàleg per ensenyar-lo, de les dades de prova fins que la plataforma el tingui.
+    nutricio: () => proves.nutricio(),
     productes: () => proves.productes(),
     articles: (categoria) => proves.articles(categoria),
     valoracio: () => proves.valoracio(),
