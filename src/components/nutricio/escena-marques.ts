@@ -37,8 +37,7 @@ export const FASES = {
 const GRONXA = 18;
 const gronxa = (t: number) => {
   const g = clamp((t - 0.5) / 0.2, -1, 1);
-  // Amb l'error de coma flotant, «al mig» pot ser -2e-16: també és de cara.
-  return Math.abs(g) < 1e-9 ? 0 : g * GRONXA;
+  return g === 0 ? 0 : g * GRONXA;
 };
 
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
@@ -106,80 +105,4 @@ export function estatCapitol(p: number, marca: number, total: number): EstatCapi
 /** La marca que mana en aquest punt (la del fons i l'indicador). */
 export function marcaActiva(p: number, total: number): number {
   return Math.min(total - 1, Math.max(0, Math.floor(p * total + 0.1)));
-}
-
-// ── El recorregut sencer: les marques i, al final, el catàleg ─────────────────────────────────
-//
-// Les marques fan la primera part del recorregut i s'aturen amb l'última de cara (al mig del seu
-// tram). La resta és el catàleg: els productes de l'última marca surten girant, entra el fons clar
-// i les targetes surten d'una en una amb un bot. Les fases s'encadenen sense cap salt.
-
-/** Capítols de marca que es recorren (l'última, fins al mig) i el del catàleg. */
-const trams = (total: number) => ({ marques: total - 0.5, cataleg: 1 });
-
-/** Fins on arriben les marques dins del recorregut (0–1). */
-export function fiMarques(total: number): number {
-  const { marques, cataleg } = trams(total);
-  return marques / (marques + cataleg);
-}
-
-/** El progrés que reben les marques: al final de la seva part, l'última és de cara. */
-export function progresMarques(p: number, total: number): number {
-  return (clamp(p / fiMarques(total)) * trams(total).marques) / total;
-}
-
-/** El progrés del catàleg (0–1): zero mentre passen les marques. */
-export function progresCataleg(p: number, total: number): number {
-  const fi = fiMarques(total);
-  return clamp((p - fi) / (1 - fi));
-}
-
-/** Al model, una marca del mig d'un recorregut de tres (entra i surt): t local → progrés. */
-const delMig = (t: number) => (t + 1) / 3;
-
-/** L'estat d'un producte al recorregut sencer: amb el catàleg, l'última marca també surt. */
-export function estatProducteEscena(p: number, marca: number, total: number, index: number, quants: number): EstatProducte {
-  const q = progresCataleg(p, total);
-  // Primer marxen els productes (fins al 30 % del tram); després entra el catàleg.
-  if (q > 0 && marca === total - 1) return estatProducte(delMig(0.5 + 0.8 * clamp(q / 0.3)), 1, 3, index, quants);
-  return estatProducte(progresMarques(p, total), marca, total, index, quants);
-}
-
-/** El text d'una marca al recorregut sencer: el de l'última se'n va quan entra el catàleg. */
-export function estatCapitolEscena(p: number, marca: number, total: number): EstatCapitol {
-  const c = estatCapitol(progresMarques(p, total), marca, total);
-  if (marca !== total - 1) return c;
-  const fora = clamp(progresCataleg(p, total) / 0.2);
-  return { text: c.text * (1 - fora), textY: c.textY - fora * 40 };
-}
-
-const easeOutBack = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2);
-
-export type EstatCataleg = {
-  /** El fons clar que tapa l'escena fosca. */
-  fons: number;
-  /** El títol i els filtres. */
-  cap: number;
-  /** El bot de cada targeta (pot passar d'1 mentre rebota; al final, exactament 1). */
-  pop: (index: number, quantes: number) => number;
-};
-
-/** Com està el catàleg dins de l'escena. */
-export function estatCataleg(p: number, total: number): EstatCataleg {
-  const q = progresCataleg(p, total);
-  return {
-    // El fons clar, quan els productes de l'última marca ja han marxat.
-    fons: clamp((q - 0.25) / 0.2),
-    cap: easeOutCubic(clamp((q - 0.35) / 0.2)),
-    pop: (index, quantes) => {
-      // Les targetes comencen entre el 42 % i el 75 % del tram i triguen un 25 % cadascuna.
-      const inici = 0.42 + (quantes > 1 ? (index / (quantes - 1)) * 0.33 : 0);
-      return easeOutBack(clamp((q - inici) / 0.25));
-    },
-  };
-}
-
-/** La marca activa al recorregut sencer. */
-export function marcaActivaEscena(p: number, total: number): number {
-  return marcaActiva(progresMarques(p, total), total);
 }

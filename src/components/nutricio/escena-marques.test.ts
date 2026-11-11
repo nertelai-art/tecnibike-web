@@ -1,14 +1,4 @@
-import {
-  estatCapitol,
-  estatCapitolEscena,
-  estatCataleg,
-  estatProducte,
-  estatProducteEscena,
-  fiMarques,
-  marcaActiva,
-  marcaActivaEscena,
-  progresMarques,
-} from './escena-marques';
+import { estatCapitol, estatProducte, marcaActiva } from './escena-marques';
 
 // Invariants de l'escena, mostrejant el progrés: no valors exactes de cada fotograma.
 
@@ -74,57 +64,5 @@ describe('escena de marques', () => {
   it('la marca activa va de la primera a l\'última sense saltar-ne cap', () => {
     const vistes = new Set(mostres.map((p) => marcaActiva(p, TOTAL)));
     expect([...vistes].sort()).toEqual([0, 1, 2, 3]);
-  });
-});
-
-describe('escena sencera: marques i catàleg', () => {
-  const fi = fiMarques(TOTAL);
-
-  it("quan s'acaben les marques, l'última és de cara i el catàleg encara no ha entrat", () => {
-    for (let i = 0; i < 4; i++) expect(estatProducteEscena(fi, TOTAL - 1, TOTAL, i, 4)).toMatchObject({ opacitat: 1, girY: 0 });
-    const c = estatCataleg(fi, TOTAL);
-    expect(c.fons).toBe(0);
-    expect(c.pop(0, 8)).toBe(0);
-  });
-
-  it('al final, totes les marques han marxat i el catàleg és sencer, amb totes les targetes a lloc', () => {
-    for (let marca = 0; marca < TOTAL; marca++) {
-      expect(estatProducteEscena(1, marca, TOTAL, 0, 4).opacitat, `marca ${marca}`).toBe(0);
-      expect(estatCapitolEscena(1, marca, TOTAL).text).toBe(0);
-    }
-    const c = estatCataleg(1, TOTAL);
-    expect(c.fons).toBe(1);
-    expect(c.cap).toBe(1);
-    for (let i = 0; i < 8; i++) expect(c.pop(i, 8)).toBe(1);
-  });
-
-  it("el fons clar no entra fins que els productes de l'última marca han marxat", () => {
-    for (const p of mostres) {
-      if (estatCataleg(p, TOTAL).fons <= 0) continue;
-      for (let i = 0; i < 4; i++) expect(estatProducteEscena(p, TOTAL - 1, TOTAL, i, 4).opacitat, `p=${p} i=${i}`).toBe(0);
-    }
-  });
-
-  it("les targetes surten d'una en una, en ordre", () => {
-    const comenca = (i: number) => mostres.find((p) => estatCataleg(p, TOTAL).pop(i, 8) > 0)!;
-    for (let i = 1; i < 8; i++) expect(comenca(i)).toBeGreaterThan(comenca(i - 1));
-  });
-
-  it("l'última marca passa de quedar-se de cara a sortir sense cap salt", () => {
-    const fins = Array.from({ length: 2001 }, (_, i) => fi - 0.05 + (i / 2000) * 0.15);
-    for (let i = 0; i < 4; i++) {
-      fins.slice(1).forEach((p, k) => {
-        const a = estatProducteEscena(fins[k]!, TOTAL - 1, TOTAL, i, 4);
-        const b = estatProducteEscena(p, TOTAL - 1, TOTAL, i, 4);
-        expect(Math.abs(b.girY - a.girY), `p=${p} i=${i}`).toBeLessThan(12);
-        expect(Math.abs(b.opacitat - a.opacitat)).toBeLessThan(0.1);
-      });
-    }
-  });
-
-  it('les marques es recorren igual que abans, ara en la primera part', () => {
-    expect(marcaActivaEscena(0, TOTAL)).toBe(0);
-    expect(marcaActivaEscena(fi, TOTAL)).toBe(TOTAL - 1);
-    expect(progresMarques(fi, TOTAL)).toBeCloseTo((TOTAL - 0.5) / TOTAL);
   });
 });
