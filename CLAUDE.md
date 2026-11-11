@@ -130,7 +130,8 @@ Versions que **no** són l'última, i per què:
   https://tecnibike-web.vercel.app. El primer desplegament (en importar, 23-10-2026) és de producció.
 - **Producció = `main`.** Vercel desplega a producció cada canvi de `main` i fa previsualitzacions
   de `developer` (i de qualsevol altra branca). L'«Ignored Build Step» és «Automatic». Publicar a
-  producció és, doncs, llançar el flux de promoció, i només quan l'usuari ho digui, cada vegada.
+  producció és, doncs, llançar el flux de promoció, i només quan l’usuari ho digui, cada vegada.
+  Configurat i provat el 11-11-2026: un push a `developer` fa una previsualització.
   (Fins al 11-11-2026 la branca de producció de Vercel era `developer` i es publicava canviant
   l'Ignored Build Step a mà; l'últim desplegament així va ser `5a635ac`.) Amb la clau de l'API de
   Vercel no es poden canviar els ajustos del projecte: es fa al tauler.
