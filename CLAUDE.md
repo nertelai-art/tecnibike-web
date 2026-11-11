@@ -44,6 +44,9 @@ Versions que **no** són l'última, i per què:
   ressenyes i participants encara van per les dades de proves, perquè l'API no en té. Limitacions:
   el preu de la fitxa és orientatiu (mana el que torna la plataforma), no hi ha variants d'extres,
   només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
+  La primera hora que s'ofereix és ara més l'antelació mínima dels ajustos de la plataforma
+  (`antelacioMinuts`; a les dades de proves, 0): la plataforma rebutja qualsevol recollida abans.
+  Quan la plataforma rebutja una cosa, el camp i la frase que dona surten als registres de Vercel.
   Les fotos de la plataforma s'optimitzen si són de l'emmagatzematge públic (`next.config.ts`);
   les altres se serveixen tal qual. El nom del proveïdor no surt de `src/lib/plataforma/`.
 - **Accions de servidor** (`src/app/[locale]/accions.ts`): tornen a validar-ho tot amb Zod i el
