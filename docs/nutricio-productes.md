@@ -216,8 +216,8 @@ Notes perquè funcioni a la reserva:
 
 **Decisió (11-11-2026):** l'usuari ha triat les fotos de les webs de les marques. S'han baixat de
 les botigues oficials (226ERS i Nutrinovex, una per sabor; Maurten i SiS, una per producte; les de
-SiS són caixes expositores), s'han retallat amb fons transparent i són a `public/img/nutricio/`. Es
-fan servir en local i a les previsualitzacions. **Abans de publicar-les a producció cal el permís
+SiS són caixes expositores), s'han retallat amb fons transparent i són a `public/img/nutricio/`. Per
+decisió de l'usuari, són al repositori (públic) i a les previsualitzacions. **Abans de publicar-les a producció cal el permís
 de cada marca** (vegeu més avall què ofereix cadascuna).
 
 ### a) Fotos pròpies de la botiga

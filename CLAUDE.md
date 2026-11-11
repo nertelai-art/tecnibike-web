@@ -85,11 +85,10 @@ Versions que **no** són l'última, i per què:
   per marca i moment de la ruta: en ensenya 8 i la resta, amb «Veure'n més». A la reserva, n'ensenya
   6. **Fotos de producte:** baixades de les webs de les marques (`public/img/nutricio/`, retallades
   amb fons transparent, una per sabor quan l'envàs canvia; el sabor canvia la foto). Les va triar
-  l'usuari el 11-11-2026 per a local i previsualització. **No es pugen al repositori** (és públic:
-  seria publicar-les) i estan al `.gitignore`. Es baixen amb `node scripts/fotos-nutricio.mjs <dir>`
-  i es retallen amb `py -3.12 scripts/retalla-fotos-nutricio.py <dir> public/img/nutricio` (Pillow
-  i NumPy). On no hi són (Vercel, un clon nou) surt la il·lustració. Per publicar-les cal el permís
-  de les marques (vegeu `docs/nutricio-productes.md`). A la reserva, la nutrició és de la reserva
+  l'usuari el 11-11-2026, i el mateix dia va dir de pujar-les al repositori (que és públic). Es
+  regeneren amb `node scripts/fotos-nutricio.mjs <dir>` i
+  `py -3.12 scripts/retalla-fotos-nutricio.py <dir> public/img/nutricio` (Pillow i NumPy). **Abans
+  de publicar-les a producció cal el permís de les marques** (vegeu `docs/nutricio-productes.md`). A la reserva, la nutrició és de la reserva
   sencera, no d'una bici: línies `{producteId, sabor, quantitat}`. Els sabors són variants amb estoc
   propi, i l'estoc es ven i no torna (no depèn de les dates). Està **apagada**
   (`configuracioReserves.nutricio.actiu`) a producció, a les previsualitzacions i amb la plataforma

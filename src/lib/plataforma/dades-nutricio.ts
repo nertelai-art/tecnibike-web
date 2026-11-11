@@ -1,13 +1,11 @@
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import type { ProducteNutricio, SaborNutricio } from './esquema';
 
 // Nutrició esportiva de la botiga, a les dades de prova. Els productes són els dels expositors de la
 // botiga (fotos del client, 11-11-2026) i el format, els sabors, els carbohidrats i la cafeïna, els de
 // les webs de les marques (docs/nutricio-productes.md, consultades l'11-11-2026). Els preus són el PVP
 // de cada marca (o la caixa dividida per unitats), no els de la botiga, i l'estoc és inventat: per
-// això tot porta `ficticia`. Les fotos són de les webs de les marques: abans de publicar-les a
-// producció cal el seu permís (docs/nutricio-productes.md). Quan la plataforma porti el catàleg i l'estoc, tot això surt d'allà.
+// això tot porta `ficticia`. Les fotos són de les webs de les marques (pujades al repositori amb el
+// vistiplau de l'usuari); abans de publicar-les a producció cal el permís de les marques. Quan la plataforma porti el catàleg i l'estoc, tot això surt d'allà.
 
 /** Les fotos que tenim, baixades de les webs de les marques (public/img/nutricio). */
 const AMB_FOTO = new Set([
@@ -15,21 +13,12 @@ const AMB_FOTO = new Set([
   '226ers-hydrazero', '226ers-recovery-drink', 'nutrinovex-longovit-30', 'nutrinovex-glucomin', 'nutrinovex-glucobar',
   'nutrinovex-cramp-rescuer',
 ]);
-/**
- * La foto d'un producte i sabor, si és a la carpeta. No es puja al repositori (és públic i cal el
- * permís de les marques): sense, surt la il·lustració. Es baixa amb scripts/fotos-nutricio.mjs.
- */
-const foto = (producte: string, sabor: string) => {
-  const ruta = `/img/nutricio/${producte}--${sabor}.webp`;
-  return existsSync(join(process.cwd(), 'public', ruta)) ? ruta : undefined;
-};
+/** La foto d'un producte i sabor (public/img/nutricio; es regeneren amb scripts/fotos-nutricio.mjs). */
+const foto = (producte: string, sabor: string) => `/img/nutricio/${producte}--${sabor}.webp`;
 
 /** Sabors amb un estoc inventat i, als productes que en tenen, la foto de cada sabor. */
 const sabors = (producte: string, ...ids: string[]): SaborNutricio[] =>
-  ids.map((id, i) => {
-    const imatge = AMB_FOTO.has(producte) ? foto(producte, id) : undefined;
-    return { id, estoc: [12, 8, 5, 3, 10, 6, 9][i % 7]!, ...(imatge && { imatge }) };
-  });
+  ids.map((id, i) => ({ id, estoc: [12, 8, 5, 3, 10, 6, 9][i % 7]!, ...(AMB_FOTO.has(producte) && { imatge: foto(producte, id) }) }));
 
 export const productesNutricio: ProducteNutricio[] = [
   // ── Maurten ──

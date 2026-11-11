@@ -1,6 +1,7 @@
 // Baixa les fotos de producte de nutrició de les webs de les marques (scripts/fotos-nutricio.tsv)
-// a una carpeta, per retallar-les després amb scripts/retalla-fotos-nutricio.py. No es pugen al
-// repositori, que és públic: cal el permís de les marques per publicar-les (docs/nutricio-productes.md).
+// a una carpeta, per retallar-les després amb scripts/retalla-fotos-nutricio.py. Les retallades ja
+// són al repositori (public/img/nutricio): això és per regenerar-les o afegir-ne. Per publicar-les a
+// producció cal el permís de les marques (docs/nutricio-productes.md).
 //
 //   node scripts/fotos-nutricio.mjs <carpeta-temporal>
 //   py -3.12 scripts/retalla-fotos-nutricio.py <carpeta-temporal> public/img/nutricio
