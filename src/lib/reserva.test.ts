@@ -1,5 +1,5 @@
 import type { HorariBotiga } from './plataforma/esquema';
-import { extresLliures, primeraRecollida, retornPerDefecte, tallesLliures } from './reserva';
+import { commutaExtra, extresLliures, primeraRecollida, retornPerDefecte, tallesLliures } from './reserva';
 
 const feiner = [
   { obre: '09:00', tanca: '13:00' },
@@ -38,5 +38,23 @@ describe('primera recollida i retorn per defecte', () => {
 
   it("per defecte es torna el mateix dia a l'última hora", () => {
     expect(retornPerDefecte({ dia: '2026-10-27', hora: '10:30' }, horari)).toEqual({ dia: '2026-10-27', hora: '20:00' });
+  });
+});
+
+describe('triar extres', () => {
+  const extres = [
+    { id: 'casc', grupId: 'g-casc' },
+    { id: 'cadenat', grupId: 'g-acc' },
+    { id: 'compta', grupId: 'g-acc' },
+    { id: 'alforges' },
+  ];
+
+  it('afegeix i treu un extra', () => {
+    expect(commutaExtra(['casc'], 'alforges', extres)).toEqual(['casc', 'alforges']);
+    expect(commutaExtra(['casc', 'alforges'], 'casc', extres)).toEqual(['alforges']);
+  });
+
+  it("d'un mateix grup de la plataforma se'n pot triar un com a molt: el nou substitueix l'anterior", () => {
+    expect(commutaExtra(['casc', 'cadenat'], 'compta', extres)).toEqual(['casc', 'compta']);
   });
 });

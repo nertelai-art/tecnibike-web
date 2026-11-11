@@ -12,7 +12,7 @@ function nova(ara = new Date('2026-10-27T07:00:00Z')) {
 
 /** Busca una talla amb unitats lliures per no dependre del hash concret. */
 async function tallaLliure(p: ReturnType<typeof nova>, biciId: string, des: string, fins: string) {
-  const disponibilitat = (await p.disponibilitat(des, fins, [biciId])).bicis[biciId] ?? {};
+  const disponibilitat = (await p.disponibilitat({ dia: des, hora: '09:00' }, { dia: fins, hora: '19:00' }, [biciId])).bicis[biciId] ?? {};
   const talla = Object.entries(disponibilitat).find(([, unitats]) => unitats > 0);
   if (!talla) throw new Error('cap talla lliure a la prova');
   return { talla: talla[0], unitats: talla[1] };
@@ -89,7 +89,7 @@ describe('reserva de lloguer', () => {
     const un = { recollida: rec, retorn: { dia: rec.dia, hora: '19:00' } };
     await expect(p.crearReservaLloguer(reserva(Array.from({ length: unitats + 1 }, () => linia('gravel', talla)), un))).rejects.toMatchObject({ motiu: 'esgotat' });
     await p.crearReservaLloguer(reserva(Array.from({ length: unitats }, () => linia('gravel', talla)), un));
-    expect((await p.disponibilitat(rec.dia, rec.dia, ['gravel'])).bicis.gravel![talla]).toBe(0);
+    expect((await p.disponibilitat({ dia: rec.dia, hora: '09:00' }, { dia: rec.dia, hora: '19:00' }, ['gravel'])).bicis.gravel![talla]).toBe(0);
   });
 
   it("els extres tenen estoc i s'esgoten", async () => {
@@ -100,7 +100,7 @@ describe('reserva de lloguer', () => {
     for (const id of ['btt', 'carretera', 'gravel']) bicis.push(linia(id, (await tallaLliure(p, id, rec.dia, ret.dia)).talla, { extres: ['cadiraNado'] }));
     await expect(p.crearReservaLloguer(reserva(bicis))).rejects.toMatchObject({ motiu: 'extra' });
     await p.crearReservaLloguer(reserva(bicis.slice(0, 2)));
-    expect((await p.disponibilitat(rec.dia, ret.dia, [])).extres.cadiraNado).toBe(0);
+    expect((await p.disponibilitat({ dia: rec.dia, hora: '09:00' }, { dia: ret.dia, hora: '19:00' }, [])).extres.cadiraNado).toBe(0);
   });
 
   it('els pedals han de ser del grup de pedals i els extres, de la resta', async () => {
@@ -138,9 +138,9 @@ describe('retenció mentre es paga', () => {
       ...un, bicis: Array.from({ length: unitats }, () => ({ biciId: 'urbana', talla, pedals: 'pedals-plans', extres: [], ciclista: {} })), ...client,
     });
     expect(retencio.caducaA).toBe('2026-10-27T07:15:00.000Z');
-    expect((await p.disponibilitat(rec.dia, rec.dia, ['urbana'])).bicis.urbana![talla]).toBe(0);
+    expect((await p.disponibilitat({ dia: rec.dia, hora: '09:00' }, { dia: rec.dia, hora: '19:00' }, ['urbana'])).bicis.urbana![talla]).toBe(0);
     ara = new Date('2026-10-27T07:16:00Z');
-    expect((await p.disponibilitat(rec.dia, rec.dia, ['urbana'])).bicis.urbana![talla]).toBe(unitats);
+    expect((await p.disponibilitat({ dia: rec.dia, hora: '09:00' }, { dia: rec.dia, hora: '19:00' }, ['urbana'])).bicis.urbana![talla]).toBe(unitats);
   });
 
   it('alliberar-la retorna les unitats de seguida', async () => {
@@ -148,7 +148,7 @@ describe('retenció mentre es paga', () => {
     const { talla, unitats } = await tallaLliure(p, 'urbana', rec.dia, rec.dia);
     const retencio = await p.retenirReserva({ ...un, bicis: [{ biciId: 'urbana', talla, pedals: 'pedals-plans', extres: [], ciclista: {} }], ...client });
     await p.alliberarRetencio(retencio.id);
-    expect((await p.disponibilitat(rec.dia, rec.dia, ['urbana'])).bicis.urbana![talla]).toBe(unitats);
+    expect((await p.disponibilitat({ dia: rec.dia, hora: '09:00' }, { dia: rec.dia, hora: '19:00' }, ['urbana'])).bicis.urbana![talla]).toBe(unitats);
   });
 
   it('sense passarel·la de pagament no es pot pagar', async () => {

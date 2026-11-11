@@ -21,7 +21,6 @@ import { Participants } from './Participants';
 import styles from './Reserva.module.css';
 
 const MAX_BICIS = 8;
-const PEDALS_PER_DEFECTE = 'pedals-plans';
 
 const noop = () => () => {};
 /** «Ara» a la botiga segons el rellotge del navegador; al servidor és buit (no hi ha hora fiable). */
@@ -60,8 +59,11 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
   const reduced = useReducedMotion();
   const formulari = useRef<HTMLFormElement>(null);
 
+  // Per defecte, els primers pedals de la botiga i, si n'hi ha, el casc (a les dades de prova, inclòs).
+  const pedalsPerDefecte = extres.find((e) => e.grup === 'pedals')?.id ?? '';
+  const extresPerDefecte = extres.some((e) => e.id === 'casc') ? ['casc'] : [];
   const novaLinia = (clau: number, biciId: string): LiniaFormulari => ({
-    clau, biciId, talla: null, pedals: PEDALS_PER_DEFECTE, extres: ['casc'], nom: '', alcada: '', seient: '',
+    clau, biciId, talla: null, pedals: pedalsPerDefecte, extres: extresPerDefecte, nom: '', alcada: '', seient: '',
   });
   const seguentClau = useRef(1);
   const [linies, setLinies] = useState<LiniaFormulari[]>(() => [novaLinia(0, bici.id)]);
@@ -79,17 +81,17 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
   const retorn = retornTriat ?? (recollida ? retornPerDefecte(recollida, horari) : null);
   const biciIds = [...new Set(linies.map((l) => l.biciId))].sort().join(',');
 
-  // Unitats lliures de les bicis del carro i dels extres per als dies triats.
+  // Unitats lliures de les bicis del carro i dels extres de la recollida al retorn.
   useEffect(() => {
     if (!recollida || !retorn || diesEntre(recollida.dia, retorn.dia) < 1) return;
     let viu = true;
-    consultarDisponibilitat(recollida.dia, retorn.dia, biciIds.split(',')).then((d) => {
+    consultarDisponibilitat(recollida, retorn, biciIds.split(',')).then((d) => {
       if (viu) setDisponibilitat(d);
     });
     return () => {
       viu = false;
     };
-  }, [recollida?.dia, retorn?.dia, biciIds, reservesFetes]); // eslint-disable-line react-hooks/exhaustive-deps -- n'hi ha prou amb els dies
+  }, [recollida?.dia, recollida?.hora, retorn?.dia, retorn?.hora, biciIds, reservesFetes]); // eslint-disable-line react-hooks/exhaustive-deps -- n'hi ha prou amb els dies i les hores
 
   const perId = new Map(extres.map((e) => [e.id, e]));
   const pedals = extres.filter((e) => e.grup === 'pedals');
@@ -177,11 +179,11 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
     const bicis = linies.map((l, i) => {
       const talles = tallesLliures(disponibilitat, linies, i);
       if (!l.talla || talles?.[l.talla] === 0) errors.add(`bicis.${i}.talla`);
-      if (extresLliures(disponibilitat, linies, i)[l.pedals] === 0) errors.add(`bicis.${i}.pedals`);
+      if (pedals.length > 0 && (!l.pedals || extresLliures(disponibilitat, linies, i)[l.pedals] === 0)) errors.add(`bicis.${i}.pedals`);
       return {
         biciId: l.biciId,
         talla: l.talla ?? '',
-        pedals: l.pedals,
+        pedals: l.pedals || undefined,
         extres: l.extres,
         ciclista: {
           nom: l.nom.trim() || undefined,
@@ -239,10 +241,12 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
             <h1 id="bici-nom" className={styles.nom}>
               {bici.nom}
             </h1>
-            <p className={styles.model}>
-              {bici.model.valor}
-              {bici.model.ficticia && <span className="mostra">*</span>}
-            </p>
+            {bici.model.valor && (
+              <p className={styles.model}>
+                {bici.model.valor}
+                {bici.model.ficticia && <span className="mostra">*</span>}
+              </p>
+            )}
           </div>
 
           {!confirmada && (
@@ -271,7 +275,7 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
                             </p>
                             {d.extres.map((e) => (
                               <p key={e.id} className={styles.liniaDetall}>
-                                <span>+ {t(`extresNoms.${e.id}`)}</span>
+                                <span>+ {perId.get(e.id)?.nom ?? t(`extresNoms.${e.id}`)}</span>
                                 <span>{euros(e.import)}</span>
                               </p>
                             ))}
@@ -326,13 +330,13 @@ export function ReservaLloguer({ bici, flota, extres, horari, configuracio, foto
             <p className={styles.fetMarca} aria-hidden="true">
               ✓
             </p>
-            <h2>{t('fet.titol')}</h2>
+            <h2>{confirmada.estat === 'pendent' ? t('fet.titolPendent') : t('fet.titol')}</h2>
             <p className={styles.codi}>
               <span>{t('fet.codi')}</span>
               <strong>{confirmada.codi}</strong>
             </p>
             <p>
-              {t('fet.text', {
+              {t(confirmada.estat === 'pendent' ? 'fet.textPendent' : 'fet.text', {
                 data: new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${recollida.dia}T12:00:00`)),
                 hora: recollida.hora,
               })}

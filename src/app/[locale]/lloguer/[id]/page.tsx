@@ -6,6 +6,7 @@ import { ViewTransition } from 'react';
 import { ReservaLloguer } from '@/components/reserva/ReservaLloguer';
 import { Peu } from '@/components/Seccions';
 import { Link } from '@/i18n/navigation';
+import { optimitzable } from '@/lib/imatges';
 import { plataforma } from '@/lib/plataforma';
 import styles from '@/components/reserva/Reserva.module.css';
 
@@ -54,7 +55,7 @@ export default async function FitxaLloguer({ params }: Params) {
                     <span aria-hidden="true">←</span>
                   </Link>
                   {/* A escriptori, la mateixa mida que la targeta: la foto ja és baixada i la transició no l'espera. */}
-                  <Image src={bici.imatge} alt={bici.nom} width={1200} height={720} priority sizes="(min-width: 1100px) 400px, 90vw" />
+                  <Image src={bici.imatge} alt={bici.nom} width={1200} height={720} priority sizes="(min-width: 1100px) 400px, 90vw" unoptimized={!optimitzable(bici.imatge)} />
                 </div>
               </ViewTransition>
             }

@@ -385,7 +385,9 @@
       "codi": "Booking code",
       "text": "See you on {data} at {hora} at the shop. You'll get the confirmation by email and WhatsApp*.",
       "adreca": "Carrer de l'Empordà, 29 · Sant Antoni de Calonge",
-      "altra": "Make another booking"
+      "altra": "Make another booking",
+      "titolPendent": "Request sent",
+      "textPendent": "The shop will review your booking for {data} at {hora} and confirm it by email or WhatsApp."
     },
     "fitxa": {
       "titol": "What's included",
@@ -466,5 +468,26 @@
     "parla": "Chat with our assistant on WhatsApp",
     "missatgeCita": "Hi! I'd like to book a workshop appointment.",
     "alternativa": "Prefer a message?"
+  },
+  "pagament": {
+    "metaTitol": "Payment",
+    "tornar": "Back to the bikes",
+    "codi": "Booking code",
+    "fet": {
+      "titol": "Payment received",
+      "text": "Your booking is made. You'll get the confirmation by email."
+    },
+    "confirmant": {
+      "titol": "We're confirming the payment",
+      "text": "It may take a few seconds. This page refreshes by itself."
+    },
+    "cancellat": {
+      "titol": "Payment cancelled",
+      "text": "Nothing has been charged. You can book again whenever you like."
+    },
+    "caducat": {
+      "titol": "The booking has expired",
+      "text": "Too much time has passed and the bikes are free again. Please try again."
+    }
   }
 }

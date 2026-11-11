@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60 * 60 * 24 * 30,
+    // Les fotos del catàleg al magatzem públic de la plataforma (vegeu src/lib/imatges.ts).
+    remotePatterns: [{ protocol: 'https', hostname: '*.supabase.co', pathname: '/storage/v1/object/public/**' }],
   },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];

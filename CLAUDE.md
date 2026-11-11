@@ -30,10 +30,22 @@ Versions que **no** són l'última, i per què:
 - **Idiomes:** `ca` (per defecte), `es`, `en` i `fr`, a `src/messages/`. Una prova obliga que tots
   quatre tinguin les mateixes claus.
 - **Plataforma Nertel (app.nertel.ai):** tot el negoci (flota, disponibilitat, taller, reserves)
-  passa per `src/lib/plataforma/`. Avui només hi ha la implementació de proves (dades locals,
-  reserves en memòria). La plataforma encara no té API pública per a webs; quan n'hi hagi, s'hi
-  afegeix la implementació remota i la resta de la web no canvia. El nom del proveïdor no surt de
-  `src/lib/plataforma/`.
+  passa per `src/lib/plataforma/` (contracte a `interficie.ts`). La plataforma és la font de veritat:
+  si el client hi canvia una foto o un preu, la web canvia (catàleg, horari i ajustos es tornen a
+  llegir cada 5 minuts; la disponibilitat i les reserves, sempre en directe). Dues implementacions:
+  - `remota/`: l'API de lloguer de la plataforma. S'activa amb `PLATAFORMA_API_URL` i
+    `PLATAFORMA_API_CLAU` (només servidor, mai `NEXT_PUBLIC_`; noms a `.env.example`, valors a
+    Vercel). La clau és de la botiga, amb els abasts `rental_read` i `rental_write`.
+  - `proves.ts`: dades locals (`dades-prova.ts`) i reserves en memòria. És la que corre si falta
+    qualsevol de les dues variables.
+
+  El contracte de la plataforma (`remota/contracte.ts`) és generat: es copia del repositori de la
+  plataforma amb `node scripts/sincronitza-contracte.mjs [camí]` i no es toca a mà. Taller, botiga,
+  ressenyes i participants encara van per les dades de proves, perquè l'API no en té. Limitacions:
+  el preu de la fitxa és orientatiu (mana el que torna la plataforma), no hi ha variants d'extres,
+  només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
+  Les fotos de la plataforma s'optimitzen si són de l'emmagatzematge públic (`next.config.ts`);
+  les altres se serveixen tal qual. El nom del proveïdor no surt de `src/lib/plataforma/`.
 - **Accions de servidor** (`src/app/[locale]/accions.ts`): tornen a validar-ho tot amb Zod i el
   preu, l'horari i l'estoc els comprova la plataforma. El rellotge només entra aquí (`araABotiga`,
   en hora de Madrid) i, a la plataforma de proves, per paràmetre (`rellotge`).
@@ -103,7 +115,8 @@ Versions que **no** són l'última, i per què:
   en canviar-les, treu-ne els crèdits.
 - Logo bo de SiS (la web antiga hi tenia el de Shimano Index System; ara surt el nom en text).
 - Pàgines legals pròpies (ara enllacen a les de la web antiga), galetes i 404 pròpia.
-- Connexió real amb app.nertel.ai i els avisos per correu i WhatsApp. El mòdul de lloguer per
+- Posar la clau de la botiga a Vercel (la connexió ja és feta i provada contra una API falsa, no
+  contra la real) i els avisos per correu i WhatsApp. El mòdul de lloguer per
   unitats, el pagament i la signatura són feina de la plataforma (guia a `docs/`).
 - Preus i estoc dels extres i pedals, festius que tanquen, fiança i política de cancel·lació.
 - Validar amb el client les tres rutes proposades i ensenyar-li els vídeos generats amb IA.

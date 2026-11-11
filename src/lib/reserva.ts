@@ -48,3 +48,14 @@ export function retornPerDefecte(recollida: Moment, horari: HorariBotiga): Momen
   const hores = horesRetorn(recollida.dia, horari);
   return { dia: recollida.dia, hora: hores.at(-1) ?? recollida.hora };
 }
+
+/**
+ * Posa o treu un extra de la llista d'una bici. Dels extres d'un mateix grup de la plataforma
+ * (`grupId`) se'n pot triar un com a molt: el nou substitueix el que hi hagués.
+ */
+export function commutaExtra(triats: readonly string[], id: string, extres: readonly { id: string; grupId?: string }[]): string[] {
+  if (triats.includes(id)) return triats.filter((x) => x !== id);
+  const grup = extres.find((e) => e.id === id)?.grupId;
+  const delGrup = grup ? new Set(extres.filter((e) => e.grupId === grup).map((e) => e.id)) : new Set<string>();
+  return [...triats.filter((x) => !delGrup.has(x)), id];
+}

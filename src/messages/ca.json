@@ -385,7 +385,9 @@
       "codi": "Codi de reserva",
       "text": "T'esperem el {data} a les {hora} a la botiga. Rebràs la confirmació per correu i WhatsApp*.",
       "adreca": "Carrer de l'Empordà, 29 · Sant Antoni de Calonge",
-      "altra": "Fes una altra reserva"
+      "altra": "Fes una altra reserva",
+      "titolPendent": "Sol·licitud enviada",
+      "textPendent": "La botiga revisarà la teva reserva per al {data} a les {hora} i te la confirmarà per correu o WhatsApp."
     },
     "fitxa": {
       "titol": "Què inclou",
@@ -466,5 +468,26 @@
     "parla": "Parla amb el nostre assistent per WhatsApp",
     "missatgeCita": "Hola! Voldria demanar cita al taller.",
     "alternativa": "Ho prefereixes en un missatge?"
+  },
+  "pagament": {
+    "metaTitol": "Pagament",
+    "tornar": "Torna a les bicis",
+    "codi": "Codi de reserva",
+    "fet": {
+      "titol": "Pagament rebut",
+      "text": "Tens la reserva feta. Rebràs la confirmació per correu."
+    },
+    "confirmant": {
+      "titol": "Estem confirmant el pagament",
+      "text": "Pot trigar uns segons. Aquesta pàgina s'actualitza sola."
+    },
+    "cancellat": {
+      "titol": "Pagament cancel·lat",
+      "text": "No s'ha cobrat res. Pots tornar a fer la reserva quan vulguis."
+    },
+    "caducat": {
+      "titol": "La reserva ha caducat",
+      "text": "Ha passat massa estona i les bicis tornen a estar lliures. Torna-ho a provar."
+    }
   }
 }

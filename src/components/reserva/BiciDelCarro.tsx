@@ -8,6 +8,8 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useId } from 'react';
 import type { BiciLloguer, Extra } from '@/lib/plataforma/esquema';
+import { optimitzable } from '@/lib/imatges';
+import { commutaExtra } from '@/lib/reserva';
 import { tallaSuggerida } from '@/lib/talles';
 import { Extres } from './Extres';
 import styles from './Reserva.module.css';
@@ -59,7 +61,7 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
           <span className={styles.biciNumero} aria-hidden="true">
             {index + 1}
           </span>
-          <Image src={bici.imatge} alt="" width={120} height={72} className={styles.biciMiniatura} />
+          <Image src={bici.imatge} alt="" width={120} height={72} className={styles.biciMiniatura} unoptimized={!optimitzable(bici.imatge)} />
           {onTreure ? (
             <>
               <label className={styles.camp}>
@@ -163,11 +165,13 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
         </p>
       </div>
 
-      <div className={styles.grup} aria-invalid={error('pedals') || undefined}>
-        <p className={styles.etiquetaGrup}>{t('pedals')}</p>
-        <Extres nom={`${id}-pedals`} extres={pedals} triats={[linia.pedals]} lliures={lliures} multiple={false} onCanvi={(p) => onCanvi({ pedals: p })} />
-        {error('pedals') && <em className={styles.errorSolt}>{t('camps.pedals')}</em>}
-      </div>
+      {pedals.length > 0 && (
+        <div className={styles.grup} aria-invalid={error('pedals') || undefined}>
+          <p className={styles.etiquetaGrup}>{t('pedals')}</p>
+          <Extres nom={`${id}-pedals`} extres={pedals} triats={[linia.pedals]} lliures={lliures} multiple={false} onCanvi={(p) => onCanvi({ pedals: p })} />
+          {error('pedals') && <em className={styles.errorSolt}>{t('camps.pedals')}</em>}
+        </div>
+      )}
 
       <div className={styles.grup}>
         <p className={styles.etiquetaGrup}>{t('extres')}</p>
@@ -177,7 +181,7 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
           triats={linia.extres}
           lliures={lliures}
           multiple
-          onCanvi={(x) => onCanvi({ extres: linia.extres.includes(x) ? linia.extres.filter((y) => y !== x) : [...linia.extres, x] })}
+          onCanvi={(x) => onCanvi({ extres: commutaExtra(linia.extres, x, extres) })}
         />
       </div>
     </fieldset>

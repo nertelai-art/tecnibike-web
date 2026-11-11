@@ -6,6 +6,7 @@
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import type { Extra } from '@/lib/plataforma/esquema';
+import { optimitzable } from '@/lib/imatges';
 import { formatEuros } from '@/lib/preus';
 import styles from './Reserva.module.css';
 
@@ -31,6 +32,7 @@ export function Extres({ nom, extres, triats, lliures, multiple, onCanvi }: Prop
         const n = lliures[e.id];
         const triat = triats.includes(e.id);
         const esgotat = n === 0 && !triat;
+        const nomExtra = e.nom ?? t(`extresNoms.${e.id}`);
         const preu = e.preu === 0 ? t('inclos') : e.cobrament === 'perDia' ? t('preuDia', { preu: formatEuros(e.preu, locale) }) : formatEuros(e.preu, locale);
         return (
           <li key={e.id}>
@@ -41,14 +43,14 @@ export function Extres({ nom, extres, triats, lliures, multiple, onCanvi }: Prop
                 value={e.id}
                 checked={triat}
                 disabled={esgotat}
-                aria-label={`${t(`extresNoms.${e.id}`)} · ${preu}`}
+                aria-label={`${nomExtra} · ${preu}`}
                 onChange={() => onCanvi(e.id)}
               />
               <span className={styles.extraFoto}>
-                {e.imatge ? <Image src={e.imatge} alt="" width={96} height={96} /> : <small>{t('senseImatge')}</small>}
+                {e.imatge ? <Image src={e.imatge} alt="" width={96} height={96} unoptimized={!optimitzable(e.imatge)} /> : <small>{t('senseImatge')}</small>}
               </span>
               <span className={styles.extraText}>
-                <strong>{t(`extresNoms.${e.id}`)}</strong>
+                <strong>{nomExtra}</strong>
                 <span>
                   {preu}
                   {e.ficticia && <span className="mostra">*</span>}

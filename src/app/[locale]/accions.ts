@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import { araABotiga, esData, esPassat } from '@/lib/calendari';
 import { diesEntre, MAX_DIES_LLOGUER } from '@/lib/horari';
 import { ErrorReserva, plataforma, type Disponibilitat } from '@/lib/plataforma';
-import { citaTaller, modalitatPagament, participantsReserva, reservaLloguer } from '@/lib/plataforma/esquema';
+import { citaTaller, modalitatPagament, moment, participantsReserva, reservaLloguer } from '@/lib/plataforma/esquema';
 
 // Accions de servidor de les reserves. Tot el que arriba del navegador es torna a validar aquí, i
 // el preu, l'horari i les unitats lliures els comprova la plataforma: el formulari només orienta.
@@ -12,14 +12,24 @@ import { citaTaller, modalitatPagament, participantsReserva, reservaLloguer } fr
 export type ErrorResultat = 'dades' | 'esgotat' | 'extra' | 'durada' | 'talla' | 'franja' | 'noDisponible' | 'xarxa';
 
 export type ResultatReserva =
-  | { ok: true; codi: string; totalCentims?: number }
+  | { ok: true; codi: string; totalCentims?: number; estat?: 'pendent' | 'confirmada' }
   | { ok: true; pagament: string }
   | { ok: false; error: ErrorResultat; camps?: string[] };
 
-export async function consultarDisponibilitat(des: string, fins: string, biciIds: string[]): Promise<Disponibilitat | null> {
-  if (!esData(des) || !esData(fins) || diesEntre(des, fins) < 1 || diesEntre(des, fins) > MAX_DIES_LLOGUER) return null;
+export async function consultarDisponibilitat(recollida: unknown, retorn: unknown, biciIds: string[]): Promise<Disponibilitat | null> {
+  const des = moment.safeParse(recollida);
+  const fins = moment.safeParse(retorn);
+  if (!des.success || !fins.success || !esData(des.data.dia) || !esData(fins.data.dia)) return null;
+  const dies = diesEntre(des.data.dia, fins.data.dia);
+  if (dies < 1 || dies > MAX_DIES_LLOGUER) return null;
   if (!Array.isArray(biciIds) || biciIds.length > 8 || biciIds.some((id) => typeof id !== 'string')) return null;
-  return plataforma.disponibilitat(des, fins, biciIds);
+  try {
+    return await plataforma.disponibilitat(des.data, fins.data, biciIds);
+  } catch (e) {
+    // Sense disponibilitat, el formulari segueix: la plataforma ho torna a comprovar en reservar.
+    console.error('Disponibilitat no disponible', e);
+    return null;
+  }
 }
 
 export async function consultarFranges(dia: string) {
@@ -55,7 +65,8 @@ export async function reservarLloguer(entrada: unknown, modalitat?: unknown): Pr
     try {
       const capcaleres = await headers();
       const origen = `${capcaleres.get('x-forwarded-proto') ?? 'https'}://${capcaleres.get('host')}`;
-      const { url } = await plataforma.iniciarPagament(retencio.id, triada.data, `${origen}/${validada.data.idioma}/reserva/pagament`);
+      const tornada = `${origen}/${validada.data.idioma}/reserva/pagament?retencio=${encodeURIComponent(retencio.id)}`;
+      const { url } = await plataforma.iniciarPagament(retencio.id, triada.data, tornada);
       return { ok: true, pagament: url };
     } catch (e) {
       // Si no es pot començar a pagar, les bicis no es queden guardades per a ningú.

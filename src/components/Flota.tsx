@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useId, useLayoutEffect, useRef, useState, ViewTransition, type CSSProperties } from 'react';
 import type { BiciLloguer, CategoriaLloguer } from '@/lib/plataforma/esquema';
 import { Link } from '@/i18n/navigation';
+import { optimitzable } from '@/lib/imatges';
 import { formatEuros, preuMinimPerDia, preuPerDia } from '@/lib/preus';
 import { useReducedMotion } from '@/lib/scroll-scene';
 import { Revela } from './Revela';
@@ -69,16 +70,25 @@ export function Flota({ flota }: { flota: BiciLloguer[] }) {
       <ViewTransition name={`bici-${bici.id}`} share="morph" default="none">
         <div className={styles.escenari}>
           {bici.electrica && <span className={styles.etiqueta}>{t('electrica')}</span>}
-          <Image src={bici.imatge} alt="" width={640} height={380} sizes="(min-width: 1100px) 400px, (min-width: 700px) 45vw, 90vw" />
+          <Image
+            src={bici.imatge}
+            alt=""
+            width={640}
+            height={380}
+            sizes="(min-width: 1100px) 400px, (min-width: 700px) 45vw, 90vw"
+            unoptimized={!optimitzable(bici.imatge)}
+          />
         </div>
       </ViewTransition>
       <div className={styles.cos}>
         <p className={styles.categoria}>{t(`categories.${bici.categoria}`)}</p>
         <h3 className={styles.nom}>{bici.nom}</h3>
-        <p className={styles.model}>
-          {bici.model.valor}
-          {bici.model.ficticia && <span className="mostra">*</span>}
-        </p>
+        {bici.model.valor && (
+          <p className={styles.model}>
+            {bici.model.valor}
+            {bici.model.ficticia && <span className="mostra">*</span>}
+          </p>
+        )}
         <div className={styles.peu}>
           <p className={styles.preu}>
             <span>{t('desDe')}</span>

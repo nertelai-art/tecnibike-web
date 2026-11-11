@@ -98,16 +98,23 @@ export const horariBotiga = z.object({
 // ── Extres del lloguer ──────────────────────────────────────────────────────────────────────
 
 /**
- * Pedals, casc, cadenat… El nom de cada extra surt dels missatges de la web per l'`id`. Els pedals
- * són un grup obligatori (se'n tria un per bici); la resta, opcionals.
+ * Pedals, casc, cadenat… Els pedals són un grup obligatori (se'n tria un per bici); la resta,
+ * opcionals.
  */
 export const extra = z.object({
   id: z.string(),
   grup: z.enum(['pedals', 'extres']),
+  /** El nom que hi ha posat la botiga. Sense, el nom surt dels missatges de la web per l'`id`. */
+  nom: z.string().optional(),
+  /** El grup d'opcions de la plataforma: dels extres d'un mateix grup se'n pot triar un com a molt. */
+  grupId: z.string().optional(),
   imatge: z.string().optional(),
   preu: centims,
   cobrament: z.enum(['perReserva', 'perDia']),
-  /** Unitats que té la botiga; `null` si no se'n porta el compte (p. ex. «porto els meus pedals»). */
+  /**
+   * Unitats que té la botiga; `null` si no se'n porta el compte o no se sap (la plataforma no diu el
+   * total). El que queda lliure per a unes dates surt de `disponibilitat`.
+   */
   estoc: z.number().int().nonnegative().nullable(),
   ficticia: z.boolean(),
 });
@@ -143,8 +150,8 @@ export const ciclista = z.object({
 export const biciReserva = z.object({
   biciId: z.string(),
   talla: z.string(),
-  /** Id de l'extra del grup «pedals». */
-  pedals: z.string(),
+  /** Id de l'extra del grup «pedals». Res si la botiga no en té cap de configurat. */
+  pedals: z.string().min(1).optional(),
   extres: z.array(z.string()).max(8),
   ciclista,
 });
@@ -168,7 +175,12 @@ export const citaTaller = z.object({
   ...client,
 });
 
-export const confirmacio = z.object({ codi: z.string(), totalCentims: z.number().int().optional() });
+export const confirmacio = z.object({
+  codi: z.string(),
+  totalCentims: z.number().int().optional(),
+  /** Una reserva de lloguer pot quedar pendent que la botiga la confirmi. */
+  estat: z.enum(['pendent', 'confirmada']).optional(),
+});
 
 // ── Pagament i participants (preparats, apagats fins que la plataforma ho permeti) ─────────────
 

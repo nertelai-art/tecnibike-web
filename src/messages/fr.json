@@ -385,7 +385,9 @@
       "codi": "Code de réservation",
       "text": "Nous vous attendons le {data} à {hora} à la boutique. Vous recevrez la confirmation par e-mail et WhatsApp*.",
       "adreca": "Carrer de l'Empordà, 29 · Sant Antoni de Calonge",
-      "altra": "Faire une autre réservation"
+      "altra": "Faire une autre réservation",
+      "titolPendent": "Demande envoyée",
+      "textPendent": "La boutique examinera votre réservation pour le {data} à {hora} et vous la confirmera par e-mail ou WhatsApp."
     },
     "fitxa": {
       "titol": "Ce qui est inclus",
@@ -466,5 +468,26 @@
     "parla": "Parlez avec notre assistant sur WhatsApp",
     "missatgeCita": "Bonjour ! Je voudrais prendre rendez-vous à l'atelier.",
     "alternativa": "Vous préférez un message ?"
+  },
+  "pagament": {
+    "metaTitol": "Paiement",
+    "tornar": "Retour aux vélos",
+    "codi": "Code de réservation",
+    "fet": {
+      "titol": "Paiement reçu",
+      "text": "Votre réservation est faite. Vous recevrez la confirmation par e-mail."
+    },
+    "confirmant": {
+      "titol": "Nous confirmons le paiement",
+      "text": "Cela peut prendre quelques secondes. Cette page se met à jour toute seule."
+    },
+    "cancellat": {
+      "titol": "Paiement annulé",
+      "text": "Rien n'a été débité. Vous pouvez réserver à nouveau quand vous voulez."
+    },
+    "caducat": {
+      "titol": "La réservation a expiré",
+      "text": "Trop de temps a passé et les vélos sont à nouveau libres. Réessayez."
+    }
   }
 }
