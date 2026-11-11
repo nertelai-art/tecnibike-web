@@ -1,34 +1,39 @@
 'use client';
 
-// Escena de les marques de nutrició: un escenari fix dins d'un recorregut alt, amb un capítol per
-// marca. Amb el scroll, els productes de cada marca (fotos reals retallades) entren girant sobre si
-// mateixos, es queden de cara i surten mentre entra la marca següent; el fons pren el color de la
-// marca. La coreografia és a escena-marques.ts (pura, amb proves); aquí només s'escriuen
-// `transform` i `opacity` a les refs, sense re-renderitzar React.
+// Escena de nutrició: un escenari fix dins d'un recorregut alt. Primer, un capítol per marca: els
+// productes (fotos reals retallades) entren girant sobre si mateixos, es queden de cara i surten
+// mentre entra la marca següent; el fons pren el color de la marca. Quan l'última marca és de cara,
+// el capítol final és el catàleg: els seus productes surten girant, entra el fons clar i les
+// targetes surten d'una en una amb un bot. La coreografia és a escena-marques.ts (pura, amb proves);
+// aquí només s'escriuen estils a les refs, sense re-renderitzar React.
 //
-// Es fa una sola vegada: quan s'arriba al final i el scroll s'atura, el recorregut es plega a
-// l'alçada de l'escenari (compensant la posició perquè la pàgina no salti) i queda com un aparador
-// de marques, on l'indicador de baix canvia de marca amb el mateix gir. Fins que no es torna a
+// Es fa una sola vegada: quan s'arriba al final i el scroll s'atura, el recorregut es plega i el
+// catàleg queda al seu lloc com una secció normal (la pàgina no salta). Fins que no es torna a
 // carregar la pàgina, no es repeteix.
 //
-// L'HTML del servidor és l'estat final de cada capítol, un sota l'altre: és el que es veu sense
-// JavaScript i amb «menys moviment».
+// L'HTML del servidor és l'estat final: les marques una sota l'altra i el catàleg. És el que es veu
+// sense JavaScript i amb «menys moviment».
 
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useRef, useSyncExternalStore, type ReactNode } from 'react';
 import { destacats, imatgeDe, temaDe } from '@/content/nutricio';
 import type { ProducteNutricio } from '@/lib/plataforma/esquema';
 import { useReducedMotion, useScrollProgress } from '@/lib/scroll-scene';
-import { estatCapitol, estatProducte, marcaActiva, posicioRepos, type EstatProducte } from './escena-marques';
+import {
+  estatCapitolEscena,
+  estatCataleg,
+  estatProducteEscena,
+  marcaActivaEscena,
+  posicioRepos,
+  type EstatProducte,
+} from './escena-marques';
 import { Paquet } from './Paquet';
 import styles from './Nutricio.module.css';
 
 const MAX_PRODUCTES = 4;
 /** Quant de temps sense scroll per donar l'escena per acabada (plegar a mig scroll el tallaria). */
 const ESPERA_PLEGAR_MS = 200;
-/** Durada del canvi de marca a l'aparador, un cop plegada. */
-const CANVI_MS = 900;
-const easeInOut = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
+const noop = () => () => {};
 
 /** Si la foto és més ampla que alta (una caixa, una barreta), la peça es fa ampla. */
 function marcaForma(img: HTMLImageElement | null) {
@@ -40,20 +45,21 @@ function marcaForma(img: HTMLImageElement | null) {
   if (img.complete) aplica();
   else img.addEventListener('load', aplica, { once: true });
 }
-const noop = () => () => {};
 
 type Props = {
   marques: readonly string[];
   productes: readonly ProducteNutricio[];
-  /** En triar «Mira'n els productes» d'una marca. */
+  /** En triar «Mira'n els productes» d'una marca: filtra el catàleg (l'escena hi porta). */
   onTria: (marca: string) => void;
+  /** El catàleg: l'últim capítol de l'escena i, un cop plegada, una secció normal. */
+  cataleg: ReactNode;
 };
 
 /** El lloc al ventall (`x`) el posa el CSS amb `--lloc`; aquí només el que es mou. */
 const transformDe = (e: Pick<EstatProducte, 'y' | 'girY' | 'girZ' | 'escala'>) =>
   `translate3d(0, ${e.y.toFixed(2)}%, 0) rotateZ(${e.girZ.toFixed(2)}deg) rotateY(${e.girY.toFixed(2)}deg) scale(${e.escala.toFixed(3)})`;
 
-export function EscenaMarques({ marques, productes, onTria }: Props) {
+export function EscenaMarques({ marques, productes, onTria, cataleg }: Props) {
   const t = useTranslations('nutricio');
   const reduit = useReducedMotion();
   const client = useSyncExternalStore(noop, () => true, () => false);
@@ -62,73 +68,70 @@ export function EscenaMarques({ marques, productes, onTria }: Props) {
 
   const pista = useRef<HTMLDivElement>(null);
   const escenari = useRef<HTMLDivElement>(null);
+  const capCataleg = useRef<HTMLDivElement>(null);
   const textos = useRef<(HTMLDivElement | null)[]>([]);
   const peces = useRef<(HTMLDivElement | null)[]>([]);
   const punts = useRef<(HTMLLIElement | null)[]>([]);
-
-  const perMarca = marques.map((m) => destacats(productes.filter((p) => p.marca === m), MAX_PRODUCTES));
-  /** Plegada: ja no segueix el scroll; ensenya `marca` i, mentre canvia, la que se'n va. */
-  const plegada = useRef<{ marca: number; anim: number } | null>(null);
+  const plegada = useRef(false);
   const espera = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  /**
-   * Pinta una marca. `pm`, `mm` i `tot` són els paràmetres del model: amb el scroll, el progrés real,
-   * la marca i el total; en canviar de marca a l'aparador, una marca «del mig» d'un recorregut de
-   * tres, que entra i surt (la primera i l'última del de debò no ho fan). `null`: amagada.
-   */
-  const pintaMarca = useCallback(
-    (m: number, model: { pm: number; mm: number; tot: number } | null) => {
-      const text = textos.current[m];
-      const c = model ? estatCapitol(model.pm, model.mm, model.tot) : { text: 0, textY: 0 };
-      if (text) {
-        text.style.opacity = c.text.toFixed(3);
-        text.style.transform = `translateY(${c.textY.toFixed(1)}px)`;
-        text.style.visibility = c.text <= 0 ? 'hidden' : 'visible';
-      }
-      const quants = perMarca[m]!.length;
-      for (let i = 0; i < quants; i++) {
-        const peca = peces.current[m * MAX_PRODUCTES + i];
-        if (!peca) continue;
-        const e = model ? estatProducte(model.pm, model.mm, model.tot, i, quants) : null;
-        const opacitat = e?.opacitat ?? 0;
-        peca.style.opacity = opacitat.toFixed(3);
-        if (e) peca.style.transform = transformDe(e);
-        peca.style.visibility = opacitat <= 0 ? 'hidden' : 'visible';
-      }
-    },
-    [perMarca],
-  );
-
-  /** Marca el fons i l'indicador amb la marca activa. */
-  const activa = useCallback(
-    (m: number) => {
-      const tema = temaDe(marques[m]!);
-      escenari.current?.style.setProperty('--fons-escena', tema.fons);
-      escenari.current?.style.setProperty('--text-escena', tema.text);
-      punts.current.forEach((punt, i) => punt && (punt.dataset.actiu = String(i === m)));
-    },
-    [marques],
-  );
+  const perMarca = marques.map((m) => destacats(productes.filter((p) => p.marca === m), MAX_PRODUCTES));
 
   const dibuixa = useCallback(
     (p: number) => {
-      activa(marcaActiva(p, total));
-      for (let m = 0; m < total; m++) pintaMarca(m, { pm: p, mm: m, tot: total });
+      const activa = marcaActivaEscena(p, total);
+      const tema = temaDe(marques[activa]!);
+      escenari.current?.style.setProperty('--fons-escena', tema.fons);
+      escenari.current?.style.setProperty('--text-escena', tema.text);
+      punts.current.forEach((punt, i) => punt && (punt.dataset.actiu = String(i === activa)));
+
+      for (let m = 0; m < total; m++) {
+        const text = textos.current[m];
+        if (text) {
+          const c = estatCapitolEscena(p, m, total);
+          text.style.opacity = c.text.toFixed(3);
+          text.style.transform = `translateY(${c.textY.toFixed(1)}px)`;
+          text.style.visibility = c.text <= 0 ? 'hidden' : 'visible';
+        }
+        const quants = perMarca[m]!.length;
+        for (let i = 0; i < quants; i++) {
+          const peca = peces.current[m * MAX_PRODUCTES + i];
+          if (!peca) continue;
+          const e = estatProducteEscena(p, m, total, i, quants);
+          peca.style.opacity = e.opacitat.toFixed(3);
+          peca.style.transform = transformDe(e);
+          peca.style.visibility = e.opacitat <= 0 ? 'hidden' : 'visible';
+        }
+      }
+
+      // El catàleg: el fons clar, el títol i els filtres, i cada targeta amb el seu bot.
+      const cat = capCataleg.current;
+      if (cat) {
+        const c = estatCataleg(p, total);
+        cat.style.setProperty('--fons-cataleg', c.fons.toFixed(3));
+        cat.style.setProperty('--cap', c.cap.toFixed(3));
+        cat.dataset.actiu = String(c.fons >= 1);
+        const targetes = cat.querySelectorAll<HTMLElement>('[data-pop]');
+        targetes.forEach((targeta, i) => targeta.style.setProperty('--pop', c.pop(i, targetes.length).toFixed(3)));
+        // «Veure'n més» i els botons del peu, amb l'última targeta.
+        cat.style.setProperty('--peu', Math.min(1, c.pop(targetes.length - 1, targetes.length)).toFixed(3));
+        escenari.current?.style.setProperty('--indicador', (1 - c.fons).toFixed(3));
+      }
     },
-    [total, activa, pintaMarca],
+    [total, marques, perMarca],
   );
 
-  /** Plega el recorregut sense que la pàgina salti: el que hi ha a sota es queda on era. */
+  /** Plega el recorregut sense que la pàgina salti: el catàleg es queda on era. */
   const plega = useCallback(() => {
     const el = pista.current;
-    if (!el || plegada.current) return;
-    const abans = el.getBoundingClientRect().bottom;
-    plegada.current = { marca: total - 1, anim: 0 };
+    const cat = capCataleg.current;
+    if (!el || !cat || plegada.current) return;
+    const abans = cat.getBoundingClientRect().top;
+    plegada.current = true;
     el.dataset.plegada = 'true';
-    const despres = el.getBoundingClientRect().bottom;
+    const despres = cat.getBoundingClientRect().top;
     if (despres !== abans) window.scrollBy({ top: despres - abans, behavior: 'instant' });
-    dibuixa(1);
-  }, [dibuixa, total]);
+  }, []);
 
   const pinta = useCallback(
     (p: number) => {
@@ -144,40 +147,23 @@ export function EscenaMarques({ marques, productes, onTria }: Props) {
   // En hidratar (o si canvia el moviment reduït), el primer fotograma sense esperar cap scroll.
   useEffect(() => pinta(progres.current), [pinta, progres]);
 
-  /** Porta l'escena al mig del capítol d'una marca: amb el scroll, o ja plegada, girant-hi. */
-  const anarA = (i: number) => {
+  /** Porta l'escena fins a una posició del recorregut (0–1). */
+  const anarAProgres = (p: number) => {
     const el = pista.current;
-    if (!el || !animada) return onTria(marques[i]!);
-    const fet = plegada.current;
-    if (fet) {
-      if (fet.marca === i) return;
-      cancelAnimationFrame(fet.anim);
-      const surt = fet.marca;
-      fet.marca = i;
-      activa(i);
-      // Directe, sense passar per les marques del mig: la que hi ha surt girant i entra la triada.
-      // Al model, una marca del mig d'un recorregut de tres: t (local) → p = (t + 1) / 3.
-      const delMig = (t: number) => ({ pm: (t + 1) / 3, mm: 1, tot: 3 });
-      let inici: number | undefined;
-      const pas = (ara: number) => {
-        inici ??= ara;
-        const k = easeInOut(Math.min(1, (ara - inici) / CANVI_MS));
-        for (let m = 0; m < total; m++) {
-          if (m === surt) pintaMarca(m, delMig(0.5 + 0.8 * k));
-          else if (m === i) pintaMarca(m, delMig(-0.15 + 0.65 * k));
-          else pintaMarca(m, null);
-        }
-        if (k < 1) fet.anim = requestAnimationFrame(pas);
-      };
-      fet.anim = requestAnimationFrame(pas);
-      return;
-    }
+    if (!el) return;
     const recorregut = el.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + ((i + 0.5) / total) * recorregut, behavior: 'smooth' });
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + p * recorregut, behavior: 'smooth' });
+  };
+
+  /** Filtra el catàleg per la marca i hi porta: amb l'escena, fins al final del recorregut. */
+  const tria = (marca: string) => {
+    onTria(marca);
+    if (animada && !plegada.current) anarAProgres(1);
+    else capCataleg.current?.scrollIntoView({ behavior: reduit ? 'auto' : 'smooth', block: 'start' });
   };
 
   return (
-    <div ref={pista} className={styles.pista} data-animada={animada || undefined} style={{ '--capitols': total } as React.CSSProperties}>
+    <div ref={pista} className={styles.pista} data-animada={animada || undefined} style={{ '--capitols': total + 1 } as React.CSSProperties}>
       <div ref={escenari} className={styles.escenari}>
         <p className="sr-only">{t('escenaSr')}</p>
         {marques.map((m, mi) => {
@@ -191,7 +177,7 @@ export function EscenaMarques({ marques, productes, onTria }: Props) {
                 </p>
                 <h3 className={styles.capitolNom}>{m}</h3>
                 <p className={styles.capitolLema}>{t.has(`marques.${tema.clau}`) ? t(`marques.${tema.clau}`) : ''}</p>
-                <button type="button" className={styles.capitolBoto} onClick={() => onTria(m)}>
+                <button type="button" className={styles.capitolBoto} onClick={() => tria(m)}>
                   {t('veure', { n: seus })} <span aria-hidden="true">→</span>
                 </button>
               </div>
@@ -226,12 +212,16 @@ export function EscenaMarques({ marques, productes, onTria }: Props) {
         <ol className={styles.indicador} aria-label={t('marca')}>
           {marques.map((m, i) => (
             <li key={m} ref={(el) => void (punts.current[i] = el)} data-actiu={i === 0}>
-              <button type="button" onClick={() => anarA(i)}>
+              {/* El mig del tram de cada marca: les marques fan total − ½ trams i el catàleg, un. */}
+              <button type="button" onClick={() => anarAProgres((i + 0.5) / (total + 0.5))}>
                 {m}
               </button>
             </li>
           ))}
         </ol>
+        <div ref={capCataleg} className={styles.capitolCataleg}>
+          {cataleg}
+        </div>
       </div>
     </div>
   );

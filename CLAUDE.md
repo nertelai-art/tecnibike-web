@@ -81,12 +81,13 @@ Versions que **no** són l'última, i per què:
   fixa amb un capítol per marca (Maurten, 226ERS, Nutrinovex i SiS, amb els seus colors de
   `src/content/nutricio.ts`). Amb el scroll, els productes entren girant sobre si mateixos (CSS 3D,
   sense three.js), es queden de cara i surten. La coreografia és a `escena-marques.ts`, amb proves.
-  Es fa una sola vegada: quan s'arriba al final i el scroll s'atura, el recorregut es plega a
-  l'alçada de l'escenari (compensant la posició) i queda com un aparador on l'indicador canvia de
-  marca girant. No torna fins que es recarrega la pàgina. Sense JavaScript o amb menys moviment,
-  els capítols surten un sota l'altre. Després ve la graella per marca i moment de la ruta: les
-  targetes surten d'una en una amb un bot quan el catàleg arriba a la pantalla, n'ensenya 8 i la
-  resta amb «Veure'n més». A la reserva, n'ensenya 6, en rajoles compactes. **Fotos de producte:** baixades de les webs de les marques (`public/img/nutricio/`, retallades
+  El catàleg és el capítol final de la mateixa escena: quan l'última marca (SiS) és de cara, els
+  seus productes surten girant, entra el fons clar i les targetes surten d'una en una amb un bot
+  (`--pop`, segons el scroll). Es fa una sola vegada: quan s'arriba al final i el scroll s'atura, el
+  recorregut es plega i el catàleg queda al seu lloc com una secció normal (es compensa la posició).
+  No torna fins que es recarrega la pàgina. Sense JavaScript o amb menys moviment, les marques surten
+  una sota l'altra i el catàleg a sota. El catàleg filtra per marca i moment de la ruta, n'ensenya 8
+  i la resta amb «Veure'n més»; després d'un canvi de filtre, les targetes noves tornen a fer el bot. A la reserva, n'ensenya 6, en rajoles compactes. **Fotos de producte:** baixades de les webs de les marques (`public/img/nutricio/`, retallades
   amb fons transparent, una per sabor quan l'envàs canvia; el sabor canvia la foto). Les va triar
   l'usuari el 11-11-2026, i el mateix dia va dir de pujar-les al repositori (que és públic). Es
   regeneren amb `node scripts/fotos-nutricio.mjs <dir>` i

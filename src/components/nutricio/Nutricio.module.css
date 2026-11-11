@@ -164,9 +164,75 @@
 .pista[data-animada] {
   height: calc(100svh + var(--capitols) * 85svh);
 }
-/* Un cop vista, el recorregut es plega: queda l'escenari sol, com un aparador. */
+/* Un cop vista, el recorregut es plega: les marques marxen i el catàleg queda com una secció
+   normal, al mateix lloc on era dins de l'escena. */
 .pista[data-animada][data-plegada] {
-  height: 100svh;
+  height: auto;
+}
+.pista[data-animada][data-plegada] .escenari {
+  position: static;
+  height: auto;
+  overflow: visible;
+  background: none;
+  color: inherit;
+}
+.pista[data-animada][data-plegada] .capitol,
+.pista[data-animada][data-plegada] .indicador {
+  display: none;
+}
+
+/* El catàleg: l'últim capítol de l'escena. Sense animació, una secció normal sota les marques. */
+.capitolCataleg {
+  position: relative;
+}
+.pista[data-animada] .capitolCataleg {
+  padding-top: calc(var(--header-h) + 8px);
+}
+.pista[data-animada] .graella {
+  padding-top: 0;
+}
+.pista[data-animada]:not([data-plegada]) .capitolCataleg {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  color: var(--tinta);
+  pointer-events: none;
+}
+.pista[data-animada]:not([data-plegada]) .capitolCataleg[data-actiu='true'] {
+  pointer-events: auto;
+}
+/* El fons clar entra per sobre de l'escena fosca. */
+.pista[data-animada]:not([data-plegada]) .capitolCataleg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--escenari);
+  opacity: var(--fons-cataleg, 0);
+}
+.pista[data-animada]:not([data-plegada]) .capitolCataleg > * {
+  position: relative;
+}
+.pista[data-animada]:not([data-plegada]) .filtres,
+.pista[data-animada]:not([data-plegada]) .momentText {
+  opacity: var(--cap, 0);
+  translate: 0 calc((1 - var(--cap, 0)) * 24px);
+}
+.pista[data-animada]:not([data-plegada]) .veureMes,
+.pista[data-animada]:not([data-plegada]) .peu,
+.pista[data-animada]:not([data-plegada]) .buit {
+  opacity: var(--peu, 0);
+}
+/* Cada targeta, amb el seu bot segons el scroll (--pop, que escriu l'escena; pot passar d'1). */
+.pista[data-animada]:not([data-plegada]) [data-pop] {
+  opacity: clamp(0, var(--pop, 0), 1);
+  translate: 0 calc((1 - var(--pop, 0)) * 56px);
+  scale: calc(0.7 + 0.3 * var(--pop, 0));
+}
+.pista[data-animada]:not([data-plegada]) [data-pop] .foto img,
+.pista[data-animada]:not([data-plegada]) [data-pop] .foto svg {
+  scale: calc(0.4 + 0.6 * var(--pop, 0));
+  rotate: calc((1 - min(var(--pop, 0), 1)) * -16deg);
 }
 .pista[data-animada] .escenari {
   position: sticky;
@@ -215,6 +281,7 @@
   --h: clamp(110px, 27svh, 270px);
 }
 .pista[data-animada] .indicador {
+  opacity: var(--indicador, 1);
   position: absolute;
   left: 50%;
   bottom: clamp(16px, 3svh, 32px);
@@ -388,20 +455,17 @@
     0 0 0 1px var(--linia),
     0 16px 30px -16px rgb(18 20 23 / 0.4);
 }
-/* Les targetes surten d'una en una amb un bot quan el catàleg arriba a la pantalla, i tornen a
-   sortir en canviar de filtre. Sense JavaScript o amb menys moviment, ja hi són. */
+/* Després de canviar de filtre (amb l'escena ja plegada), les targetes noves surten soles amb el
+   mateix bot. Amb menys moviment, ja hi són. */
 @media (prefers-reduced-motion: no-preference) {
-  .productes[data-espera]:not([data-visible]) .targeta {
-    opacity: 0;
-  }
-  .productes[data-visible] .targeta {
+  .productes[data-canviat] .targeta {
     animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    animation-delay: calc(var(--i) * 70ms);
+    animation-delay: calc(var(--i) * 60ms);
   }
-  .productes[data-visible] .foto img,
-  .productes[data-visible] .foto svg {
+  .productes[data-canviat] .foto img,
+  .productes[data-canviat] .foto svg {
     animation: pop-foto 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    animation-delay: calc(var(--i) * 70ms + 140ms);
+    animation-delay: calc(var(--i) * 60ms + 120ms);
   }
 }
 @keyframes pop {
@@ -572,5 +636,39 @@
   .targeta:hover .foto img,
   .targeta:hover .foto svg {
     transform: none;
+  }
+}
+
+/* Mòbil: dues targetes per fila, perquè el catàleg es vegi dins de l'escena. */
+@media (max-width: 560px) {
+  /* Els filtres, en una fila que es passa amb el dit: no es mengen la pantalla. */
+  .pastilles {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .pastilles button {
+    flex: none;
+  }
+  .productes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .foto {
+    height: 124px;
+    padding: 10px;
+  }
+  .dades {
+    padding: 10px 10px 12px;
+  }
+  .nom {
+    font-size: 14px;
+  }
+  .descripcio {
+    display: none;
+  }
+  .peuTargeta {
+    flex-wrap: wrap;
   }
 }
