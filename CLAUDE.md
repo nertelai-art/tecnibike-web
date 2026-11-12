@@ -120,17 +120,28 @@ Versions que **no** són l'última, i per què:
 
 ## Repositori i Vercel
 
-- GitHub: `nertelai-art/tecnibike-web` (públic). Només hi ha `developer`; a `main` s'hi arriba per
-  promoció, mai a mà.
+- GitHub: `nertelai-art/tecnibike-web` (públic). Branques i fusions, com a servei-tecnic, perquè al
+  graf (Fork) es vegi el flux:
+  - **Cada feina, en una branca curta** des de `developer` (`feat/…`, `fix/…`, `docs/…`, `ci/…`),
+    que hi entra amb un **merge commit** (`git merge --no-ff`, o PR fusionada amb `--merge`). Mai
+    squash ni rebase.
+  - **`main` és el que hi ha a producció.** A `main` no s'hi puja mai a mà: cada publicació és una
+    **release**, que fa el flux **«Release a producció (developer → main)»**
+    (`.github/workflows/promou-produccio.yml`) i que només llança l'usuari (Actions → Run workflow).
+    Abans, la versió puja a `package.json` amb un commit `chore(release): vX.Y.Z` a `developer`. El
+    flux comprova que el commit és de `developer`, que l'etiqueta és nova i que la previsualització de
+    Vercel d'aquell commit ha acabat bé; llavors fusiona a `main` amb `--no-ff`
+    («release: vX.Y.Z»), hi posa l'etiqueta `vX.Y.Z` i torna `developer` al mateix punt. No construeix
+    res ni força res.
 - Vercel: projecte `tecnibike-web` (equip nertelai-7298's projects), amb l'avatar TCNBK. URL:
   https://tecnibike-web.vercel.app. El primer desplegament (en importar, 23-10-2026) és de producció.
-- **Cap push publica sol a producció:** Vercel encara té `developer` com a branca de producció (no
-  accepta `main` fins que existeixi), i per això l'«Ignored Build Step» és «Only build
-  pre-production». Quan existeixi `main`, cal posar-la com a branca de producció (Settings →
-  Environments → Production) i tornar l'Ignored Build Step a «Automatic».
-- **Publicar a producció** (només quan l'usuari ho digui, cada vegada): posar l'Ignored Build Step a
-  «Automatic», crear el desplegament de producció del commit (API de Vercel, `target: production`) i,
-  quan ja construeix, tornar-lo a «Only build pre-production». Últim: `4553481` (30-10-2026).
+- **Producció = `main`.** Vercel desplega a producció cada canvi de `main` i fa previsualitzacions
+  de `developer` (i de qualsevol altra branca). L'«Ignored Build Step» és «Automatic». Publicar a
+  producció és, doncs, fer una release amb el flux, i només quan l’usuari ho digui, cada vegada.
+  Configurat i provat el 11-11-2026: un push a `developer` fa una previsualització.
+  (Fins al 11-11-2026 la branca de producció de Vercel era `developer` i es publicava canviant
+  l'Ignored Build Step a mà; l'últim desplegament així va ser `5a635ac`.) Amb la clau de l'API de
+  Vercel no es poden canviar els ajustos del projecte: es fa al tauler.
 
 ## Pendent abans de publicar
 

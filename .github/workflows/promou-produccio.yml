@@ -1,0 +1,117 @@
+name: Release a producció (developer → main)
+
+# Publicar a producció és fer una release: fusionar `developer` a `main` amb un merge commit
+# («release: vX.Y.Z»), posar-hi l'etiqueta de versió i tornar `developer` al mateix punt. Vercel
+# desplega a producció cada canvi de `main`; `developer` només fa previsualitzacions. Al graf queden
+# els dos carrils i una unió per release, com a servei-tecnic (docs/12 §7 d'aquell repositori).
+#
+# A `main` no s'hi puja a mà, i aquest flux només el llança l'usuari, cada vegada (Actions →
+# «Release a producció» → Run workflow). Res no el dispara sol.
+#
+# Abans de cada release, la versió puja a package.json amb un commit `chore(release): vX.Y.Z` a
+# `developer`: el flux llegeix la versió d'allà i no publica si l'etiqueta ja existeix.
+#
+# No construeix res. Les portes ja han passat abans:
+# - El ganxo de pre-push (`pnpm check`: tipus, lint i proves) abans que el commit arribés a GitHub.
+# - El build de la previsualització de Vercel d'aquell mateix commit: aquí es comprova que hagi
+#   acabat bé (l'estat «Vercel» del commit). Tornar-lo a construir seria pagar dues vegades.
+# Tots els push són sense `--force`: si `main` o `developer` s'han mogut pel camí, fallen.
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: "Commit de developer a publicar (per defecte, el seu cap)"
+        required: false
+
+# Dues releases alhora es farien la traveta. En sèrie, no. No es cancel·la: dura segons.
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+# Ha de poder escriure (moure `main` i `developer`, i crear l'etiqueta) i llegir l'estat dels commits.
+permissions:
+  contents: write
+  statuses: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Cal la història sencera per comprovar d'on ve el candidat i fusionar-lo.
+          fetch-depth: 0
+
+      - name: Quin commit publiquem
+        id: candidat
+        run: |
+          if [ -n "${{ inputs.sha }}" ]; then
+            sha="$(git rev-parse "${{ inputs.sha }}^{commit}")"
+          else
+            sha="$(git rev-parse origin/developer)"
+          fi
+          versio="$(git show "$sha:package.json" | jq -r .version)"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "versio=$versio" >> "$GITHUB_OUTPUT"
+          echo "Candidat: $sha (v$versio)"
+          git --no-pager log -1 --format='  %h %s' "$sha"
+
+      - name: El candidat ha de ser de developer
+        run: |
+          if ! git merge-base --is-ancestor "${{ steps.candidat.outputs.sha }}" origin/developer; then
+            echo "::error::${{ steps.candidat.outputs.sha }} no és a developer. No es publica."
+            exit 1
+          fi
+
+      - name: La versió ha de ser nova
+        run: |
+          if git rev-parse -q --verify "refs/tags/v${{ steps.candidat.outputs.versio }}" >/dev/null; then
+            echo "::error::L'etiqueta v${{ steps.candidat.outputs.versio }} ja existeix. Puja la versió a package.json (commit chore(release)) abans de publicar."
+            exit 1
+          fi
+
+      - name: La previsualització de Vercel d'aquest commit ha d'haver acabat bé
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          estat="$(gh api "repos/${{ github.repository }}/commits/${{ steps.candidat.outputs.sha }}/status" \
+            --jq '[.statuses[] | select(.context == "Vercel")][0].state // "cap"')"
+          echo "Estat de Vercel: $estat"
+          if [ "$estat" != "success" ]; then
+            echo "::error::La previsualització de Vercel d'aquest commit no ha acabat bé (estat: $estat). Si encara construeix, espera i torna-ho a llançar."
+            exit 1
+          fi
+
+      - name: Fusiona a main amb merge commit i etiqueta
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --detach origin/main
+          # Mai fast-forward: el merge commit és la release i la unió que es veu al graf.
+          if ! git merge --no-ff "${{ steps.candidat.outputs.sha }}" -m "release: v${{ steps.candidat.outputs.versio }}"; then
+            echo "::error::La fusió a main té conflictes: main i developer han divergit. Cal mirar-ho a mà."
+            exit 1
+          fi
+          git tag -a "v${{ steps.candidat.outputs.versio }}" -m "v${{ steps.candidat.outputs.versio }}"
+
+      - name: Puja main i l'etiqueta (desplega producció)
+        run: git push origin "HEAD:refs/heads/main" "refs/tags/v${{ steps.candidat.outputs.versio }}"
+
+      - name: Torna developer al mateix punt que main
+        run: |
+          # Només si `developer` no ha avançat mentrestant: llavors és un fast-forward. Si ha avançat,
+          # no es toca; la propera release ho recull igualment.
+          if [ "$(git rev-parse origin/developer)" = "${{ steps.candidat.outputs.sha }}" ]; then
+            git push origin "HEAD:refs/heads/developer"
+            echo "developer → main."
+          else
+            echo "::warning::developer ha avançat mentre es publicava: no s'ha mogut. Fusiona-hi main (git merge main) quan vagi bé."
+          fi
+          {
+            echo "### release v${{ steps.candidat.outputs.versio }} → main \`$(git rev-parse --short HEAD)\`"
+            git --no-pager log -1 --format='%s' "${{ steps.candidat.outputs.sha }}"
+            echo
+            echo "Vercel en fa ara el desplegament de producció."
+          } >> "$GITHUB_STEP_SUMMARY"
