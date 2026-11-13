@@ -1,10 +1,13 @@
 import Image from 'next/image';
+import { hasLocale } from 'next-intl';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
 import { FOTOS_EXTRES } from '@/content/fotos-extres';
 import type { Ressenya, Valoracio } from '@/lib/plataforma/esquema';
 import { Link } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
 import { enllacWhatsapp, TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
+import { enllacCreditNertel } from '@/lib/credit-nertel';
 import { AnatomiaTaller } from './anatomia/AnatomiaTaller';
 import { CarruselMarques } from './marques/CarruselMarques';
 import { MapaRutes } from './rutes/MapaRutes';
@@ -309,6 +312,8 @@ export async function Visita() {
 export async function Peu() {
   const t = await getTranslations('peu');
   const tm = await getTranslations('mostra');
+  const locale = await getLocale();
+  const idioma = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
   return (
     <footer className={styles.peu}>
       <div className={`contenidor ${styles.peuGraella}`}>
@@ -348,6 +353,16 @@ export async function Peu() {
             })}
           </p>
         </details>
+      </div>
+
+      {/* Qui ha fet la web. Franja pròpia sota el peu, discreta, que porta a nertel.ai. */}
+      <div className={styles.creditNertel}>
+        <a href={enllacCreditNertel(idioma)} target="_blank" rel="noopener">
+          <span>{t('fetaPer')}</span>
+          {/* El blau marí del símbol és per a fons clars: sobre el peu fosc s'aclareix perquè es vegi sencer. */}
+          <Image src="/img/nertel-mark.png" alt="" width={116} height={96} className={styles.creditNertelSimbol} />
+          <span className={styles.creditNertelNom}>Nertel</span>
+        </a>
       </div>
     </footer>
   );
