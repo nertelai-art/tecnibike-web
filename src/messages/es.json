@@ -464,15 +464,21 @@
       "dades": "Revisa los campos marcados.",
       "franja": "Esta hora se acaba de llenar. Elige otra.",
       "serveis": "Elige al menos un servicio.",
-      "xarxa": "No se ha podido enviar. Vuelve a intentarlo o llámanos al 972 66 29 51."
+      "xarxa": "No se ha podido enviar. Vuelve a intentarlo o llámanos al 972 66 29 51.",
+      "noDisponible": "Ahora mismo no podemos guardar la cita en línea. Llámanos al 972 66 29 51 y te la damos."
     },
     "fet": {
       "titol": "Cita confirmada",
       "text": "Te esperamos el {data} a las {hora}. Te daremos el presupuesto antes de tocar nada y te avisaremos por WhatsApp cuando esté lista*.",
-      "altra": "Pedir otra cita"
+      "altra": "Pedir otra cita",
+      "titolPendent": "Cita solicitada",
+      "textPendent": "Hemos guardado la hora del {data} a las {hora}. El taller te la confirmará muy pronto por WhatsApp."
     },
     "situacio": "Taller",
-    "tancar": "Cerrar"
+    "tancar": "Cerrar",
+    "lliure": "Libre",
+    "preuConsultar": "Precio a consultar",
+    "senseCitesEnLinia": "Ahora mismo las citas del taller se piden por teléfono:"
   },
   "whatsapp": {
     "parla": "Habla con nuestro asistente por WhatsApp",

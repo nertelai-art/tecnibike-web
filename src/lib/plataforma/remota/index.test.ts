@@ -101,10 +101,10 @@ function apiFalsa(respostes: Record<string, { estat?: number; cos: unknown }>) {
 const proves = () => crearPlataformaProva({ generaCodi: () => 'TB-PROVA', rellotge: () => new Date('2026-10-27T07:00:00Z') });
 const R = '/api/public/rental';
 
-function remota(respostes: Record<string, { estat?: number; cos: unknown }> = {}) {
+function remota(respostes: Record<string, { estat?: number; cos: unknown }> = {}, { clauCites }: { clauCites?: string } = {}) {
   const api = apiFalsa({ [`GET ${R}/catalog`]: { cos: cataleg }, [`GET ${R}/hours`]: { cos: hores }, [`GET ${R}/settings`]: { cos: ajustos() }, ...respostes });
   const plataforma = crearPlataformaRemota({
-    url: 'https://app.prova', clau: 'clau-prova', fetch: api.fetch, generaClau: () => 'clau-idempotencia-1', proves: proves(),
+    url: 'https://app.prova', clau: 'clau-prova', clauCites, fetch: api.fetch, generaClau: () => 'clau-idempotencia-1', proves: proves(),
   });
   return { plataforma, crides: api.crides };
 }
@@ -354,11 +354,105 @@ describe("plataforma remota: la botiga d'equipament", () => {
 });
 
 describe('plataforma remota: el que encara no té API', () => {
-  it('el taller, la botiga i les ressenyes surten de la implementació de proves', async () => {
+  it('els participants encara no hi són', async () => {
     const { plataforma, crides } = remota();
-    await expect(plataforma.serveisTaller()).resolves.toHaveLength(6);
     await expect(plataforma.registrarParticipants({ codi: 'X', participants: [], condicions: true } as never)).rejects.toMatchObject({ motiu: 'noDisponible' });
     expect(crides).toHaveLength(0);
+  });
+});
+
+describe('plataforma remota: el taller', () => {
+  const B = '/api/public/bookings';
+  const servei = (category: string | null, priceCents: number | null, priceBasis: 'exact' | 'from' | 'on_request', extra: object = {}) => ({
+    id: crypto.randomUUID(), name: `Servei ${category}`, description: null, imageUrl: null, category, attributes: {},
+    priceCents, priceBasis, priceUnit: 'unit', vatIncluded: true, priceHidden: false, ...extra,
+  });
+  const ambServeis = (workshopServices: unknown[]) => ({ [`GET ${R}/catalog`]: { cos: RentalCatalogResponseSchema.parse({ ...cataleg, workshopServices }) } });
+
+  it('els preus del taller són els del catàleg de la plataforma, per peça; sense, no se n’inventa cap', async () => {
+    const serveis = await remota(
+      ambServeis([
+        servei('Frens', 2500, 'from'),
+        servei('Rodes', 1200, 'exact'),
+        servei('Transmissió', null, 'on_request'),
+        servei('Seient', 6000, 'exact', { priceHidden: true }),
+        servei('Rentat', 1000, 'exact'),
+      ]),
+    ).plataforma.serveisTaller();
+    expect(serveis.map((x) => [x.peca, x.preu, x.preuBase, x.ficticia])).toEqual([
+      ['frens', 2500, 'desDe', false],
+      ['rodes', 1200, 'exacte', false],
+      ['transmissio', null, 'consultar', false],
+      ['seient', null, 'consultar', false],
+    ]);
+    await expect(remota(ambServeis([])).plataforma.serveisTaller()).resolves.toEqual([]);
+  });
+
+  const lliures = {
+    timeZone: 'Europe/Madrid', today: '2026-11-13',
+    service: { key: 'cita-de-taller', name: 'Cita de taller', durationMinutes: 60 },
+    days: [{ date: '2026-11-17', closed: false, times: ['09:00', '10:00', '16:00'] }],
+  };
+
+  it('les hores lliures surten de la plataforma, amb la clau de cites', async () => {
+    const { plataforma, crides } = remota({ [`GET ${B}/availability`]: { cos: lliures } }, { clauCites: 'clau-cites' });
+    expect(await plataforma.frangesTaller('2026-11-17')).toEqual([
+      { inici: '09:00', places: null },
+      { inici: '10:00', places: null },
+      { inici: '16:00', places: null },
+    ]);
+    const crida = crides.find((c) => c.url.pathname === `${B}/availability`)!;
+    expect(Object.fromEntries(crida.url.searchParams)).toEqual({ from: '2026-11-17', to: '2026-11-17' });
+    expect(crida.capcaleres.get('x-api-key')).toBe('clau-cites');
+  });
+
+  it('un dia que el taller tanca no té hores', async () => {
+    const tancat = { ...lliures, days: [{ date: '2026-11-17', closed: true, times: [] }] };
+    expect(await remota({ [`GET ${B}/availability`]: { cos: tancat } }, { clauCites: 'c' }).plataforma.frangesTaller('2026-11-17')).toEqual([]);
+  });
+
+  const cita = {
+    tipusBici: 'gravel' as const, serveis: ['frens' as const, 'rodes' as const], nota: 'Grinyolen els frens', dia: '2026-11-17', hora: '10:00',
+    nom: 'Anna Puig', telefon: '+34 600 000 000', correu: 'anna@example.com', idioma: 'ca' as const, privacitat: true as const,
+  };
+  const feta = {
+    reference: '6DB3FA', status: 'confirmed', pendingConfirmation: false, service: 'cita-de-taller', date: '2026-11-17', time: '10:00',
+    endTime: '11:00', timeZone: 'Europe/Madrid', startsAt: '2026-11-17T09:00:00Z', endsAt: '2026-11-17T10:00:00Z',
+  };
+
+  it('la cita es desa a la plataforma, amb el servei, la bici i el que li passa, una sola vegada', async () => {
+    const { plataforma, crides } = remota({ [`GET ${B}/availability`]: { cos: lliures }, [`POST ${B}`]: { estat: 201, cos: feta } }, { clauCites: 'clau-cites' });
+    expect(await plataforma.crearCitaTaller(cita)).toEqual({ codi: '6DB3FA', estat: 'confirmada' });
+    const post = crides.find((c) => c.metode === 'POST')!;
+    expect(post.capcaleres.get('idempotency-key')).toBe('clau-idempotencia-1');
+    expect(post.cos).toEqual({
+      service: 'cita-de-taller', date: '2026-11-17', time: '10:00',
+      customer: { name: 'Anna Puig', phone: '+34 600 000 000', email: 'anna@example.com' },
+      note: 'Grinyolen els frens',
+      details: { bici: 'gravel', serveis: 'frens, rodes', idioma: 'ca' },
+      privacyAccepted: true,
+    });
+  });
+
+  it('una cita que el taller ha de confirmar queda pendent', async () => {
+    const pendent = { ...feta, status: 'pending', pendingConfirmation: true };
+    const { plataforma } = remota({ [`GET ${B}/availability`]: { cos: lliures }, [`POST ${B}`]: { estat: 201, cos: pendent } }, { clauCites: 'c' });
+    expect(await plataforma.crearCitaTaller(cita)).toEqual({ codi: '6DB3FA', estat: 'pendent' });
+  });
+
+  it('una hora plena és un error de franja; un telèfon que no val, de dades', async () => {
+    const error = (code: string, field?: string) => ({ error: { code, message: 'no', ...(field && { field }) } });
+    const ple = remota({ [`GET ${B}/availability`]: { cos: lliures }, [`POST ${B}`]: { estat: 409, cos: error('full') } }, { clauCites: 'c' });
+    await expect(ple.plataforma.crearCitaTaller(cita)).rejects.toMatchObject({ motiu: 'franja' });
+    const mal = remota({ [`GET ${B}/availability`]: { cos: lliures }, [`POST ${B}`]: { estat: 422, cos: error('invalid_request', 'customer.phone') } }, { clauCites: 'c' });
+    await expect(mal.plataforma.crearCitaTaller(cita)).rejects.toMatchObject({ motiu: 'dades' });
+  });
+
+  it('sense la clau de cites, no es fan veure hores ni es desa res en memòria: la cita no es perd', async () => {
+    const { plataforma, crides } = remota();
+    expect(await plataforma.frangesTaller('2026-11-17')).toBeNull();
+    await expect(plataforma.crearCitaTaller(cita)).rejects.toMatchObject({ motiu: 'noDisponible' });
+    expect(crides.filter((c) => c.url.pathname.startsWith(B))).toHaveLength(0);
   });
 });
 

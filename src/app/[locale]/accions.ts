@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import { araABotiga, esData, esPassat } from '@/lib/calendari';
 import { diesEntre, MAX_DIES_LLOGUER } from '@/lib/horari';
 import { ErrorReserva, plataforma, type Disponibilitat } from '@/lib/plataforma';
-import { citaTaller, modalitatPagament, moment, participantsReserva, reservaLloguer } from '@/lib/plataforma/esquema';
+import { citaTaller, type FranjaTaller, modalitatPagament, moment, participantsReserva, reservaLloguer } from '@/lib/plataforma/esquema';
 
 // Accions de servidor de les reserves. Tot el que arriba del navegador es torna a validar aquí, i
 // el preu, l'horari i les unitats lliures els comprova la plataforma: el formulari només orienta.
@@ -32,9 +32,16 @@ export async function consultarDisponibilitat(recollida: unknown, retorn: unknow
   }
 }
 
-export async function consultarFranges(dia: string) {
+/** Les hores d'arribada al taller d'un dia, o `'senseCites'` si ara no es poden demanar en línia. */
+export async function consultarFranges(dia: string): Promise<FranjaTaller[] | 'senseCites'> {
   if (!esData(dia)) return [];
-  return plataforma.frangesTaller(dia);
+  try {
+    return (await plataforma.frangesTaller(dia)) ?? 'senseCites';
+  } catch (e) {
+    // Si la plataforma no respon, millor dir que truquin que ensenyar el dia ple.
+    console.error('Hores del taller no disponibles', e);
+    return 'senseCites';
+  }
 }
 
 function errorDe(e: unknown): ResultatReserva {

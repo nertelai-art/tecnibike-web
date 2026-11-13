@@ -2,6 +2,9 @@ import {
   article,
   biciLloguer,
   categoriaLloguer,
+  citaTaller,
+  serveiTaller,
+  type Peca,
   type Article,
   type BiciLloguer,
   type CategoriaEquipament,
@@ -28,12 +31,13 @@ import {
   type RentalErrorCode,
   type RentalHoursResponse,
 } from './contracte';
+import { WebBookingAvailabilityResponseSchema, WebBookingErrorResponseSchema, WebBookingResponseSchema } from './contracte-cites';
 
 // Implementació remota de la plataforma: l'API de lloguer de app.nertel.ai
 // (`/api/public/rental/*`, contracte a ./contracte.ts). Sempre des del servidor: la clau només és en
 // variables d'entorn sense `NEXT_PUBLIC_`, que Next no posa mai al codi del navegador.
 //
-// El que la plataforma encara no té a l'API (el taller, la botiga d'equipament, les ressenyes i els
+// El que la plataforma encara no té a l'API (els productes per peça, les ressenyes i els
 // participants) surt de la implementació de proves.
 
 /** Quant temps es reaprofita el catàleg, l'horari i els ajustos: el que hi canviï a la plataforma surt a la web en aquest temps. */
@@ -46,6 +50,13 @@ type Opcions = {
   url: string;
   /** La clau lligada a la botiga, amb els abasts `rental_read` i `rental_write`. */
   clau: string;
+  /**
+   * La clau de cites, lligada a la botiga, amb els abasts `web_booking_read` i `web_booking_write`
+   * (`/api/public/bookings`). Sense, no es poden demanar cites de taller en línia.
+   */
+  clauCites?: string;
+  /** El servei de la cita, si la botiga en té més d'un que es reservi a hores. Sense, el seu únic servei. */
+  serveiCita?: string;
   /** La implementació del que la plataforma encara no té a l'API. */
   proves: Plataforma;
   fetch?: typeof globalThis.fetch;
@@ -198,6 +209,28 @@ function articleDe(p: ProducteVenda, categoria: CategoriaEquipament): Article {
   });
 }
 
+/** El nom de la peça al catàleg del taller (la categoria del servei, o el nom), ja normalitzat. */
+const PECES_CATALEG: Record<string, Peca> = {
+  transmissio: 'transmissio', transmision: 'transmissio', canvis: 'transmissio', cambios: 'transmissio', drivetrain: 'transmissio',
+  frens: 'frens', frenos: 'frens', brakes: 'frens',
+  rodes: 'rodes', ruedas: 'rodes', wheels: 'rodes', punxades: 'rodes',
+  direccio: 'direccio', direccion: 'direccio', steering: 'direccio',
+  seient: 'seient', sillin: 'seient', 'bike-fitting': 'seient',
+  quadre: 'quadre', cuadro: 'quadre', frame: 'quadre', 'posada-a-punt': 'quadre',
+};
+
+type ServeiCataleg = NonNullable<RentalCatalogResponse['workshopServices']>[number];
+
+/** La peça d'un servei del taller del catàleg: per la categoria, una clau `peca` dels atributs o el nom. */
+export function pecaDe(s: ServeiCataleg): Peca | null {
+  for (const valor of [s.category, s.attributes.peca, s.name]) {
+    if (typeof valor !== 'string' || !valor.trim()) continue;
+    const peca = PECES_CATALEG[normalitza(valor)];
+    if (peca) return peca;
+  }
+  return null;
+}
+
 /** En tornar de la pàgina de pagament, la plataforma hi afegeix si s'ha pagat o s'ha cancel·lat. */
 export function resultatDelPagament(parametres: Record<string, string | string[] | undefined>): 'pagat' | 'cancellat' | null {
   const valor = parametres.nertel_checkout;
@@ -206,7 +239,7 @@ export function resultatDelPagament(parametres: Record<string, string | string[]
   return null;
 }
 
-export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fetch, generaClau = () => crypto.randomUUID() }: Opcions): Plataforma {
+export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves, fetch = globalThis.fetch, generaClau = () => crypto.randomUUID() }: Opcions): Plataforma {
   async function crida(ruta: string, { metode = 'GET', cos, idempotencia, revalida }: { metode?: string; cos?: unknown; idempotencia?: string; revalida?: boolean } = {}) {
     const resposta = await fetch(new URL(`/api/public/rental${ruta}`, url), {
       method: metode,
@@ -236,6 +269,38 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
   }
 
   const cataleg = async () => RentalCatalogResponseSchema.parse(await crida('/catalog', { revalida: true }));
+
+  /** L'API de cites (`/api/public/bookings`), la mateixa que fan servir els agents de veu i WhatsApp. */
+  async function cridaCites(ruta: string, { metode = 'GET', cos, idempotencia }: { metode?: string; cos?: unknown; idempotencia?: string } = {}) {
+    if (!clauCites) throw new ErrorReserva('noDisponible', 'falta la clau de cites de la plataforma');
+    const resposta = await fetch(new URL(`/api/public/bookings${ruta}`, url), {
+      method: metode,
+      headers: {
+        'x-api-key': clauCites,
+        accept: 'application/json',
+        ...(cos !== undefined && { 'content-type': 'application/json' }),
+        ...(idempotencia && { 'Idempotency-Key': idempotencia }),
+      },
+      body: cos === undefined ? undefined : JSON.stringify(cos),
+      cache: 'no-store',
+    });
+    const json: unknown = await resposta.json().catch(() => null);
+    if (resposta.ok) return json;
+    const problema = WebBookingErrorResponseSchema.safeParse(json);
+    const codi = problema.success ? problema.data.error.code : undefined;
+    const camp = problema.success ? problema.data.error.field : undefined;
+    const detall = problema.success ? [camp, problema.data.error.message].filter(Boolean).join(': ') : undefined;
+    if (codi === 'full' || codi === 'outside_hours' || codi === 'date_out_of_range') throw new ErrorReserva('franja', detall);
+    if (codi === 'invalid_request' && camp?.startsWith('customer')) throw new ErrorReserva('dades', detall);
+    // La clau, el servei o un cos mal format: no és culpa de qui demana la cita.
+    throw new Error(`La plataforma de cites ha respost ${resposta.status} ${codi ?? ''} a ${metode} ${ruta || '/'}${detall ? ` (${detall})` : ''}`.replace(/ {2,}/g, ' '));
+  }
+
+  /** Les hores lliures d'un dia del servei de cita del taller. */
+  async function horesLliures(dia: string) {
+    const consulta = new URLSearchParams({ ...(serveiCita && { service: serveiCita }), from: dia, to: dia });
+    return WebBookingAvailabilityResponseSchema.parse(await cridaCites(`/availability?${consulta}`));
+  }
 
   /** Les bicis de la web amb el seu model de la plataforma, per traduir l'adreça llegible a l'identificador. */
   async function bicis(): Promise<{ bici: BiciLloguer; model: Model }[]> {
@@ -391,9 +456,49 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
     registrarParticipants: async () => {
       throw new ErrorReserva('noDisponible');
     },
-    serveisTaller: () => proves.serveisTaller(),
-    frangesTaller: (dia) => proves.frangesTaller(dia),
-    crearCitaTaller: (cita) => proves.crearCitaTaller(cita),
+    // Els preus del taller, del catàleg (`workshopServices`): un per peça, el primer que hi encaixi. Si
+    // la botiga no n'ha posat cap, cap: la web no s'inventa preus.
+    serveisTaller: async () => {
+      const vistes = new Set<Peca>();
+      return ((await cataleg()).workshopServices ?? []).flatMap((s) => {
+        const peca = pecaDe(s);
+        if (!peca || vistes.has(peca)) return [];
+        vistes.add(peca);
+        const amagat = s.priceHidden || s.priceBasis === 'on_request' || s.priceCents === null;
+        return [
+          serveiTaller.parse({ id: s.id, peca, preu: amagat ? null : s.priceCents, preuBase: amagat ? 'consultar' : s.priceBasis === 'from' ? 'desDe' : 'exacte', ficticia: false }),
+        ];
+      });
+    },
+    // Les hores i les cites, de l'API de cites. Sense la clau, no se'n fan veure: una cita que es
+    // desés en memòria es perdria, i la plataforma és l'única agenda (també la dels agents).
+    frangesTaller: async (dia) => {
+      if (!clauCites) return null;
+      const dies = (await horesLliures(dia)).days.find((d) => d.date === dia);
+      if (!dies || dies.closed) return [];
+      return dies.times.map((inici) => ({ inici, places: null }));
+    },
+    crearCitaTaller: async (entrada) => {
+      const cita = citaTaller.parse(entrada);
+      if (!clauCites) throw new ErrorReserva('noDisponible', 'falta la clau de cites de la plataforma');
+      const { service } = await horesLliures(cita.dia);
+      const feta = WebBookingResponseSchema.parse(
+        await cridaCites('', {
+          metode: 'POST',
+          idempotencia: generaClau(),
+          cos: {
+            service: service.key,
+            date: cita.dia,
+            time: cita.hora,
+            customer: { name: cita.nom, phone: cita.telefon, email: cita.correu },
+            ...(cita.nota && { note: cita.nota }),
+            details: { bici: cita.tipusBici, serveis: cita.serveis.join(', '), idioma: cita.idioma },
+            privacyAccepted: true,
+          },
+        }),
+      );
+      return { codi: feta.reference, estat: feta.pendingConfirmation || feta.status === 'pending' ? 'pendent' : 'confirmada' };
+    },
     // El catàleg per ensenyar-lo, de les dades de prova fins que la plataforma el tingui.
     nutricio: () => proves.nutricio(),
     productes: () => proves.productes(),

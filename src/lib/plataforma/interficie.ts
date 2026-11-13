@@ -26,7 +26,7 @@ import type {
 
 export class ErrorReserva extends Error {
   constructor(
-    readonly motiu: 'bici' | 'talla' | 'durada' | 'esgotat' | 'extra' | 'franja' | 'retencio' | 'participants' | 'noDisponible',
+    readonly motiu: 'dades' | 'bici' | 'talla' | 'durada' | 'esgotat' | 'extra' | 'franja' | 'retencio' | 'participants' | 'noDisponible',
     /** Per als registres: què ha dit la plataforma, si n'ha dit res. La web decideix pel motiu. */
     detall?: string,
   ) {
@@ -72,7 +72,8 @@ export interface Plataforma {
   /** Dades dels ciclistes i signatura del contracte abans de recollir. */
   registrarParticipants(participants: ParticipantsReserva): Promise<void>;
   serveisTaller(): Promise<ServeiTaller[]>;
-  frangesTaller(dia: string): Promise<FranjaTaller[]>;
+  /** Les hores d'arribada d'un dia. `null`: ara no es poden demanar cites en línia (falta la clau). */
+  frangesTaller(dia: string): Promise<FranjaTaller[] | null>;
   crearCitaTaller(cita: CitaTaller): Promise<Confirmacio>;
   /** Gels, barretes i begudes que es poden afegir a una reserva de lloguer. */
   nutricio(): Promise<ProducteNutricio[]>;

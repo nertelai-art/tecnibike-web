@@ -31,12 +31,14 @@ export const biciLloguer = z.object({
 /** Peça de la bici de l'escena d'anatomia a la qual pertany un servei. */
 export const peca = z.enum(['transmissio', 'frens', 'rodes', 'direccio', 'seient', 'quadre']);
 
+/** El preu d'un servei del taller per peça, del catàleg de la plataforma (o de mostra, a les proves). */
 export const serveiTaller = z.object({
   id: z.string(),
   peca,
-  desDe: centims,
-  /** Dies laborables habituals. */
-  dies: z.number().int().positive(),
+  /** Nul si és a consultar o la botiga no el vol dir. */
+  preu: centims.nullable(),
+  /** Preu tancat, «des de» o a consultar, com l'ha posat la botiga. */
+  preuBase: z.enum(['exacte', 'desDe', 'consultar']),
   ficticia: z.boolean(),
 });
 
@@ -227,7 +229,8 @@ export const reservaLloguer = z.object({
   ...client,
 });
 
-export const franjaTaller = z.object({ inici: hora, places: z.number().int().nonnegative() });
+/** Una hora d'arribada al taller. `places`: les que queden, o nul si la plataforma només diu que és lliure. */
+export const franjaTaller = z.object({ inici: hora, places: z.number().int().nonnegative().nullable() });
 
 export const citaTaller = z.object({
   tipusBici: z.enum(['carretera', 'muntanya', 'gravel', 'electrica', 'urbana']),

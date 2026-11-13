@@ -464,15 +464,21 @@
       "dades": "Revisa els camps marcats.",
       "franja": "Aquesta hora s'acaba d'omplir. Tria'n una altra.",
       "serveis": "Tria almenys un servei.",
-      "xarxa": "No s'ha pogut enviar. Torna-ho a provar o truca'ns al 972 66 29 51."
+      "xarxa": "No s'ha pogut enviar. Torna-ho a provar o truca'ns al 972 66 29 51.",
+      "noDisponible": "Ara mateix no podem desar la cita en línia. Truca'ns al 972 66 29 51 i te la donem."
     },
     "fet": {
       "titol": "Cita confirmada",
       "text": "T'esperem el {data} a les {hora}. Et direm el pressupost abans de tocar res i t'avisarem per WhatsApp quan estigui llesta*.",
-      "altra": "Demana una altra cita"
+      "altra": "Demana una altra cita",
+      "titolPendent": "Cita demanada",
+      "textPendent": "Hem guardat l'hora del {data} a les {hora}. El taller te la confirmarà ben aviat per WhatsApp."
     },
     "situacio": "Taller",
-    "tancar": "Tanca"
+    "tancar": "Tanca",
+    "lliure": "Lliure",
+    "preuConsultar": "Preu a consultar",
+    "senseCitesEnLinia": "Ara mateix les cites del taller es demanen per telèfon:"
   },
   "whatsapp": {
     "parla": "Parla amb el nostre assistent per WhatsApp",

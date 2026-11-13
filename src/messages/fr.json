@@ -464,15 +464,21 @@
       "dades": "Vérifiez les champs signalés.",
       "franja": "Ce créneau vient d'être pris. Choisissez-en un autre.",
       "serveis": "Choisissez au moins un service.",
-      "xarxa": "L'envoi a échoué. Réessayez ou appelez-nous au +34 972 66 29 51."
+      "xarxa": "L'envoi a échoué. Réessayez ou appelez-nous au +34 972 66 29 51.",
+      "noDisponible": "Nous ne pouvons pas enregistrer le rendez-vous en ligne pour le moment. Appelez-nous au 972 66 29 51 et nous vous le donnons."
     },
     "fet": {
       "titol": "Rendez-vous confirmé",
       "text": "Rendez-vous le {data} à {hora}. Nous vous donnerons un devis avant de toucher à quoi que ce soit et vous préviendrons sur WhatsApp quand il sera prêt*.",
-      "altra": "Prendre un autre rendez-vous"
+      "altra": "Prendre un autre rendez-vous",
+      "titolPendent": "Rendez-vous demandé",
+      "textPendent": "Nous avons réservé le {data} à {hora}. L’atelier vous le confirmera très vite par WhatsApp."
     },
     "situacio": "Atelier",
-    "tancar": "Fermer"
+    "tancar": "Fermer",
+    "lliure": "Libre",
+    "preuConsultar": "Prix sur demande",
+    "senseCitesEnLinia": "Pour le moment, les rendez-vous à l’atelier se prennent par téléphone :"
   },
   "whatsapp": {
     "parla": "Parlez avec notre assistant sur WhatsApp",
