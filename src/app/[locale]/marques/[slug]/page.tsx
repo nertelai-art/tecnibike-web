@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { BotoCita } from '@/components/cita/BotoCita';
 import { Peu } from '@/components/Seccions';
 import { CATEGORIES_EQUIPAMENT } from '@/content/equipament';
 import { fitxaMarca, FITXES_MARQUES } from '@/content/fitxes-marques';
@@ -136,9 +137,9 @@ export default async function FitxaDeMarca({ params }: Params) {
               </Link>
             )}
             {marca.categoria === 'components' && (
-              <Link href="/taller/cita" className="boto">
+              <BotoCita className="boto">
                 {t('accio.components.boto')} <span className="fletxa">→</span>
-              </Link>
+              </BotoCita>
             )}
             {marca.categoria === 'equipament' && categoriaBotiga && (
               <Link href={`/botiga/${categoriaBotiga}`} className="boto">
