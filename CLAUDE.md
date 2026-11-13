@@ -74,19 +74,21 @@ Versions que **no** són l'última, i per què:
   sobre de tot. Un cop passada de llarg, queda desmuntada i no es repeteix. La línia de temps i les
   posicions dels bàners (en % del fotograma) són a `anatomia-fases.ts`, amb proves. (Es va provar
   de retallar la bici i posar-la sobre el taller, però el retall es veia malament.)
+- **Seccions plegables de la reserva:** els extres de cada bici i la nutrició es pleguen (`Plegable.tsx`),
+  amb el resum del que s'hi ha triat. Els extres sense foto a la plataforma porten una icona. En afegir
+  una bici, la pàgina hi baixa fins a deixar-la al mig, la ressalta un moment i hi posa el focus.
 - **Variants d'extres:** un extra pot tenir variants (la talla del casc), cadascuna amb el seu estoc.
   Un cop triat, la rajola demana quina; la plataforma les rep a `items[].options[].variant`.
 - **Nutrició esportiva** (`src/components/nutricio/`, recerca a
   [docs/nutricio-productes.md](docs/nutricio-productes.md)). A la pàgina de la botiga `/[locale]/botiga/nutricio`
-  (abans era a la portada; es va moure el 13-11-2026) hi ha una escena fixa amb un capítol per marca (Maurten, 226ERS, Nutrinovex i SiS, amb els seus colors de
-  `src/content/nutricio.ts`). Amb el scroll, els productes entren girant sobre si mateixos (CSS 3D,
-  sense three.js), es queden de cara i surten. La coreografia és a `escena-marques.ts`, amb proves.
-  Es fa una sola vegada: quan s'arriba al final i el scroll s'atura, el recorregut es plega a
-  l'alçada de l'escenari (compensant la posició) i queda com un aparador on l'indicador canvia de
-  marca girant. No torna fins que es recarrega la pàgina. Sense JavaScript o amb menys moviment,
-  els capítols surten un sota l'altre. Després ve la graella per marca i moment de la ruta: les
-  targetes surten d'una en una amb un bot quan el catàleg arriba a la pantalla, n'ensenya 8 i la
-  resta amb «Veure'n més». A la reserva, n'ensenya 6, en rajoles compactes. **Fotos de producte:** baixades de les webs de les marques (`public/img/nutricio/`, retallades
+  (abans era a la portada; es va moure el 13-11-2026). A dalt, un hero amb una rajola per marca
+  (Maurten, 226ERS, Nutrinovex i SiS, amb els seus colors de `src/content/nutricio.ts` i tres productes
+  en ventall): cada rajola és un filtre. Triar-ne una ensenya tots els seus productes i tenyeix el hero;
+  tornar-hi a clicar ensenya tots els de totes. La marca es guarda a l'adreça (`?marca=`). A sota, la
+  graella amb els filtres per marca i moment de la ruta, sencera (sense «Veure'n més»); les targetes
+  surten d'una en una amb un bot. (Fins al 13-11-2026 hi havia una escena de scroll amb els productes
+  girant; l'usuari la va fer treure.) A la reserva, la nutrició és una secció plegable amb 6 productes
+  i «Veure'n més». **Fotos de producte:** baixades de les webs de les marques (`public/img/nutricio/`, retallades
   amb fons transparent, una per sabor quan l'envàs canvia; el sabor canvia la foto). Les va triar
   l'usuari el 11-11-2026, i el mateix dia va dir de pujar-les al repositori (que és públic). Es
   regeneren amb `node scripts/fotos-nutricio.mjs <dir>` i
