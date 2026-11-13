@@ -346,7 +346,6 @@
     "preuDia": "{preu}/día",
     "estoc": "{n, plural, =0 {Agotado} one {Queda 1} other {Quedan #}}",
     "estocMolts": "Más de 15",
-    "senseImatge": "Sin imagen",
     "dades": "Tus datos",
     "nom": "Nombre y apellidos",
     "telefon": "Teléfono (con WhatsApp)",
@@ -434,7 +433,9 @@
     "tipusBici": "Tipo de bici",
     "calculDies": "{preu}/día × {dies}",
     "variantDe": "Opciones de {extra}",
-    "nutricio": "Nutrición para la ruta"
+    "nutricio": "Nutrición para la ruta",
+    "extresTriats": "{n, plural, one {# elegido} other {# elegidos}}",
+    "extresDisponibles": "{n, plural, one {# opción} other {# opciones}}"
   },
   "cita": {
     "titol": "Pide cita en el taller",
@@ -503,7 +504,6 @@
     "situacio": "Nutrición deportiva",
     "titol": "Combustible para cada kilómetro",
     "intro": "Geles, barritas y bebidas de Maurten, 226ERS, Nutrinovex y SiS, los mismos que tenemos en la tienda. Te los dejamos a punto con la bici de alquiler, o pasa a buscarlos antes de salir.",
-    "veure": "{n, plural, one {Ver el producto} other {Ver los # productos}}",
     "totesMarques": "Todas las marcas",
     "quan": "Cuándo tomarlo",
     "tot": "Todo",
@@ -608,12 +608,19 @@
     "reserva": {
       "titol": "Nutrición para la ruta",
       "intro": "Geles, barritas y bebidas de la tienda. Te los dejamos a punto con la bici y se pagan con la reserva.",
-      "triats": "En la reserva"
+      "triats": "En la reserva",
+      "unitats": "{n, plural, one {# unidad} other {# unidades}} · {preu}",
+      "opcional": "Opcional"
     },
     "demanaWhatsapp": "Resérvala por WhatsApp",
     "veureMes": "Ver más ({n})",
     "veureMenys": "Ver menos",
-    "escenaSr": "Los productos de cada marca giran sobre sí mismos a medida que bajas."
+    "triaMarca": "Elige una marca",
+    "veureMarca": "{marca}: mira sus {n} productos",
+    "productesN": "{n, plural, one {# producto} other {# productos}}",
+    "triada": "Elegida",
+    "mira": "Verla",
+    "resultat": "{n, plural, one {# producto} other {# productos}} · {marca}"
   },
   "fitxaMarca": {
     "tornar": "Todas las marcas",
