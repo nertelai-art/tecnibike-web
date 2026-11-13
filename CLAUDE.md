@@ -40,8 +40,16 @@ Versions que **no** són l'última, i per què:
     qualsevol de les dues variables.
 
   El contracte de la plataforma (`remota/contracte.ts`) és generat: es copia del repositori de la
-  plataforma amb `node scripts/sincronitza-contracte.mjs [camí]` i no es toca a mà. Taller, botiga,
-  ressenyes i participants encara van per les dades de proves, perquè l'API no en té. Limitacions:
+  plataforma amb `node scripts/sincronitza-contracte.mjs [camí]` i no es toca a mà. Els productes per
+  peça, les ressenyes i els participants encara van per les dades de proves, perquè l'API no en té.
+  **Taller** (13-11-2026): els preus surten de `workshopServices` del catàleg, un per peça segons la
+  `category` del servei (Rodes, Frens, Transmissió, Direcció, Seient, Quadre o Posada a punt, en
+  qualsevol idioma), i respecten `priceHidden` i `priceBasis`; sense, no se n'ensenya cap. Les hores i
+  les cites van per `/api/public/bookings` (contracte llegit a `remota/contracte-cites.ts`), la
+  mateixa agenda que els agents de veu i WhatsApp, amb la clau `PLATAFORMA_CITES_CLAU` (abasts
+  `web_booking_read` i `web_booking_write`, la fa l'Enric). **Sense aquesta clau, el formulari no
+  ensenya hores i demana que truquin: una cita no es desa mai en memòria** (fins al 13-11-2026 es
+  perdien així a producció). Limitacions:
   el preu de la fitxa és orientatiu (mana el que torna la plataforma), només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
   Dels models, la web llegeix els camps del catàleg (13-11-2026, plataforma v1.0.10): l'adreça surt de
   la referència (`sku`) i, si no en té, del nom (les adreces d'abans encara troben la bici); la
