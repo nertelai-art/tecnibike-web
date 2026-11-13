@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
-import { NutricioPortada } from '@/components/nutricio/NutricioPortada';
+import { NutricioContingut, NutricioPortada } from '@/components/nutricio/NutricioPortada';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Peu } from '@/components/Seccions';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
@@ -18,7 +18,8 @@ import styles from '@/components/botiga/Categoria.module.css';
 // només surt si ve de la plataforma (els de mostra no s'ensenyen). Ara es pregunta per WhatsApp;
 // quan es pugui vendre en línia, el botó es canvia per «Afegeix a la cistella».
 //
-// La nutrició té la seva pròpia secció (escena de marques i catàleg amb sabors): NutricioPortada.
+// La nutrició té la seva pròpia pàgina (hero amb les marques, que filtren, i catàleg amb sabors):
+// NutricioPortada, sense la capçalera ni la tira de marques de les altres categories.
 // Cada marca de la tira porta a la seva fitxa, o a la graella filtrada si és de nutrició.
 
 type Params = { params: Promise<{ locale: string; categoria: string }> };
@@ -54,7 +55,8 @@ export default async function CategoriaBotiga({ params }: Params) {
   return (
     <>
       <main id="contingut" className={styles.pagina}>
-        <header className={styles.cap}>
+        {!esNutricio && (
+          <header className={styles.cap}>
           <Image src={FOTOS_EQUIPAMENT[categoria].src} alt="" fill priority sizes="100vw" className={styles.fons} />
           <div className={`contenidor ${styles.capText}`}>
             <Link href="/#equipament" className={styles.tornar}>
@@ -64,8 +66,10 @@ export default async function CategoriaBotiga({ params }: Params) {
             <h1 className="titol-seccio">{te(`categories.${categoria}.nom`)}</h1>
             <p className="intro">{te(`categories.${categoria}.text`)}</p>
           </div>
-        </header>
+          </header>
+        )}
 
+        {!esNutricio && (
         <div className="contenidor">
           <ul className={styles.marques} aria-label={te('marques')}>
             {marques.map((m) => (
@@ -82,12 +86,14 @@ export default async function CategoriaBotiga({ params }: Params) {
             ))}
           </ul>
 
-          {!esNutricio && <p className={styles.avis}>{t('aviat')}</p>}
+          <p className={styles.avis}>{t('aviat')}</p>
         </div>
+        )}
 
         {esNutricio && (
-          // L'escena llegeix la marca de l'adreça (?marca=…): cal un límit de Suspense en una pàgina estàtica.
-          <Suspense>
+          // La marca de l'adreça (?marca=…) només es llegeix al navegador: en una pàgina estàtica cal un
+          // límit de Suspense. Mentrestant (i a l'HTML del servidor), la pàgina sense marca triada.
+          <Suspense fallback={<NutricioContingut productes={nutricio} ambReserva={configuracio.nutricio.actiu} />}>
             <NutricioPortada productes={nutricio} ambReserva={configuracio.nutricio.actiu} />
           </Suspense>
         )}
