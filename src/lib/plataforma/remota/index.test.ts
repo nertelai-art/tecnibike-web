@@ -133,6 +133,43 @@ describe('plataforma remota: el catàleg', () => {
   });
 });
 
+describe('plataforma remota: els camps nous del catàleg (13-11-2026)', () => {
+  // La referència, la categoria, l'ordre, «Elèctrica» i els grups de tria múltiple. Fins que la botiga
+  // no els ompli arriben nuls o no hi són, i llavors la web fa com abans (els casos de dalt).
+  const ambCamps = RentalCatalogResponseSchema.parse({
+    ...cataleg,
+    models: [
+      { ...cataleg.models[0]!, name: 'BTT rígida', sku: 'btt', category: 'Muntanya', position: 1 },
+      { ...cataleg.models[1]!, name: 'Urbana', sku: 'e-urbana', category: 'Passeig', position: 2, attributes: { 'elèctrica': true } },
+      { ...cataleg.models[2]!, name: 'Road disc', sku: null, category: 'Carretera', position: null, attributes: { 'elèctrica': false } },
+    ],
+    optionGroups: cataleg.optionGroups.map((g) => (g.id === G_ACCESSORIS ? { ...g, multiple: true } : { ...g, multiple: false })),
+  });
+  const amb = () => remota({ [`GET ${R}/catalog`]: { cos: ambCamps } }).plataforma;
+
+  it("l'adreça surt de la referència; sense, del nom; i en l'ordre de la botiga", async () => {
+    expect((await amb().flota()).map((b) => b.id)).toEqual(['btt', 'e-urbana', 'road-disc']);
+  });
+
+  it("la categoria i si és elèctrica surten dels camps del catàleg, no del nom", async () => {
+    const [btt, urbana, carretera] = await amb().flota();
+    expect(btt).toMatchObject({ categoria: 'muntanya', electrica: false });
+    expect(urbana).toMatchObject({ categoria: 'passeig', electrica: true });
+    expect(carretera).toMatchObject({ categoria: 'carretera', electrica: false });
+  });
+
+  it("una adreça d'abans (feta amb el nom) encara troba la bici", async () => {
+    expect((await amb().bici('urbana'))?.id).toBe('e-urbana');
+    expect(await amb().bici('no-hi-es')).toBeNull();
+  });
+
+  it("d'un grup de tria múltiple se'n poden triar diversos: els seus extres no porten grup", async () => {
+    const extres = await amb().extres();
+    expect(extres.find((e) => e.id === CADENAT)?.grupId).toBeUndefined();
+    expect(extres.find((e) => e.id === CASC)?.grupId).toBe(G_CASC);
+  });
+});
+
 describe('plataforma remota: horari i ajustos', () => {
   it("l'horari de la setmana, els dies tancats i els dies amb un altre horari", async () => {
     const horari = await remota().plataforma.horari();

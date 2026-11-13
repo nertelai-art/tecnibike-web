@@ -43,6 +43,12 @@ Versions que **no** són l'última, i per què:
   plataforma amb `node scripts/sincronitza-contracte.mjs [camí]` i no es toca a mà. Taller, botiga,
   ressenyes i participants encara van per les dades de proves, perquè l'API no en té. Limitacions:
   el preu de la fitxa és orientatiu (mana el que torna la plataforma), només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
+  Dels models, la web llegeix els camps del catàleg (13-11-2026, plataforma v1.0.10): l'adreça surt de
+  la referència (`sku`) i, si no en té, del nom (les adreces d'abans encara troben la bici); la
+  categoria, de `category` («Muntanya», «Carretera»…); si és elèctrica, de `attributes["elèctrica"]`;
+  i l'ordre és el de la botiga (`position`, la plataforma ja els envia ordenats). D'un grup d'extres
+  `multiple` se'n poden triar diversos. Tots aquests camps poden arribar nuls fins que la botiga els
+  ompli, i llavors es dedueixen del nom com abans.
   La primera hora que s'ofereix és ara més l'antelació mínima dels ajustos de la plataforma
   (`antelacioMinuts`; a les dades de proves, 0): la plataforma rebutja qualsevol recollida abans.
   Quan la plataforma rebutja una cosa, el camp i la frase que dona surten als registres de Vercel.
