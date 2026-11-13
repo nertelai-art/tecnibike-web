@@ -12,7 +12,7 @@
   --hero-fons: var(--grafit);
   position: relative;
   isolation: isolate;
-  padding: calc(var(--header-h) + 56px) 0 clamp(40px, 5vw, 64px);
+  padding: calc(var(--header-h) + 40px) 0 clamp(36px, 4vw, 56px);
   color: var(--blanc);
   background: var(--hero-fons);
   transition: background-color 0.6s var(--ease);
@@ -36,7 +36,7 @@
 .tornar {
   display: block;
   width: max-content;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   font-size: 14px;
   font-weight: 700;
   color: var(--blanc);
@@ -46,14 +46,13 @@
   color: var(--taronja);
 }
 .titol {
-  margin-top: 14px;
-  font-size: clamp(42px, 7vw, 96px);
+  margin-top: 12px;
+  font-size: clamp(40px, 5.6vw, 80px);
   line-height: 0.95;
-  max-width: 14ch;
 }
 .intro {
-  margin-top: 18px;
-  max-width: 60ch;
+  margin-top: 14px;
+  max-width: 62ch;
   font-size: clamp(16px, 1.4vw, 19px);
   color: rgb(255 255 255 / 0.78);
 }
@@ -62,14 +61,14 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 14px;
-  margin-top: clamp(32px, 4vw, 48px);
+  margin-top: clamp(24px, 3vw, 40px);
 }
 .rajola {
   position: relative;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   gap: 10px;
-  min-height: 330px;
+  min-height: 320px;
   padding: 20px;
   border: 0;
   border-radius: 22px;
@@ -144,6 +143,7 @@
 .rajolaProductes {
   position: relative;
   min-height: 150px;
+  margin-bottom: 6px;
 }
 .rajolaPeca {
   --gir: calc((var(--j) - 1) * 12deg);
@@ -151,8 +151,8 @@
   position: absolute;
   left: 50%;
   bottom: 0;
-  width: 44%;
-  height: 100%;
+  width: 38%;
+  height: 92%;
   display: grid;
   place-items: end center;
   transform: translateX(calc(-50% + var(--x))) rotate(var(--gir));
@@ -175,12 +175,16 @@
   transform: translateX(calc(-50% + var(--x) * 1.35)) translateY(-8px) rotate(calc(var(--gir) * 1.5));
 }
 .rajolaPeu {
+  position: relative;
+  z-index: 5;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding-top: 12px;
   border-top: 1px solid rgb(255 255 255 / 0.16);
+  background: var(--marca);
+  box-shadow: 0 -12px 16px -6px var(--marca);
   font-size: 14px;
   font-weight: 700;
 }
