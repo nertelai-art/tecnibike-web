@@ -46,8 +46,10 @@ Versions que **no** són l'última, i per què:
   `category` del servei (Rodes, Frens, Transmissió, Direcció, Seient, Quadre o Posada a punt, en
   qualsevol idioma), i respecten `priceHidden` i `priceBasis`; sense, no se n'ensenya cap. Les hores i
   les cites van per `/api/public/bookings` (contracte llegit a `remota/contracte-cites.ts`), la
-  mateixa agenda que els agents de veu i WhatsApp, amb la clau `PLATAFORMA_CITES_CLAU` (abasts
-  `web_booking_read` i `web_booking_write`, la fa l'Enric). **Sense aquesta clau, el formulari no
+  mateixa agenda que els agents de veu i WhatsApp, amb la mateixa clau de la web, `PLATAFORMA_API_CLAU`,
+  que porta els abasts de lloguer i de cites (`web_booking_read` i `web_booking_write`): una sola clau,
+  decisió de l'Enric del 13-11-2026 (`PLATAFORMA_CITES_CLAU`, opcional, mana si hi és). **Sense els
+  abasts de cites, el formulari no
   ensenya hores i demana que truquin: una cita no es desa mai en memòria** (fins al 13-11-2026 es
   perdien així a producció). Limitacions:
   el preu de la fitxa és orientatiu (mana el que torna la plataforma), només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
