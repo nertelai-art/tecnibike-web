@@ -631,8 +631,8 @@
         "boto": "Mira la flota de lloguer"
       },
       "components": {
-        "titol": "Muntem {marca} al taller",
-        "text": "Te’l posem, l’ajustem i et diem quan toca canviar-lo. Demana cita i passa amb la bici.",
+        "titol": "{marca}, al nostre taller",
+        "text": "El fem servir quan revisem la teva bici i, si el vols, te’l posem i te l’ajustem. Demana cita i passa amb la bici.",
         "boto": "Demana cita al taller"
       },
       "equipament": {

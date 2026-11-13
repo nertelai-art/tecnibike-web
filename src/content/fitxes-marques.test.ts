@@ -23,7 +23,7 @@ describe('fitxes de marques', () => {
       for (const l of routing.locales) {
         expect(f.lema[l], `${f.slug} · lema ${l}`).toBeTruthy();
         expect(f.descripcio[l], `${f.slug} · descripció ${l}`).toBeTruthy();
-        for (const d of f.destacats) expect(d.descripcio[l], `${f.slug} · ${d.nom} ${l}`).toBeTruthy();
+        for (const d of f.destacats) expect(d.descripcio[l], `${f.slug} · ${l}`).toBeTruthy();
       }
       expect(() => new Intl.DisplayNames(['ca'], { type: 'region' }).of(f.pais), f.slug).not.toThrow();
       for (const i of f.imatges) expect(existsSync(join(process.cwd(), 'public', i.src)), i.src).toBe(true);

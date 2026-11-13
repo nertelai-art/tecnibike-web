@@ -17,7 +17,8 @@ export type FitxaMarca = {
   web: string;
   lema: Text;
   descripcio: Text;
-  destacats: { nom: string; descripcio: Text }[];
+  /** El nom del model, o el de la línia de producte en cada idioma si no és un nom propi. */
+  destacats: { nom: string | Text; descripcio: Text }[];
   imatges: { src: string; font: string; descripcio: string }[];
 };
 
@@ -629,7 +630,7 @@ export const FITXES_MARQUES: FitxaMarca[] = [
         }
       },
       {
-        "nom": "Lubricants de cadena",
+        "nom": {"ca":"Lubricants de cadena","es":"Lubricantes de cadena","en":"Chain lubes","fr":"Lubrifiants de chaîne"},
         "descripcio": {
           "ca": "Lubricants de cadena per a diferents condicions",
           "es": "Lubricantes de cadena para distintas condiciones",
@@ -688,7 +689,7 @@ export const FITXES_MARQUES: FitxaMarca[] = [
         }
       },
       {
-        "nom": "Líquid MTB",
+        "nom": {"ca":"Líquid MTB","es":"Líquido MTB","en":"MTB sealant","fr":"Liquide VTT"},
         "descripcio": {
           "ca": "Líquid antipunxades per a cobertes de muntanya",
           "es": "Líquido antipinchazos para cubiertas de montaña",
@@ -697,7 +698,7 @@ export const FITXES_MARQUES: FitxaMarca[] = [
         }
       },
       {
-        "nom": "Kit de metxes",
+        "nom": {"ca":"Kit de metxes","es":"Kit de mechas","en":"Tubeless plug kit","fr":"Kit de mèches"},
         "descripcio": {
           "ca": "Metxes per tapar punxades sense desmuntar la coberta",
           "es": "Mechas para tapar pinchazos sin desmontar la cubierta",
@@ -981,7 +982,7 @@ export const FITXES_MARQUES: FitxaMarca[] = [
         }
       },
       {
-        "nom": "Màscares d'esquí",
+        "nom": {"ca":"Màscares d'esquí","es":"Máscaras de esquí","en":"Ski goggles","fr":"Masques de ski"},
         "descripcio": {
           "ca": "Màscares per a esquí i snowboard",
           "es": "Máscaras para esquí y snowboard",
@@ -1158,7 +1159,7 @@ export const FITXES_MARQUES: FitxaMarca[] = [
         }
       },
       {
-        "nom": "Equipacions a mida",
+        "nom": {"ca":"Equipacions a mida","es":"Equipaciones a medida","en":"Custom kits","fr":"Tenues sur mesure"},
         "descripcio": {
           "ca": "Roba personalitzada per a clubs i equips, l'origen de la marca",
           "es": "Ropa personalizada para clubes y equipos, el origen de la marca",

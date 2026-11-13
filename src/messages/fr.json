@@ -631,8 +631,8 @@
         "boto": "Voir la flotte de location"
       },
       "components": {
-        "titol": "Nous montons {marca} à l’atelier",
-        "text": "Nous l’installons, le réglons et vous disons quand le changer. Prenez rendez-vous et venez avec votre vélo.",
+        "titol": "{marca}, dans notre atelier",
+        "text": "Nous l’utilisons quand nous révisons votre vélo et, si vous le souhaitez, nous l’installons et le réglons. Prenez rendez-vous et venez avec votre vélo.",
         "boto": "Prendre rendez-vous à l’atelier"
       },
       "equipament": {

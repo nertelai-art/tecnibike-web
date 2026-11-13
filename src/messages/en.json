@@ -631,8 +631,8 @@
         "boto": "See the rental fleet"
       },
       "components": {
-        "titol": "We fit {marca} in the workshop",
-        "text": "We fit it, adjust it and tell you when it needs replacing. Book a slot and bring your bike.",
+        "titol": "{marca}, in our workshop",
+        "text": "We use it when we service your bike and, if you want it, we fit and adjust it for you. Book a slot and bring your bike.",
         "boto": "Book the workshop"
       },
       "equipament": {

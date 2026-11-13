@@ -73,7 +73,7 @@ export default async function FitxaDeMarca({ params }: Params) {
             {marca.logo && (
               <span className={styles.logo}>
                 {/* eslint-disable-next-line @next/next/no-img-element -- logos petits (SVG i WebP ja retallats) */}
-                <img src={`/img/marques/${marca.logo}`} alt="" data-vector={marca.logo.endsWith('.svg') || undefined} />
+                <img src={`/img/marques/${marca.logo}`} alt="" />
               </span>
             )}
             <p className="situacio">{tm(`categories.${marca.categoria}`)}</p>
@@ -96,12 +96,15 @@ export default async function FitxaDeMarca({ params }: Params) {
 
             <h2 className={styles.titolPetit}>{t('destacats')}</h2>
             <ol className={styles.destacats}>
-              {fitxa.destacats.map((d) => (
-                <li key={d.nom}>
-                  <strong>{d.nom}</strong>
-                  <span>{d.descripcio[l]}</span>
-                </li>
-              ))}
+              {fitxa.destacats.map((d) => {
+                const nom = typeof d.nom === 'string' ? d.nom : d.nom[l];
+                return (
+                  <li key={nom}>
+                    <strong>{nom}</strong>
+                    <span>{d.descripcio[l]}</span>
+                  </li>
+                );
+              })}
             </ol>
 
             <a className={styles.web} href={fitxa.web} target="_blank" rel="noopener noreferrer">
@@ -158,7 +161,7 @@ export default async function FitxaDeMarca({ params }: Params) {
                   <Link href={enllacMarca(m)} aria-label={m.nom}>
                     {m.logo ? (
                       // eslint-disable-next-line @next/next/no-img-element -- logos petits (SVG i WebP ja retallats)
-                      <img src={`/img/marques/${m.logo}`} alt="" data-vector={m.logo.endsWith('.svg') || undefined} />
+                      <img src={`/img/marques/${m.logo}`} alt="" />
                     ) : (
                       <span>{m.nom}</span>
                     )}

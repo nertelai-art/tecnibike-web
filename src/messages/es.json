@@ -631,8 +631,8 @@
         "boto": "Ver la flota de alquiler"
       },
       "components": {
-        "titol": "Montamos {marca} en el taller",
-        "text": "Te lo ponemos, lo ajustamos y te decimos cuándo toca cambiarlo. Pide cita y pasa con la bici.",
+        "titol": "{marca}, en nuestro taller",
+        "text": "Lo usamos cuando revisamos tu bici y, si lo quieres, te lo ponemos y te lo ajustamos. Pide cita y pasa con la bici.",
         "boto": "Pedir cita en el taller"
       },
       "equipament": {
