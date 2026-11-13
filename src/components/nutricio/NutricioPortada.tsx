@@ -1,12 +1,18 @@
 'use client';
 
-// Secció de nutrició de l'inici. Primer, l'escena de les marques (EscenaMarques): un capítol per
-// marca amb els seus productes, fotos reals, que giren sobre si mateixos amb el scroll. Després, la
-// graella de productes amb filtres per marca i pel moment de la ruta, que n'ensenya vuit i la resta
-// amb «Veure'n més», per no allargar la portada. El sabor canvia la foto.
+// Nutrició esportiva, a la pàgina de la botiga (/botiga/nutricio). Primer, l'escena de les marques
+// (EscenaMarques): un capítol per marca amb els seus productes, fotos reals, que giren sobre si
+// mateixos amb el scroll. Després, la graella de productes amb filtres per marca i pel moment de la
+// ruta, que n'ensenya vuit i la resta amb «Veure'n més». El sabor canvia la foto. Amb `?marca=…` a
+// l'adreça (des de la fitxa o el carrusel de marques), la graella surt filtrada per aquella marca.
+//
+// Preus: només els que venen de la plataforma. Els de mostra (`ficticia`) no s'ensenyen, perquè
+// l'equip de la botiga ha de poder confiar que el preu de la web és el bo.
 
 import { useLocale, useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
+import { Link } from '@/i18n/navigation';
 import { colorSabor, imatgeDe, ORDRE_MARQUES, temaDe } from '@/content/nutricio';
 import { enllacWhatsapp } from '@/lib/contacte';
 import { momentNutricio, type MomentNutricio, type ProducteNutricio } from '@/lib/plataforma/esquema';
@@ -49,7 +55,11 @@ export function NutricioPortada({ productes, ambReserva }: Props) {
   const locale = useLocale();
   const reduit = useReducedMotion();
   const graella = useRef<HTMLDivElement>(null);
-  const [marca, setMarca] = useState<string | null>(null);
+  const parametres = useSearchParams();
+  const [marca, setMarca] = useState<string | null>(() => {
+    const demanada = parametres.get('marca');
+    return demanada && productes.some((p) => p.marca === demanada) ? demanada : null;
+  });
   const [moment, setMoment] = useState<MomentNutricio | null>(null);
   const [sabors, setSabors] = useState<Record<string, string>>({});
   const [tots, setTots] = useState(false);
@@ -70,15 +80,7 @@ export function NutricioPortada({ productes, ambReserva }: Props) {
   };
 
   return (
-    <section id="nutricio" className={styles.seccio} aria-labelledby="nutricio-titol">
-      <div className={`contenidor ${styles.cap}`}>
-        <p className="situacio">{t('situacio')}</p>
-        <h2 id="nutricio-titol" className="titol-seccio">
-          {t('titol')}
-        </h2>
-        <p className="intro">{t('intro')}</p>
-      </div>
-
+    <section id="nutricio" className={styles.seccio} aria-label={t('situacio')}>
       <EscenaMarques marques={marques} productes={productes} onTria={triaMarca} />
 
       <div ref={graella} className={`contenidor ${styles.graella}`}>
@@ -155,10 +157,7 @@ export function NutricioPortada({ productes, ambReserva }: Props) {
                     ) : (
                       <span className={styles.saborUnic}>{nomSabor(p, sabor)}</span>
                     )}
-                    <p className={styles.preu}>
-                      {formatEuros(p.preu, locale)}
-                      {p.ficticia && <span className="mostra">*</span>}
-                    </p>
+                    {!p.ficticia && <p className={styles.preu}>{formatEuros(p.preu, locale)}</p>}
                   </div>
                 </div>
               </li>
@@ -175,9 +174,9 @@ export function NutricioPortada({ productes, ambReserva }: Props) {
         <div className={styles.peu}>
           {ambReserva ? (
             <>
-              <a href="#flota" className="boto boto--blau">
+              <Link href="/#flota" className="boto boto--blau">
                 {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
-              </a>
+              </Link>
               <a className={styles.whatsapp} href={enllacWhatsapp(t('missatge'))} target="_blank" rel="noopener noreferrer">
                 {t('perWhatsapp')}
               </a>

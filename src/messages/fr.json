@@ -202,14 +202,17 @@
   },
   "botigaCategoria": {
     "tornar": "Retour à l’accueil",
-    "aviat": "La boutique en ligne arrive bientôt. En attendant, réservez sur WhatsApp et venez le chercher au magasin : il sera prêt.",
+    "aviat": "Voici ce que vous trouverez en boutique. Pour le réserver, écrivez-nous sur WhatsApp et passez le récupérer : il vous attendra.",
     "reservar": "Réserver sur WhatsApp",
-    "missatge": "Bonjour ! Je voudrais réserver : {article}."
+    "missatge": "Bonjour ! Je voudrais réserver : {article}.",
+    "veureMarca": "Voir la marque {marca}",
+    "preuConsultar": "Prix sur demande",
+    "preuDesDe": "À partir de {preu}"
   },
   "marques": {
     "situacio": "Les marques",
     "titol": "Équipez-vous comme un pro.",
-    "text": "Les vélos, les composants, les vêtements et la nutrition des équipes pros. Faites-les défiler, et si vous en cherchez une, demandez-nous sur WhatsApp.",
+    "text": "Les vélos, les composants, les vêtements et la nutrition des équipes pros. Faites-les défiler et touchez-en une pour en savoir plus.",
     "filtre": "Filtrer par catégorie",
     "categories": {
       "totes": "Toutes",
@@ -237,7 +240,8 @@
     "carrusel": "{n} marques du magasin",
     "pregunta": "Demander pour {marca} sur WhatsApp",
     "missatge": "Bonjour ! Avez-vous du matériel {marca} ?",
-    "preguntar": "Demandez-nous"
+    "veure": "Voir la marque {marca}",
+    "mira": "Voir plus"
   },
   "botiga": {
     "situacio": "La boutique",
@@ -297,7 +301,9 @@
     "telefon": "Appelez-nous",
     "whatsapp": "Écrivez-nous sur WhatsApp",
     "correu": "E-mail",
-    "mapa": "Itinéraire"
+    "mapa": "Itinéraire",
+    "mapaAria": "Carte avec la boutique Tecnibike",
+    "comArribar": "Itinéraire"
   },
   "peu": {
     "lema": "Location, atelier et boutique de vélos sur la Costa Brava depuis plus de 15 ans.",
@@ -589,7 +595,7 @@
     "ambLaBici": "Ajoutez-la à votre vélo de location",
     "perWhatsapp": "Ou commandez-la sur WhatsApp",
     "missatge": "Bonjour ! Je voudrais réserver de la nutrition pour ma sortie (gels, barres…). Qu’avez-vous ?",
-    "nota": "Photos de produits issues des sites des marques. Prix et stock indicatifs*.",
+    "nota": "Photos de produits issues des sites des marques. Prix en boutique.",
     "marca": "Marque",
     "totes": "Toutes",
     "sabor": "Parfum",
@@ -608,5 +614,32 @@
     "veureMes": "Voir plus ({n})",
     "veureMenys": "Voir moins",
     "escenaSr": "Les produits de chaque marque tournent sur eux-mêmes à mesure que vous descendez."
+  },
+  "fitxaMarca": {
+    "tornar": "Toutes les marques",
+    "dades": "La marque en bref",
+    "desDe": "Depuis {any}",
+    "historia": "La marque",
+    "destacats": "Nos coups de cœur",
+    "web": "Site de {marca}",
+    "mes": "Plus de marques : {categoria}",
+    "credits": "Photos du site de {marca} :",
+    "accio": {
+      "bicis": {
+        "titol": "Envie de rouler sur un {marca} ?",
+        "text": "Louez-le pour une journée ou une semaine, ou venez le voir et l’essayer au magasin.",
+        "boto": "Voir la flotte de location"
+      },
+      "components": {
+        "titol": "{marca}, dans notre atelier",
+        "text": "Nous l’utilisons quand nous révisons votre vélo et, si vous le souhaitez, nous l’installons et le réglons. Prenez rendez-vous et venez avec votre vélo.",
+        "boto": "Prendre rendez-vous à l’atelier"
+      },
+      "equipament": {
+        "titol": "{marca}, au magasin",
+        "text": "Venez l’essayer : nous vous aidons à trouver la bonne taille et l’ajustons sur place.",
+        "boto": "Voir les {categoria} au magasin"
+      }
+    }
   }
 }

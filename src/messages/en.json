@@ -202,14 +202,17 @@
   },
   "botigaCategoria": {
     "tornar": "Back to home",
-    "aviat": "Online shopping is coming soon. For now, reserve it on WhatsApp and pick it up at the shop: we will have it ready.",
+    "aviat": "This is what you’ll find in the shop. To reserve it, message us on WhatsApp and pick it up: we’ll have it ready.",
     "reservar": "Reserve on WhatsApp",
-    "missatge": "Hi! I would like to reserve: {article}."
+    "missatge": "Hi! I would like to reserve: {article}.",
+    "veureMarca": "See the {marca} brand",
+    "preuConsultar": "Price on request",
+    "preuDesDe": "From {preu}"
   },
   "marques": {
     "situacio": "The brands",
     "titol": "Kit yourself out like a pro.",
-    "text": "The bikes, components, clothing and nutrition the pro teams use. Browse them, and if you are after one, ask us on WhatsApp.",
+    "text": "The bikes, components, clothing and nutrition the pro teams use. Browse them and tap one to find out more.",
     "filtre": "Filter by category",
     "categories": {
       "totes": "All",
@@ -237,7 +240,8 @@
     "carrusel": "{n} brands in the shop",
     "pregunta": "Ask about {marca} on WhatsApp",
     "missatge": "Hi! Do you have any {marca} gear?",
-    "preguntar": "Ask us"
+    "veure": "See the {marca} brand",
+    "mira": "See more"
   },
   "botiga": {
     "situacio": "The shop",
@@ -297,7 +301,9 @@
     "telefon": "Call us",
     "whatsapp": "Message us on WhatsApp",
     "correu": "Email",
-    "mapa": "Get directions"
+    "mapa": "Get directions",
+    "mapaAria": "Map showing the Tecnibike shop",
+    "comArribar": "Get directions"
   },
   "peu": {
     "lema": "Bike rental, workshop and shop on the Costa Brava for over 15 years.",
@@ -589,7 +595,7 @@
     "ambLaBici": "Add it to your rental bike",
     "perWhatsapp": "Or order it on WhatsApp",
     "missatge": "Hi! I'd like to book some nutrition for my ride (gels, bars…). What do you have?",
-    "nota": "Product photos from the brands' websites. Sample prices and stock*.",
+    "nota": "Product photos from the brands’ websites. Prices in the shop.",
     "marca": "Brand",
     "totes": "All",
     "sabor": "Flavour",
@@ -608,5 +614,32 @@
     "veureMes": "See more ({n})",
     "veureMenys": "See less",
     "escenaSr": "Each brand's products spin around as you scroll down."
+  },
+  "fitxaMarca": {
+    "tornar": "All brands",
+    "dades": "The brand at a glance",
+    "desDe": "Since {any}",
+    "historia": "The brand",
+    "destacats": "Our picks",
+    "web": "{marca} website",
+    "mes": "More brands: {categoria}",
+    "credits": "Photos from the {marca} website:",
+    "accio": {
+      "bicis": {
+        "titol": "Want to ride a {marca}?",
+        "text": "Rent one for a day or a week, or come to the shop to see it and try it.",
+        "boto": "See the rental fleet"
+      },
+      "components": {
+        "titol": "{marca}, in our workshop",
+        "text": "We use it when we service your bike and, if you want it, we fit and adjust it for you. Book a slot and bring your bike.",
+        "boto": "Book the workshop"
+      },
+      "equipament": {
+        "titol": "{marca}, in the shop",
+        "text": "Come and try it on: we help you find your size and adjust it there and then.",
+        "boto": "See {categoria} in the shop"
+      }
+    }
   }
 }

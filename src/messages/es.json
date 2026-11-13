@@ -202,14 +202,17 @@
   },
   "botigaCategoria": {
     "tornar": "Volver al inicio",
-    "aviat": "La tienda online llega pronto. De momento, resérvalo por WhatsApp y pasa a recogerlo a la tienda: te lo tendremos listo.",
+    "aviat": "Aquí tienes lo que encontrarás en la tienda. Para reservarlo, escríbenos por WhatsApp y pasa a recogerlo: te lo tendremos a punto.",
     "reservar": "Resérvalo por WhatsApp",
-    "missatge": "¡Hola! Quería reservar: {article}."
+    "missatge": "¡Hola! Quería reservar: {article}.",
+    "veureMarca": "Ver la marca {marca}",
+    "preuConsultar": "Precio a consultar",
+    "preuDesDe": "Desde {preu}"
   },
   "marques": {
     "situacio": "Las marcas",
     "titol": "Equípate como un profesional.",
-    "text": "Las bicis, los componentes, la ropa y la nutrición que usan los equipos. Pásalas, y si buscas una, pregúntanos por WhatsApp.",
+    "text": "Las bicis, los componentes, la ropa y la nutrición que usan los equipos. Pásalas y toca una para saber más.",
     "filtre": "Filtra por categoría",
     "categories": {
       "totes": "Todas",
@@ -237,7 +240,8 @@
     "carrusel": "{n} marcas de la tienda",
     "pregunta": "Pregunta por {marca} por WhatsApp",
     "missatge": "¡Hola! ¿Tenéis material de {marca}?",
-    "preguntar": "Pregúntalo"
+    "veure": "Ver la marca {marca}",
+    "mira": "Ver más"
   },
   "botiga": {
     "situacio": "La tienda",
@@ -297,7 +301,9 @@
     "telefon": "Llámanos",
     "whatsapp": "Escríbenos por WhatsApp",
     "correu": "Correo",
-    "mapa": "Cómo llegar"
+    "mapa": "Cómo llegar",
+    "mapaAria": "Mapa con la tienda Tecnibike",
+    "comArribar": "Cómo llegar"
   },
   "peu": {
     "lema": "Alquiler, taller y tienda de bicis en la Costa Brava desde hace más de 15 años.",
@@ -589,7 +595,7 @@
     "ambLaBici": "Añádela a tu bici de alquiler",
     "perWhatsapp": "O pídela por WhatsApp",
     "missatge": "¡Hola! Quería reservar nutrición para la ruta (geles, barritas…). ¿Qué tenéis?",
-    "nota": "Fotos de producto de las webs de las marcas. Precios y stock de muestra*.",
+    "nota": "Fotos de producto de las webs de las marcas. Precios en la tienda.",
     "marca": "Marca",
     "totes": "Todas",
     "sabor": "Sabor",
@@ -608,5 +614,32 @@
     "veureMes": "Ver más ({n})",
     "veureMenys": "Ver menos",
     "escenaSr": "Los productos de cada marca giran sobre sí mismos a medida que bajas."
+  },
+  "fitxaMarca": {
+    "tornar": "Todas las marcas",
+    "dades": "La marca en breve",
+    "desDe": "Desde {any}",
+    "historia": "La marca",
+    "destacats": "Lo que destacamos",
+    "web": "Web de {marca}",
+    "mes": "Más marcas: {categoria}",
+    "credits": "Fotos de la web de {marca}:",
+    "accio": {
+      "bicis": {
+        "titol": "¿Quieres rodar con una {marca}?",
+        "text": "Alquílala por un día o por una semana, o ven a la tienda a verla y probarla.",
+        "boto": "Ver la flota de alquiler"
+      },
+      "components": {
+        "titol": "{marca}, en nuestro taller",
+        "text": "Lo usamos cuando revisamos tu bici y, si lo quieres, te lo ponemos y te lo ajustamos. Pide cita y pasa con la bici.",
+        "boto": "Pedir cita en el taller"
+      },
+      "equipament": {
+        "titol": "{marca}, en la tienda",
+        "text": "Ven a probártelo: te ayudamos a encontrar la talla y te lo ajustamos al momento.",
+        "boto": "Ver {categoria} en la tienda"
+      }
+    }
   }
 }
