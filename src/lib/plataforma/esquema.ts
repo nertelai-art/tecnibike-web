@@ -59,7 +59,12 @@ export const article = z.object({
   categoria: categoriaEquipament,
   marca: z.string(),
   nom: z.string(),
-  preu: centims,
+  /** Nul si el preu és a consultar. */
+  preu: centims.nullable(),
+  /** Preu tancat, «des de» o a consultar, com l'ha posat la botiga. Sense, tancat. */
+  preuBase: z.enum(['exacte', 'desDe', 'consultar']).optional(),
+  descripcio: z.string().optional(),
+  imatge: z.string().optional(),
   ficticia: z.boolean(),
 });
 
