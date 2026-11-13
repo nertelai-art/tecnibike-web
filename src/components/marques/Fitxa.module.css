@@ -180,6 +180,8 @@
 .producte img {
   object-fit: contain;
   padding: 6%;
+  /* Algunes fotos porten fons gris o blanc: es fonen amb l'escenari. */
+  mix-blend-mode: multiply;
 }
 @media (min-width: 900px) {
   .producte {
