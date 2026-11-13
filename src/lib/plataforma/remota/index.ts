@@ -70,10 +70,19 @@ const MOTIUS: Partial<Record<RentalErrorCode, ErrorReserva['motiu']>> = {
 };
 
 /** Adreça llegible d'un model: la que hi posi la botiga (`attributes.slug`) o el nom sense accents. */
-export function slugDe(model: Pick<Model, 'name' | 'attributes'>): string {
+export function slugDe(model: Pick<Model, 'name' | 'attributes' | 'sku'>): string {
+  // La referència del catàleg (`sku`) és el codi estable que tria la botiga: és la bona per a l'adreça.
+  return model.sku?.trim() ? normalitza(model.sku) : slugAntic(model);
+}
+
+/** L'adreça d'abans de la referència: `attributes.slug` o el nom. Les d'enllaços vells encara valen. */
+export function slugAntic(model: Pick<Model, 'name' | 'attributes'>): string {
   const triat = model.attributes.slug;
-  const base = typeof triat === 'string' && triat.trim() ? triat : model.name;
-  return base
+  return normalitza(typeof triat === 'string' && triat.trim() ? triat : model.name);
+}
+
+function normalitza(text: string): string {
+  return text
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
@@ -85,7 +94,10 @@ export function slugDe(model: Pick<Model, 'name' | 'attributes'>): string {
  * Categoria per als filtres de la flota: la de `attributes.category`, si la botiga l'hi posa; si
  * no, se'n dedueix del nom, mentre la plataforma no la tingui.
  */
-export function categoriaDe(model: Pick<Model, 'name' | 'attributes'>): CategoriaLloguer {
+export function categoriaDe(model: Pick<Model, 'name' | 'attributes' | 'category'>): CategoriaLloguer {
+  // La categoria del catàleg («Muntanya», «Carretera», «Gravel», «Passeig»), sense majúscules ni accents.
+  const delCataleg = model.category ? CATEGORIES_CATALEG[normalitza(model.category)] : undefined;
+  if (delCataleg) return delCataleg;
   const triada = categoriaLloguer.safeParse(model.attributes.category);
   if (triada.success) return triada.data;
   const nom = model.name.toLowerCase();
@@ -95,10 +107,23 @@ export function categoriaDe(model: Pick<Model, 'name' | 'attributes'>): Categori
   return 'muntanya';
 }
 
-/** Si és elèctrica: `attributes.electric`, o un nom com «E-bike» o «E-gravel». */
+/** El nom de categoria del catàleg, ja normalitzat, a la categoria dels filtres de la flota. */
+const CATEGORIES_CATALEG: Record<string, CategoriaLloguer> = {
+  muntanya: 'muntanya', montana: 'muntanya', mountain: 'muntanya', btt: 'muntanya', mtb: 'muntanya',
+  carretera: 'carretera', road: 'carretera',
+  gravel: 'gravel',
+  passeig: 'passeig', paseo: 'passeig', urbana: 'passeig', city: 'passeig', ciutat: 'passeig',
+};
+
+/**
+ * Si és elèctrica: el camp «Elèctrica» del catàleg (`attributes["elèctrica"]`, sí o no); si no hi és,
+ * `attributes.electric`; i si tampoc, un nom com «E-bike» o «E-gravel».
+ */
 export function electricaDe(model: Pick<Model, 'name' | 'attributes'>): boolean {
-  const marcada = model.attributes.electric;
-  if (typeof marcada === 'boolean') return marcada;
+  for (const clau of ['elèctrica', 'electrica', 'electric']) {
+    const marcada = model.attributes[clau];
+    if (typeof marcada === 'boolean') return marcada;
+  }
   return /^e-|el[eè]ctric/i.test(model.name.trim());
 }
 
@@ -271,16 +296,23 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
 
   return {
     flota: async () => (await bicis()).map((b) => b.bici),
-    bici: async (id) => (await bicis()).find((b) => b.bici.id === id)?.bici ?? null,
+    // Primer per l'adreça d'ara; si no, per la d'abans de la referència (enllaços que ja circulen).
+    bici: async (id) => {
+      const totes = await bicis();
+      return (totes.find((b) => b.bici.id === id) ?? totes.find((b) => slugAntic(b.model) === id))?.bici ?? null;
+    },
     extres: async () => {
       const { optionGroups, options } = await cataleg();
       const obligatoris = new Set(optionGroups.filter((g) => g.required).map((g) => g.id));
+      // D'un grup de tria múltiple se'n poden triar diversos: sense grup, la web no en desmarca cap en
+      // triar-ne un altre. Sense `multiple` (respostes d'abans), un per grup, com sempre.
+      const multiples = new Set(optionGroups.filter((g) => g.multiple).map((g) => g.id));
       return options.map(
         (o): Extra => ({
           id: o.id,
           grup: obligatoris.has(o.groupId) ? 'pedals' : 'extres',
           nom: o.name,
-          grupId: o.groupId,
+          ...(!multiples.has(o.groupId) && { grupId: o.groupId }),
           ...(o.imageUrl && { imatge: o.imageUrl }),
           preu: o.priceCents,
           cobrament: o.priceUnit === 'day' ? 'perDia' : 'perReserva',
