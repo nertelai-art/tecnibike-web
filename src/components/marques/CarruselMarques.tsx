@@ -3,12 +3,13 @@
 // Carrusel de les marques de la botiga: passa sol, a poc a poc i sense final (la llista es repeteix),
 // i s'atura quan s'hi posa el ratolí, el dit o el focus. També es pot moure amb les fletxes,
 // arrossegant o amb el teclat. En canviar de categoria, les targetes surten i entren amb un fos.
-// Cada marca obre WhatsApp per preguntar si en tenen. Amb moviment reduït no passa sol.
+// Cada marca porta a la seva fitxa (les de nutrició, al catàleg de nutrició filtrat). Amb moviment
+// reduït no passa sol.
 
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
-import { CATEGORIES_MARCA, MARQUES, type CategoriaMarca } from '@/content/marques';
-import { enllacWhatsapp } from '@/lib/contacte';
+import { CATEGORIES_MARCA, enllacMarca, MARQUES, type CategoriaMarca } from '@/content/marques';
+import { Link } from '@/i18n/navigation';
 import { useReducedMotion } from '@/lib/scroll-scene';
 import styles from './CarruselMarques.module.css';
 
@@ -187,13 +188,12 @@ export function CarruselMarques() {
         {repetides.map(({ m, copia, i }) => (
           // Les còpies només hi són per al bucle: el lector de pantalla llegeix la primera.
           <li key={`${filtre}-${copia}-${m.nom}`} aria-hidden={copia > 0 || undefined} style={{ '--i': Math.min(i, 8) } as CSSProperties}>
-            <a
+            <Link
               className={styles.targeta}
-              href={enllacWhatsapp(t('missatge', { marca: m.nom }))}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={t('pregunta', { marca: m.nom })}
+              href={enllacMarca(m)}
+              aria-label={t('veure', { marca: m.nom })}
               tabIndex={copia > 0 ? -1 : undefined}
+              draggable={false}
             >
               <span className={styles.logo}>
                 {m.logo ? (
@@ -208,9 +208,9 @@ export function CarruselMarques() {
                 <span>{m.tipus.map((tipus) => t(`tipus.${tipus}`)).join(' · ')}</span>
               </span>
               <span className={styles.preguntar} aria-hidden="true">
-                {t('preguntar')} →
+                {t('mira')} →
               </span>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

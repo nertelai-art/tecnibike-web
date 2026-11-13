@@ -212,7 +212,7 @@
   "marques": {
     "situacio": "Les marques",
     "titol": "Equipa’t com un professional.",
-    "text": "Les bicis, els components, la roba i la nutrició que fan servir els equips. Passa-les, i si en busques una, pregunta’ns-ho per WhatsApp.",
+    "text": "Les bicis, els components, la roba i la nutrició que fan servir els equips. Passa-les i toca’n una per saber-ne més.",
     "filtre": "Filtra per categoria",
     "categories": {
       "totes": "Totes",
@@ -240,7 +240,8 @@
     "carrusel": "{n} marques de la botiga",
     "pregunta": "Pregunta per {marca} per WhatsApp",
     "missatge": "Hola! Teniu material de {marca}?",
-    "preguntar": "Pregunta-ho"
+    "veure": "Mira la marca {marca}",
+    "mira": "Mira-la"
   },
   "botiga": {
     "situacio": "La botiga",
@@ -613,5 +614,32 @@
     "veureMes": "Veure'n més ({n})",
     "veureMenys": "Veure'n menys",
     "escenaSr": "Els productes de cada marca giren sobre si mateixos a mesura que baixes."
+  },
+  "fitxaMarca": {
+    "tornar": "Totes les marques",
+    "dades": "La marca en breu",
+    "desDe": "Des de {any}",
+    "historia": "La marca",
+    "destacats": "Què en destaquem",
+    "web": "Web de {marca}",
+    "mes": "Més marques: {categoria}",
+    "credits": "Fotos de la web de {marca}:",
+    "accio": {
+      "bicis": {
+        "titol": "Vols rodar amb una {marca}?",
+        "text": "Lloga-la per un dia o per una setmana, o vine a la botiga a veure-la i provar-la.",
+        "boto": "Mira la flota de lloguer"
+      },
+      "components": {
+        "titol": "Muntem {marca} al taller",
+        "text": "Te’l posem, l’ajustem i et diem quan toca canviar-lo. Demana cita i passa amb la bici.",
+        "boto": "Demana cita al taller"
+      },
+      "equipament": {
+        "titol": "{marca}, a la botiga",
+        "text": "Vine a emprovar-t’ho: t’ajudem a trobar la talla i t’ho ajustem al moment.",
+        "boto": "Mira {categoria} a la botiga"
+      }
+    }
   }
 }

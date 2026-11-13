@@ -212,7 +212,7 @@
   "marques": {
     "situacio": "The brands",
     "titol": "Kit yourself out like a pro.",
-    "text": "The bikes, components, clothing and nutrition the pro teams use. Browse them, and if you are after one, ask us on WhatsApp.",
+    "text": "The bikes, components, clothing and nutrition the pro teams use. Browse them and tap one to find out more.",
     "filtre": "Filter by category",
     "categories": {
       "totes": "All",
@@ -240,7 +240,8 @@
     "carrusel": "{n} brands in the shop",
     "pregunta": "Ask about {marca} on WhatsApp",
     "missatge": "Hi! Do you have any {marca} gear?",
-    "preguntar": "Ask us"
+    "veure": "See the {marca} brand",
+    "mira": "See more"
   },
   "botiga": {
     "situacio": "The shop",
@@ -613,5 +614,32 @@
     "veureMes": "See more ({n})",
     "veureMenys": "See less",
     "escenaSr": "Each brand's products spin around as you scroll down."
+  },
+  "fitxaMarca": {
+    "tornar": "All brands",
+    "dades": "The brand at a glance",
+    "desDe": "Since {any}",
+    "historia": "The brand",
+    "destacats": "Our picks",
+    "web": "{marca} website",
+    "mes": "More brands: {categoria}",
+    "credits": "Photos from the {marca} website:",
+    "accio": {
+      "bicis": {
+        "titol": "Want to ride a {marca}?",
+        "text": "Rent one for a day or a week, or come to the shop to see it and try it.",
+        "boto": "See the rental fleet"
+      },
+      "components": {
+        "titol": "We fit {marca} in the workshop",
+        "text": "We fit it, adjust it and tell you when it needs replacing. Book a slot and bring your bike.",
+        "boto": "Book the workshop"
+      },
+      "equipament": {
+        "titol": "{marca}, in the shop",
+        "text": "Come and try it on: we help you find your size and adjust it there and then.",
+        "boto": "See {categoria} in the shop"
+      }
+    }
   }
 }
