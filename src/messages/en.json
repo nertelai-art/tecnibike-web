@@ -464,15 +464,21 @@
       "dades": "Please check the highlighted fields.",
       "franja": "This time has just filled up. Choose another one.",
       "serveis": "Choose at least one service.",
-      "xarxa": "We couldn't send it. Please try again or call us on +34 972 66 29 51."
+      "xarxa": "We couldn't send it. Please try again or call us on +34 972 66 29 51.",
+      "noDisponible": "We can't save the appointment online right now. Call us on 972 66 29 51 and we'll book it for you."
     },
     "fet": {
       "titol": "Appointment confirmed",
       "text": "See you on {data} at {hora}. We'll give you a quote before touching anything and message you on WhatsApp when it's ready*.",
-      "altra": "Book another slot"
+      "altra": "Book another slot",
+      "titolPendent": "Appointment requested",
+      "textPendent": "We've held {data} at {hora} for you. The workshop will confirm it shortly on WhatsApp."
     },
     "situacio": "Workshop",
-    "tancar": "Close"
+    "tancar": "Close",
+    "lliure": "Free",
+    "preuConsultar": "Price on request",
+    "senseCitesEnLinia": "Right now workshop appointments are booked by phone:"
   },
   "whatsapp": {
     "parla": "Chat with our assistant on WhatsApp",

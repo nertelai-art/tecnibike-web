@@ -24,7 +24,7 @@ const proves = crearPlataformaProva({
   rellotge: () => new Date(),
   configuracio: { nutricio: { actiu: process.env.NODE_ENV === 'development' } },
 });
-const { PLATAFORMA_API_URL: url, PLATAFORMA_API_CLAU: clau } = process.env;
+const { PLATAFORMA_API_URL: url, PLATAFORMA_API_CLAU: clau, PLATAFORMA_CITES_CLAU: clauCites, PLATAFORMA_TALLER_SERVEI: serveiCita } = process.env;
 
 export const plataformaRemota = Boolean(url && clau);
-export const plataforma: Plataforma = url && clau ? crearPlataformaRemota({ url, clau, proves }) : proves;
+export const plataforma: Plataforma = url && clau ? crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves }) : proves;

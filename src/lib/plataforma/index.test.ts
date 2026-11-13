@@ -258,10 +258,10 @@ describe('cita al taller', () => {
   it('ocupa una plaça de la franja triada', async () => {
     const p = nova();
     const dia = '2026-10-27';
-    const franja = (await p.frangesTaller(dia)).find((f) => f.places > 0)!;
+    const franja = (await p.frangesTaller(dia))!.find((f) => (f.places ?? 0) > 0)!;
     const confirmacio = await p.crearCitaTaller({ tipusBici: 'carretera', serveis: ['frens'], dia, hora: franja.inici, ...client });
     expect(confirmacio.codi).toBe('TB-PROVA1');
-    expect((await p.frangesTaller(dia)).find((f) => f.inici === franja.inici)!.places).toBe(franja.places - 1);
+    expect((await p.frangesTaller(dia))!.find((f) => f.inici === franja.inici)!.places).toBe(franja.places! - 1);
   });
 
   it('no accepta cites en diumenge', async () => {
