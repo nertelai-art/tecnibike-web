@@ -8,6 +8,7 @@ import { useEffect, useId, useState, useSyncExternalStore, useTransition, type F
 import { consultarFranges, demanarCita, type ResultatReserva } from '@/app/[locale]/accions';
 import { ORDRE_PECES } from '@/components/anatomia/anatomia-fases';
 import { dataLocal, propersDiesOberts } from '@/lib/calendari';
+import { TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
 import type { CitaTaller as Cita, FranjaTaller, Peca, ServeiTaller } from '@/lib/plataforma/esquema';
 import { formatEuros } from '@/lib/preus';
 import styles from './Reserva.module.css';
@@ -34,14 +35,14 @@ export function CitaTaller({ serveis, pecaInicial }: Props) {
   const [triats, setTriats] = useState<Peca[]>(pecaInicial ? [pecaInicial] : []);
   const [diaTriat, setDiaTriat] = useState('');
   const [hora, setHora] = useState<string | null>(null);
-  const [franges, setFranges] = useState<FranjaTaller[] | null>(null);
+  const [franges, setFranges] = useState<FranjaTaller[] | 'senseCites' | null>(null);
   const [errorsCamps, setErrorsCamps] = useState<Set<string>>(new Set());
   const [resultat, setResultat] = useState<ResultatReserva | null>(null);
   const [enviant, iniciaEnviament] = useTransition();
 
   const dia = diaTriat || dies[0] || '';
   // Avui només compten les hores que encara no han passat.
-  const frangesVisibles = franges?.map((f) => (dia === avui && f.inici <= ara ? { ...f, places: 0 } : f)) ?? null;
+  const frangesVisibles = Array.isArray(franges) ? franges.map((f) => (dia === avui && f.inici <= ara ? { ...f, places: 0 } : f)) : franges;
 
   useEffect(() => {
     if (!dia) return;
@@ -62,12 +63,12 @@ export function CitaTaller({ serveis, pecaInicial }: Props) {
         <p className={styles.fetMarca} aria-hidden="true">
           ✓
         </p>
-        <h2>{t('fet.titol')}</h2>
+        <h2>{resultat.estat === 'pendent' ? t('fet.titolPendent') : t('fet.titol')}</h2>
         <p className={styles.codi}>
           <span>{tr('fet.codi')}</span>
           <strong>{resultat.codi}</strong>
         </p>
-        <p>{t('fet.text', { data: formatDia(dia, { weekday: 'long', day: 'numeric', month: 'long' }), hora })}</p>
+        <p>{t(resultat.estat === 'pendent' ? 'fet.textPendent' : 'fet.text', { data: formatDia(dia, { weekday: 'long', day: 'numeric', month: 'long' }), hora })}</p>
         <p className={styles.adreca}>{tr('fet.adreca')}</p>
         <button
           type="button"
@@ -127,6 +128,8 @@ export function CitaTaller({ serveis, pecaInicial }: Props) {
         ? t('errors.franja')
         : resultat.error === 'xarxa'
           ? t('errors.xarxa')
+          : resultat.error === 'noDisponible'
+            ? t('errors.noDisponible')
           : error('serveis')
             ? t('errors.serveis')
             : t('errors.dades')
@@ -165,9 +168,14 @@ export function CitaTaller({ serveis, pecaInicial }: Props) {
                   <span className={cita.serveiCos}>
                     <small>{ta(`peces.${peca}.nom`)}</small>
                     <strong>{ta(`peces.${peca}.servei`)}</strong>
+                    {/* El preu, el del catàleg de la plataforma; si la botiga no n'hi ha posat, cap. */}
                     {servei && (
                       <span>
-                        {ta('desDe', { preu: formatEuros(servei.desDe, locale) })}
+                        {servei.preu === null
+                          ? t('preuConsultar')
+                          : servei.preuBase === 'desDe'
+                            ? ta('desDe', { preu: formatEuros(servei.preu, locale) })
+                            : formatEuros(servei.preu, locale)}
                         {servei.ficticia && <span className="mostra">*</span>}
                       </span>
                     )}
@@ -214,6 +222,10 @@ export function CitaTaller({ serveis, pecaInicial }: Props) {
         </p>
         {frangesVisibles === null ? (
           <p className={styles.ajuda}>{tr('carregant')}</p>
+        ) : frangesVisibles === 'senseCites' ? (
+          <p className={styles.ajuda}>
+            {t('senseCitesEnLinia')} <a href={`tel:${TELEFON}`}>{TELEFON_VISIBLE}</a>
+          </p>
         ) : frangesVisibles.every((f) => f.places === 0) ? (
           <p className={styles.ajuda}>{t('senseFranges')}</p>
         ) : (
@@ -223,7 +235,7 @@ export function CitaTaller({ serveis, pecaInicial }: Props) {
                 <input type="radio" name="hora" checked={hora === f.inici} disabled={f.places === 0} onChange={() => setHora(f.inici)} />
                 <span>
                   <strong>{f.inici}</strong>
-                  <small>{t('places', { n: f.places })}</small>
+                  <small>{f.places === null ? t('lliure') : t('places', { n: f.places })}</small>
                 </span>
               </label>
             ))}

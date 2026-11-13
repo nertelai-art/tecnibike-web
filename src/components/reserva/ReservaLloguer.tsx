@@ -165,7 +165,21 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
 
   // ── Bicis ──
   const canviaLinia = (clau: number, canvi: Partial<LiniaFormulari>) => setLinies((ls) => ls.map((l) => (l.clau === clau ? { ...l, ...canvi } : l)));
-  const afegeix = () => setLinies((ls) => [...ls, novaLinia(seguentClau.current++, ls.at(-1)?.biciId ?? bici.id)]);
+  const [novaClau, setNovaClau] = useState<number | null>(null);
+  const afegeix = () => {
+    const clau = seguentClau.current++;
+    setLinies((ls) => [...ls, novaLinia(clau, ls.at(-1)?.biciId ?? bici.id)]);
+    setNovaClau(clau);
+  };
+  // La bici nova queda sota el que es veu: s'hi baixa amb un desplaçament suau fins a deixar-la al mig
+  // de la pantalla, i el focus va al seu primer camp (sense tornar a desplaçar).
+  useEffect(() => {
+    if (novaClau === null) return;
+    const el = formulari.current?.querySelector<HTMLElement>(`[data-clau="${novaClau}"]`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+    el.querySelector<HTMLElement>('select, input')?.focus({ preventScroll: true });
+  }, [novaClau, reduced]);
   const treu = (clau: number) => setLinies((ls) => ls.filter((l) => l.clau !== clau));
 
   function enviar(event: FormEvent<HTMLFormElement>) {
@@ -454,6 +468,7 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
                   preuDe={preuDe}
                   onCanvi={(canvi) => canviaLinia(l.clau, canvi)}
                   onTreure={i > 0 ? () => treu(l.clau) : undefined}
+                  nova={l.clau === novaClau}
                 />
               ))}
               {linies.length < MAX_BICIS && (

@@ -346,7 +346,6 @@
     "preuDia": "{preu}/jour",
     "estoc": "{n, plural, =0 {Épuisé} one {Il en reste 1} other {Il en reste #}}",
     "estocMolts": "Plus de 15",
-    "senseImatge": "Pas d'image",
     "dades": "Vos coordonnées",
     "nom": "Nom et prénom",
     "telefon": "Téléphone (avec WhatsApp)",
@@ -434,7 +433,9 @@
     "tipusBici": "Type de vélo",
     "calculDies": "{preu}/jour × {dies}",
     "variantDe": "Options de {extra}",
-    "nutricio": "Nutrition pour la sortie"
+    "nutricio": "Nutrition pour la sortie",
+    "extresTriats": "{n, plural, one {# choisi} other {# choisis}}",
+    "extresDisponibles": "{n, plural, one {# option} other {# options}}"
   },
   "cita": {
     "titol": "Rendez-vous à l'atelier",
@@ -463,15 +464,21 @@
       "dades": "Vérifiez les champs signalés.",
       "franja": "Ce créneau vient d'être pris. Choisissez-en un autre.",
       "serveis": "Choisissez au moins un service.",
-      "xarxa": "L'envoi a échoué. Réessayez ou appelez-nous au +34 972 66 29 51."
+      "xarxa": "L'envoi a échoué. Réessayez ou appelez-nous au +34 972 66 29 51.",
+      "noDisponible": "Nous ne pouvons pas enregistrer le rendez-vous en ligne pour le moment. Appelez-nous au 972 66 29 51 et nous vous le donnons."
     },
     "fet": {
       "titol": "Rendez-vous confirmé",
       "text": "Rendez-vous le {data} à {hora}. Nous vous donnerons un devis avant de toucher à quoi que ce soit et vous préviendrons sur WhatsApp quand il sera prêt*.",
-      "altra": "Prendre un autre rendez-vous"
+      "altra": "Prendre un autre rendez-vous",
+      "titolPendent": "Rendez-vous demandé",
+      "textPendent": "Nous avons réservé le {data} à {hora}. L’atelier vous le confirmera très vite par WhatsApp."
     },
     "situacio": "Atelier",
-    "tancar": "Fermer"
+    "tancar": "Fermer",
+    "lliure": "Libre",
+    "preuConsultar": "Prix sur demande",
+    "senseCitesEnLinia": "Pour le moment, les rendez-vous à l’atelier se prennent par téléphone :"
   },
   "whatsapp": {
     "parla": "Parlez avec notre assistant sur WhatsApp",
@@ -503,7 +510,6 @@
     "situacio": "Nutrition sportive",
     "titol": "Du carburant pour chaque kilomètre",
     "intro": "Gels, barres et boissons de Maurten, 226ERS, Nutrinovex et SiS, les mêmes que dans notre boutique. Nous les préparons avec votre vélo de location, ou passez les chercher avant de partir.",
-    "veure": "{n, plural, one {Voir le produit} other {Voir les # produits}}",
     "totesMarques": "Toutes les marques",
     "quan": "Quand le prendre",
     "tot": "Tout",
@@ -608,12 +614,19 @@
     "reserva": {
       "titol": "Nutrition pour la sortie",
       "intro": "Gels, barres et boissons de la boutique. Nous les préparons avec votre vélo et ils se paient avec la réservation.",
-      "triats": "Dans la réservation"
+      "triats": "Dans la réservation",
+      "unitats": "{n, plural, one {# unité} other {# unités}} · {preu}",
+      "opcional": "Facultatif"
     },
     "demanaWhatsapp": "Réservez-la sur WhatsApp",
     "veureMes": "Voir plus ({n})",
     "veureMenys": "Voir moins",
-    "escenaSr": "Les produits de chaque marque tournent sur eux-mêmes à mesure que vous descendez."
+    "triaMarca": "Choisissez une marque",
+    "veureMarca": "{marca} : voir ses {n} produits",
+    "productesN": "{n, plural, one {# produit} other {# produits}}",
+    "triada": "Choisie",
+    "mira": "La voir",
+    "resultat": "{n, plural, one {# produit} other {# produits}} · {marca}"
   },
   "fitxaMarca": {
     "tornar": "Toutes les marques",

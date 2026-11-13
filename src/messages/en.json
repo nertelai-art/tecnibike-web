@@ -346,7 +346,6 @@
     "preuDia": "{preu}/day",
     "estoc": "{n, plural, =0 {Sold out} one {1 left} other {# left}}",
     "estocMolts": "Over 15",
-    "senseImatge": "No image",
     "dades": "Your details",
     "nom": "Full name",
     "telefon": "Phone (with WhatsApp)",
@@ -434,7 +433,9 @@
     "tipusBici": "Bike type",
     "calculDies": "{preu}/day × {dies}",
     "variantDe": "{extra} options",
-    "nutricio": "Ride nutrition"
+    "nutricio": "Ride nutrition",
+    "extresTriats": "{n} selected",
+    "extresDisponibles": "{n, plural, one {# option} other {# options}}"
   },
   "cita": {
     "titol": "Book the workshop",
@@ -463,15 +464,21 @@
       "dades": "Please check the highlighted fields.",
       "franja": "This time has just filled up. Choose another one.",
       "serveis": "Choose at least one service.",
-      "xarxa": "We couldn't send it. Please try again or call us on +34 972 66 29 51."
+      "xarxa": "We couldn't send it. Please try again or call us on +34 972 66 29 51.",
+      "noDisponible": "We can't save the appointment online right now. Call us on 972 66 29 51 and we'll book it for you."
     },
     "fet": {
       "titol": "Appointment confirmed",
       "text": "See you on {data} at {hora}. We'll give you a quote before touching anything and message you on WhatsApp when it's ready*.",
-      "altra": "Book another slot"
+      "altra": "Book another slot",
+      "titolPendent": "Appointment requested",
+      "textPendent": "We've held {data} at {hora} for you. The workshop will confirm it shortly on WhatsApp."
     },
     "situacio": "Workshop",
-    "tancar": "Close"
+    "tancar": "Close",
+    "lliure": "Free",
+    "preuConsultar": "Price on request",
+    "senseCitesEnLinia": "Right now workshop appointments are booked by phone:"
   },
   "whatsapp": {
     "parla": "Chat with our assistant on WhatsApp",
@@ -503,7 +510,6 @@
     "situacio": "Sports nutrition",
     "titol": "Fuel for every kilometre",
     "intro": "Gels, bars and drinks from Maurten, 226ERS, Nutrinovex and SiS, the same ones we stock in the shop. We'll have them ready with your rental bike, or drop by before you ride.",
-    "veure": "{n, plural, one {See the product} other {See all # products}}",
     "totesMarques": "All brands",
     "quan": "When to take it",
     "tot": "All",
@@ -608,12 +614,19 @@
     "reserva": {
       "titol": "Ride nutrition",
       "intro": "Gels, bars and drinks from the shop. We'll have them ready with your bike, and you pay for them with your booking.",
-      "triats": "In your booking"
+      "triats": "In your booking",
+      "unitats": "{n, plural, one {# item} other {# items}} · {preu}",
+      "opcional": "Optional"
     },
     "demanaWhatsapp": "Book it on WhatsApp",
     "veureMes": "See more ({n})",
     "veureMenys": "See less",
-    "escenaSr": "Each brand's products spin around as you scroll down."
+    "triaMarca": "Pick a brand",
+    "veureMarca": "{marca}: see its {n} products",
+    "productesN": "{n, plural, one {# product} other {# products}}",
+    "triada": "Selected",
+    "mira": "See it",
+    "resultat": "{n, plural, one {# product} other {# products}} · {marca}"
   },
   "fitxaMarca": {
     "tornar": "All brands",

@@ -1,292 +1,242 @@
-/* Secció de nutrició de l'inici: capçalera i graella sobre el fons clar del web, i al mig l'escena
-   de les marques, que pren el color de cada marca (variables de src/content/nutricio.ts). */
+/* Pàgina de nutrició de la botiga: el hero amb les quatre marques, que són filtres i prenen els
+   colors de cada marca (variables de src/content/nutricio.ts), i la graella de productes a sota. */
 
 .seccio {
-  padding-block: var(--section);
+  padding-bottom: var(--section);
   background: var(--escenari);
 }
 
-/* ── L'escena de les marques ─────────────────────────────────────────────────────────────── */
+/* ── El hero de les marques ──────────────────────────────────────────────────────────────── */
 
-/* Sense animació (servidor, sense JavaScript o amb menys moviment): un capítol sota l'altre. */
-.pista {
+.hero {
+  --hero-fons: var(--grafit);
   position: relative;
+  isolation: isolate;
+  padding: calc(var(--header-h) + 40px) 0 clamp(36px, 4vw, 56px);
+  color: var(--blanc);
+  background: var(--hero-fons);
+  transition: background-color 0.6s var(--ease);
+  overflow: hidden;
 }
-.escenari {
-  position: relative;
+/* Una llum suau que pren l'accent de la marca triada. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -20% -10% auto auto;
+  z-index: -1;
+  width: 70vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--hero-accent, var(--taronja)) 22%, transparent), transparent 65%);
+  transition: background 0.6s var(--ease);
 }
-.capitol {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
-  align-items: center;
-  gap: clamp(16px, 3vw, 48px);
-  padding: clamp(40px, 6vw, 72px) max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter)));
-  background: var(--fons);
-  color: var(--text);
+.heroText :global(.situacio) {
+  color: rgb(255 255 255 / 0.72);
 }
-.capitolText {
-  position: relative;
-  z-index: 1;
-}
-.capitolNumero {
-  font-size: 13px;
+.tornar {
+  display: block;
+  width: max-content;
+  margin-bottom: 18px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--accent);
+  color: var(--blanc);
+  text-decoration: none;
 }
-.capitolNumero span {
-  opacity: 0.55;
-  color: var(--text);
+.tornar:hover {
+  color: var(--taronja);
 }
-.capitolNom {
-  margin-top: 10px;
-  font-size: clamp(48px, 7.5vw, 112px);
-  font-weight: 900;
-  line-height: 0.92;
-  letter-spacing: -0.03em;
+.titol {
+  margin-top: 12px;
+  font-size: clamp(40px, 5.6vw, 80px);
+  line-height: 0.95;
 }
-.capitolLema {
-  margin-top: 18px;
-  max-width: 34ch;
-  font-size: clamp(15px, 1.25vw, 18px);
-  line-height: 1.5;
-  opacity: 0.85;
+.intro {
+  margin-top: 14px;
+  max-width: 62ch;
+  font-size: clamp(16px, 1.4vw, 19px);
+  color: rgb(255 255 255 / 0.78);
 }
-.capitolBoto {
-  display: inline-flex;
-  align-items: center;
+
+.marquesHero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 14px;
+  margin-top: clamp(24px, 3vw, 40px);
+}
+.rajola {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
   gap: 10px;
-  margin-top: 26px;
-  min-height: 48px;
-  padding: 0 22px;
+  min-height: 320px;
+  padding: 20px;
   border: 0;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--fons);
+  border-radius: 22px;
+  background: var(--marca);
+  color: var(--marca-text);
+  text-align: left;
   font: inherit;
-  font-size: 15px;
-  font-weight: 800;
   cursor: pointer;
-  transition: transform 0.2s var(--ease);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.14),
+    0 20px 40px -28px rgb(0 0 0 / 0.8);
+  overflow: hidden;
+  transition:
+    transform 0.35s var(--ease),
+    opacity 0.35s var(--ease),
+    box-shadow 0.35s var(--ease),
+    filter 0.35s var(--ease);
 }
-.capitolBoto:hover {
-  transform: translateY(-2px);
+.rajola:hover {
+  transform: translateY(-4px);
 }
-.capitolBoto:focus-visible,
-.indicador button:focus-visible {
-  outline: 3px solid var(--taronja);
+.rajola:focus-visible {
+  outline: 3px solid var(--marca-accent);
   outline-offset: 3px;
 }
-.capitol[data-marca='maurten'] .capitolNom {
-  font-weight: 500;
-  letter-spacing: -0.01em;
+.rajola[aria-pressed='true'] {
+  transform: translateY(-6px);
+  box-shadow:
+    inset 0 0 0 2px var(--marca-accent),
+    0 28px 50px -24px rgb(0 0 0 / 0.9);
 }
-.capitol[data-marca='226ers'] .capitolNom {
-  font-style: italic;
-  text-transform: uppercase;
+.rajola[data-apagada] {
+  opacity: 0.5;
+  filter: saturate(0.6);
 }
-.capitol[data-marca='nutrinovex'] .capitolNom {
-  text-transform: lowercase;
+.rajola[data-apagada]:hover {
+  opacity: 0.85;
+  filter: none;
 }
-.capitol[data-marca='sis'] .capitolNom {
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.rajolaCap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
 }
-
-/* Els productes: cada peça té una cara (la foto) i un dors (la mateixa silueta, fosca). */
-.capitolProductes {
-  /* Distància entre els centres dels productes del ventall. */
-  --pas: clamp(76px, 13.5vw, 230px);
-  position: relative;
-  height: clamp(240px, 34vw, 440px);
-  perspective: 1400px;
-}
-.peca {
-  --w: clamp(84px, 11vw, 176px);
-  --h: clamp(150px, 19vw, 330px);
-  position: absolute;
-  left: calc(50% + var(--lloc, 0) * var(--pas) - var(--w) / 2);
-  top: calc(50% - var(--h) / 2);
-  width: var(--w);
-  height: var(--h);
-  transform-style: preserve-3d;
-}
-.peca[data-tipus='barreta'] {
-  --w: clamp(120px, 15vw, 240px);
-  --h: clamp(90px, 11vw, 190px);
-}
-.peca[data-tipus='recuperacio'],
-.peca[data-tipus='beguda'],
-.peca[data-tipus='gominoles'],
-.peca[data-ample] {
-  --w: clamp(100px, 13vw, 210px);
-  --h: clamp(120px, 15vw, 260px);
-}
-.cara,
-.dors {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  /* Una sola cel·la de la mida de la peça: la foto s'hi encabeix (height: 100% es resol). */
-  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
-  backface-visibility: hidden;
-}
-.dors {
-  transform: rotateY(180deg);
-}
-.cara img,
-.dors img,
-.cara svg,
-.dors svg {
-  /* Dins d'una cel·la de graella, un max-height en % no es resol: mida fixa i contain. */
-  width: 100%;
-  height: 100%;
+.rajolaLogo {
+  height: 40px;
+  width: auto;
+  max-width: 70%;
   object-fit: contain;
-  filter: drop-shadow(0 18px 22px rgb(0 0 0 / 0.45));
+  object-position: left center;
+  filter: brightness(0) invert(1);
 }
-.dors img,
-.dors svg {
-  transform: scaleX(-1);
-  filter: brightness(0.35) saturate(0.4) drop-shadow(0 18px 22px rgb(0 0 0 / 0.45));
+.rajolaNom {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
 }
-
-.indicador {
-  display: none;
+.rajolaMarca {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--marca-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--marca-accent) 25%, transparent);
 }
-
-/* Amb animació: l'escenari s'enganxa i els capítols es superposen. */
-.pista[data-animada] {
-  height: calc(100svh + var(--capitols) * 85svh);
+.rajolaLema {
+  font-size: 14px;
+  line-height: 1.45;
+  opacity: 0.8;
 }
-/* Un cop vista, el recorregut es plega: queda l'escenari sol, com un aparador. */
-.pista[data-animada][data-plegada] {
-  height: 100svh;
+/* Tres productes en ventall que s'obre en passar-hi el ratolí o en triar la marca. */
+.rajolaProductes {
+  position: relative;
+  min-height: 150px;
+  margin-bottom: 6px;
 }
-.pista[data-animada] .escenari {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  overflow: hidden;
-  background: var(--fons-escena, #050505);
-  color: var(--text-escena, #fff);
-  transition:
-    background-color 0.6s var(--ease),
-    color 0.6s var(--ease);
-}
-.pista[data-animada] .capitol {
-  position: absolute;
-  inset: 0;
-  padding-top: calc(var(--header-h) + 24px);
-  /* L'indicador de marques, a baix. */
-  padding-bottom: 72px;
-  background: none;
-}
-.pista[data-animada] .capitolProductes {
-  height: min(64svh, 600px);
-}
-.pista[data-animada] .peca {
-  will-change: transform, opacity;
-}
-.pista[data-animada] .peca {
-  /* Tots dins d'una mateixa capsa: la foto s'hi encabeix sense deformar-se. */
-  --h: clamp(140px, 38svh, 360px);
-  --w: calc(var(--h) * 0.6);
-}
-.pista[data-animada] .peca[data-tipus='barreta'] {
-  --w: calc(var(--h) * 0.75);
-}
-.pista[data-animada] .peca[data-tipus='recuperacio'],
-.pista[data-animada] .peca[data-tipus='gominoles'] {
-  --h: clamp(110px, 28svh, 270px);
-  --w: calc(var(--h) * 0.85);
-}
-.pista[data-animada] .peca[data-ample] {
-  --h: clamp(100px, 24svh, 240px);
-  --w: calc(var(--h) * 1.25);
-}
-/* El tub de pastilles és molt alt: una mica més petit perquè no domini. */
-.pista[data-animada] .peca[data-tipus='pastilles'] {
-  --h: clamp(110px, 27svh, 270px);
-}
-.pista[data-animada] .indicador {
+.rajolaPeca {
+  --gir: calc((var(--j) - 1) * 12deg);
+  --x: calc((var(--j) - 1) * 30%);
   position: absolute;
   left: 50%;
-  bottom: clamp(16px, 3svh, 32px);
+  bottom: 0;
+  width: 38%;
+  height: 92%;
+  display: grid;
+  place-items: end center;
+  transform: translateX(calc(-50% + var(--x))) rotate(var(--gir));
+  transform-origin: 50% 100%;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: calc(3 - var(--j));
+}
+.rajolaPeca:nth-child(2) {
+  z-index: 3;
+}
+.rajolaPeca img,
+.rajolaPeca svg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 14px rgb(0 0 0 / 0.45));
+}
+.rajola:hover .rajolaPeca,
+.rajola[aria-pressed='true'] .rajolaPeca {
+  transform: translateX(calc(-50% + var(--x) * 1.35)) translateY(-8px) rotate(calc(var(--gir) * 1.5));
+}
+.rajolaPeu {
+  position: relative;
+  z-index: 5;
   display: flex;
-  gap: 4px;
-  padding: 4px;
-  margin: 0;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.1);
-  backdrop-filter: blur(8px);
-  list-style: none;
-  translate: -50% 0;
-}
-.indicador button {
-  min-height: 36px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 999px;
-  background: none;
-  color: inherit;
-  font: inherit;
-  font-size: 13px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgb(255 255 255 / 0.16);
+  background: var(--marca);
+  box-shadow: 0 -12px 16px -6px var(--marca);
+  font-size: 14px;
   font-weight: 700;
-  opacity: 0.65;
-  cursor: pointer;
-  transition:
-    background-color 0.3s var(--ease),
-    opacity 0.3s var(--ease);
 }
-.indicador li[data-actiu='true'] button {
-  background: rgb(255 255 255 / 0.18);
-  opacity: 1;
+.rajolaEstat {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.12);
+  white-space: nowrap;
 }
-
-@media (max-width: 800px) {
-  .capitol {
-    grid-template-columns: none;
-    align-content: center;
+.rajola[aria-pressed='true'] .rajolaEstat {
+  background: var(--marca-accent);
+  color: var(--marca);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rajola {
+    animation: entra-rajola 0.7s var(--ease) backwards;
+    animation-delay: calc(var(--i) * 90ms + 150ms);
+  }
+}
+@keyframes entra-rajola {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+@media (max-width: 560px) {
+  .marquesHero {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .rajola {
+    min-height: 0;
+    padding: 14px;
     gap: 8px;
-    text-align: center;
   }
-  .capitolLema {
-    margin-inline: auto;
+  .rajolaLema {
+    display: none;
   }
-  .capitolBoto {
-    margin-top: 16px;
+  .rajolaLogo {
+    height: 26px;
+    max-width: 80%;
   }
-  .pista[data-animada] .capitol {
-    align-content: start;
-    padding-top: calc(var(--header-h) + 28px);
+  .rajolaNom {
+    font-size: 24px;
   }
-  .pista[data-animada] .capitolProductes {
-    --pas: clamp(60px, 21vw, 110px);
-    height: 44svh;
+  .rajolaProductes {
+    min-height: 96px;
   }
-  .pista[data-animada] .peca {
-    --h: clamp(96px, 21svh, 190px);
-  }
-  .pista[data-animada] .peca[data-tipus='recuperacio'],
-  .pista[data-animada] .peca[data-tipus='gominoles'] {
-    --h: clamp(80px, 16svh, 150px);
-  }
-  .pista[data-animada] .peca[data-ample] {
-    --h: clamp(64px, 13svh, 120px);
-  }
-  .pista[data-animada] .peca[data-tipus='pastilles'] {
-    --h: clamp(84px, 17svh, 160px);
-  }
-  /* Per sobre del botó flotant de WhatsApp. */
-  .pista[data-animada] .indicador {
-    bottom: 88px;
-  }
-  .pista[data-animada] .capitol {
-    padding-bottom: 136px;
-  }
-  .pista[data-animada] .indicador button {
-    min-height: 32px;
-    padding: 0 8px;
+  .rajolaPeu {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
     font-size: 12px;
   }
 }

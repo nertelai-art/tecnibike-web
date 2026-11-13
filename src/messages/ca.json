@@ -346,7 +346,6 @@
     "preuDia": "{preu}/dia",
     "estoc": "{n, plural, =0 {Esgotat} one {Queda 1} other {Queden #}}",
     "estocMolts": "Més de 15",
-    "senseImatge": "Sense imatge",
     "dades": "Les teves dades",
     "nom": "Nom i cognoms",
     "telefon": "Telèfon (amb WhatsApp)",
@@ -434,7 +433,9 @@
     "tipusBici": "Tipus de bici",
     "calculDies": "{preu}/dia × {dies}",
     "variantDe": "Opcions de {extra}",
-    "nutricio": "Nutrició per a la ruta"
+    "nutricio": "Nutrició per a la ruta",
+    "extresTriats": "{n, plural, one {# triat} other {# triats}}",
+    "extresDisponibles": "{n, plural, one {# opció} other {# opcions}}"
   },
   "cita": {
     "titol": "Demana cita al taller",
@@ -463,15 +464,21 @@
       "dades": "Revisa els camps marcats.",
       "franja": "Aquesta hora s'acaba d'omplir. Tria'n una altra.",
       "serveis": "Tria almenys un servei.",
-      "xarxa": "No s'ha pogut enviar. Torna-ho a provar o truca'ns al 972 66 29 51."
+      "xarxa": "No s'ha pogut enviar. Torna-ho a provar o truca'ns al 972 66 29 51.",
+      "noDisponible": "Ara mateix no podem desar la cita en línia. Truca'ns al 972 66 29 51 i te la donem."
     },
     "fet": {
       "titol": "Cita confirmada",
       "text": "T'esperem el {data} a les {hora}. Et direm el pressupost abans de tocar res i t'avisarem per WhatsApp quan estigui llesta*.",
-      "altra": "Demana una altra cita"
+      "altra": "Demana una altra cita",
+      "titolPendent": "Cita demanada",
+      "textPendent": "Hem guardat l'hora del {data} a les {hora}. El taller te la confirmarà ben aviat per WhatsApp."
     },
     "situacio": "Taller",
-    "tancar": "Tanca"
+    "tancar": "Tanca",
+    "lliure": "Lliure",
+    "preuConsultar": "Preu a consultar",
+    "senseCitesEnLinia": "Ara mateix les cites del taller es demanen per telèfon:"
   },
   "whatsapp": {
     "parla": "Parla amb el nostre assistent per WhatsApp",
@@ -503,7 +510,6 @@
     "situacio": "Nutrició esportiva",
     "titol": "Combustible per a cada quilòmetre",
     "intro": "Gels, barretes i begudes de Maurten, 226ERS, Nutrinovex i SiS, els mateixos que tenim a la botiga. Te'ls deixem a punt amb la bici de lloguer, o passa a buscar-los abans de sortir.",
-    "veure": "{n, plural, one {Mira'n el producte} other {Mira'n els # productes}}",
     "totesMarques": "Totes les marques",
     "quan": "Quan el prens",
     "tot": "Tot",
@@ -608,12 +614,19 @@
     "reserva": {
       "titol": "Nutrició per a la ruta",
       "intro": "Gels, barretes i begudes de la botiga. Te les deixem a punt amb la bici i es paguen amb la reserva.",
-      "triats": "A la reserva"
+      "triats": "A la reserva",
+      "unitats": "{n, plural, one {# unitat} other {# unitats}} · {preu}",
+      "opcional": "Opcional"
     },
     "demanaWhatsapp": "Reserva-la per WhatsApp",
     "veureMes": "Veure'n més ({n})",
     "veureMenys": "Veure'n menys",
-    "escenaSr": "Els productes de cada marca giren sobre si mateixos a mesura que baixes."
+    "triaMarca": "Tria una marca",
+    "veureMarca": "{marca}: mira’n els {n} productes",
+    "productesN": "{n, plural, one {# producte} other {# productes}}",
+    "triada": "Triada",
+    "mira": "Mira-la",
+    "resultat": "{n, plural, one {# producte} other {# productes}} · {marca}"
   },
   "fitxaMarca": {
     "tornar": "Totes les marques",

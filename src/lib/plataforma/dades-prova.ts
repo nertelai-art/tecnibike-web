@@ -159,14 +159,14 @@ export const configuracioReserves: ConfiguracioReserves = {
   antelacioMinuts: 0,
 };
 
-/** Tots els preus i terminis del taller són inventats: no n'hi ha cap llista publicada. */
+/** Tots els preus del taller són inventats: no n'hi ha cap llista publicada. */
 export const serveisTaller: ServeiTaller[] = [
-  { id: 'transmissio', peca: 'transmissio', desDe: 1500, dies: 1, ficticia: true },
-  { id: 'frens', peca: 'frens', desDe: 2000, dies: 1, ficticia: true },
-  { id: 'rodes', peca: 'rodes', desDe: 1200, dies: 1, ficticia: true },
-  { id: 'direccio', peca: 'direccio', desDe: 1800, dies: 1, ficticia: true },
-  { id: 'seient', peca: 'seient', desDe: 6000, dies: 1, ficticia: true },
-  { id: 'quadre', peca: 'quadre', desDe: 6900, dies: 2, ficticia: true },
+  { id: 'transmissio', peca: 'transmissio', preu: 1500, preuBase: 'desDe', ficticia: true },
+  { id: 'frens', peca: 'frens', preu: 2000, preuBase: 'desDe', ficticia: true },
+  { id: 'rodes', peca: 'rodes', preu: 1200, preuBase: 'desDe', ficticia: true },
+  { id: 'direccio', peca: 'direccio', preu: 1800, preuBase: 'desDe', ficticia: true },
+  { id: 'seient', peca: 'seient', preu: 6000, preuBase: 'desDe', ficticia: true },
+  { id: 'quadre', peca: 'quadre', preu: 6900, preuBase: 'desDe', ficticia: true },
 ];
 
 /**

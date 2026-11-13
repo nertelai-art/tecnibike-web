@@ -75,8 +75,9 @@ export const RentalItemSchema = z.object({
   /** La variant (la talla), si el model en té. Si no, res. */
   variant: VariantSchema,
   /**
-   * Les opcions d'aquesta unitat, una per grup com a molt. Si un grup és
-   * obligatori (`required`), n'hi ha d'haver una d'aquell grup.
+   * Les opcions d'aquesta unitat, una per grup com a molt (diverses d'un grup
+   * `multiple`, cadascuna una vegada). Si un grup és obligatori (`required`),
+   * n'hi ha d'haver una d'aquell grup.
    */
   options: z.array(RentalOptionChoiceSchema).max(10).default([]),
   /** Qui la farà servir. */
@@ -441,8 +442,26 @@ export const RentalCatalogResponseSchema = z.object({
       description: z.string().nullable(),
       /** La foto del catàleg, una adreça pública. */
       imageUrl: z.string().nullable(),
-      /** Els atributs lliures del catàleg (quadre, grup, frens…), com els ha escrit la botiga. */
+      /**
+       * Els atributs lliures del catàleg (quadre, grup, frens…), com els ha escrit la botiga. Els camps
+       * del catàleg (*Catàleg → Camps*) hi van amb la seva clau, que és el nom en minúscules: un camp
+       * «Elèctrica» de tipus «Sí o no» és `attributes["elèctrica"]`, `true` o `false` (docs/147 W-c).
+       */
       attributes: z.record(z.string(), z.unknown()),
+      /**
+       * La referència del catàleg (13/11/2026, docs/147 W-b): un codi estable que tria la botiga
+       * (`btt`, `e-urbana`), per traduir el nom a la web o fer-ne l'adreça. Nul si no en té.
+       * Opcional perquè hi ha respostes d'abans.
+       */
+      sku: z.string().nullable().optional(),
+      /** La categoria del catàleg (13/11/2026, W-c): «Muntanya», «Carretera»… Nul si no en té. Opcional, per les d'abans. */
+      category: z.string().nullable().optional(),
+      /**
+       * L'ordre que li ha posat la botiga (13/11/2026, W-d): **els models ja surten en aquest ordre**,
+       * primer els que en tenen, de més petit a més gran, i després la resta per nom. Nul si no en té.
+       * Opcional, per les d'abans.
+       */
+      position: z.number().int().nullable().optional(),
       /** Les variants que es poden triar (les talles). Buit: no en té, i `variant` va buit. */
       variants: z.array(z.string()),
       /** Les tarifes. El preu d'un lloguer el dona `POST /quotes`: no cal calcular-lo a la web. */
@@ -451,9 +470,13 @@ export const RentalCatalogResponseSchema = z.object({
       turnaroundMinutes: z.number().int(),
     }),
   ),
-  /** Els grups d'opcions. Si `required`, cal triar-ne una per a cada unitat. */
-  optionGroups: z.array(z.object({ id: z.string().uuid(), name: z.string(), required: z.boolean() })),
-  /** Les opcions: el que s'afegeix a una unitat. Una per grup com a molt. */
+  /**
+   * Els grups d'opcions. Si `required`, cal triar-ne una per a cada unitat. Si `multiple` (13/11/2026,
+   * docs/147 W-a), se'n poden triar diverses per unitat, cadascuna una vegada (casc, cadenat i
+   * alforges alhora); si no, una com a molt. `multiple` és opcional perquè hi ha respostes d'abans.
+   */
+  optionGroups: z.array(z.object({ id: z.string().uuid(), name: z.string(), required: z.boolean(), multiple: z.boolean().optional() })),
+  /** Les opcions: el que s'afegeix a una unitat. Una per grup com a molt, llevat dels grups `multiple`. */
   options: z.array(
     z.object({
       /** L'identificador, el que va a `items[].options[].optionId`. */
@@ -461,6 +484,8 @@ export const RentalCatalogResponseSchema = z.object({
       name: z.string(),
       description: z.string().nullable(),
       imageUrl: z.string().nullable(),
+      /** La referència del catàleg (13/11/2026, W-b): `casc`, `pedals-spd`. Nul si no en té. Opcional, per les d'abans. */
+      sku: z.string().nullable().optional(),
       /** El grup (`optionGroups[].id`). */
       groupId: z.string().uuid(),
       /** El preu, en cèntims. */
@@ -536,6 +561,27 @@ export const RentalCatalogResponseSchema = z.object({
         priceBasis: z.enum(["exact", "from", "on_request"]),
         /** Si el preu porta l'IVA. */
         vatIncluded: z.boolean(),
+        /**
+         * Com en diu la botiga, de les variants (13/11/2026): «Talles», «Colors». Nul: no ho ha dit.
+         * Opcional, per les respostes d'abans.
+         */
+        variantName: z.string().nullable().optional(),
+        /**
+         * Les variants (13/11/2026): talles, colors, sabors, en l'ordre de la botiga i sense les
+         * arxivades. **Buit si el producte no en té.** Opcional, per les respostes d'abans.
+         */
+        variants: z
+          .array(
+            z.object({
+              id: z.string().uuid(),
+              label: z.string(),
+              /** Nul: el del producte. */
+              priceCents: z.number().int().nullable(),
+              /** La referència de la variant, si en té. */
+              sku: z.string().nullable(),
+            }),
+          )
+          .optional(),
       }),
     )
     .optional(),
@@ -581,6 +627,16 @@ export const RentalCatalogResponseSchema = z.object({
   ),
 });
 export type RentalCatalogResponse = z.infer<typeof RentalCatalogResponseSchema>;
+
+/**
+ * `GET /catalog?category=`: opcional (13/11/2026). Amb una categoria, `saleProducts` només porta els
+ * productes d'aquella categoria del catàleg (sense majúscules ni accents); la resta de la resposta no
+ * canvia. Sense, tots.
+ */
+export const RentalCatalogQuerySchema = z.object({
+  category: z.string().trim().min(1).max(80).optional(),
+});
+export type RentalCatalogQuery = z.infer<typeof RentalCatalogQuerySchema>;
 
 /**
  * `GET /availability`: els paràmetres de la consulta. `models`, opcional: els

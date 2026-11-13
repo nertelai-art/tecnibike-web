@@ -40,9 +40,23 @@ Versions que **no** són l'última, i per què:
     qualsevol de les dues variables.
 
   El contracte de la plataforma (`remota/contracte.ts`) és generat: es copia del repositori de la
-  plataforma amb `node scripts/sincronitza-contracte.mjs [camí]` i no es toca a mà. Taller, botiga,
-  ressenyes i participants encara van per les dades de proves, perquè l'API no en té. Limitacions:
+  plataforma amb `node scripts/sincronitza-contracte.mjs [camí]` i no es toca a mà. Els productes per
+  peça, les ressenyes i els participants encara van per les dades de proves, perquè l'API no en té.
+  **Taller** (13-11-2026): els preus surten de `workshopServices` del catàleg, un per peça segons la
+  `category` del servei (Rodes, Frens, Transmissió, Direcció, Seient, Quadre o Posada a punt, en
+  qualsevol idioma), i respecten `priceHidden` i `priceBasis`; sense, no se n'ensenya cap. Les hores i
+  les cites van per `/api/public/bookings` (contracte llegit a `remota/contracte-cites.ts`), la
+  mateixa agenda que els agents de veu i WhatsApp, amb la clau `PLATAFORMA_CITES_CLAU` (abasts
+  `web_booking_read` i `web_booking_write`, la fa l'Enric). **Sense aquesta clau, el formulari no
+  ensenya hores i demana que truquin: una cita no es desa mai en memòria** (fins al 13-11-2026 es
+  perdien així a producció). Limitacions:
   el preu de la fitxa és orientatiu (mana el que torna la plataforma), només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
+  Dels models, la web llegeix els camps del catàleg (13-11-2026, plataforma v1.0.10): l'adreça surt de
+  la referència (`sku`) i, si no en té, del nom (les adreces d'abans encara troben la bici); la
+  categoria, de `category` («Muntanya», «Carretera»…); si és elèctrica, de `attributes["elèctrica"]`;
+  i l'ordre és el de la botiga (`position`, la plataforma ja els envia ordenats). D'un grup d'extres
+  `multiple` se'n poden triar diversos. Tots aquests camps poden arribar nuls fins que la botiga els
+  ompli, i llavors es dedueixen del nom com abans.
   La primera hora que s'ofereix és ara més l'antelació mínima dels ajustos de la plataforma
   (`antelacioMinuts`; a les dades de proves, 0): la plataforma rebutja qualsevol recollida abans.
   Quan la plataforma rebutja una cosa, el camp i la frase que dona surten als registres de Vercel.
@@ -74,19 +88,21 @@ Versions que **no** són l'última, i per què:
   sobre de tot. Un cop passada de llarg, queda desmuntada i no es repeteix. La línia de temps i les
   posicions dels bàners (en % del fotograma) són a `anatomia-fases.ts`, amb proves. (Es va provar
   de retallar la bici i posar-la sobre el taller, però el retall es veia malament.)
+- **Seccions plegables de la reserva:** els extres de cada bici i la nutrició es pleguen (`Plegable.tsx`),
+  amb el resum del que s'hi ha triat. Els extres sense foto a la plataforma porten una icona. En afegir
+  una bici, la pàgina hi baixa fins a deixar-la al mig, la ressalta un moment i hi posa el focus.
 - **Variants d'extres:** un extra pot tenir variants (la talla del casc), cadascuna amb el seu estoc.
   Un cop triat, la rajola demana quina; la plataforma les rep a `items[].options[].variant`.
 - **Nutrició esportiva** (`src/components/nutricio/`, recerca a
   [docs/nutricio-productes.md](docs/nutricio-productes.md)). A la pàgina de la botiga `/[locale]/botiga/nutricio`
-  (abans era a la portada; es va moure el 13-11-2026) hi ha una escena fixa amb un capítol per marca (Maurten, 226ERS, Nutrinovex i SiS, amb els seus colors de
-  `src/content/nutricio.ts`). Amb el scroll, els productes entren girant sobre si mateixos (CSS 3D,
-  sense three.js), es queden de cara i surten. La coreografia és a `escena-marques.ts`, amb proves.
-  Es fa una sola vegada: quan s'arriba al final i el scroll s'atura, el recorregut es plega a
-  l'alçada de l'escenari (compensant la posició) i queda com un aparador on l'indicador canvia de
-  marca girant. No torna fins que es recarrega la pàgina. Sense JavaScript o amb menys moviment,
-  els capítols surten un sota l'altre. Després ve la graella per marca i moment de la ruta: les
-  targetes surten d'una en una amb un bot quan el catàleg arriba a la pantalla, n'ensenya 8 i la
-  resta amb «Veure'n més». A la reserva, n'ensenya 6, en rajoles compactes. **Fotos de producte:** baixades de les webs de les marques (`public/img/nutricio/`, retallades
+  (abans era a la portada; es va moure el 13-11-2026). A dalt, un hero amb una rajola per marca
+  (Maurten, 226ERS, Nutrinovex i SiS, amb els seus colors de `src/content/nutricio.ts` i tres productes
+  en ventall): cada rajola és un filtre. Triar-ne una ensenya tots els seus productes i tenyeix el hero;
+  tornar-hi a clicar ensenya tots els de totes. La marca es guarda a l'adreça (`?marca=`). A sota, la
+  graella amb els filtres per marca i moment de la ruta, sencera (sense «Veure'n més»); les targetes
+  surten d'una en una amb un bot. (Fins al 13-11-2026 hi havia una escena de scroll amb els productes
+  girant; l'usuari la va fer treure.) A la reserva, la nutrició és una secció plegable amb 6 productes
+  i «Veure'n més». **Fotos de producte:** baixades de les webs de les marques (`public/img/nutricio/`, retallades
   amb fons transparent, una per sabor quan l'envàs canvia; el sabor canvia la foto). Les va triar
   l'usuari el 11-11-2026, i el mateix dia va dir de pujar-les al repositori (que és públic). Es
   regeneren amb `node scripts/fotos-nutricio.mjs <dir>` i

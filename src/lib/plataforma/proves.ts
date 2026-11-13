@@ -229,8 +229,8 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
     },
     crearCitaTaller: async (entrada) => {
       const cita = citaTaller.parse(entrada);
-      const franja = (await plataforma.frangesTaller(cita.dia)).find((f) => f.inici === cita.hora);
-      if (!franja || franja.places < 1) throw new ErrorReserva('franja');
+      const franja = (await plataforma.frangesTaller(cita.dia))?.find((f) => f.inici === cita.hora);
+      if (!franja || franja.places === 0) throw new ErrorReserva('franja');
       const confirmacio = { codi: generaCodi() };
       cites.push({ ...cita, ...confirmacio });
       return confirmacio;
