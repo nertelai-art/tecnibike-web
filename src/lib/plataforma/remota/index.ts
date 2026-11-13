@@ -1,4 +1,16 @@
-import { biciLloguer, categoriaLloguer, type BiciLloguer, type CategoriaLloguer, type Extra, type HorariBotiga, type ReservaLloguer, type Tarifa } from '../esquema';
+import {
+  article,
+  biciLloguer,
+  categoriaLloguer,
+  type Article,
+  type BiciLloguer,
+  type CategoriaEquipament,
+  type CategoriaLloguer,
+  type Extra,
+  type HorariBotiga,
+  type ReservaLloguer,
+  type Tarifa,
+} from '../esquema';
 import { ErrorReserva, type Plataforma } from '../interficie';
 import {
   RentalAvailabilityResponseSchema,
@@ -124,6 +136,41 @@ export function horariDe(hores: RentalHoursResponse): HorariBotiga {
     tancats: hores.exceptions.filter((e) => e.closed).map((e) => ({ dia: e.date, ficticia: false })),
     pasMinuts: hores.slotMinutes,
   };
+}
+
+/** El nom de categoria que posa la botiga al catàleg, a la categoria d'equipament de la web. */
+const CATEGORIES_VENDA: Record<string, CategoriaEquipament> = {
+  casc: 'cascs', cascs: 'cascs', cascos: 'cascs', helmets: 'cascs',
+  ullera: 'ulleres', ulleres: 'ulleres', gafas: 'ulleres', glasses: 'ulleres',
+  roba: 'roba', ropa: 'roba', clothing: 'roba',
+  sabata: 'sabates', sabates: 'sabates', zapatillas: 'sabates', shoes: 'sabates',
+  nutricio: 'nutricio', nutricion: 'nutricio', nutrition: 'nutricio',
+  accessori: 'accessoris', accessoris: 'accessoris', accesorios: 'accessoris', accessories: 'accessoris',
+};
+
+/** La categoria d'equipament d'un nom de categoria del catàleg, o `null` si no és de la botiga. */
+export function categoriaVendaDe(nom: string | null): CategoriaEquipament | null {
+  if (!nom) return null;
+  const clau = nom.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+  return CATEGORIES_VENDA[clau] ?? null;
+}
+
+type ProducteVenda = NonNullable<RentalCatalogResponse['saleProducts']>[number];
+
+/** Un producte de venda de la plataforma, com a article de la botiga de la web. */
+function articleDe(p: ProducteVenda, categoria: CategoriaEquipament): Article {
+  const marca = p.attributes.marca ?? p.attributes.brand;
+  return article.parse({
+    id: p.id,
+    categoria,
+    marca: typeof marca === 'string' ? marca : '',
+    nom: p.name,
+    preu: p.priceBasis === 'on_request' ? null : p.priceCents,
+    preuBase: p.priceBasis === 'on_request' || p.priceCents === null ? 'consultar' : p.priceBasis === 'from' ? 'desDe' : 'exacte',
+    ...(p.description && { descripcio: p.description }),
+    ...(p.imageUrl && { imatge: p.imageUrl }),
+    ficticia: false,
+  });
 }
 
 /** En tornar de la pàgina de pagament, la plataforma hi afegeix si s'ha pagat o s'ha cancel·lat. */
@@ -318,7 +365,12 @@ export function crearPlataformaRemota({ url, clau, proves, fetch = globalThis.fe
     // El catàleg per ensenyar-lo, de les dades de prova fins que la plataforma el tingui.
     nutricio: () => proves.nutricio(),
     productes: () => proves.productes(),
-    articles: (categoria) => proves.articles(categoria),
+    // Els productes de venda de la plataforma (`saleProducts`). Mentre la botiga no n'hagi donat d'alta
+    // cap d'una categoria, els de prova, que són de mostra i no ensenyen el preu.
+    articles: async (categoria) => {
+      const venda = ((await cataleg()).saleProducts ?? []).filter((p) => categoriaVendaDe(p.category) === categoria);
+      return venda.length ? venda.map((p) => articleDe(p, categoria)) : proves.articles(categoria);
+    },
     valoracio: () => proves.valoracio(),
     ressenyes: () => proves.ressenyes(),
   };

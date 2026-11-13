@@ -202,9 +202,12 @@
   },
   "botigaCategoria": {
     "tornar": "Torna a l’inici",
-    "aviat": "La botiga en línia arriba aviat. De moment, reserva-ho per WhatsApp i passa a recollir-ho a la botiga: t’ho tindrem a punt.",
+    "aviat": "Aquí tens el que trobaràs a la botiga. Per reservar-ho, escriu-nos per WhatsApp i passa a recollir-ho: t’ho tindrem a punt.",
     "reservar": "Reserva-ho per WhatsApp",
-    "missatge": "Hola! Voldria reservar: {article}."
+    "missatge": "Hola! Voldria reservar: {article}.",
+    "veureMarca": "Mira la marca {marca}",
+    "preuConsultar": "Preu a consultar",
+    "preuDesDe": "Des de {preu}"
   },
   "marques": {
     "situacio": "Les marques",
@@ -297,7 +300,9 @@
     "telefon": "Truca'ns",
     "whatsapp": "Escriu-nos per WhatsApp",
     "correu": "Correu",
-    "mapa": "Com arribar-hi"
+    "mapa": "Com arribar-hi",
+    "mapaAria": "Mapa amb la botiga Tecnibike",
+    "comArribar": "Com arribar-hi"
   },
   "peu": {
     "lema": "Lloguer, taller i botiga de bicis a la Costa Brava des de fa més de 15 anys.",
@@ -589,7 +594,7 @@
     "ambLaBici": "Afegeix-la a la teva bici de lloguer",
     "perWhatsapp": "O demana-la per WhatsApp",
     "missatge": "Hola! Voldria reservar nutrició per a la ruta (gels, barretes…). Què teniu?",
-    "nota": "Fotos de producte de les webs de les marques. Preus i estoc de mostra*.",
+    "nota": "Fotos de producte de les webs de les marques. Preus a la botiga.",
     "marca": "Marca",
     "totes": "Totes",
     "sabor": "Sabor",

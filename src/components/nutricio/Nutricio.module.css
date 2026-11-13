@@ -5,12 +5,6 @@
   padding-block: var(--section);
   background: var(--escenari);
 }
-.cap {
-  margin-bottom: clamp(32px, 5vw, 56px);
-}
-.cap :global(.titol-seccio) {
-  max-width: 13ch;
-}
 
 /* ── L'escena de les marques ─────────────────────────────────────────────────────────────── */
 

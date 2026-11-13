@@ -61,6 +61,7 @@ const cataleg = RentalCatalogResponseSchema.parse({
     { id: COMPTA, name: 'Comptaquilòmetres', description: null, imageUrl: null, groupId: G_ACCESSORIS, priceCents: 200, priceUnit: 'day', limited: true, variants: [] },
   ],
   seasons: [],
+  shopItems: [],
 });
 
 const feiner = (weekday: number) => ({ weekday, opensAt: '09:00', closesAt: '20:00' });
@@ -78,8 +79,8 @@ const hores = RentalHoursResponseSchema.parse({
 const ajustos = (payment?: { mode: 'none' | 'deposit' | 'full'; depositPercent: number | null }) =>
   RentalSettingsResponseSchema.parse({
     timeZone: 'Europe/Madrid', slotMinutes: 30, maxDays: 30, minNoticeMinutes: 60, turnaroundMinutes: 30, halfDayMinutes: 240,
-    holdMinutes: 15, paymentEnabled: false, participantsEnabled: false,
-    ...(payment && { payment: { ...payment, cancellation: { noticeHours: 48, refundPercentInside: 100, refundPercentOutside: 0 } } }),
+    holdMinutes: 15, paymentEnabled: false, participantsEnabled: false, shopItemsEnabled: false,
+    ...(payment && { payment: { ...payment, payAtShop: false, cancellation: { noticeHours: 48, refundPercentInside: 100, refundPercentOutside: 0 } } }),
   });
 
 type Crida = { metode: string; url: URL; capcaleres: Headers; cos: unknown };
@@ -174,6 +175,7 @@ describe('plataforma remota: disponibilitat i reserva', () => {
         { optionId: PLANS, variants: [{ variant: null, free: null }] },
         { optionId: CASC, variants: [{ variant: 'S', free: 1 }, { variant: 'M', free: 4 }] },
       ],
+      shopItems: [],
     });
     const { plataforma, crides } = remota({ [`GET ${R}/availability`]: { cos: lliures } });
     expect(await plataforma.disponibilitat(recollida, retorn, ['btt'])).toEqual({
@@ -270,7 +272,7 @@ describe('plataforma remota: disponibilitat i reserva', () => {
   });
 
   it('retenir, pagar i consultar una retenció', async () => {
-    const retinguda = { holdId: RETENCIO, status: 'active', expiresAt: '2026-10-27T07:15:00.000Z', totalCents: 8460, currency: 'EUR', timeZone: 'Europe/Madrid', pickup: feta.pickup, return: feta.return, booking: null };
+    const retinguda = { holdId: RETENCIO, status: 'active', expiresAt: '2026-10-27T07:15:00.000Z', totalCents: 8460, rentalCents: 8460, shopCents: 0, currency: 'EUR', timeZone: 'Europe/Madrid', pickup: feta.pickup, return: feta.return, booking: null };
     const { plataforma, crides } = remota({
       [`POST ${R}/holds`]: { estat: 201, cos: { ...retinguda, accessToken: 'y'.repeat(40) } },
       [`POST ${R}/holds/${RETENCIO}/checkout`]: { estat: 201, cos: { checkoutUrl: 'https://pagament.prova/s/1', expiresAt: '2026-10-27T07:30:00.000Z', amountCents: 2538, totalCents: 8460, currency: 'EUR', mode: 'deposit' } },
@@ -280,6 +282,37 @@ describe('plataforma remota: disponibilitat i reserva', () => {
     await expect(plataforma.iniciarPagament(RETENCIO, 'senyal', 'https://web.prova/ca/reserva/pagament')).resolves.toEqual({ url: 'https://pagament.prova/s/1' });
     expect(crides.at(-1)!.cos).toEqual({ mode: 'deposit', returnUrl: 'https://web.prova/ca/reserva/pagament' });
     await expect(plataforma.estatRetencio(RETENCIO)).resolves.toEqual({ estat: 'convertida', codi: '6DB3FA' });
+  });
+});
+
+describe("plataforma remota: la botiga d'equipament", () => {
+  const venda = (id: string, categoria: string | null, marca: string, preu: number | null, base: 'exact' | 'from' | 'on_request' = 'exact') => ({
+    id, name: `Article ${id.slice(-1)}`, description: null, imageUrl: 'https://abc.supabase.co/storage/v1/object/public/cataleg/a.png',
+    category: categoria, attributes: { marca }, priceCents: preu, priceBasis: base, vatIncluded: true,
+  });
+  const ambVenda = (saleProducts: unknown[]) => ({ [`GET ${R}/catalog`]: { cos: { ...cataleg, saleProducts } } });
+
+  it('els articles i els preus surten dels productes de venda de la plataforma, per categoria', async () => {
+    const { plataforma } = remota(ambVenda([
+      venda('d0000000-0000-4000-8000-000000000001', 'Cascs', 'POC', 27000),
+      venda('d0000000-0000-4000-8000-000000000002', 'Nutrició', 'Maurten', 350),
+      venda('d0000000-0000-4000-8000-000000000003', 'cascs', 'Kask', 19900, 'from'),
+      venda('d0000000-0000-4000-8000-000000000004', 'Cascs', 'Kask', null, 'on_request'),
+    ]));
+    const cascs = await plataforma.articles('cascs');
+    expect(cascs.map((a) => [a.marca, a.preu, a.preuBase, a.ficticia])).toEqual([
+      ['POC', 27000, 'exacte', false],
+      ['Kask', 19900, 'desDe', false],
+      ['Kask', null, 'consultar', false],
+    ]);
+    expect(cascs[0]!.imatge).toContain('supabase.co');
+  });
+
+  it("mentre la plataforma no en té cap d'una categoria, surten els de prova, de mostra", async () => {
+    const { plataforma } = remota(ambVenda([]));
+    const roba = await plataforma.articles('roba');
+    expect(roba.length).toBeGreaterThan(0);
+    expect(roba.every((a) => a.ficticia)).toBe(true);
   });
 });
 

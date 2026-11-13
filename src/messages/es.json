@@ -202,9 +202,12 @@
   },
   "botigaCategoria": {
     "tornar": "Volver al inicio",
-    "aviat": "La tienda online llega pronto. De momento, resérvalo por WhatsApp y pasa a recogerlo a la tienda: te lo tendremos listo.",
+    "aviat": "Aquí tienes lo que encontrarás en la tienda. Para reservarlo, escríbenos por WhatsApp y pasa a recogerlo: te lo tendremos a punto.",
     "reservar": "Resérvalo por WhatsApp",
-    "missatge": "¡Hola! Quería reservar: {article}."
+    "missatge": "¡Hola! Quería reservar: {article}.",
+    "veureMarca": "Ver la marca {marca}",
+    "preuConsultar": "Precio a consultar",
+    "preuDesDe": "Desde {preu}"
   },
   "marques": {
     "situacio": "Las marcas",
@@ -297,7 +300,9 @@
     "telefon": "Llámanos",
     "whatsapp": "Escríbenos por WhatsApp",
     "correu": "Correo",
-    "mapa": "Cómo llegar"
+    "mapa": "Cómo llegar",
+    "mapaAria": "Mapa con la tienda Tecnibike",
+    "comArribar": "Cómo llegar"
   },
   "peu": {
     "lema": "Alquiler, taller y tienda de bicis en la Costa Brava desde hace más de 15 años.",
@@ -589,7 +594,7 @@
     "ambLaBici": "Añádela a tu bici de alquiler",
     "perWhatsapp": "O pídela por WhatsApp",
     "missatge": "¡Hola! Quería reservar nutrición para la ruta (geles, barritas…). ¿Qué tenéis?",
-    "nota": "Fotos de producto de las webs de las marcas. Precios y stock de muestra*.",
+    "nota": "Fotos de producto de las webs de las marcas. Precios en la tienda.",
     "marca": "Marca",
     "totes": "Todas",
     "sabor": "Sabor",
