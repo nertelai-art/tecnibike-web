@@ -212,7 +212,7 @@
   "marques": {
     "situacio": "Les marques",
     "titol": "Équipez-vous comme un pro.",
-    "text": "Les vélos, les composants, les vêtements et la nutrition des équipes pros. Faites-les défiler, et si vous en cherchez une, demandez-nous sur WhatsApp.",
+    "text": "Les vélos, les composants, les vêtements et la nutrition des équipes pros. Faites-les défiler et touchez-en une pour en savoir plus.",
     "filtre": "Filtrer par catégorie",
     "categories": {
       "totes": "Toutes",
@@ -240,7 +240,8 @@
     "carrusel": "{n} marques du magasin",
     "pregunta": "Demander pour {marca} sur WhatsApp",
     "missatge": "Bonjour ! Avez-vous du matériel {marca} ?",
-    "preguntar": "Demandez-nous"
+    "veure": "Voir la marque {marca}",
+    "mira": "Voir plus"
   },
   "botiga": {
     "situacio": "La boutique",
@@ -613,5 +614,32 @@
     "veureMes": "Voir plus ({n})",
     "veureMenys": "Voir moins",
     "escenaSr": "Les produits de chaque marque tournent sur eux-mêmes à mesure que vous descendez."
+  },
+  "fitxaMarca": {
+    "tornar": "Toutes les marques",
+    "dades": "La marque en bref",
+    "desDe": "Depuis {any}",
+    "historia": "La marque",
+    "destacats": "Nos coups de cœur",
+    "web": "Site de {marca}",
+    "mes": "Plus de marques : {categoria}",
+    "credits": "Photos du site de {marca} :",
+    "accio": {
+      "bicis": {
+        "titol": "Envie de rouler sur un {marca} ?",
+        "text": "Louez-le pour une journée ou une semaine, ou venez le voir et l’essayer au magasin.",
+        "boto": "Voir la flotte de location"
+      },
+      "components": {
+        "titol": "{marca}, dans notre atelier",
+        "text": "Nous l’utilisons quand nous révisons votre vélo et, si vous le souhaitez, nous l’installons et le réglons. Prenez rendez-vous et venez avec votre vélo.",
+        "boto": "Prendre rendez-vous à l’atelier"
+      },
+      "equipament": {
+        "titol": "{marca}, au magasin",
+        "text": "Venez l’essayer : nous vous aidons à trouver la bonne taille et l’ajustons sur place.",
+        "boto": "Voir les {categoria} au magasin"
+      }
+    }
   }
 }

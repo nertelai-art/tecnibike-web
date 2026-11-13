@@ -1,0 +1,295 @@
+/* Fitxa d'una marca: capçalera amb la foto, història i models destacats al costat de la foto de
+   producte, què pots fer amb la marca a Tecnibike i la resta de marques del mateix grup. */
+
+.pagina {
+  padding-bottom: calc(var(--section) * 0.6);
+}
+
+.cap {
+  position: relative;
+  isolation: isolate;
+  min-height: min(78svh, 720px);
+  display: flex;
+  align-items: flex-end;
+  padding: calc(var(--header-h) + 48px) 0 56px;
+  color: var(--blanc);
+  background: var(--grafit);
+}
+.cap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to top, rgb(18 20 23 / 0.94), rgb(18 20 23 / 0.45) 55%, rgb(18 20 23 / 0.15)),
+    linear-gradient(to right, rgb(18 20 23 / 0.55), transparent 60%);
+}
+.cap[data-sense-foto] {
+  min-height: min(56svh, 520px);
+  background: radial-gradient(120% 90% at 85% 10%, var(--grafit-3), var(--grafit) 70%);
+}
+.fons {
+  z-index: -2;
+  object-fit: cover;
+}
+.capText {
+  animation: entra 0.7s var(--ease) both;
+}
+.capText :global(.situacio) {
+  margin-top: 22px;
+  color: rgb(255 255 255 / 0.75);
+}
+
+.tornar {
+  display: block;
+  width: max-content;
+  margin-bottom: 28px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blanc);
+  text-decoration: none;
+}
+.tornar:hover {
+  color: var(--taronja);
+}
+
+/* El logo, amb els seus colors, en una càpsula blanca sobre la foto. */
+.logo {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  height: 52px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--blanc);
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.5);
+}
+.logo img {
+  height: 100%;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+}
+
+.nom {
+  margin-top: 12px;
+  font-size: clamp(48px, 9vw, 128px);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+.lema {
+  margin-top: 18px;
+  max-width: 40ch;
+  font-size: clamp(18px, 1.8vw, 24px);
+  color: rgb(255 255 255 / 0.85);
+}
+.dades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.dades li {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.12);
+  backdrop-filter: blur(6px);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cos {
+  display: grid;
+  gap: clamp(32px, 5vw, 72px);
+  margin-top: clamp(48px, 7vw, 96px);
+}
+@media (min-width: 900px) {
+  .cos {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.titolPetit {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+.descripcio {
+  margin: 14px 0 44px;
+  max-width: 60ch;
+  font-size: clamp(18px, 1.6vw, 21px);
+  line-height: 1.6;
+  color: var(--tinta);
+}
+
+.destacats {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: destacat;
+  border-top: 1px solid var(--linia);
+}
+.destacats li {
+  counter-increment: destacat;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 2px 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--linia);
+}
+.destacats li::before {
+  content: counter(destacat, decimal-leading-zero);
+  grid-row: span 2;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--taronja);
+  padding-top: 3px;
+}
+.destacats strong {
+  font-size: 20px;
+}
+.destacats span {
+  color: var(--tinta-2);
+}
+
+.web {
+  display: inline-block;
+  margin-top: 28px;
+  font-weight: 700;
+  color: var(--blau-fosc);
+  text-decoration: none;
+}
+.web:hover {
+  text-decoration: underline;
+}
+
+/* La foto de producte, sobre l'escenari clar i sencera (sense retallar). */
+.producte {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1;
+  border-radius: var(--radi);
+  background: radial-gradient(80% 70% at 50% 45%, var(--blanc), var(--escenari-2));
+  overflow: hidden;
+}
+.producte img {
+  object-fit: contain;
+  padding: 6%;
+  /* Algunes fotos porten fons gris o blanc: es fonen amb l'escenari. */
+  mix-blend-mode: multiply;
+}
+@media (min-width: 900px) {
+  .producte {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+  }
+}
+.logoGran {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 25%;
+  object-fit: contain;
+}
+
+.accio {
+  margin-top: clamp(56px, 8vw, 110px);
+}
+.accio {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+}
+.accio > div:first-child {
+  padding-top: 32px;
+  border-top: 2px solid var(--grafit);
+}
+@media (min-width: 900px) {
+  .accio {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+.accioTitol {
+  font-size: clamp(28px, 3.6vw, 44px);
+  max-width: 22ch;
+}
+.accio p {
+  margin-top: 10px;
+  max-width: 56ch;
+  color: var(--tinta-2);
+}
+.botons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.germanes {
+  margin-top: clamp(56px, 8vw, 100px);
+}
+.germanes ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 36px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.germanes a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 56px;
+  text-decoration: none;
+  color: var(--tinta);
+}
+.germanes img {
+  height: 32px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: grayscale(1);
+  opacity: 0.7;
+  transition:
+    filter 0.2s var(--ease),
+    opacity 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+.germanes a:hover img,
+.germanes a:focus-visible img {
+  filter: none;
+  opacity: 1;
+  transform: translateY(-2px);
+}
+.germanes span {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.credits {
+  margin-top: 48px;
+  font-size: 13px;
+  color: var(--tinta-3);
+}
+.credits a {
+  color: inherit;
+}
+
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .capText {
+    animation: none;
+  }
+}

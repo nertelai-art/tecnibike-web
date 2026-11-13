@@ -212,7 +212,7 @@
   "marques": {
     "situacio": "Las marcas",
     "titol": "Equípate como un profesional.",
-    "text": "Las bicis, los componentes, la ropa y la nutrición que usan los equipos. Pásalas, y si buscas una, pregúntanos por WhatsApp.",
+    "text": "Las bicis, los componentes, la ropa y la nutrición que usan los equipos. Pásalas y toca una para saber más.",
     "filtre": "Filtra por categoría",
     "categories": {
       "totes": "Todas",
@@ -240,7 +240,8 @@
     "carrusel": "{n} marcas de la tienda",
     "pregunta": "Pregunta por {marca} por WhatsApp",
     "missatge": "¡Hola! ¿Tenéis material de {marca}?",
-    "preguntar": "Pregúntalo"
+    "veure": "Ver la marca {marca}",
+    "mira": "Ver más"
   },
   "botiga": {
     "situacio": "La tienda",
@@ -613,5 +614,32 @@
     "veureMes": "Ver más ({n})",
     "veureMenys": "Ver menos",
     "escenaSr": "Los productos de cada marca giran sobre sí mismos a medida que bajas."
+  },
+  "fitxaMarca": {
+    "tornar": "Todas las marcas",
+    "dades": "La marca en breve",
+    "desDe": "Desde {any}",
+    "historia": "La marca",
+    "destacats": "Lo que destacamos",
+    "web": "Web de {marca}",
+    "mes": "Más marcas: {categoria}",
+    "credits": "Fotos de la web de {marca}:",
+    "accio": {
+      "bicis": {
+        "titol": "¿Quieres rodar con una {marca}?",
+        "text": "Alquílala por un día o por una semana, o ven a la tienda a verla y probarla.",
+        "boto": "Ver la flota de alquiler"
+      },
+      "components": {
+        "titol": "{marca}, en nuestro taller",
+        "text": "Lo usamos cuando revisamos tu bici y, si lo quieres, te lo ponemos y te lo ajustamos. Pide cita y pasa con la bici.",
+        "boto": "Pedir cita en el taller"
+      },
+      "equipament": {
+        "titol": "{marca}, en la tienda",
+        "text": "Ven a probártelo: te ayudamos a encontrar la talla y te lo ajustamos al momento.",
+        "boto": "Ver {categoria} en la tienda"
+      }
+    }
   }
 }

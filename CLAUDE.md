@@ -77,8 +77,8 @@ Versions que **no** són l'última, i per què:
 - **Variants d'extres:** un extra pot tenir variants (la talla del casc), cadascuna amb el seu estoc.
   Un cop triat, la rajola demana quina; la plataforma les rep a `items[].options[].variant`.
 - **Nutrició esportiva** (`src/components/nutricio/`, recerca a
-  [docs/nutricio-productes.md](docs/nutricio-productes.md)). A la portada, després de Rutes, hi ha una escena
-  fixa amb un capítol per marca (Maurten, 226ERS, Nutrinovex i SiS, amb els seus colors de
+  [docs/nutricio-productes.md](docs/nutricio-productes.md)). A la pàgina de la botiga `/[locale]/botiga/nutricio`
+  (abans era a la portada; es va moure el 13-11-2026) hi ha una escena fixa amb un capítol per marca (Maurten, 226ERS, Nutrinovex i SiS, amb els seus colors de
   `src/content/nutricio.ts`). Amb el scroll, els productes entren girant sobre si mateixos (CSS 3D,
   sense three.js), es queden de cara i surten. La coreografia és a `escena-marques.ts`, amb proves.
   Es fa una sola vegada: quan s'arriba al final i el scroll s'atura, el recorregut es plega a
@@ -96,7 +96,7 @@ Versions que **no** són l'última, i per què:
   propi, i l'estoc es ven i no torna (no depèn de les dates). Està **apagada**
   (`configuracioReserves.nutricio.actiu`) a producció, a les previsualitzacions i amb la plataforma
   real: és feina nova fora del pressupost i l'ha de decidir l'Enric (coordinadora de la plataforma,
-  11-11-2026). Només s'encén amb `pnpm dev` (`index.ts`), per ensenyar-la. Apagada, la portada
+  11-11-2026). Només s'encén amb `pnpm dev` (`index.ts`), per ensenyar-la. Apagada, la pàgina
   demana la nutrició per WhatsApp i una reserva que en porti es rebutja. Si tira endavant, la
   plataforma provarà de reutilitzar el catàleg i les comandes que ja té (una reserva amb una comanda
   de botiga lligada, amb estoc per variant), i el contracte es tornarà a copiar. Si un producte no té foto, surt una il·lustració pròpia (`Paquet.tsx`). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
@@ -112,9 +112,22 @@ Versions que **no** són l'última, i per què:
   per la vora dreta i les rodes giren el que recorre. Les capes (`public/img/bici-scroll/`) les fa
   `python scripts/capes-bici.py public/img/flota/carretera.jpg public/img/bici-scroll 360` (Pillow i
   NumPy). Només amb ratolí i pantalla ≥ 1000 px; si no, la barra del navegador amb els colors.
-- **Botiga d'equipament:** la plataforma ja té `articles(categoria)` i cada categoria té pàgina a
-  `/[locale]/botiga/[categoria]`. Ara es reserva per WhatsApp; quan es pugui vendre en línia, el botó
-  es canvia per la cistella. Les fotos són de Wikimedia Commons, amb els crèdits al peu.
+- **Botiga d'equipament:** cada categoria té pàgina a `/[locale]/botiga/[categoria]`. Tecnibike de
+  moment només fa lloguer i cites de taller, no ven en línia: es reserva per WhatsApp i, quan es pugui
+  vendre, el botó es canvia per la cistella. Els articles són els productes de venda de la plataforma
+  (`saleProducts`, categoria pel nom: `categoriaVendaDe` a `remota/index.ts`); **el preu només surt si
+  ve de la plataforma** (tancat, «des de» o a consultar), perquè l'equip de la botiga sàpiga que el que
+  es veu és el que hi ha posat. Mentre no n'hi hagi cap d'una categoria, surten els de mostra, sense
+  preu. Les fotos de les categories són de Wikimedia Commons, amb els crèdits al peu.
+- **Marques:** clicar una marca (carrusel de l'inici o tira d'una categoria) porta a `enllacMarca`: les
+  de nutrició, al catàleg de nutrició filtrat (`?marca=`); la resta, a la seva fitxa
+  `/[locale]/marques/[slug]` (`src/content/fitxes-marques.ts`: país, any, història, models destacats
+  en quatre idiomes, i què se'n pot fer a Tecnibike). Recerca del 13-11-2026 a les webs oficials; els
+  dubtes que en van quedar no s'han posat. Les fotos són de les webs de les marques
+  (`public/img/marques/fitxes/`, amb la font al peu); Oakley i Shimano encara no en tenen (les webs
+  tornaven 403) i pinten el logo. Una prova obliga que cada marca que no és de nutrició tingui fitxa.
+- **On som:** mapa MapLibre de la botiga a la secció de visita (`src/components/visita/MapaBotiga.tsx`),
+  que es carrega quan s'hi arriba, amb el botó «Com arribar-hi» a Google Maps.
 - **Dades de mostra:** tot el que és inventat porta `ficticia: true` a les dades i un `*` a la
   pàgina, amb la nota al peu. Abans de publicar, cap d'aquestes dades pot quedar sense confirmar.
 
