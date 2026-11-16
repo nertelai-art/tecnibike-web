@@ -56,7 +56,7 @@ export default async function FitxaVenda({ params }: Params) {
             ← {t('tornar')}
           </Link>
 
-          <Galeria fotos={fotos} alt={nom} etiquetes={fotos.map((_, i) => t('foto', { n: i + 1, total: fotos.length }))}>
+          <Galeria fotos={fotos} alt={nom} transicio={`venda-${bici.id}`} etiquetes={fotos.map((_, i) => t('foto', { n: i + 1, total: fotos.length }))}>
             {bici.ficticia && <span className={styles.etiquetaMostra}>{t('mostraEtiqueta')}</span>}
           </Galeria>
 

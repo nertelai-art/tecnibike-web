@@ -106,7 +106,8 @@
       "de2a6": "2–6 dies",
       "mesDe6": "+6 dies",
       "nota": "Preu per bici i per dia. Casc inclòs*."
-    }
+    },
+    "veureBici": "Mira-la"
   },
   "comFunciona": {
     "titol": "Llogar és així de fàcil.",
