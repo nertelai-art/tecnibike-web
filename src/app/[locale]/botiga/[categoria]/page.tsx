@@ -24,6 +24,10 @@ import styles from '@/components/botiga/Categoria.module.css';
 
 type Params = { params: Promise<{ locale: string; categoria: string }> };
 
+// Es torna a generar cada 5 minuts (REVALIDA_S de la plataforma), perquè el que canviï a la plataforma
+// hi surti: vegeu src/app/revalida.test.ts.
+export const revalidate = 300;
+
 export function generateStaticParams() {
   return CATEGORIES_EQUIPAMENT.map((categoria) => ({ categoria }));
 }
