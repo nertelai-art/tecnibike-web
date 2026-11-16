@@ -277,3 +277,25 @@
   font-size: 14px;
   color: var(--tinta-2);
 }
+
+/* A la compra, si les bicis són de mostra (la botiga encara no n'ha donat d'alta cap), es diu ben clar. */
+.avisMostra {
+  margin: 28px 0 0;
+  padding: 12px 16px;
+  border: 1.5px dashed var(--taronja);
+  border-radius: 12px;
+  background: #fff4ec;
+  color: var(--tinta);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.avisMostra strong {
+  margin-right: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--taronja-fosc);
+  color: var(--blanc);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

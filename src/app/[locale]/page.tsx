@@ -14,8 +14,9 @@ export const revalidate = 300;
 export default async function Inici({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [flota, serveis, valoracio, ressenyes] = await Promise.all([
+  const [flota, venda, serveis, valoracio, ressenyes] = await Promise.all([
     plataforma.flota(),
+    plataforma.bicisVenda(),
     plataforma.serveisTaller(),
     plataforma.valoracio(),
     plataforma.ressenyes(),
@@ -25,7 +26,7 @@ export default async function Inici({ params }: { params: Promise<{ locale: stri
     <>
       <main>
         <Portada valoracio={valoracio} />
-        <Flota flota={flota} />
+        <Flota flota={flota} venda={venda} />
         <ComFunciona />
         <Taller />
         <Rutes />

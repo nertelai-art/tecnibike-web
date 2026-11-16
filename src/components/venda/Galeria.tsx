@@ -4,7 +4,7 @@
 // canviar-la. La primera és la principal de la plataforma.
 
 import Image from 'next/image';
-import { useState, type ReactNode } from 'react';
+import { useState, ViewTransition, type ReactNode } from 'react';
 import { optimitzable } from '@/lib/imatges';
 import styles from './Venda.module.css';
 
@@ -15,18 +15,22 @@ type Props = {
   etiquetes: readonly string[];
   /** El que va a sobre de la foto (l'etiqueta de mostra). */
   children?: ReactNode;
+  /** El nom de la transició, el mateix que a la targeta: en entrar, la foto creix i es col·loca. */
+  transicio?: string;
 };
 
-export function Galeria({ fotos, alt, etiquetes, children }: Props) {
+export function Galeria({ fotos, alt, etiquetes, children, transicio }: Props) {
   const [triada, setTriada] = useState(0);
   const foto = fotos[triada] ?? fotos[0];
 
   return (
     <div className={styles.galeria}>
-      <div className={styles.fotoGran}>
-        {foto && <Image key={foto} src={foto} alt={alt} width={1200} height={900} priority sizes="(min-width: 860px) 55vw, 92vw" unoptimized={!optimitzable(foto)} />}
-        {children}
-      </div>
+      <ViewTransition name={transicio} share="morph" default="none">
+        <div className={styles.fotoGran}>
+          {foto && <Image key={foto} src={foto} alt={alt} width={1200} height={900} priority sizes="(min-width: 860px) 55vw, 92vw" unoptimized={!optimitzable(foto)} />}
+          {children}
+        </div>
+      </ViewTransition>
       {fotos.length > 1 && (
         <ul className={styles.miniatures}>
           {fotos.map((f, i) => (
