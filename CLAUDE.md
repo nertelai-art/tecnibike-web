@@ -32,7 +32,14 @@ Versions que **no** són l'última, i per què:
 - **Plataforma Nertel (app.nertel.ai):** tot el negoci (flota, disponibilitat, taller, reserves)
   passa per `src/lib/plataforma/` (contracte a `interficie.ts`). La plataforma és la font de veritat:
   si el client hi canvia una foto o un preu, la web canvia (catàleg, horari i ajustos es tornen a
-  llegir cada 5 minuts; la disponibilitat i les reserves, sempre en directe). Dues implementacions:
+  llegir cada 5 minuts; la disponibilitat i les reserves, sempre en directe). **Una compilació demana el
+  catàleg, l'horari i els ajustos una sola vegada per procés** (`compilant`, amb `NEXT_PHASE`): a Vercel,
+  la memòria de `fetch` no torna res durant la compilació i el 16-11-2026 cada pàgina va tornar a la
+  plataforma (593 crides en dues previsualitzacions, i la plataforma alentida). Per això les pàgines que
+  la llegeixen diuen `export const revalidate = 300` (una prova ho obliga). Es comprova amb
+  `node scripts/compta-crides-build.mjs --sense-cau`, contra una plataforma falsa; mai contra producció.
+  Detalls i què fer amb les previsualitzacions: [docs/compilacio-i-plataforma.md](docs/compilacio-i-plataforma.md).
+  Dues implementacions:
   - `remota/`: l'API de lloguer de la plataforma. S'activa amb `PLATAFORMA_API_URL` i
     `PLATAFORMA_API_CLAU` (només servidor, mai `NEXT_PUBLIC_`; noms a `.env.example`, valors a
     Vercel). La clau és de la botiga, amb els abasts `rental_read` i `rental_write`.
