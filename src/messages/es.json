@@ -17,6 +17,11 @@
     "tancar": "Cerrar el menú",
     "inici": "Tecnibike, inicio"
   },
+  "selector": {
+    "etiqueta": "Alquiler o compra",
+    "lloguer": "Alquiler",
+    "compra": "Compra"
+  },
   "mostra": {
     "marca": "Dato de muestra, pendiente de confirmar",
     "nota": "Los datos marcados con * son de muestra y deben confirmarse con Tecnibike."
@@ -80,7 +85,6 @@
   "flota": {
     "situacio": "Alquiler",
     "titol": "Elige tu bici.",
-    "intro": "Bicis de nuestra tienda, revisadas después de cada alquiler. El precio baja cuantos más días la tienes.",
     "categories": {
       "totes": "Todas",
       "muntanya": "Montaña",
@@ -211,7 +215,6 @@
     "preuDesDe": "Desde {preu}"
   },
   "venda": {
-    "situacio": "Tienda",
     "titol": "Bicis en venta",
     "intro": "Las bicis que vendemos en la tienda de Sant Antoni de Calonge. Pregúntanos por WhatsApp por tu talla y ven a probarla.",
     "tornarInici": "Volver al inicio",

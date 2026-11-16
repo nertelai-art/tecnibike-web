@@ -17,6 +17,11 @@
     "tancar": "Close menu",
     "inici": "Tecnibike, home"
   },
+  "selector": {
+    "etiqueta": "Rent or buy",
+    "lloguer": "Rent",
+    "compra": "Buy"
+  },
   "mostra": {
     "marca": "Sample data, to be confirmed",
     "nota": "Data marked with * is sample data and must be confirmed with Tecnibike."
@@ -80,7 +85,6 @@
   "flota": {
     "situacio": "Rental",
     "titol": "Choose your bike.",
-    "intro": "Bikes from our own shop, checked after every rental. The more days you keep it, the lower the price.",
     "categories": {
       "totes": "All",
       "muntanya": "Mountain",
@@ -211,7 +215,6 @@
     "preuDesDe": "From {preu}"
   },
   "venda": {
-    "situacio": "Shop",
     "titol": "Bikes for sale",
     "intro": "The bikes we sell at our shop in Sant Antoni de Calonge. Ask us about your size on WhatsApp and come and try it.",
     "tornarInici": "Back to home",

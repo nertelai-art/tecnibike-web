@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Peu } from '@/components/Seccions';
+import { SelectorLloguerCompra } from '@/components/SelectorLloguerCompra';
 import { textPreuVenda } from '@/components/venda/preu';
 import { Link } from '@/i18n/navigation';
 import { optimitzable } from '@/lib/imatges';
@@ -39,9 +40,8 @@ export default async function BicisEnVenda({ params }: Params) {
             <Link href="/" className={styles.tornar}>
               ← {t('tornarInici')}
             </Link>
-            <p className="situacio">{t('situacio')}</p>
+            <SelectorLloguerCompra actiu="compra" tema="fosc" />
             <h1 className="titol-seccio">{t('titol')}</h1>
-            <p className="intro">{t('intro')}</p>
           </div>
         </header>
 
