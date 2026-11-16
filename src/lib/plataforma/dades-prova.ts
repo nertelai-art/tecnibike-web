@@ -1,4 +1,4 @@
-import type { Article, BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, Producte, Ressenya, ServeiTaller, Valoracio } from './esquema';
+import type { Article, BiciLloguer, BiciVenda, ConfiguracioReserves, Extra, HorariBotiga, Producte, Ressenya, ServeiTaller, Valoracio } from './esquema';
 
 // Dades de la implementació de proves. Les tarifes són les oficials del PDF de 2026; el que porta
 // `ficticia: true` és inventat perquè es vegi com queda i no es pot publicar sense confirmar-ho.
@@ -221,6 +221,29 @@ export const articles: Article[] = [
 ];
 
 /** Consultat a Google Maps el 23-10-2026. */
+// Bicis en venda de MOSTRA, per veure la pàgina mentre la botiga no n'hagi donat d'alta cap al catàleg
+// de la plataforma (categoria «Bicicletes»). Les fotos són de la flota de lloguer i no tenen preu: la
+// pàgina diu ben clar que són de mostra.
+const mostra = (id: string, nom: string, imatge: string, talles: string[], fitxa: BiciVenda['fitxa']): BiciVenda => ({
+  id, nom, marca: '', preu: null, preuBase: 'consultar', ivaInclos: true, imatge, imatges: [imatge], estoc: null, nomVariants: 'Talles',
+  variants: talles.map((nom) => ({ nom, preu: null, estoc: null })), fitxa, ficticia: true,
+});
+
+export const bicisVenda: BiciVenda[] = [
+  mostra('mostra-carretera', 'Bici de carretera', '/img/flota/carretera.jpg', ['51', '54', '56'], [
+    { camp: 'quadre', valor: 'Carboni' }, { camp: 'grup', valor: 'Shimano 105 Di2' }, { camp: 'frens', valor: 'Disc hidràulic' },
+  ]),
+  mostra('mostra-gravel', 'Bici de gravel', '/img/flota/gravel.png', ['S', 'M', 'L'], [
+    { camp: 'quadre', valor: 'Alumini' }, { camp: 'grup', valor: 'Shimano GRX' }, { camp: 'elèctrica', valor: false },
+  ]),
+  mostra('mostra-e-btt', 'BTT elèctrica de doble suspensió', '/img/flota/e-btt-doble.png', ['M', 'L'], [
+    { camp: 'motor', valor: 'Shimano EP801' }, { camp: 'bateria', valor: '630 Wh' }, { camp: 'elèctrica', valor: true },
+  ]),
+  mostra('mostra-urbana', 'Bici urbana elèctrica', '/img/flota/e-urbana.png', ['Única'], [
+    { camp: 'motor', valor: 'Bafang' }, { camp: 'autonomia', valor: '80 km' }, { camp: 'elèctrica', valor: true },
+  ]),
+];
+
 export const valoracioGoogle: Valoracio = { mitjana: 4.3, total: 123, font: 'google' };
 
 /** Ressenyes reals de Google (textos literals). Cal el vistiplau del client per publicar-les. */

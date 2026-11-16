@@ -6,6 +6,7 @@
   "nav": {
     "saltar": "Ir al contenido",
     "lloguer": "Alquiler",
+    "venda": "Venta",
     "taller": "Taller",
     "rutes": "Rutas",
     "botiga": "Tienda",
@@ -208,6 +209,40 @@
     "veureMarca": "Ver la marca {marca}",
     "preuConsultar": "Precio a consultar",
     "preuDesDe": "Desde {preu}"
+  },
+  "venda": {
+    "situacio": "Tienda",
+    "titol": "Bicis en venta",
+    "intro": "Las bicis que vendemos en la tienda de Sant Antoni de Calonge. Pregúntanos por WhatsApp por tu talla y ven a probarla.",
+    "tornarInici": "Volver al inicio",
+    "tornar": "Todas las bicis en venta",
+    "mostraEtiqueta": "Muestra",
+    "mostra": "Todavía no hay ninguna bici en venta en el catálogo de la tienda. Estas son de muestra, para que veas cómo quedará la página: no están a la venta.",
+    "mostraFitxa": "Esta bici es de muestra y no está a la venta. Cuando la tienda dé de alta sus bicis en el catálogo, saldrán aquí con el precio.",
+    "opcions": "Opciones",
+    "preuConsultar": "Precio a consultar",
+    "preuDesDe": "Desde {preu}",
+    "ivaInclos": "IVA incluido",
+    "ivaNoInclos": "IVA no incluido",
+    "preguntar": "Pregunta por WhatsApp",
+    "missatge": "¡Hola! Me interesa la bici {bici}. ¿Me podéis contar más?",
+    "nota": "De momento no vendemos en línea: escríbenos y te la reservamos en la tienda para que la puedas probar.",
+    "fitxaTecnica": "Ficha técnica",
+    "si": "Sí",
+    "no": "No",
+    "lloguer": "¿Quieres probar una antes de decidirte? También las alquilamos.",
+    "lloguerEnllac": "Mira las bicis de alquiler",
+    "foto": "Foto {n} de {total}",
+    "disponibilitat": {
+      "disponible": "Disponible en la tienda",
+      "esgotada": "Agotada",
+      "perEncarrec": "Por encargo"
+    },
+    "enEstoc": "{n, plural, one {# unidad} other {# unidades}}",
+    "talla": {
+      "esgotada": "Agotada",
+      "queden": "{n, plural, one {Queda #} other {Quedan #}}"
+    }
   },
   "marques": {
     "situacio": "Las marcas",

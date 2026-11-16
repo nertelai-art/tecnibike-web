@@ -1,6 +1,7 @@
 import type {
   Article,
   BiciLloguer,
+  BiciVenda,
   CategoriaEquipament,
   CitaTaller,
   Confirmacio,
@@ -81,6 +82,10 @@ export interface Plataforma {
   productes(): Promise<Producte[]>;
   /** Articles de la botiga d'equipament d'una categoria. */
   articles(categoria: CategoriaEquipament): Promise<Article[]>;
+  /** Bicis en venda: els productes de venda de la categoria de bicis del catàleg (no la flota de lloguer). */
+  bicisVenda(): Promise<BiciVenda[]>;
+  /** Una bici en venda per la seva adreça, o `null`. */
+  biciVenda(id: string): Promise<BiciVenda | null>;
   valoracio(): Promise<Valoracio>;
   ressenyes(): Promise<Ressenya[]>;
 }

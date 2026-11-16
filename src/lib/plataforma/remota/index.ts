@@ -1,17 +1,22 @@
 import {
   article,
   biciLloguer,
+  biciVenda,
   categoriaLloguer,
   citaTaller,
   serveiTaller,
   type Peca,
   type Article,
   type BiciLloguer,
+  type BiciVenda,
   type CategoriaEquipament,
   type CategoriaLloguer,
   type Extra,
   type HorariBotiga,
+  type MomentNutricio,
+  type ProducteNutricio,
   type ReservaLloguer,
+  type TipusNutricio,
   type Tarifa,
 } from '../esquema';
 import { ErrorReserva, type Plataforma } from '../interficie';
@@ -38,7 +43,8 @@ import { WebBookingAvailabilityResponseSchema, WebBookingErrorResponseSchema, We
 // variables d'entorn sense `NEXT_PUBLIC_`, que Next no posa mai al codi del navegador.
 //
 // El que la plataforma encara no té a l'API (els productes per peça, les ressenyes i els
-// participants) surt de la implementació de proves.
+// participants) surt de la implementació de proves. La nutrició i les bicis en venda, també, mentre
+// la botiga no n'hagi donat d'alta cap al catàleg.
 
 /**
  * Quant temps es reaprofita el catàleg, l'horari i els ajustos: el que hi canviï a la plataforma surt
@@ -240,6 +246,109 @@ export function pecaDe(s: ServeiCataleg): Peca | null {
   return null;
 }
 
+type ArticleBotiga = RentalCatalogResponse['shopItems'][number];
+
+/** El primer atribut que hi hagi d'unes quantes claus (la botiga les escriu en minúscules, en qualsevol idioma). */
+function atribut(atributs: Record<string, unknown>, ...claus: string[]): unknown {
+  for (const clau of claus) if (atributs[clau] !== undefined && atributs[clau] !== null && atributs[clau] !== '') return atributs[clau];
+  return undefined;
+}
+
+const text = (valor: unknown) => (typeof valor === 'string' && valor.trim() ? valor.trim() : undefined);
+const nombre = (valor: unknown) =>
+  typeof valor === 'number' && valor >= 0 ? valor : typeof valor === 'string' && /^\d+([.,]\d+)?$/.test(valor.trim()) ? Number(valor.trim().replace(',', '.')) : undefined;
+
+/** El tipus d'un producte de nutrició: el camp «Tipus» del catàleg o, si no hi és, el nom. Sense pistes, gel. */
+export function tipusNutricioDe(nom: string, atributs: Record<string, unknown>): TipusNutricio {
+  const pista = normalitza(`${text(atribut(atributs, 'tipus', 'tipo', 'type')) ?? ''} ${nom}`);
+  if (/recupera|recovery/.test(pista)) return 'recuperacio';
+  if (/barr|(^|-)bar(-|$)/.test(pista)) return 'barreta';
+  if (/gomin|chew|gummi/.test(pista)) return 'gominoles';
+  if (/pastill|tab/.test(pista)) return 'pastilles';
+  if (/shot/.test(pista)) return 'shot';
+  if (/beguda|bebida|drink|isoton|hidrat|mix/.test(pista)) return 'beguda';
+  return 'gel';
+}
+
+const MOMENTS: Record<string, MomentNutricio> = {
+  abans: 'abans', antes: 'abans', before: 'abans',
+  durant: 'durant', durante: 'durant', during: 'durant',
+  despres: 'despres', despues: 'despres', after: 'despres',
+};
+
+/** Un article de botiga de la plataforma (`shopItems`) com a producte de nutrició de la web. */
+function producteNutricioDe(a: ArticleBotiga): ProducteNutricio {
+  const moments = String(atribut(a.attributes, 'moment', 'moments', 'momento') ?? '')
+    .split(/[,;/]/)
+    .map((m) => MOMENTS[normalitza(m)])
+    .filter((m): m is MomentNutricio => m !== undefined);
+  const carbohidrats = nombre(atribut(a.attributes, 'carbohidrats', 'carbohidratos', 'carbs'));
+  const cafeina = nombre(atribut(a.attributes, 'cafeïna', 'cafeina', 'caffeine'));
+  return {
+    id: a.id,
+    marca: text(atribut(a.attributes, 'marca', 'brand')) ?? '',
+    nom: a.name,
+    tipus: tipusNutricioDe(a.name, a.attributes),
+    moments: moments.length ? [...new Set(moments)] : ['durant'],
+    format: text(atribut(a.attributes, 'format', 'formato', 'size')) ?? '',
+    ...(carbohidrats !== undefined && { carbohidratsG: carbohidrats }),
+    ...(cafeina !== undefined && cafeina > 0 && { cafeinaMg: cafeina }),
+    ...(a.description && { descripcio: a.description }),
+    ...(a.imageUrl && { imatge: a.imageUrl }),
+    preu: a.priceCents,
+    // Sense sabors, la plataforma n'envia un de sol sense nom: el nom buit no s'ensenya.
+    sabors: a.variants.map((v) => ({
+      id: v.id,
+      nom: v.label ?? '',
+      ...(v.priceCents !== null && v.priceCents !== a.priceCents && { preu: v.priceCents }),
+      estoc: null,
+    })),
+    ficticia: false,
+  };
+}
+
+/** Si una categoria del catàleg és la de les bicis en venda: «Bicicletes», «Bicis de segona mà», «Bikes»… */
+export function esCategoriaBicis(nom: string | null | undefined): boolean {
+  return Boolean(nom) && /^(bici|bicicleta|bicycle|bike)/.test(normalitza(nom!));
+}
+
+/** Els atributs que no van a la fitxa tècnica: la marca ja surt a dalt, i l'adreça és de la web. */
+const FORA_DE_FITXA = new Set(['marca', 'brand', 'slug']);
+
+const DISPONIBILITATS = { available: 'disponible', unavailable: 'esgotada', on_order: 'perEncarrec' } as const;
+
+/** L'estoc de la plataforma: nul (o no hi és) vol dir que no se'n porta el compte, no que sigui zero. */
+const estocDe = (n: number | null | undefined) => (typeof n === 'number' ? Math.max(0, n) : null);
+
+/** Un producte de venda de la categoria de bicis com a bici en venda de la web. */
+function biciVendaDe(p: ProducteVenda, id: string): BiciVenda {
+  const fitxa = Object.entries(p.attributes).flatMap(([camp, valor]): BiciVenda['fitxa'] => {
+    if (FORA_DE_FITXA.has(camp)) return [];
+    if (typeof valor === 'boolean') return [{ camp, valor }];
+    if (typeof valor === 'number') return [{ camp, valor: String(valor) }];
+    const escrit = text(valor);
+    return escrit ? [{ camp, valor: escrit }] : [];
+  });
+  const consultar = p.priceBasis === 'on_request' || p.priceCents === null;
+  return biciVenda.parse({
+    id,
+    nom: p.name,
+    marca: text(atribut(p.attributes, 'marca', 'brand')) ?? '',
+    preu: consultar ? null : p.priceCents,
+    preuBase: consultar ? 'consultar' : p.priceBasis === 'from' ? 'desDe' : 'exacte',
+    ivaInclos: p.vatIncluded,
+    ...(p.description && { descripcio: p.description }),
+    ...(p.imageUrl && { imatge: p.imageUrl }),
+    imatges: p.images ?? [],
+    ...(p.availability && { disponibilitat: DISPONIBILITATS[p.availability] }),
+    estoc: estocDe(p.stock),
+    ...(p.variantName && { nomVariants: p.variantName }),
+    variants: (p.variants ?? []).map((v) => ({ nom: v.label, preu: v.priceCents, estoc: estocDe(v.stock) })),
+    fitxa,
+    ficticia: false,
+  });
+}
+
 /** En tornar de la pàgina de pagament, la plataforma hi afegeix si s'ha pagat o s'ha cancel·lat. */
 export function resultatDelPagament(parametres: Record<string, string | string[] | undefined>): 'pagat' | 'cancellat' | null {
   const valor = parametres.nertel_checkout;
@@ -294,12 +403,33 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
     throw new Error(`La plataforma ha respost ${resposta.status} ${codi ?? ''} a ${metode} ${ruta}${detall ? ` (${detall})` : ''}`.replace(/ {2,}/g, ' '));
   }
 
-  /** La plataforma encara no ven productes amb la reserva: millor dir-ho que perdre'ls pel camí. */
-  function senseNutricio(reserva: ReservaLloguer) {
-    if (reserva.nutricio?.length) throw new ErrorReserva('noDisponible', 'la plataforma encara no admet nutrició a la reserva');
+  const cataleg = async () => RentalCatalogResponseSchema.parse(await crida('/catalog', { revalida: true }));
+  const ajustos = async () => RentalSettingsResponseSchema.parse(await crida('/settings', { revalida: true }));
+
+  /** Si la botiga ven articles (la nutrició) amb el lloguer i en té algun d'actiu. */
+  async function ambNutricio(): Promise<boolean> {
+    const [{ shopItemsEnabled }, { shopItems }] = await Promise.all([ajustos(), cataleg()]);
+    return shopItemsEnabled && shopItems.length > 0;
   }
 
-  const cataleg = async () => RentalCatalogResponseSchema.parse(await crida('/catalog', { revalida: true }));
+  /** Si la botiga no ven nutrició amb el lloguer, millor dir-ho que perdre-la pel camí. */
+  async function comprovaNutricio(reserva: ReservaLloguer) {
+    if (reserva.nutricio?.length && !(await ambNutricio())) throw new ErrorReserva('noDisponible', 'la botiga no ven nutrició amb el lloguer');
+  }
+
+  /** Les bicis en venda del catàleg, amb una adreça llegible única. */
+  async function bicisEnVenda(): Promise<BiciVenda[]> {
+    const vistes = new Set<string>();
+    return ((await cataleg()).saleProducts ?? [])
+      .filter((p) => esCategoriaBicis(p.category))
+      .map((p) => {
+        const base = normalitza(text(p.attributes.slug) ?? p.name) || p.id;
+        let id = base;
+        for (let n = 2; vistes.has(id); n++) id = `${base}-${n}`;
+        vistes.add(id);
+        return biciVendaDe(p, id);
+      });
+  }
 
   /** L'API de cites (`/api/public/bookings`), la mateixa que fan servir els agents de veu i WhatsApp. */
   async function cridaCites(ruta: string, { metode = 'GET', cos, idempotencia }: { metode?: string; cos?: unknown; idempotencia?: string } = {}) {
@@ -384,6 +514,8 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
       pickup: { date: reserva.recollida.dia, time: reserva.recollida.hora },
       return: { date: reserva.retorn.dia, time: reserva.retorn.hora },
       items,
+      // La nutrició: el sabor és la variant de l'article. El preu el posa la plataforma.
+      ...(reserva.nutricio?.length && { shopItems: reserva.nutricio.map((l) => ({ variantId: l.sabor, quantity: l.quantitat })) }),
       customer: { name: reserva.nom, phone: reserva.telefon, email: reserva.correu, language: reserva.idioma },
       ...(reserva.comentaris && { notes: reserva.comentaris }),
       privacyAccepted: true,
@@ -403,12 +535,14 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
       // D'un grup de tria múltiple se'n poden triar diversos: sense grup, la web no en desmarca cap en
       // triar-ne un altre. Sense `multiple` (respostes d'abans), un per grup, com sempre.
       const multiples = new Set(optionGroups.filter((g) => g.multiple).map((g) => g.id));
+      const nomsGrups = new Map(optionGroups.map((g) => [g.id, g.name]));
       return options.map(
         (o): Extra => ({
           id: o.id,
           grup: obligatoris.has(o.groupId) ? 'pedals' : 'extres',
           nom: o.name,
           ...(!multiples.has(o.groupId) && { grupId: o.groupId }),
+          ...(nomsGrups.has(o.groupId) && { grupNom: nomsGrups.get(o.groupId) }),
           ...(o.imageUrl && { imatge: o.imageUrl }),
           preu: o.priceCents,
           cobrament: o.priceUnit === 'day' ? 'perDia' : 'perReserva',
@@ -420,19 +554,19 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
     },
     horari: async () => horariDe(RentalHoursResponseSchema.parse(await crida('/hours', { revalida: true }))),
     configuracioReserves: async () => {
-      const ajustos = RentalSettingsResponseSchema.parse(await crida('/settings', { revalida: true }));
-      const mode = ajustos.payment?.mode ?? 'none';
+      const [{ payment, holdMinutes, minNoticeMinutes }, nutricio] = await Promise.all([ajustos(), ambNutricio()]);
+      const mode = payment?.mode ?? 'none';
       return {
         pagament: {
           actiu: mode !== 'none',
           modalitats: [mode === 'full' ? 'total' : 'senyal'],
-          senyalPercent: ajustos.payment?.depositPercent ?? 100,
+          senyalPercent: payment?.depositPercent ?? 100,
         },
         participants: { actiu: false },
-        // Fins que el contracte porti els productes de botiga i el seu estoc.
-        nutricio: { actiu: false },
-        retencioMinuts: ajustos.holdMinutes,
-        antelacioMinuts: ajustos.minNoticeMinutes,
+        // Els articles que la botiga ven amb el lloguer (`shopItems`), si en ven i en té algun.
+        nutricio: { actiu: nutricio },
+        retencioMinuts: holdMinutes,
+        antelacioMinuts: minNoticeMinutes,
       };
     },
     disponibilitat: async (recollida, retorn, biciIds) => {
@@ -440,7 +574,7 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
       const demanades = totes.filter((b) => biciIds.includes(b.bici.id));
       const consulta = new URLSearchParams({ pickupDate: recollida.dia, pickupTime: recollida.hora, returnDate: retorn.dia, returnTime: retorn.hora });
       if (demanades.length) consulta.set('models', demanades.map((b) => b.model.id).join(','));
-      const lliures = RentalAvailabilityResponseSchema.parse(await crida(`/availability?${consulta}`));
+      const [lliures, { shopItems }] = await Promise.all([crida(`/availability?${consulta}`).then((r) => RentalAvailabilityResponseSchema.parse(r)), cataleg()]);
       const perModel = new Map(demanades.map((b) => [b.model.id, b.bici.id]));
       const resultat: Awaited<ReturnType<Plataforma['disponibilitat']>> = { bicis: {}, extres: {}, variantsExtres: {}, nutricio: {} };
       for (const m of lliures.models) {
@@ -454,16 +588,22 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
         const ambNom = o.variants.filter((v) => v.variant !== null);
         if (ambNom.length) resultat.variantsExtres[o.optionId] = Object.fromEntries(ambNom.map((v) => [v.variant!, v.free]));
       }
+      // El que queda de cada sabor (la variant d'un article), pel producte: no depèn de les dates.
+      const producteDe = new Map(shopItems.flatMap((a) => a.variants.map((v) => [v.id, a.id] as const)));
+      for (const { variantId, free } of lliures.shopItems) {
+        const producte = producteDe.get(variantId);
+        if (producte) (resultat.nutricio[producte] ??= {})[variantId] = free;
+      }
       return resultat;
     },
     crearReservaLloguer: async (reserva) => {
-      senseNutricio(reserva);
+      await comprovaNutricio(reserva);
       const feta = RentalBookingResponseSchema.parse(await crida('/bookings', { metode: 'POST', cos: await cosDe(reserva), idempotencia: generaClau() }));
       // El testimoni d'accés (`accessToken`) caldrà per als participants (L10); avui la web no el desa.
       return { codi: feta.reference, totalCentims: feta.totalCents, estat: feta.status === 'pending' ? 'pendent' : 'confirmada' };
     },
     retenirReserva: async (reserva) => {
-      senseNutricio(reserva);
+      await comprovaNutricio(reserva);
       const retinguda = RentalHoldCreatedResponseSchema.parse(await crida('/holds', { metode: 'POST', cos: await cosDe(reserva), idempotencia: generaClau() }));
       return { id: retinguda.holdId, caducaA: retinguda.expiresAt, totalCentims: retinguda.totalCents };
     },
@@ -530,14 +670,28 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
       );
       return { codi: feta.reference, estat: feta.pendingConfirmation || feta.status === 'pending' ? 'pendent' : 'confirmada' };
     },
-    // El catàleg per ensenyar-lo, de les dades de prova fins que la plataforma el tingui.
-    nutricio: () => proves.nutricio(),
+    // Els articles que la botiga ven amb el lloguer. Mentre no n'hi hagi cap, els de prova, que només
+    // s'ensenyen al catàleg de nutrició (a la reserva, la nutrició és apagada: vegeu `ambNutricio`).
+    nutricio: async () => {
+      const { shopItems } = await cataleg();
+      return shopItems.length ? shopItems.map(producteNutricioDe) : proves.nutricio();
+    },
     productes: () => proves.productes(),
     // Els productes de venda de la plataforma (`saleProducts`). Mentre la botiga no n'hagi donat d'alta
     // cap d'una categoria, els de prova, que són de mostra i no ensenyen el preu.
     articles: async (categoria) => {
       const venda = ((await cataleg()).saleProducts ?? []).filter((p) => categoriaVendaDe(p.category) === categoria);
       return venda.length ? venda.map((p) => articleDe(p, categoria)) : proves.articles(categoria);
+    },
+    // Les bicis en venda del catàleg (categoria de bicis). Mentre la botiga no n'hagi donat d'alta cap, les
+    // de mostra, que la pàgina marca com a tals.
+    bicisVenda: async () => {
+      const bicis = await bicisEnVenda();
+      return bicis.length ? bicis : proves.bicisVenda();
+    },
+    biciVenda: async (id) => {
+      const bicis = await bicisEnVenda();
+      return bicis.length ? (bicis.find((b) => b.id === id) ?? null) : proves.biciVenda(id);
     },
     valoracio: () => proves.valoracio(),
     ressenyes: () => proves.ressenyes(),

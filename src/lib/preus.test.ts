@@ -1,4 +1,4 @@
-import { desglosLinia, duradaDe, formatEuros, importNutricio, preuLinia, preuLloguer, preuMinimPerDia, preuPerDia, totalReserva } from './preus';
+import { desglosLinia, duradaDe, formatEuros, importNutricio, preuLinia, preuNutricio, preuLloguer, preuMinimPerDia, preuPerDia, totalReserva } from './preus';
 
 const btt = { dia: 2800, de2a6: 2520, mesDe6: 2100 };
 const eDoble = { dia: 5500, migDia: 4200, de2a6: 4800, mesDe6: 3900 };
@@ -110,6 +110,13 @@ describe('preuLinia i totalReserva', () => {
     expect(importNutricio([{ producteId: 'gel', quantitat: 3 }, { producteId: 'barreta', quantitat: 1 }], productes)).toBe(260 * 3 + 250);
     expect(importNutricio([], productes)).toBe(0);
     expect(importNutricio([{ producteId: 'res', quantitat: 1 }], productes)).toBeNull();
+  });
+
+  it('un sabor amb preu propi es cobra al seu preu; els altres, al del producte', () => {
+    const productes = [{ id: 'gel', preu: 350, sabors: [{ id: 'cola' }, { id: 'llimona', preu: 380 }] }];
+    expect(preuNutricio(productes[0]!, 'llimona')).toBe(380);
+    expect(preuNutricio(productes[0]!, 'cola')).toBe(350);
+    expect(importNutricio([{ producteId: 'gel', sabor: 'llimona', quantitat: 2 }, { producteId: 'gel', sabor: 'cola', quantitat: 1 }], productes)).toBe(380 * 2 + 350);
   });
 
   it('sense bicis no hi ha total', () => {

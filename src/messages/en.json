@@ -6,6 +6,7 @@
   "nav": {
     "saltar": "Skip to content",
     "lloguer": "Rental",
+    "venda": "For sale",
     "taller": "Workshop",
     "rutes": "Routes",
     "botiga": "Shop",
@@ -208,6 +209,40 @@
     "veureMarca": "See the {marca} brand",
     "preuConsultar": "Price on request",
     "preuDesDe": "From {preu}"
+  },
+  "venda": {
+    "situacio": "Shop",
+    "titol": "Bikes for sale",
+    "intro": "The bikes we sell at our shop in Sant Antoni de Calonge. Ask us about your size on WhatsApp and come and try it.",
+    "tornarInici": "Back to home",
+    "tornar": "All bikes for sale",
+    "mostraEtiqueta": "Sample",
+    "mostra": "There are no bikes for sale in the shop’s catalogue yet. These are samples, so you can see what the page will look like: they are not for sale.",
+    "mostraFitxa": "This bike is a sample and is not for sale. When the shop adds its bikes to the catalogue, they will appear here with their price.",
+    "opcions": "Options",
+    "preuConsultar": "Price on request",
+    "preuDesDe": "From {preu}",
+    "ivaInclos": "VAT included",
+    "ivaNoInclos": "VAT not included",
+    "preguntar": "Ask on WhatsApp",
+    "missatge": "Hi! I’m interested in the {bici} bike. Could you tell me more?",
+    "nota": "We don’t sell online yet: message us and we’ll keep it for you at the shop so you can try it.",
+    "fitxaTecnica": "Specifications",
+    "si": "Yes",
+    "no": "No",
+    "lloguer": "Want to try one before you decide? We rent them too.",
+    "lloguerEnllac": "See our rental bikes",
+    "foto": "Photo {n} of {total}",
+    "disponibilitat": {
+      "disponible": "In stock at the shop",
+      "esgotada": "Sold out",
+      "perEncarrec": "Made to order"
+    },
+    "enEstoc": "{n, plural, one {# unit} other {# units}}",
+    "talla": {
+      "esgotada": "Sold out",
+      "queden": "{n} left"
+    }
   },
   "marques": {
     "situacio": "The brands",

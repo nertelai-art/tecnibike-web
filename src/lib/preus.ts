@@ -74,16 +74,23 @@ export function totalReserva(linies: readonly LiniaPreu[], recollida: Moment, re
   return total;
 }
 
+type ProductePreu = { id: string; preu: number; sabors?: readonly { id: string; preu?: number }[] };
+
+/** El preu d'una unitat d'un producte de nutrició en un sabor: el del sabor, si en té; si no, el del producte. */
+export function preuNutricio(producte: ProductePreu, sabor?: string): number {
+  return producte.sabors?.find((s) => s.id === sabor)?.preu ?? producte.preu;
+}
+
 /** El que costa la nutrició de la reserva: preu per quantitat. `null` si hi ha un producte que no es coneix. */
 export function importNutricio(
-  linies: readonly { producteId: string; quantitat: number }[],
-  productes: readonly { id: string; preu: number }[],
+  linies: readonly { producteId: string; sabor?: string; quantitat: number }[],
+  productes: readonly ProductePreu[],
 ): number | null {
   let total = 0;
   for (const l of linies) {
     const producte = productes.find((p) => p.id === l.producteId);
     if (!producte) return null;
-    total += producte.preu * l.quantitat;
+    total += preuNutricio(producte, l.sabor) * l.quantitat;
   }
   return total;
 }

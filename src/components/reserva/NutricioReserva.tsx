@@ -11,7 +11,7 @@ import { Paquet } from '@/components/nutricio/Paquet';
 import { colorSabor, imatgeDe, ORDRE_MARQUES, temaDe } from '@/content/nutricio';
 import { optimitzable } from '@/lib/imatges';
 import type { LiniaNutricio, ProducteNutricio } from '@/lib/plataforma/esquema';
-import { formatEuros } from '@/lib/preus';
+import { formatEuros, importNutricio, preuNutricio } from '@/lib/preus';
 import { afegeixNutricio, MAX_QUANTITAT_NUTRICIO, nutricioLliure } from '@/lib/reserva';
 import { Plegable } from './Plegable';
 import styles from './Reserva.module.css';
@@ -33,7 +33,8 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
   const locale = useLocale();
   const id = useId();
   const marques = ORDRE_MARQUES.filter((m) => productes.some((p) => p.marca === m));
-  const altres = [...new Set(productes.map((p) => p.marca))].filter((m) => !marques.includes(m as (typeof ORDRE_MARQUES)[number]));
+  // Els productes de la plataforma sense marca escrita no fan botó de filtre.
+  const altres = [...new Set(productes.map((p) => p.marca))].filter((m) => m && !marques.includes(m as (typeof ORDRE_MARQUES)[number]));
   const totes = [...marques, ...altres];
   const [marca, setMarca] = useState<string | null>(null);
   const [sabors, setSabors] = useState<Record<string, string>>({});
@@ -50,16 +51,19 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
   return (
     <fieldset className={`${styles.grup} ${styles.nutricio}`}>
       <legend className="sr-only">{t('reserva.titol')}</legend>
+      {/* Oberta d'entrada: plegada, no es veia que es podia afegir nutrició. */}
       <Plegable
         titol={t('reserva.titol')}
+        inicial
         resum={
           linies.length > 0
-            ? t('reserva.unitats', { n: linies.reduce((n, l) => n + l.quantitat, 0), preu: euros(linies.reduce((n, l) => n + (productes.find((x) => x.id === l.producteId)?.preu ?? 0) * l.quantitat, 0)) })
+            ? t('reserva.unitats', { n: linies.reduce((n, l) => n + l.quantitat, 0), preu: euros(importNutricio(linies, productes) ?? 0) })
             : t('reserva.opcional')
         }
       >
         <p className={styles.ajuda}>{t('reserva.intro')}</p>
 
+        {totes.length > 1 && (
         <div className={styles.filtreMarques} role="group" aria-label={t('marca')}>
           <button type="button" aria-pressed={marca === null} onClick={() => (setMarca(null), setTots(false))}>
             {t('totes')}
@@ -71,6 +75,7 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
             </button>
           ))}
         </div>
+        )}
 
         <ul id={`${id}-productes`} className={styles.nutricioProductes}>
           {visibles.map((p) => {
@@ -97,7 +102,7 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
                     {p.cafeinaMg !== undefined && <span data-cafeina>{t('cafeina', { mg: p.cafeinaMg })}</span>}
                   </p>
                   <p className={styles.nutricioPreu}>
-                    {t('perUnitat', { preu: euros(p.preu) })}
+                    {t('perUnitat', { preu: euros(preuNutricio(p, sabor)) })}
                     {p.ficticia && <span className="mostra">*</span>}
                   </p>
                 </div>
@@ -118,7 +123,8 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
                       </select>
                     </label>
                   ) : (
-                    <p className={styles.nutricioSaborUnic}>
+                    // Un producte d'un sol sabor de la plataforma no en té el nom: llavors no es diu.
+                    nomSabor(p, sabor) && <p className={styles.nutricioSaborUnic}>
                       <span aria-hidden="true" style={{ background: colorSabor(sabor) }} />
                       {nomSabor(p, sabor)}
                     </p>
@@ -178,7 +184,7 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
                         +
                       </button>
                     </span>
-                    <span className={styles.nutricioImport}>{euros(p.preu * l.quantitat)}</span>
+                    <span className={styles.nutricioImport}>{euros(preuNutricio(p, l.sabor) * l.quantitat)}</span>
                   </li>
                 );
               })}

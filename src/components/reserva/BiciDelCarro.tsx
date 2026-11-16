@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl';
 import { useId } from 'react';
 import type { BiciLloguer, Extra } from '@/lib/plataforma/esquema';
 import { optimitzable } from '@/lib/imatges';
-import { commutaExtra } from '@/lib/reserva';
+import { commutaExtra, grupsExtres } from '@/lib/reserva';
 import { tallaSuggerida } from '@/lib/talles';
 import { Extres } from './Extres';
 import { Plegable } from './Plegable';
@@ -180,28 +180,35 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
         </div>
       )}
 
+      {/* Els extres, oberts: abans es plegaven i no es veien. Agrupats pel grup de la plataforma. */}
       <Plegable
         titol={t('extres')}
         resum={linia.extres.length > 0 ? t('extresTriats', { n: linia.extres.length }) : t('extresDisponibles', { n: extres.length })}
+        inicial
         forcada={extres.some((e) => error(`variants.${e.id}`))}
       >
-        <Extres
-          nom={`${id}-extres`}
-          extres={extres}
-          triats={linia.extres}
-          lliures={lliures}
-          multiple
-          onCanvi={(x) => {
-            const triats = commutaExtra(linia.extres, x, extres);
-            // La variant d'un extra que es treu ja no compta.
-            const variants = Object.fromEntries(Object.entries(linia.variants).filter(([id]) => triats.includes(id)));
-            onCanvi({ extres: triats, variants });
-          }}
-          variants={linia.variants}
-          lliuresVariants={lliuresVariants}
-          onVariant={(x, v) => onCanvi({ variants: { ...linia.variants, [x]: v } })}
-          faltaVariant={new Set(extres.filter((e) => error(`variants.${e.id}`)).map((e) => e.id))}
-        />
+        {grupsExtres(extres).map((grup) => (
+          <div key={grup.nom ?? '-'} className={styles.grupExtres}>
+            {grup.nom && <p className={styles.grupExtresNom}>{grup.nom}</p>}
+            <Extres
+              nom={`${id}-extres`}
+              extres={grup.extres}
+              triats={linia.extres}
+              lliures={lliures}
+              multiple
+              onCanvi={(x) => {
+                const triats = commutaExtra(linia.extres, x, extres);
+                // La variant d'un extra que es treu ja no compta.
+                const variants = Object.fromEntries(Object.entries(linia.variants).filter(([id]) => triats.includes(id)));
+                onCanvi({ extres: triats, variants });
+              }}
+              variants={linia.variants}
+              lliuresVariants={lliuresVariants}
+              onVariant={(x, v) => onCanvi({ variants: { ...linia.variants, [x]: v } })}
+              faltaVariant={new Set(extres.filter((e) => error(`variants.${e.id}`)).map((e) => e.id))}
+            />
+          </div>
+        ))}
       </Plegable>
     </fieldset>
   );

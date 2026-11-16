@@ -172,6 +172,12 @@ describe('plataforma remota: els camps nous del catàleg (13-11-2026)', () => {
     expect(await amb().bici('no-hi-es')).toBeNull();
   });
 
+  it('cada extra porta el nom del seu grup, per agrupar-los al formulari', async () => {
+    const extres = await amb().extres();
+    expect(extres.find((e) => e.id === CADENAT)?.grupNom).toBe('Accessoris');
+    expect(extres.find((e) => e.id === CASC)?.grupNom).toBe('Casc');
+  });
+
   it("d'un grup de tria múltiple se'n poden triar diversos: els seus extres no porten grup", async () => {
     const extres = await amb().extres();
     expect(extres.find((e) => e.id === CADENAT)?.grupId).toBeUndefined();
@@ -328,6 +334,137 @@ describe('plataforma remota: disponibilitat i reserva', () => {
     await expect(plataforma.iniciarPagament(RETENCIO, 'senyal', 'https://web.prova/ca/reserva/pagament')).resolves.toEqual({ url: 'https://pagament.prova/s/1' });
     expect(crides.at(-1)!.cos).toEqual({ mode: 'deposit', returnUrl: 'https://web.prova/ca/reserva/pagament' });
     await expect(plataforma.estatRetencio(RETENCIO)).resolves.toEqual({ estat: 'convertida', codi: '6DB3FA' });
+  });
+});
+
+describe('plataforma remota: la nutrició amb el lloguer (articles de botiga)', () => {
+  const GEL = 'e0000000-0000-4000-8000-000000000001';
+  const COLA = 'e1000000-0000-4000-8000-000000000001';
+  const LLIMONA = 'e1000000-0000-4000-8000-000000000002';
+  const BARRETA = 'e0000000-0000-4000-8000-000000000002';
+  const BARRETA_UNICA = 'e1000000-0000-4000-8000-000000000003';
+  const ambArticles = RentalCatalogResponseSchema.parse({
+    ...cataleg,
+    shopItems: [
+      {
+        id: GEL, name: 'Gel 100', description: 'Hidrogel', imageUrl: 'https://abc.supabase.co/storage/v1/object/public/cataleg/gel.png',
+        category: 'Nutrició', attributes: { marca: 'Maurten', format: '40 g', carbohidrats: 25, 'cafeïna': 0 }, priceCents: 350, maxPerLine: 10,
+        kind: 'article', priceUnit: 'unit',
+        variants: [{ id: COLA, label: 'Cola', priceCents: null }, { id: LLIMONA, label: 'Llimona', priceCents: 380 }],
+      },
+      {
+        id: BARRETA, name: 'Barreta de civada', description: null, imageUrl: null, category: null, attributes: {}, priceCents: 250, maxPerLine: 10,
+        variants: [{ id: BARRETA_UNICA, label: null, priceCents: null }],
+      },
+    ],
+  });
+  const ajustosAmbArticles = { ...ajustos(), shopItemsEnabled: true };
+  const amb = (mes: Record<string, { estat?: number; cos: unknown }> = {}) =>
+    remota({ [`GET ${R}/catalog`]: { cos: ambArticles }, [`GET ${R}/settings`]: { cos: ajustosAmbArticles }, ...mes });
+
+  it('els articles de la plataforma són la nutrició: marca, format, sabors i el preu de cada sabor', async () => {
+    const [gel, barreta] = await amb().plataforma.nutricio();
+    expect(gel).toMatchObject({ id: GEL, marca: 'Maurten', nom: 'Gel 100', tipus: 'gel', format: '40 g', carbohidratsG: 25, preu: 350, ficticia: false });
+    expect(gel!.sabors).toEqual([
+      { id: COLA, nom: 'Cola', estoc: null },
+      { id: LLIMONA, nom: 'Llimona', preu: 380, estoc: null },
+    ]);
+    // Sense marca ni tipus escrits, es dedueixen del nom; un producte sense sabors en té un de sol, sense nom.
+    expect(barreta).toMatchObject({ marca: '', tipus: 'barreta', sabors: [{ id: BARRETA_UNICA, nom: '', estoc: null }] });
+  });
+
+  it('la nutrició és activa quan la botiga ven articles amb el lloguer i en té algun', async () => {
+    expect((await amb().plataforma.configuracioReserves()).nutricio.actiu).toBe(true);
+    const sense = remota({ [`GET ${R}/catalog`]: { cos: ambArticles } });
+    expect((await sense.plataforma.configuracioReserves()).nutricio.actiu).toBe(false);
+  });
+
+  it('el que queda de cada sabor surt de la disponibilitat de la plataforma', async () => {
+    const lliures = RentalAvailabilityResponseSchema.parse({
+      timeZone: 'Europe/Madrid', pickup: { date: '2026-11-02', time: '09:00' }, return: { date: '2026-11-04', time: '19:00' },
+      models: [], options: [], shopItems: [{ variantId: COLA, free: 4 }, { variantId: LLIMONA, free: 0 }, { variantId: BARRETA_UNICA, free: null }],
+    });
+    const { plataforma } = amb({ [`GET ${R}/availability`]: { cos: lliures } });
+    const d = await plataforma.disponibilitat({ dia: '2026-11-02', hora: '09:00' }, { dia: '2026-11-04', hora: '19:00' }, []);
+    expect(d.nutricio).toEqual({ [GEL]: { [COLA]: 4, [LLIMONA]: 0 }, [BARRETA]: { [BARRETA_UNICA]: null } });
+  });
+
+  it('la reserva envia la nutrició com a línies de botiga, amb el sabor i la quantitat, sense el preu', async () => {
+    const feta = RentalBookingResponseSchema.parse({
+      reference: '6DB3FB', status: 'pending', totalCents: 9160, currency: 'EUR', accessToken: 'x'.repeat(40), timeZone: 'Europe/Madrid',
+      pickup: { date: '2026-11-02', time: '09:00' }, return: { date: '2026-11-04', time: '19:00' },
+    });
+    const { plataforma, crides } = amb({ [`POST ${R}/bookings`]: { estat: 201, cos: feta } });
+    await plataforma.crearReservaLloguer({
+      recollida: { dia: '2026-11-02', hora: '09:00' }, retorn: { dia: '2026-11-04', hora: '19:00' },
+      bicis: [{ biciId: 'btt', talla: 'M', pedals: PLANS, extres: [], ciclista: {} }],
+      nutricio: [{ producteId: GEL, sabor: LLIMONA, quantitat: 2 }, { producteId: BARRETA, sabor: BARRETA_UNICA, quantitat: 1 }],
+      nom: 'Anna Puig', telefon: '+34 600 000 000', correu: 'anna@example.com', idioma: 'ca', privacitat: true,
+    });
+    const cos = RentalBookingRequestSchema.parse(crides.find((c) => c.metode === 'POST')!.cos);
+    expect(cos.shopItems).toEqual([{ variantId: LLIMONA, quantity: 2 }, { variantId: BARRETA_UNICA, quantity: 1 }]);
+  });
+});
+
+describe('plataforma remota: les bicis en venda', () => {
+  const bici = (n: number, mes: Record<string, unknown> = {}) => ({
+    id: `f0000000-0000-4000-8000-00000000000${n}`, name: `Bici ${n}`, description: null, imageUrl: null, category: 'Bicicletes',
+    attributes: {}, priceCents: 150000, priceBasis: 'exact', vatIncluded: true, ...mes,
+  });
+  const ambVenda = (saleProducts: unknown[]) => ({ [`GET ${R}/catalog`]: { cos: { ...cataleg, saleProducts } } });
+
+  it('les bicis en venda són els productes de venda de la categoria de bicis, no la flota de lloguer', async () => {
+    const { plataforma } = remota(ambVenda([
+      bici(1, {
+        name: 'Orbea Oiz M30', description: 'Doble suspensió de carboni', imageUrl: 'https://abc.supabase.co/storage/v1/object/public/cataleg/oiz.png',
+        attributes: { marca: 'Orbea', any: 2026, quadre: 'Carboni', 'elèctrica': false }, priceBasis: 'from', variantName: 'Talles',
+        variants: [{ id: 'f1000000-0000-4000-8000-000000000001', label: 'M', priceCents: null, sku: null }, { id: 'f1000000-0000-4000-8000-000000000002', label: 'L', priceCents: 320000, sku: null }],
+      }),
+      bici(2, { category: 'Cascs' }),
+      bici(3, { category: 'bicis de segona mà', name: 'Trek Domane', priceCents: null, priceBasis: 'on_request' }),
+    ]));
+    const bicis = await plataforma.bicisVenda();
+    expect(bicis.map((b) => b.id)).toEqual(['orbea-oiz-m30', 'trek-domane']);
+    expect(bicis[0]).toMatchObject({
+      nom: 'Orbea Oiz M30', marca: 'Orbea', preu: 150000, preuBase: 'desDe', ivaInclos: true, descripcio: 'Doble suspensió de carboni', nomVariants: 'Talles',
+      variants: [{ nom: 'M', preu: null }, { nom: 'L', preu: 320000 }], ficticia: false,
+    });
+    expect(bicis[0]!.fitxa).toEqual([{ camp: 'any', valor: '2026' }, { camp: 'quadre', valor: 'Carboni' }, { camp: 'elèctrica', valor: false }]);
+    expect(bicis[1]).toMatchObject({ preu: null, preuBase: 'consultar', variants: [] });
+    expect(await plataforma.bicisVenda()).toEqual(bicis);
+    expect((await plataforma.biciVenda('trek-domane'))?.nom).toBe('Trek Domane');
+    expect(await plataforma.biciVenda('no-hi-es')).toBeNull();
+  });
+
+  it("porta si es pot comprar, quantes n'hi ha (de la bici i de cada talla) i totes les fotos (plataforma v1.0.14)", async () => {
+    const foto = (n: number) => `https://abc.supabase.co/storage/v1/object/public/cataleg/bici-${n}.png`;
+    const { plataforma } = remota(ambVenda([
+      bici(1, {
+        name: 'Gravel', imageUrl: foto(1), images: [foto(1), foto(2)], availability: 'available', stock: 3,
+        variants: [
+          { id: 'f1000000-0000-4000-8000-000000000001', label: 'M', priceCents: null, sku: null, stock: 0 },
+          { id: 'f1000000-0000-4000-8000-000000000002', label: 'L', priceCents: null, sku: null, stock: null },
+        ],
+      }),
+      bici(2, { name: 'Carretera', availability: 'on_order', stock: null }),
+      bici(3, { name: 'BTT', availability: 'unavailable', stock: 0 }),
+      bici(4, { name: 'Urbana' }),
+    ]));
+    const [gravel, carretera, btt, urbana] = await plataforma.bicisVenda();
+    expect(gravel).toMatchObject({ disponibilitat: 'disponible', estoc: 3, imatge: foto(1), imatges: [foto(1), foto(2)] });
+    expect(gravel!.variants).toEqual([{ nom: 'M', preu: null, estoc: 0 }, { nom: 'L', preu: null, estoc: null }]);
+    expect(carretera).toMatchObject({ disponibilitat: 'perEncarrec', estoc: null, imatges: [] });
+    expect(btt).toMatchObject({ disponibilitat: 'esgotada', estoc: 0 });
+    // Una resposta d'abans de la v1.0.14 no diu res: no s'inventa ni que n'hi ha ni que no.
+    expect(urbana!.disponibilitat).toBeUndefined();
+    expect(urbana!.estoc).toBeNull();
+  });
+
+  it('mentre la botiga no en té cap al catàleg, surten les de prova, marcades com a mostra', async () => {
+    const { plataforma } = remota(ambVenda([bici(2, { category: 'Cascs' })]));
+    const bicis = await plataforma.bicisVenda();
+    expect(bicis.length).toBeGreaterThan(0);
+    expect(bicis.every((b) => b.ficticia)).toBe(true);
   });
 });
 
