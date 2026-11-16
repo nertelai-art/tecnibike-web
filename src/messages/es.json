@@ -231,7 +231,18 @@
     "si": "Sí",
     "no": "No",
     "lloguer": "¿Quieres probar una antes de decidirte? También las alquilamos.",
-    "lloguerEnllac": "Mira las bicis de alquiler"
+    "lloguerEnllac": "Mira las bicis de alquiler",
+    "foto": "Foto {n} de {total}",
+    "disponibilitat": {
+      "disponible": "Disponible en la tienda",
+      "esgotada": "Agotada",
+      "perEncarrec": "Por encargo"
+    },
+    "enEstoc": "{n, plural, one {# unidad} other {# unidades}}",
+    "talla": {
+      "esgotada": "Agotada",
+      "queden": "{n, plural, one {Queda #} other {Quedan #}}"
+    }
   },
   "marques": {
     "situacio": "Las marcas",

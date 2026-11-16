@@ -315,6 +315,11 @@ export function esCategoriaBicis(nom: string | null | undefined): boolean {
 /** Els atributs que no van a la fitxa tècnica: la marca ja surt a dalt, i l'adreça és de la web. */
 const FORA_DE_FITXA = new Set(['marca', 'brand', 'slug']);
 
+const DISPONIBILITATS = { available: 'disponible', unavailable: 'esgotada', on_order: 'perEncarrec' } as const;
+
+/** L'estoc de la plataforma: nul (o no hi és) vol dir que no se'n porta el compte, no que sigui zero. */
+const estocDe = (n: number | null | undefined) => (typeof n === 'number' ? Math.max(0, n) : null);
+
 /** Un producte de venda de la categoria de bicis com a bici en venda de la web. */
 function biciVendaDe(p: ProducteVenda, id: string): BiciVenda {
   const fitxa = Object.entries(p.attributes).flatMap(([camp, valor]): BiciVenda['fitxa'] => {
@@ -334,8 +339,11 @@ function biciVendaDe(p: ProducteVenda, id: string): BiciVenda {
     ivaInclos: p.vatIncluded,
     ...(p.description && { descripcio: p.description }),
     ...(p.imageUrl && { imatge: p.imageUrl }),
+    imatges: p.images ?? [],
+    ...(p.availability && { disponibilitat: DISPONIBILITATS[p.availability] }),
+    estoc: estocDe(p.stock),
     ...(p.variantName && { nomVariants: p.variantName }),
-    variants: (p.variants ?? []).map((v) => ({ nom: v.label, preu: v.priceCents })),
+    variants: (p.variants ?? []).map((v) => ({ nom: v.label, preu: v.priceCents, estoc: estocDe(v.stock) })),
     fitxa,
     ficticia: false,
   });

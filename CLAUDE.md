@@ -160,7 +160,10 @@ Versions que **no** són l'última, i per què:
   camps del catàleg tal com els escriu la botiga (`quadre`, `grup`, `any`…; `marca` va a dalt). Es
   pregunta per WhatsApp. Mentre la botiga no n'hagi donat d'alta cap, surten quatre bicis **de mostra**
   (`bicisVenda` a `dades-prova.ts`, amb fotos de la flota) amb un avís ben visible i sense preu.
-  L'API encara no dona l'estoc ni més d'una foto per bici (demanat a la plataforma el 16-11-2026).
+  Des de la plataforma v1.0.14 (16-11-2026) també porta si es pot comprar (`availability`: disponible,
+  esgotada o per encàrrec), quantes n'hi ha (`stock`, de la bici i de cada talla; nul vol dir que no se'n
+  porta el compte, no zero) i totes les fotos (`images`, la principal la primera), que la fitxa ensenya
+  en una galeria (`Galeria.tsx`).
 - **Marques:** clicar una marca (carrusel de l'inici o tira d'una categoria) porta a `enllacMarca`: les
   de nutrició, al catàleg de nutrició filtrat (`?marca=`); la resta, a la seva fitxa
   `/[locale]/marques/[slug]` (`src/content/fitxes-marques.ts`: país, any, història, models destacats

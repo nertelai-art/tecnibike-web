@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Peu } from '@/components/Seccions';
+import { Galeria } from '@/components/venda/Galeria';
 import { textPreuVenda } from '@/components/venda/preu';
 import { Link } from '@/i18n/navigation';
 import { enllacWhatsapp } from '@/lib/contacte';
-import { optimitzable } from '@/lib/imatges';
 import { plataforma } from '@/lib/plataforma';
 import { formatEuros } from '@/lib/preus';
 import styles from '@/components/venda/Venda.module.css';
@@ -14,6 +13,10 @@ import styles from '@/components/venda/Venda.module.css';
 // Fitxa d'una bici en venda: la foto, el preu, les talles, la descripció i la fitxa tècnica (els camps
 // que la botiga hi ha posat al catàleg). Tecnibike encara no ven en línia: es pregunta per WhatsApp i
 // es reserva a la botiga.
+
+// Es torna a generar cada 5 minuts (REVALIDA_S de la plataforma), perquè el que canviï a la plataforma
+// hi surti: vegeu src/app/revalida.test.ts.
+export const revalidate = 300;
 
 type Params = { params: Promise<{ locale: string; id: string }> };
 
@@ -42,6 +45,8 @@ export default async function FitxaVenda({ params }: Params) {
   if (!bici) notFound();
   const t = await getTranslations('venda');
   const nom = [bici.marca, bici.nom].filter(Boolean).join(' ');
+  // Totes les fotos de la plataforma (la principal la primera); si no en dona la llista, la principal.
+  const fotos = bici.imatges.length ? bici.imatges : bici.imatge ? [bici.imatge] : [];
 
   return (
     <>
@@ -51,10 +56,9 @@ export default async function FitxaVenda({ params }: Params) {
             ← {t('tornar')}
           </Link>
 
-          <div className={styles.fotoGran}>
-            {bici.imatge && <Image src={bici.imatge} alt={nom} width={1200} height={900} priority sizes="(min-width: 860px) 55vw, 92vw" unoptimized={!optimitzable(bici.imatge)} />}
+          <Galeria fotos={fotos} alt={nom} etiquetes={fotos.map((_, i) => t('foto', { n: i + 1, total: fotos.length }))}>
             {bici.ficticia && <span className={styles.etiquetaMostra}>{t('mostraEtiqueta')}</span>}
-          </div>
+          </Galeria>
 
           <div className={styles.info}>
             {bici.marca && <p className={styles.marca}>{bici.marca}</p>}
@@ -66,10 +70,18 @@ export default async function FitxaVenda({ params }: Params) {
                 <span>{t('mostraFitxa')}</span>
               </p>
             ) : (
-              <p className={styles.preuGran}>
-                {textPreuVenda(bici, t, locale)}
-                {bici.preu !== null && <small>{t(bici.ivaInclos ? 'ivaInclos' : 'ivaNoInclos')}</small>}
-              </p>
+              <>
+                <p className={styles.preuGran}>
+                  {textPreuVenda(bici, t, locale)}
+                  {bici.preu !== null && <small>{t(bici.ivaInclos ? 'ivaInclos' : 'ivaNoInclos')}</small>}
+                </p>
+                {bici.disponibilitat && (
+                  <p className={styles.disponibilitat} data-estat={bici.disponibilitat}>
+                    {t(`disponibilitat.${bici.disponibilitat}`)}
+                    {bici.disponibilitat === 'disponible' && bici.estoc !== null && bici.estoc > 0 && <> · {t('enEstoc', { n: bici.estoc })}</>}
+                  </p>
+                )}
+              </>
             )}
 
             {bici.variants.length > 0 && (
@@ -77,10 +89,12 @@ export default async function FitxaVenda({ params }: Params) {
                 <p className={styles.etiqueta}>{bici.nomVariants ?? t('opcions')}</p>
                 <ul className={styles.variants}>
                   {bici.variants.map((v) => (
-                    <li key={v.nom}>
+                    <li key={v.nom} data-esgotada={v.estoc === 0 || undefined}>
                       {v.nom}
                       {/* El preu d'una talla, només si no és el de la bici. */}
                       {!bici.ficticia && v.preu !== null && v.preu !== bici.preu && <small>{formatEuros(v.preu, locale)}</small>}
+                      {/* Quantes en queden, si la botiga en porta el compte. */}
+                      {v.estoc !== null && <small>{v.estoc === 0 ? t('talla.esgotada') : t('talla.queden', { n: v.estoc })}</small>}
                     </li>
                   ))}
                 </ul>

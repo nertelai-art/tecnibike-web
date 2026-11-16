@@ -436,6 +436,30 @@ describe('plataforma remota: les bicis en venda', () => {
     expect(await plataforma.biciVenda('no-hi-es')).toBeNull();
   });
 
+  it("porta si es pot comprar, quantes n'hi ha (de la bici i de cada talla) i totes les fotos (plataforma v1.0.14)", async () => {
+    const foto = (n: number) => `https://abc.supabase.co/storage/v1/object/public/cataleg/bici-${n}.png`;
+    const { plataforma } = remota(ambVenda([
+      bici(1, {
+        name: 'Gravel', imageUrl: foto(1), images: [foto(1), foto(2)], availability: 'available', stock: 3,
+        variants: [
+          { id: 'f1000000-0000-4000-8000-000000000001', label: 'M', priceCents: null, sku: null, stock: 0 },
+          { id: 'f1000000-0000-4000-8000-000000000002', label: 'L', priceCents: null, sku: null, stock: null },
+        ],
+      }),
+      bici(2, { name: 'Carretera', availability: 'on_order', stock: null }),
+      bici(3, { name: 'BTT', availability: 'unavailable', stock: 0 }),
+      bici(4, { name: 'Urbana' }),
+    ]));
+    const [gravel, carretera, btt, urbana] = await plataforma.bicisVenda();
+    expect(gravel).toMatchObject({ disponibilitat: 'disponible', estoc: 3, imatge: foto(1), imatges: [foto(1), foto(2)] });
+    expect(gravel!.variants).toEqual([{ nom: 'M', preu: null, estoc: 0 }, { nom: 'L', preu: null, estoc: null }]);
+    expect(carretera).toMatchObject({ disponibilitat: 'perEncarrec', estoc: null, imatges: [] });
+    expect(btt).toMatchObject({ disponibilitat: 'esgotada', estoc: 0 });
+    // Una resposta d'abans de la v1.0.14 no diu res: no s'inventa ni que n'hi ha ni que no.
+    expect(urbana!.disponibilitat).toBeUndefined();
+    expect(urbana!.estoc).toBeNull();
+  });
+
   it('mentre la botiga no en té cap al catàleg, surten les de prova, marcades com a mostra', async () => {
     const { plataforma } = remota(ambVenda([bici(2, { category: 'Cascs' })]));
     const bicis = await plataforma.bicisVenda();

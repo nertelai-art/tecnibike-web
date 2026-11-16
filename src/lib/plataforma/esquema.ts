@@ -71,7 +71,12 @@ export const article = z.object({
 });
 
 /** Una variant d'una bici en venda (la talla, el color), amb el seu preu si no és el de la bici. */
-export const varianteVenda = z.object({ nom: z.string(), preu: centims.nullable() });
+export const varianteVenda = z.object({
+  nom: z.string(),
+  preu: centims.nullable(),
+  /** Quantes n'hi ha d'aquesta talla. Nul: la botiga no en porta el compte (no vol dir que no n'hi hagi). */
+  estoc: z.number().int().nonnegative().nullable(),
+});
 
 /**
  * Una bici en venda: un producte de venda del catàleg de la plataforma, de la categoria de bicis. No
@@ -87,7 +92,14 @@ export const biciVenda = z.object({
   preuBase: z.enum(['exacte', 'desDe', 'consultar']),
   ivaInclos: z.boolean(),
   descripcio: z.string().optional(),
+  /** La foto principal. */
   imatge: z.string().optional(),
+  /** Totes les fotos, la principal la primera. Buida si la plataforma no en dona la llista. */
+  imatges: z.array(z.string()),
+  /** Si es pot comprar: hi és, no n'hi ha, o per encàrrec. Sense, la plataforma no ho diu. */
+  disponibilitat: z.enum(['disponible', 'esgotada', 'perEncarrec']).optional(),
+  /** Quantes n'hi ha (la suma de les talles). Nul: no se'n porta el compte. */
+  estoc: z.number().int().nonnegative().nullable(),
   /** Com en diu la botiga, de les variants: «Talles», «Colors». */
   nomVariants: z.string().optional(),
   variants: z.array(varianteVenda),

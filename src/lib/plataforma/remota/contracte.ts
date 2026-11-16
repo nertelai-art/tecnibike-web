@@ -562,6 +562,24 @@ export const RentalCatalogResponseSchema = z.object({
         /** Si el preu porta l'IVA. */
         vatIncluded: z.boolean(),
         /**
+         * Si es pot comprar (16/11/2026): `available` hi és, `unavailable` no n'hi ha (l'estoc és zero, o
+         * la botiga l'ha marcat «No disponible»), i `on_order` és «Per encàrrec»: no és a la botiga però
+         * es pot demanar. La mateixa regla que fa servir l'agent (`saleProductStock`). Opcional, per les
+         * respostes d'abans.
+         */
+        availability: z.enum(["available", "unavailable", "on_order"]).optional(),
+        /**
+         * Quants n'hi ha (16/11/2026). Amb variants, la suma de les variants; sense, el del producte.
+         * **Nul no és zero**: la botiga no en porta el compte (o d'alguna variant no). Opcional, per les
+         * respostes d'abans.
+         */
+        stock: z.number().int().nullable().optional(),
+        /**
+         * Totes les fotos (16/11/2026): **la principal la primera** (la d'`imageUrl`) i després la
+         * galeria, en l'ordre de la botiga. Buida si no en té cap. Opcional, per les respostes d'abans.
+         */
+        images: z.array(z.string()).optional(),
+        /**
          * Com en diu la botiga, de les variants (13/11/2026): «Talles», «Colors». Nul: no ho ha dit.
          * Opcional, per les respostes d'abans.
          */
@@ -579,6 +597,11 @@ export const RentalCatalogResponseSchema = z.object({
               priceCents: z.number().int().nullable(),
               /** La referència de la variant, si en té. */
               sku: z.string().nullable(),
+              /**
+               * Quantes n'hi ha d'aquesta variant (16/11/2026). **Nul no és zero**: no se'n porta el
+               * compte. Opcional, per les respostes d'abans.
+               */
+              stock: z.number().int().nullable().optional(),
             }),
           )
           .optional(),

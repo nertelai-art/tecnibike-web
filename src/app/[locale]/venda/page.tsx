@@ -12,6 +12,10 @@ import styles from '@/components/venda/Venda.module.css';
 // («Bicicletes»). No té res a veure amb la flota de lloguer, que és a la portada. Mentre la botiga no
 // n'hagi donat d'alta cap, surten les de mostra, amb un avís ben visible i sense preu.
 
+// Es torna a generar cada 5 minuts (REVALIDA_S de la plataforma), perquè el que canviï a la plataforma
+// hi surti: vegeu src/app/revalida.test.ts.
+export const revalidate = 300;
+
 type Params = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -63,6 +67,11 @@ export default async function BicisEnVenda({ params }: Params) {
                     {b.variants.length > 0 && (
                       <p className={styles.variantsResum}>
                         {b.nomVariants ?? t('opcions')}: {b.variants.map((v) => v.nom).join(' · ')}
+                      </p>
+                    )}
+                    {!b.ficticia && b.disponibilitat && b.disponibilitat !== 'disponible' && (
+                      <p className={styles.disponibilitat} data-estat={b.disponibilitat}>
+                        {t(`disponibilitat.${b.disponibilitat}`)}
                       </p>
                     )}
                     {/* El preu, només si ve de la plataforma: les de mostra no en porten. */}

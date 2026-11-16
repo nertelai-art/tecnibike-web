@@ -225,8 +225,8 @@ export const articles: Article[] = [
 // de la plataforma (categoria «Bicicletes»). Les fotos són de la flota de lloguer i no tenen preu: la
 // pàgina diu ben clar que són de mostra.
 const mostra = (id: string, nom: string, imatge: string, talles: string[], fitxa: BiciVenda['fitxa']): BiciVenda => ({
-  id, nom, marca: '', preu: null, preuBase: 'consultar', ivaInclos: true, imatge, nomVariants: 'Talles',
-  variants: talles.map((nom) => ({ nom, preu: null })), fitxa, ficticia: true,
+  id, nom, marca: '', preu: null, preuBase: 'consultar', ivaInclos: true, imatge, imatges: [imatge], estoc: null, nomVariants: 'Talles',
+  variants: talles.map((nom) => ({ nom, preu: null, estoc: null })), fitxa, ficticia: true,
 });
 
 export const bicisVenda: BiciVenda[] = [

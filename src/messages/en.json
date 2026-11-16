@@ -231,7 +231,18 @@
     "si": "Yes",
     "no": "No",
     "lloguer": "Want to try one before you decide? We rent them too.",
-    "lloguerEnllac": "See our rental bikes"
+    "lloguerEnllac": "See our rental bikes",
+    "foto": "Photo {n} of {total}",
+    "disponibilitat": {
+      "disponible": "In stock at the shop",
+      "esgotada": "Sold out",
+      "perEncarrec": "Made to order"
+    },
+    "enEstoc": "{n, plural, one {# unit} other {# units}}",
+    "talla": {
+      "esgotada": "Sold out",
+      "queden": "{n} left"
+    }
   },
   "marques": {
     "situacio": "The brands",

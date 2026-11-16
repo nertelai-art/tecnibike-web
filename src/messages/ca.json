@@ -231,7 +231,18 @@
     "si": "Sí",
     "no": "No",
     "lloguer": "Vols provar-ne una abans de decidir-te? També en lloguem.",
-    "lloguerEnllac": "Mira les bicis de lloguer"
+    "lloguerEnllac": "Mira les bicis de lloguer",
+    "foto": "Foto {n} de {total}",
+    "disponibilitat": {
+      "disponible": "Disponible a la botiga",
+      "esgotada": "Esgotada",
+      "perEncarrec": "Per encàrrec"
+    },
+    "enEstoc": "{n, plural, one {# unitat} other {# unitats}}",
+    "talla": {
+      "esgotada": "Esgotada",
+      "queden": "{n, plural, one {Queda #} other {Queden #}}"
+    }
   },
   "marques": {
     "situacio": "Les marques",
