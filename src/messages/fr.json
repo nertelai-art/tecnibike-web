@@ -17,6 +17,11 @@
     "tancar": "Fermer le menu",
     "inici": "Tecnibike, accueil"
   },
+  "selector": {
+    "etiqueta": "Location ou achat",
+    "lloguer": "Location",
+    "compra": "Achat"
+  },
   "mostra": {
     "marca": "Donnée d'exemple, à confirmer",
     "nota": "Les données marquées d'un * sont des exemples et doivent être confirmées avec Tecnibike."
@@ -80,7 +85,6 @@
   "flota": {
     "situacio": "Location",
     "titol": "Choisissez votre vélo.",
-    "intro": "Des vélos de notre boutique, révisés après chaque location. Plus vous le gardez, plus le prix baisse.",
     "categories": {
       "totes": "Tous",
       "muntanya": "VTT",
@@ -211,7 +215,6 @@
     "preuDesDe": "À partir de {preu}"
   },
   "venda": {
-    "situacio": "Boutique",
     "titol": "Vélos à vendre",
     "intro": "Les vélos que nous vendons dans notre boutique de Sant Antoni de Calonge. Demandez-nous votre taille sur WhatsApp et venez l’essayer.",
     "tornarInici": "Retour à l’accueil",

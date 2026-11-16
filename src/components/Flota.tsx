@@ -13,6 +13,7 @@ import { formatEuros, preuMinimPerDia, preuPerDia } from '@/lib/preus';
 import { useReducedMotion } from '@/lib/scroll-scene';
 import { Revela } from './Revela';
 import styles from './Flota.module.css';
+import { SelectorLloguerCompra } from './SelectorLloguerCompra';
 
 type Filtre = 'totes' | CategoriaLloguer;
 const FILTRES: Filtre[] = ['totes', 'muntanya', 'carretera', 'gravel', 'passeig'];
@@ -113,11 +114,11 @@ export function Flota({ flota }: { flota: BiciLloguer[] }) {
       <div className="contenidor">
         <div className={styles.cap}>
           <div>
-            <p className="situacio">{t('situacio')}</p>
+            {/* On hi havia l'etiqueta «— Lloguer», el selector per anar a les bicis en venda. */}
+            <SelectorLloguerCompra actiu="lloguer" />
             <h2 id={`${id}-titol`} className="titol-seccio">
               {t('titol')}
             </h2>
-            <p className="intro">{t('intro')}</p>
           </div>
           <div className={styles.filtres} role="tablist" aria-label={t('situacio')}>
             {FILTRES.map((f) => (
