@@ -165,8 +165,13 @@ Versions que **no** són l'última, i per què:
   porta el compte, no zero) i totes les fotos (`images`, la principal la primera), que la fitxa ensenya
   en una galeria (`Galeria.tsx`).
 - **Selector «Lloguer | Compra»** (`SelectorLloguerCompra.tsx`, 16-11-2026): a dalt de la flota de
-  l'inici i de les bicis en venda, on hi havia l'etiqueta de la secció; cada pàgina hi marca la seva.
-  Per petició de l'Enric, cap de les dues capçaleres porta descripció sota el títol.
+  l'inici i de les bicis en venda, on hi havia l'etiqueta de la secció. **A l'inici canvia la graella
+  allà mateix** (l'Enric no volia que «Compra» portés a una altra pàgina): les targetes surten i entren
+  amb la mateixa animació que en canviar de categoria, i a la compra no hi ha ni filtres ni tarifes.
+  L'adreça se'n recorda (`#compra`), i en tornar enrere des d'una fitxa la graella és la que s'havia
+  triat. En clicar una bici en venda, la foto creix fins a la fitxa (`<ViewTransition name="venda-<id>">`,
+  com les de lloguer). A `/venda` són enllaços. Per petició de l'Enric, cap de les dues capçaleres porta
+  descripció sota el títol.
 - **Marques:** clicar una marca (carrusel de l'inici o tira d'una categoria) porta a `enllacMarca`: les
   de nutrició, al catàleg de nutrició filtrat (`?marca=`); la resta, a la seva fitxa
   `/[locale]/marques/[slug]` (`src/content/fitxes-marques.ts`: país, any, història, models destacats

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { ViewTransition } from 'react';
 import { Peu } from '@/components/Seccions';
 import { SelectorLloguerCompra } from '@/components/SelectorLloguerCompra';
 import { textPreuVenda } from '@/components/venda/preu';
@@ -57,10 +58,13 @@ export default async function BicisEnVenda({ params }: Params) {
             {bicis.map((b) => (
               <li key={b.id}>
                 <Link href={`/venda/${b.id}`} className={styles.targeta}>
-                  <div className={styles.foto}>
-                    {b.imatge && <Image src={b.imatge} alt="" width={640} height={480} sizes="(min-width: 900px) 33vw, 90vw" unoptimized={!optimitzable(b.imatge)} />}
-                    {b.ficticia && <span className={styles.etiquetaMostra}>{t('mostraEtiqueta')}</span>}
-                  </div>
+                  {/* El mateix nom que a la fitxa: en entrar-hi, la foto creix i es col·loca. */}
+                  <ViewTransition name={`venda-${b.id}`} share="morph" default="none">
+                    <div className={styles.foto}>
+                      {b.imatge && <Image src={b.imatge} alt="" width={640} height={480} sizes="(min-width: 900px) 33vw, 90vw" unoptimized={!optimitzable(b.imatge)} />}
+                      {b.ficticia && <span className={styles.etiquetaMostra}>{t('mostraEtiqueta')}</span>}
+                    </div>
+                  </ViewTransition>
                   <div className={styles.dades}>
                     {b.marca && <p className={styles.marca}>{b.marca}</p>}
                     <h2 className={styles.nom}>{b.nom}</h2>

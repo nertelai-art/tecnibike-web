@@ -24,6 +24,10 @@
 }
 
 .opcio {
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
   display: inline-flex;
   flex: 1;
   align-items: center;
@@ -44,7 +48,8 @@
 .opcio:hover {
   color: var(--taronja);
 }
-.opcio[aria-current='page'] {
+.opcio[aria-current='page'],
+.opcio[aria-pressed='true'] {
   background: var(--actiu-fons);
   color: var(--actiu-text);
 }
