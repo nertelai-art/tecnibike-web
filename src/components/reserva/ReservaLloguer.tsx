@@ -13,7 +13,7 @@ import { primerMomentReservable, esPassat, sumaDies, type Instant } from '@/lib/
 import { blocsDelDia, diesEntre, horesRecollida, horesRetorn, MAX_DIES_LLOGUER, minutsEntre, validaFranja } from '@/lib/horari';
 import type { Disponibilitat } from '@/lib/plataforma';
 import type { BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, LiniaNutricio, ModalitatPagament, Moment, ProducteNutricio } from '@/lib/plataforma/esquema';
-import { desglosLinia, duradaDe, formatEuros, importNutricio, preuPerDia } from '@/lib/preus';
+import { desglosLinia, duradaDe, formatEuros, importNutricio, preuNutricio, preuPerDia } from '@/lib/preus';
 import { extresLliures, primeraRecollida, retornPerDefecte, tallesLliures, variantsLliures } from '@/lib/reserva';
 import { useReducedMotion } from '@/lib/scroll-scene';
 import { BiciDelCarro, type LiniaFormulari } from './BiciDelCarro';
@@ -327,7 +327,7 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
                             <span>
                               {n.quantitat} × {p?.nom ?? n.producteId}
                             </span>
-                            <span>{p ? euros(p.preu * n.quantitat) : '—'}</span>
+                            <span>{p ? euros(preuNutricio(p, n.sabor) * n.quantitat) : '—'}</span>
                           </p>
                         );
                       })}

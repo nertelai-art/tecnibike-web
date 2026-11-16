@@ -2,11 +2,12 @@ import { primerMomentReservable, sumaDies } from '../calendari';
 import { diesEntre, validaFranja } from '../horari';
 import { importNutricio, totalReserva } from '../preus';
 import { productesNutricio } from './dades-nutricio';
-import { articles, configuracioReserves, extres, flota, horari, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
+import { articles, bicisVenda, configuracioReserves, extres, flota, horari, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
 import { frangesTaller, unitatsLliures } from './disponibilitat-prova';
 import {
   article,
   biciLloguer,
+  biciVenda,
   citaTaller,
   configuracioReserves as esquemaConfiguracio,
   extra,
@@ -238,6 +239,8 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
     nutricio: async () => producteNutricio.array().parse(productesNutricio),
     productes: async () => producte.array().parse(productes),
     articles: async (categoria) => article.array().parse(articles.filter((a) => a.categoria === categoria)),
+    bicisVenda: async () => biciVenda.array().parse(bicisVenda),
+    biciVenda: async (id) => biciVenda.array().parse(bicisVenda).find((b) => b.id === id) ?? null,
     valoracio: async () => valoracio.parse(valoracioGoogle),
     ressenyes: async () => ressenya.array().parse(ressenyes),
   };

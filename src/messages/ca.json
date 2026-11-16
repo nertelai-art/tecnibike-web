@@ -6,6 +6,7 @@
   "nav": {
     "saltar": "Salta al contingut",
     "lloguer": "Lloguer",
+    "venda": "Venda",
     "taller": "Taller",
     "rutes": "Rutes",
     "botiga": "Botiga",
@@ -15,6 +16,11 @@
     "menu": "Menú",
     "tancar": "Tanca el menú",
     "inici": "Tecnibike, inici"
+  },
+  "selector": {
+    "etiqueta": "Lloguer o compra",
+    "lloguer": "Lloguer",
+    "compra": "Compra"
   },
   "mostra": {
     "marca": "Dada de mostra, pendent de confirmar",
@@ -79,7 +85,6 @@
   "flota": {
     "situacio": "Lloguer",
     "titol": "Tria la teva bici.",
-    "intro": "Bicis de la nostra botiga, revisades després de cada lloguer. El preu baixa com més dies la tens.",
     "categories": {
       "totes": "Totes",
       "muntanya": "Muntanya",
@@ -208,6 +213,39 @@
     "veureMarca": "Mira la marca {marca}",
     "preuConsultar": "Preu a consultar",
     "preuDesDe": "Des de {preu}"
+  },
+  "venda": {
+    "titol": "Bicis en venda",
+    "intro": "Les bicis que venem a la botiga de Sant Antoni de Calonge. Pregunta’ns per WhatsApp per la teva talla i vine a provar-la.",
+    "tornarInici": "Torna a l’inici",
+    "tornar": "Totes les bicis en venda",
+    "mostraEtiqueta": "Mostra",
+    "mostra": "Encara no hi ha cap bici en venda al catàleg de la botiga. Aquestes són de mostra, perquè vegis com quedarà la pàgina: no estan a la venda.",
+    "mostraFitxa": "Aquesta bici és de mostra i no està a la venda. Quan la botiga doni d’alta les seves bicis al catàleg, sortiran aquí amb el preu.",
+    "opcions": "Opcions",
+    "preuConsultar": "Preu a consultar",
+    "preuDesDe": "Des de {preu}",
+    "ivaInclos": "IVA inclòs",
+    "ivaNoInclos": "IVA no inclòs",
+    "preguntar": "Pregunta per WhatsApp",
+    "missatge": "Hola! M’interessa la bici {bici}. Me’n podeu dir més?",
+    "nota": "De moment no venem en línia: escriu-nos i te la reservem a la botiga perquè la puguis provar.",
+    "fitxaTecnica": "Fitxa tècnica",
+    "si": "Sí",
+    "no": "No",
+    "lloguer": "Vols provar-ne una abans de decidir-te? També en lloguem.",
+    "lloguerEnllac": "Mira les bicis de lloguer",
+    "foto": "Foto {n} de {total}",
+    "disponibilitat": {
+      "disponible": "Disponible a la botiga",
+      "esgotada": "Esgotada",
+      "perEncarrec": "Per encàrrec"
+    },
+    "enEstoc": "{n, plural, one {# unitat} other {# unitats}}",
+    "talla": {
+      "esgotada": "Esgotada",
+      "queden": "{n, plural, one {Queda #} other {Queden #}}"
+    }
   },
   "marques": {
     "situacio": "Les marques",

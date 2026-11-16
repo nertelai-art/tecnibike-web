@@ -738,6 +738,19 @@
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
 }
+/* Els extres de cada grup de la plataforma («Pedals», «Accessoris»), amb el nom a sobre. */
+.grupExtres + .grupExtres {
+  margin-top: 14px;
+}
+.grupExtresNom {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+}
+
 .extra {
   position: relative;
   display: grid;
@@ -1134,11 +1147,18 @@
 /* ── Variants d'un extra (la talla del casc), sota la rajola un cop triat ── */
 
 .extres > li[data-amb-variants] {
+  /* Tota la fila: amb «span 2», al mòbil (una sola columna) es creava una segona columna que
+     sortia per la dreta. Les talles, a sota de la rajola; si hi ha lloc, al costat. */
   display: grid;
-  grid-column: span 2;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
   gap: 8px;
+}
+@container (min-width: 420px) {
+  .extres > li[data-amb-variants] {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
 }
 .variants {
   display: flex;

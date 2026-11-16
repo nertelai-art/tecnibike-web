@@ -6,6 +6,7 @@
   "nav": {
     "saltar": "Aller au contenu",
     "lloguer": "Location",
+    "venda": "Vente",
     "taller": "Atelier",
     "rutes": "Parcours",
     "botiga": "Boutique",
@@ -15,6 +16,11 @@
     "menu": "Menu",
     "tancar": "Fermer le menu",
     "inici": "Tecnibike, accueil"
+  },
+  "selector": {
+    "etiqueta": "Location ou achat",
+    "lloguer": "Location",
+    "compra": "Achat"
   },
   "mostra": {
     "marca": "Donnée d'exemple, à confirmer",
@@ -79,7 +85,6 @@
   "flota": {
     "situacio": "Location",
     "titol": "Choisissez votre vélo.",
-    "intro": "Des vélos de notre boutique, révisés après chaque location. Plus vous le gardez, plus le prix baisse.",
     "categories": {
       "totes": "Tous",
       "muntanya": "VTT",
@@ -208,6 +213,39 @@
     "veureMarca": "Voir la marque {marca}",
     "preuConsultar": "Prix sur demande",
     "preuDesDe": "À partir de {preu}"
+  },
+  "venda": {
+    "titol": "Vélos à vendre",
+    "intro": "Les vélos que nous vendons dans notre boutique de Sant Antoni de Calonge. Demandez-nous votre taille sur WhatsApp et venez l’essayer.",
+    "tornarInici": "Retour à l’accueil",
+    "tornar": "Tous les vélos à vendre",
+    "mostraEtiqueta": "Exemple",
+    "mostra": "Il n’y a pas encore de vélo à vendre dans le catalogue de la boutique. Ceux-ci sont des exemples, pour voir à quoi ressemblera la page : ils ne sont pas à vendre.",
+    "mostraFitxa": "Ce vélo est un exemple et n’est pas à vendre. Quand la boutique ajoutera ses vélos au catalogue, ils apparaîtront ici avec leur prix.",
+    "opcions": "Options",
+    "preuConsultar": "Prix sur demande",
+    "preuDesDe": "À partir de {preu}",
+    "ivaInclos": "TVA incluse",
+    "ivaNoInclos": "TVA non incluse",
+    "preguntar": "Demander sur WhatsApp",
+    "missatge": "Bonjour ! Le vélo {bici} m’intéresse. Pouvez-vous m’en dire plus ?",
+    "nota": "Nous ne vendons pas encore en ligne : écrivez-nous et nous vous le réservons en boutique pour que vous puissiez l’essayer.",
+    "fitxaTecnica": "Fiche technique",
+    "si": "Oui",
+    "no": "Non",
+    "lloguer": "Envie d’en essayer un avant de vous décider ? Nous en louons aussi.",
+    "lloguerEnllac": "Voir nos vélos de location",
+    "foto": "Photo {n} sur {total}",
+    "disponibilitat": {
+      "disponible": "Disponible en boutique",
+      "esgotada": "Épuisé",
+      "perEncarrec": "Sur commande"
+    },
+    "enEstoc": "{n, plural, one {# unité} other {# unités}}",
+    "talla": {
+      "esgotada": "Épuisé",
+      "queden": "{n, plural, one {Plus que #} other {Plus que #}}"
+    }
   },
   "marques": {
     "situacio": "Les marques",

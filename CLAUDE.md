@@ -32,7 +32,14 @@ Versions que **no** són l'última, i per què:
 - **Plataforma Nertel (app.nertel.ai):** tot el negoci (flota, disponibilitat, taller, reserves)
   passa per `src/lib/plataforma/` (contracte a `interficie.ts`). La plataforma és la font de veritat:
   si el client hi canvia una foto o un preu, la web canvia (catàleg, horari i ajustos es tornen a
-  llegir cada 5 minuts; la disponibilitat i les reserves, sempre en directe). Dues implementacions:
+  llegir cada 5 minuts; la disponibilitat i les reserves, sempre en directe). **Una compilació demana el
+  catàleg, l'horari i els ajustos una sola vegada per procés** (`compilant`, amb `NEXT_PHASE`): a Vercel,
+  la memòria de `fetch` no torna res durant la compilació i el 16-11-2026 cada pàgina va tornar a la
+  plataforma (593 crides en dues previsualitzacions, i la plataforma alentida). Per això les pàgines que
+  la llegeixen diuen `export const revalidate = 300` (una prova ho obliga). Es comprova amb
+  `node scripts/compta-crides-build.mjs --sense-cau`, contra una plataforma falsa; mai contra producció.
+  Detalls i què fer amb les previsualitzacions: [docs/compilacio-i-plataforma.md](docs/compilacio-i-plataforma.md).
+  Dues implementacions:
   - `remota/`: l'API de lloguer de la plataforma. S'activa amb `PLATAFORMA_API_URL` i
     `PLATAFORMA_API_CLAU` (només servidor, mai `NEXT_PUBLIC_`; noms a `.env.example`, valors a
     Vercel). La clau és de la botiga, amb els abasts `rental_read` i `rental_write`.
@@ -91,7 +98,11 @@ Versions que **no** són l'última, i per què:
   posicions dels bàners (en % del fotograma) són a `anatomia-fases.ts`, amb proves. (Es va provar
   de retallar la bici i posar-la sobre el taller, però el retall es veia malament.)
 - **Seccions plegables de la reserva:** els extres de cada bici i la nutrició es pleguen (`Plegable.tsx`),
-  amb el resum del que s'hi ha triat. Els extres sense foto a la plataforma porten una icona. En afegir
+  amb el resum del que s'hi ha triat. **Comencen obertes** (16-11-2026): plegades, l'Enric no veia que
+  hi hagués extres ni nutrició. Els extres surten agrupats pel grup de la plataforma (`grupNom`, «Pedals»,
+  «Accessoris»; `grupsExtres` a `src/lib/reserva.ts`); un grup d'un sol extra no porta títol i els solts
+  van junts (a Tecnibike cada extra té el seu grup, i el títol només repetia el nom). Un grup de pedals que no és obligatori a la
+  plataforma surt com un grup d'extres més, no com la secció «Pedals». Els extres sense foto a la plataforma porten una icona. En afegir
   una bici, la pàgina hi baixa fins a deixar-la al mig, la ressalta un moment i hi posa el focus.
 - **Variants d'extres:** un extra pot tenir variants (la talla del casc), cadascuna amb el seu estoc.
   Un cop triat, la rajola demana quina; la plataforma les rep a `items[].options[].variant`.
@@ -111,13 +122,17 @@ Versions que **no** són l'última, i per què:
   `py -3.12 scripts/retalla-fotos-nutricio.py <dir> public/img/nutricio` (Pillow i NumPy). **Abans
   de publicar-les a producció cal el permís de les marques** (vegeu `docs/nutricio-productes.md`). A la reserva, la nutrició és de la reserva
   sencera, no d'una bici: línies `{producteId, sabor, quantitat}`. Els sabors són variants amb estoc
-  propi, i l'estoc es ven i no torna (no depèn de les dates). Està **apagada**
-  (`configuracioReserves.nutricio.actiu`) a producció, a les previsualitzacions i amb la plataforma
-  real: és feina nova fora del pressupost i l'ha de decidir l'Enric (coordinadora de la plataforma,
-  11-11-2026). Només s'encén amb `pnpm dev` (`index.ts`), per ensenyar-la. Apagada, la pàgina
-  demana la nutrició per WhatsApp i una reserva que en porti es rebutja. Si tira endavant, la
-  plataforma provarà de reutilitzar el catàleg i les comandes que ja té (una reserva amb una comanda
-  de botiga lligada, amb estoc per variant), i el contracte es tornarà a copiar. Si un producte no té foto, surt una il·lustració pròpia (`Paquet.tsx`). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
+  propi, i l'estoc es ven i no torna (no depèn de les dates). **Des del 16-11-2026 la decideix la
+  plataforma:** amb la plataforma real, la nutrició de la reserva són els articles que la botiga ven
+  amb el lloguer (`GET /catalog` → `shopItems`, amb els sabors com a variants i el preu de cada sabor),
+  l'estoc surt de `GET /availability` → `shopItems`, i la reserva els envia com a `shopItems`
+  (`{variantId, quantity}`, sense preu). S'encén sola quan la botiga té «Ven articles amb el lloguer»
+  (`GET /settings` → `shopItemsEnabled`) i almenys un article; si no, és apagada, la pàgina la demana
+  per WhatsApp i una reserva que en porti es rebutja abans d'enviar-la. La marca, el format, el tipus,
+  el moment i els carbohidrats surten dels camps del catàleg (`marca`, `format`, `tipus`, `moment`,
+  `carbohidrats`, `cafeïna`); el tipus, si no hi és, es dedueix del nom. Sense la clau de la
+  plataforma, la de proves l'encén només amb `pnpm dev` (`index.ts`). Mentre la botiga no tingui cap
+  article, el catàleg de nutrició de la botiga ensenya els de prova. Si un producte no té foto, surt una il·lustració pròpia (`Paquet.tsx`). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
 - **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`).
 - **Vídeos generats amb IA** (Higgsfield: Nano Banana 2.1 per als fotogrames clau i Kling 4.0 per
   als vídeos) a partir de les fotos reals de la Pinarello del client. No són gravacions: s'ha de dir
@@ -137,6 +152,21 @@ Versions que **no** són l'última, i per què:
   ve de la plataforma** (tancat, «des de» o a consultar), perquè l'equip de la botiga sàpiga que el que
   es veu és el que hi ha posat. Mentre no n'hi hagi cap d'una categoria, surten els de mostra, sense
   preu. Les fotos de les categories són de Wikimedia Commons, amb els crèdits al peu.
+- **Bicis en venda** (`/[locale]/venda` i `/[locale]/venda/[id]`, 16-11-2026): el llistat i la fitxa
+  de cada bici. Surten dels **productes de venda del catàleg de la plataforma** (`saleProducts`) d'una
+  categoria de bicis («Bicicletes», «Bicis de segona mà»…: `esCategoriaBicis` a `remota/index.ts`), no
+  de la flota de lloguer. La fitxa ensenya la foto, el preu (tancat, «des de» o a consultar, amb l'IVA),
+  les variants (talles) amb el seu preu si és diferent, la descripció i la fitxa tècnica, que són els
+  camps del catàleg tal com els escriu la botiga (`quadre`, `grup`, `any`…; `marca` va a dalt). Es
+  pregunta per WhatsApp. Mentre la botiga no n'hagi donat d'alta cap, surten quatre bicis **de mostra**
+  (`bicisVenda` a `dades-prova.ts`, amb fotos de la flota) amb un avís ben visible i sense preu.
+  Des de la plataforma v1.0.14 (16-11-2026) també porta si es pot comprar (`availability`: disponible,
+  esgotada o per encàrrec), quantes n'hi ha (`stock`, de la bici i de cada talla; nul vol dir que no se'n
+  porta el compte, no zero) i totes les fotos (`images`, la principal la primera), que la fitxa ensenya
+  en una galeria (`Galeria.tsx`).
+- **Selector «Lloguer | Compra»** (`SelectorLloguerCompra.tsx`, 16-11-2026): a dalt de la flota de
+  l'inici i de les bicis en venda, on hi havia l'etiqueta de la secció; cada pàgina hi marca la seva.
+  Per petició de l'Enric, cap de les dues capçaleres porta descripció sota el títol.
 - **Marques:** clicar una marca (carrusel de l'inici o tira d'una categoria) porta a `enllacMarca`: les
   de nutrició, al catàleg de nutrició filtrat (`?marca=`); la resta, a la seva fitxa
   `/[locale]/marques/[slug]` (`src/content/fitxes-marques.ts`: país, any, història, models destacats

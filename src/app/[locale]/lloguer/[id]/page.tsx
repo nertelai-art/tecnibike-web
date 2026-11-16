@@ -12,6 +12,10 @@ import styles from '@/components/reserva/Reserva.module.css';
 
 type Params = { params: Promise<{ locale: string; id: string }> };
 
+// Es torna a generar cada 5 minuts (REVALIDA_S de la plataforma), perquè el que canviï a la plataforma
+// hi surti: vegeu src/app/revalida.test.ts.
+export const revalidate = 300;
+
 export async function generateStaticParams() {
   return (await plataforma.flota()).map((bici) => ({ id: bici.id }));
 }
