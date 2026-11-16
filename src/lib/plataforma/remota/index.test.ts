@@ -1,5 +1,6 @@
+import { CATEGORIES_EQUIPAMENT } from '../../../content/equipament';
 import { horesRecollida } from '../../horari';
-import { crearPlataformaProva, ErrorReserva } from '../index';
+import { crearPlataformaProva, ErrorReserva, type Plataforma } from '../index';
 import type { ReservaLloguer } from '../esquema';
 import {
   RentalAvailabilityResponseSchema,
@@ -101,13 +102,21 @@ function apiFalsa(respostes: Record<string, { estat?: number; cos: unknown }>) {
 const proves = () => crearPlataformaProva({ generaCodi: () => 'TB-PROVA', rellotge: () => new Date('2026-10-27T07:00:00Z') });
 const R = '/api/public/rental';
 
-function remota(respostes: Record<string, { estat?: number; cos: unknown }> = {}, { clauCites }: { clauCites?: string } = {}) {
-  const api = apiFalsa({ [`GET ${R}/catalog`]: { cos: cataleg }, [`GET ${R}/hours`]: { cos: hores }, [`GET ${R}/settings`]: { cos: ajustos() }, ...respostes });
+function remota(
+  respostes: Record<string, { estat?: number; cos: unknown }> = {},
+  { clauCites, compilant }: { clauCites?: string; compilant?: boolean } = {},
+) {
+  const totes = { [`GET ${R}/catalog`]: { cos: cataleg }, [`GET ${R}/hours`]: { cos: hores }, [`GET ${R}/settings`]: { cos: ajustos() }, ...respostes };
+  const api = apiFalsa(totes);
   const plataforma = crearPlataformaRemota({
-    url: 'https://app.prova', clau: 'clau-prova', clauCites, fetch: api.fetch, generaClau: () => 'clau-idempotencia-1', proves: proves(),
+    url: 'https://app.prova', clau: 'clau-prova', clauCites, compilant, fetch: api.fetch, generaClau: () => 'clau-idempotencia-1', proves: proves(),
   });
-  return { plataforma, crides: api.crides };
+  return { plataforma, crides: api.crides, respostes: totes };
 }
+
+/** Quantes vegades s'ha demanat cada ruta de lectura (`GET`). */
+const lectures = (crides: Crida[]) =>
+  crides.filter((c) => c.metode === 'GET').reduce<Record<string, number>>((n, c) => ({ ...n, [c.url.pathname.replace(R, '')]: (n[c.url.pathname.replace(R, '')] ?? 0) + 1 }), {});
 
 describe('plataforma remota: el catàleg', () => {
   it('cada model és una bici de la flota, amb una adreça llegible i les tarifes per trams', async () => {
@@ -453,6 +462,57 @@ describe('plataforma remota: el taller', () => {
     expect(await plataforma.frangesTaller('2026-11-17')).toBeNull();
     await expect(plataforma.crearCitaTaller(cita)).rejects.toMatchObject({ motiu: 'noDisponible' });
     expect(crides.filter((c) => c.url.pathname.startsWith(B))).toHaveLength(0);
+  });
+});
+
+describe('plataforma remota: una compilació llegeix el catàleg una vegada (16-11-2026)', () => {
+  // El 16-11-2026, dues previsualitzacions de Vercel van fer 593 crides al catàleg de producció:
+  // a Vercel, la memòria de `fetch` de Next no torna res durant la compilació, i cada pàgina hi
+  // tornava. Això fa el que fan les pàgines en generar-se: els quatre idiomes, la portada, una fitxa
+  // per bici (amb les metadades) i una pàgina per categoria de la botiga.
+  const IDIOMES = ['ca', 'es', 'en', 'fr'];
+  async function generaTotesLesPagines(p: Plataforma) {
+    const bicis = await p.flota(); // generateStaticParams de la fitxa
+    await Promise.all(
+      IDIOMES.flatMap(() => [
+        Promise.all([p.flota(), p.serveisTaller(), p.valoracio(), p.ressenyes()]),
+        ...bicis.map((b) => Promise.all([p.bici(b.id), p.bici(b.id), p.flota(), p.extres(), p.horari(), p.configuracioReserves(), p.nutricio()])),
+        ...CATEGORIES_EQUIPAMENT.map((c) => Promise.all([c === 'nutricio' ? p.nutricio() : p.articles(c), p.configuracioReserves()])),
+      ]),
+    );
+  }
+
+  it("durant la compilació, el catàleg, l'horari i els ajustos es demanen una sola vegada", async () => {
+    const { plataforma, crides } = remota({}, { compilant: true });
+    await generaTotesLesPagines(plataforma);
+    await generaTotesLesPagines(plataforma); // les pàgines que es generen quan les primeres ja han acabat
+    expect(lectures(crides)).toEqual({ '/catalog': 1, '/hours': 1, '/settings': 1 });
+  });
+
+  it('fora de la compilació, les lectures simultànies en fan una; la següent torna a la plataforma', async () => {
+    const { plataforma, crides } = remota();
+    await Promise.all([plataforma.flota(), plataforma.extres(), plataforma.bici('btt'), plataforma.horari(), plataforma.horari()]);
+    expect(lectures(crides)).toEqual({ '/catalog': 1, '/hours': 1 });
+    await plataforma.flota();
+    expect(lectures(crides)['/catalog']).toBe(2);
+  });
+
+  it('una lectura que falla no es guarda: la següent ho torna a provar', async () => {
+    const { plataforma, crides, respostes } = remota({ [`GET ${R}/catalog`]: { estat: 503, cos: { error: { code: 'unavailable', message: 'ocupada' } } } }, { compilant: true });
+    await expect(plataforma.flota()).rejects.toThrow(/503/);
+    respostes[`GET ${R}/catalog`] = { cos: cataleg };
+    expect(await plataforma.flota()).toHaveLength(3);
+    expect(lectures(crides)['/catalog']).toBe(2);
+  });
+
+  it('la disponibilitat no es comparteix mai, ni compilant: és sempre en directe', async () => {
+    const lliures = RentalAvailabilityResponseSchema.parse({
+      timeZone: 'Europe/Madrid', pickup: { date: '2026-11-20', time: '10:00' }, return: { date: '2026-11-21', time: '10:00' }, models: [], options: [], shopItems: [],
+    });
+    const { plataforma, crides } = remota({ [`GET ${R}/availability`]: { cos: lliures } }, { compilant: true });
+    const franja = [{ dia: '2026-11-20', hora: '10:00' }, { dia: '2026-11-21', hora: '10:00' }] as const;
+    await Promise.all([plataforma.disponibilitat(...franja, ['btt']), plataforma.disponibilitat(...franja, ['btt'])]);
+    expect(lectures(crides)['/availability']).toBe(2);
   });
 });
 

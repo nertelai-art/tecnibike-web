@@ -40,8 +40,11 @@ import { WebBookingAvailabilityResponseSchema, WebBookingErrorResponseSchema, We
 // El que la plataforma encara no té a l'API (els productes per peça, les ressenyes i els
 // participants) surt de la implementació de proves.
 
-/** Quant temps es reaprofita el catàleg, l'horari i els ajustos: el que hi canviï a la plataforma surt a la web en aquest temps. */
-const REVALIDA_S = 300;
+/**
+ * Quant temps es reaprofita el catàleg, l'horari i els ajustos: el que hi canviï a la plataforma surt
+ * a la web en aquest temps. Les pàgines que els llegeixen ho diuen també amb `export const revalidate`.
+ */
+export const REVALIDA_S = 300;
 /** La foto d'una bici que a la plataforma no en té. */
 const SENSE_FOTO = '/img/flota/sense-foto.svg';
 
@@ -59,6 +62,12 @@ type Opcions = {
   serveiCita?: string;
   /** La implementació del que la plataforma encara no té a l'API. */
   proves: Plataforma;
+  /**
+   * Si és la compilació (`next build`): el catàleg, l'horari i els ajustos es demanen una sola vegada
+   * per procés i serveixen per a totes les pàgines. Fora de la compilació, només es comparteixen les
+   * lectures simultànies.
+   */
+  compilant?: boolean;
   fetch?: typeof globalThis.fetch;
   /** Una clau d'idempotència per a cada enviament d'una reserva. */
   generaClau?: () => string;
@@ -239,8 +248,30 @@ export function resultatDelPagament(parametres: Record<string, string | string[]
   return null;
 }
 
-export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves, fetch = globalThis.fetch, generaClau = () => crypto.randomUUID() }: Opcions): Plataforma {
-  async function crida(ruta: string, { metode = 'GET', cos, idempotencia, revalida }: { metode?: string; cos?: unknown; idempotencia?: string; revalida?: boolean } = {}) {
+export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves, compilant = false, fetch = globalThis.fetch, generaClau = () => crypto.randomUUID() }: Opcions): Plataforma {
+  /**
+   * Les lectures que fan servir totes les pàgines (catàleg, horari i ajustos), una per ruta. Qui la
+   * demana mentre ja s'està fent espera la mateixa resposta; compilant, a més, es guarda fins al final.
+   * No es pot deixar a la memòria de `fetch` de Next: a Vercel, durant la compilació, no torna res, i
+   * el 16-11-2026 cada pàgina va tornar a la plataforma (593 crides al catàleg en dues compilacions).
+   * Una lectura que falla no es guarda.
+   */
+  const compartides = new Map<string, Promise<unknown>>();
+
+  function crida(ruta: string, opcions: { metode?: string; cos?: unknown; idempotencia?: string; revalida?: boolean } = {}): Promise<unknown> {
+    if (!opcions.revalida) return demana(ruta, opcions);
+    const compartida = compartides.get(ruta);
+    if (compartida) return compartida;
+    const lectura = demana(ruta, opcions);
+    compartides.set(ruta, lectura);
+    const oblida = () => {
+      if (compartides.get(ruta) === lectura) compartides.delete(ruta);
+    };
+    lectura.then(compilant ? undefined : oblida, oblida);
+    return lectura;
+  }
+
+  async function demana(ruta: string, { metode = 'GET', cos, idempotencia, revalida }: { metode?: string; cos?: unknown; idempotencia?: string; revalida?: boolean }) {
     const resposta = await fetch(new URL(`/api/public/rental${ruta}`, url), {
       method: metode,
       headers: {
