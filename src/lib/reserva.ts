@@ -102,9 +102,18 @@ export function commutaExtra(triats: readonly string[], id: string, extres: read
   return [...triats.filter((x) => !delGrup.has(x)), id];
 }
 
-/** Els extres agrupats pel nom del grup de la plataforma («Pedals», «Accessoris»), en l'ordre en què arriben. */
+/**
+ * Els extres agrupats pel nom del grup de la plataforma («Pedals», «Accessoris»), en l'ordre en què
+ * arriben. Un grup d'un sol extra no porta títol (només repetiria el nom de l'extra: a Tecnibike cada
+ * extra té el seu grup), i tots els solts van junts, al lloc del primer.
+ */
 export function grupsExtres<T extends { grupNom?: string }>(extres: readonly T[]): { nom: string | undefined; extres: T[] }[] {
+  const perNom = new Map<string | undefined, T[]>();
+  for (const e of extres) perNom.set(e.grupNom, [...(perNom.get(e.grupNom) ?? []), e]);
   const grups = new Map<string | undefined, T[]>();
-  for (const e of extres) grups.set(e.grupNom, [...(grups.get(e.grupNom) ?? []), e]);
+  for (const [nom, delGrup] of perNom) {
+    const clau = delGrup.length > 1 ? nom : undefined;
+    grups.set(clau, [...(grups.get(clau) ?? []), ...delGrup]);
+  }
   return [...grups].map(([nom, extres]) => ({ nom, extres }));
 }

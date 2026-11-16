@@ -93,7 +93,8 @@ Versions que **no** són l'última, i per què:
 - **Seccions plegables de la reserva:** els extres de cada bici i la nutrició es pleguen (`Plegable.tsx`),
   amb el resum del que s'hi ha triat. **Comencen obertes** (16-11-2026): plegades, l'Enric no veia que
   hi hagués extres ni nutrició. Els extres surten agrupats pel grup de la plataforma (`grupNom`, «Pedals»,
-  «Accessoris»; `grupsExtres` a `src/lib/reserva.ts`). Un grup de pedals que no és obligatori a la
+  «Accessoris»; `grupsExtres` a `src/lib/reserva.ts`); un grup d'un sol extra no porta títol i els solts
+  van junts (a Tecnibike cada extra té el seu grup, i el títol només repetia el nom). Un grup de pedals que no és obligatori a la
   plataforma surt com un grup d'extres més, no com la secció «Pedals». Els extres sense foto a la plataforma porten una icona. En afegir
   una bici, la pàgina hi baixa fins a deixar-la al mig, la ressalta un moment i hi posa el focus.
 - **Variants d'extres:** un extra pot tenir variants (la talla del casc), cadascuna amb el seu estoc.
