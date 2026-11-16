@@ -1,5 +1,5 @@
 import type { HorariBotiga } from './plataforma/esquema';
-import { afegeixNutricio, commutaExtra, extresLliures, nutricioLliure, primeraRecollida, retornPerDefecte, tallesLliures, variantsLliures } from './reserva';
+import { afegeixNutricio, commutaExtra, extresLliures, grupsExtres, nutricioLliure, primeraRecollida, retornPerDefecte, tallesLliures, variantsLliures } from './reserva';
 
 const feiner = [
   { obre: '09:00', tanca: '13:00' },
@@ -96,5 +96,24 @@ describe('triar extres', () => {
 
   it("d'un mateix grup de la plataforma se'n pot triar un com a molt: el nou substitueix l'anterior", () => {
     expect(commutaExtra(['casc', 'cadenat'], 'compta', extres)).toEqual(['casc', 'compta']);
+  });
+});
+
+describe('grupsExtres', () => {
+  it("agrupa els extres pel nom del grup de la plataforma, en l'ordre en què arriben", () => {
+    const extres = [
+      { id: 'a', grupNom: 'Accessoris' },
+      { id: 'p', grupNom: 'Pedals' },
+      { id: 'b', grupNom: 'Accessoris' },
+    ];
+    expect(grupsExtres(extres)).toEqual([
+      { nom: 'Accessoris', extres: [extres[0], extres[2]] },
+      { nom: 'Pedals', extres: [extres[1]] },
+    ]);
+  });
+
+  it('sense noms de grup (les dades de prova), un sol grup sense títol', () => {
+    const extres: { id: string; grupNom?: string }[] = [{ id: 'a' }, { id: 'b' }];
+    expect(grupsExtres(extres)).toEqual([{ nom: undefined, extres }]);
   });
 });

@@ -70,6 +70,32 @@ export const article = z.object({
   ficticia: z.boolean(),
 });
 
+/** Una variant d'una bici en venda (la talla, el color), amb el seu preu si no és el de la bici. */
+export const varianteVenda = z.object({ nom: z.string(), preu: centims.nullable() });
+
+/**
+ * Una bici en venda: un producte de venda del catàleg de la plataforma, de la categoria de bicis. No
+ * té res a veure amb la flota de lloguer.
+ */
+export const biciVenda = z.object({
+  /** L'adreça llegible: `orbea-oiz-m30`. */
+  id: z.string(),
+  nom: z.string(),
+  marca: z.string(),
+  /** Nul si és a consultar. */
+  preu: centims.nullable(),
+  preuBase: z.enum(['exacte', 'desDe', 'consultar']),
+  ivaInclos: z.boolean(),
+  descripcio: z.string().optional(),
+  imatge: z.string().optional(),
+  /** Com en diu la botiga, de les variants: «Talles», «Colors». */
+  nomVariants: z.string().optional(),
+  variants: z.array(varianteVenda),
+  /** La fitxa tècnica: els camps del catàleg (quadre, grup, any…), com els ha escrit la botiga. */
+  fitxa: z.array(z.object({ camp: z.string(), valor: z.union([z.string(), z.boolean()]) })),
+  ficticia: z.boolean(),
+});
+
 export const ressenya = z.object({
   autor: z.string(),
   estrelles: z.number().int().min(1).max(5),
@@ -121,6 +147,8 @@ export const extra = z.object({
   nom: z.string().optional(),
   /** El grup d'opcions de la plataforma: dels extres d'un mateix grup se'n pot triar un com a molt. */
   grupId: z.string().optional(),
+  /** El nom del grup a la plataforma («Pedals», «Accessoris»): el formulari els agrupa per aquest nom. */
+  grupNom: z.string().optional(),
   imatge: z.string().optional(),
   preu: centims,
   cobrament: z.enum(['perReserva', 'perDia']),
@@ -147,6 +175,8 @@ export const saborNutricio = z.object({
   nom: z.string().optional(),
   /** La foto d'aquest sabor, si l'envàs canvia. Sense, la del producte. */
   imatge: z.string().optional(),
+  /** El preu d'aquest sabor, si no és el del producte. */
+  preu: centims.optional(),
   estoc: z.number().int().nonnegative().nullable(),
 });
 
@@ -322,4 +352,5 @@ export type Ressenya = z.infer<typeof ressenya>;
 export type Producte = z.infer<typeof producte>;
 export type CategoriaEquipament = z.infer<typeof categoriaEquipament>;
 export type Article = z.infer<typeof article>;
+export type BiciVenda = z.infer<typeof biciVenda>;
 export type Valoracio = z.infer<typeof valoracio>;

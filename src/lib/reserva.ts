@@ -101,3 +101,10 @@ export function commutaExtra(triats: readonly string[], id: string, extres: read
   const delGrup = grup ? new Set(extres.filter((e) => e.grupId === grup).map((e) => e.id)) : new Set<string>();
   return [...triats.filter((x) => !delGrup.has(x)), id];
 }
+
+/** Els extres agrupats pel nom del grup de la plataforma («Pedals», «Accessoris»), en l'ordre en què arriben. */
+export function grupsExtres<T extends { grupNom?: string }>(extres: readonly T[]): { nom: string | undefined; extres: T[] }[] {
+  const grups = new Map<string | undefined, T[]>();
+  for (const e of extres) grups.set(e.grupNom, [...(grups.get(e.grupNom) ?? []), e]);
+  return [...grups].map(([nom, extres]) => ({ nom, extres }));
+}

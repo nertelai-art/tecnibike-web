@@ -1,0 +1,124 @@
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Peu } from '@/components/Seccions';
+import { textPreuVenda } from '@/components/venda/preu';
+import { Link } from '@/i18n/navigation';
+import { enllacWhatsapp } from '@/lib/contacte';
+import { optimitzable } from '@/lib/imatges';
+import { plataforma } from '@/lib/plataforma';
+import { formatEuros } from '@/lib/preus';
+import styles from '@/components/venda/Venda.module.css';
+
+// Fitxa d'una bici en venda: la foto, el preu, les talles, la descripció i la fitxa tècnica (els camps
+// que la botiga hi ha posat al catàleg). Tecnibike encara no ven en línia: es pregunta per WhatsApp i
+// es reserva a la botiga.
+
+type Params = { params: Promise<{ locale: string; id: string }> };
+
+export async function generateStaticParams() {
+  return (await plataforma.bicisVenda()).map((b) => ({ id: b.id }));
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { id } = await params;
+  const bici = await plataforma.biciVenda(id);
+  if (!bici) return {};
+  return {
+    title: `${[bici.marca, bici.nom].filter(Boolean).join(' ')} · Tecnibike`,
+    ...(bici.descripcio && { description: bici.descripcio }),
+    ...(bici.imatge && { openGraph: { images: [bici.imatge] } }),
+  };
+}
+
+/** El nom d'un camp del catàleg («quadre», «elèctrica») amb la primera lletra en majúscula. */
+const nomCamp = (camp: string) => camp.charAt(0).toLocaleUpperCase() + camp.slice(1);
+
+export default async function FitxaVenda({ params }: Params) {
+  const { locale, id } = await params;
+  setRequestLocale(locale);
+  const bici = await plataforma.biciVenda(id);
+  if (!bici) notFound();
+  const t = await getTranslations('venda');
+  const nom = [bici.marca, bici.nom].filter(Boolean).join(' ');
+
+  return (
+    <>
+      <main id="contingut" className={styles.pagina}>
+        <div className={`contenidor ${styles.fitxa}`}>
+          <Link href="/venda" className={styles.tornar}>
+            ← {t('tornar')}
+          </Link>
+
+          <div className={styles.fotoGran}>
+            {bici.imatge && <Image src={bici.imatge} alt={nom} width={1200} height={900} priority sizes="(min-width: 860px) 55vw, 92vw" unoptimized={!optimitzable(bici.imatge)} />}
+            {bici.ficticia && <span className={styles.etiquetaMostra}>{t('mostraEtiqueta')}</span>}
+          </div>
+
+          <div className={styles.info}>
+            {bici.marca && <p className={styles.marca}>{bici.marca}</p>}
+            <h1>{bici.nom}</h1>
+
+            {bici.ficticia ? (
+              <p className={styles.avisMostra} role="note">
+                <strong>{t('mostraEtiqueta')}</strong>
+                <span>{t('mostraFitxa')}</span>
+              </p>
+            ) : (
+              <p className={styles.preuGran}>
+                {textPreuVenda(bici, t, locale)}
+                {bici.preu !== null && <small>{t(bici.ivaInclos ? 'ivaInclos' : 'ivaNoInclos')}</small>}
+              </p>
+            )}
+
+            {bici.variants.length > 0 && (
+              <>
+                <p className={styles.etiqueta}>{bici.nomVariants ?? t('opcions')}</p>
+                <ul className={styles.variants}>
+                  {bici.variants.map((v) => (
+                    <li key={v.nom}>
+                      {v.nom}
+                      {/* El preu d'una talla, només si no és el de la bici. */}
+                      {!bici.ficticia && v.preu !== null && v.preu !== bici.preu && <small>{formatEuros(v.preu, locale)}</small>}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            <div className={styles.accions}>
+              <a className="boto boto--blau" href={enllacWhatsapp(t('missatge', { bici: nom }))} target="_blank" rel="noopener noreferrer">
+                {t('preguntar')}
+              </a>
+            </div>
+            <p className={styles.nota}>{t('nota')}</p>
+
+            {bici.descripcio && <p className={styles.descripcio}>{bici.descripcio}</p>}
+
+            {bici.fitxa.length > 0 && (
+              <section aria-labelledby="fitxa-tecnica">
+                <h2 id="fitxa-tecnica" className={styles.etiqueta}>
+                  {t('fitxaTecnica')}
+                </h2>
+                <dl className={styles.taula} style={{ marginTop: 14 }}>
+                  {bici.fitxa.map((f) => (
+                    <div key={f.camp} style={{ display: 'contents' }}>
+                      <dt>{nomCamp(f.camp)}</dt>
+                      <dd>{typeof f.valor === 'boolean' ? t(f.valor ? 'si' : 'no') : f.valor}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )}
+
+            <p className={styles.lloguer}>
+              {t('lloguer')} <Link href="/#flota">{t('lloguerEnllac')}</Link>
+            </p>
+          </div>
+        </div>
+      </main>
+      <Peu />
+    </>
+  );
+}

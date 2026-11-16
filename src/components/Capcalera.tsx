@@ -9,6 +9,7 @@ import styles from './Capcalera.module.css';
 
 const ENLLACOS = [
   { href: '/#flota', clau: 'lloguer' },
+  { href: '/venda', clau: 'venda' },
   { href: '/#taller', clau: 'taller' },
   { href: '/#rutes', clau: 'rutes' },
   { href: '/#botiga', clau: 'botiga' },
