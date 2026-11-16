@@ -7,6 +7,10 @@ import { WhatsappFlotant } from '@/components/WhatsappFlotant';
 import { Botiga, ComFunciona, Equipament, Marques, Peu, Preguntes, Ressenyes, Rutes, Taller, Visita } from '@/components/Seccions';
 import { plataforma } from '@/lib/plataforma';
 
+// Es torna a generar cada 5 minuts (REVALIDA_S de la plataforma), perquè el que canviï a la plataforma
+// hi surti: vegeu src/app/revalida.test.ts.
+export const revalidate = 300;
+
 export default async function Inici({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);

@@ -28,4 +28,7 @@ const proves = crearPlataformaProva({
 const connexio = connexioDe(process.env);
 
 export const plataformaRemota = connexio !== null;
-export const plataforma: Plataforma = connexio ? crearPlataformaRemota({ ...connexio, proves }) : proves;
+// Compilant (`next build`, també a Vercel), el catàleg, l'horari i els ajustos es demanen una sola
+// vegada per procés, no un cop per pàgina (vegeu `compilant` a remota/index.ts).
+const compilant = process.env.NEXT_PHASE === 'phase-production-build';
+export const plataforma: Plataforma = connexio ? crearPlataformaRemota({ ...connexio, proves, compilant }) : proves;
