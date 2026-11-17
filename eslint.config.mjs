@@ -16,5 +16,6 @@ export default defineConfig([
       ],
     },
   },
-  globalIgnores(['.next/**', 'out/**', 'next-env.d.ts', 'coverage/**', 'public/vendor/**']),
+  // `.claude/` no és codi de la web: hi pot haver còpies del repositori (worktrees) amb el seu `.next`.
+  globalIgnores(['.next/**', 'out/**', 'next-env.d.ts', 'coverage/**', 'public/vendor/**', '.claude/**']),
 ]);
