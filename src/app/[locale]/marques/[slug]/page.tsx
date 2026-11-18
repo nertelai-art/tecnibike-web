@@ -9,7 +9,6 @@ import { fitxaMarca, FITXES_MARQUES } from '@/content/fitxes-marques';
 import { enllacMarca, MARQUES, slugMarca, type Marca } from '@/content/marques';
 import { Link } from '@/i18n/navigation';
 import { routing, type Locale } from '@/i18n/routing';
-import { enllacWhatsapp } from '@/lib/contacte';
 import styles from '@/components/marques/Fitxa.module.css';
 
 // Fitxa d'una marca de bicis, components o equipament: d'on és, què fa, què en destaquem i què pots
@@ -59,7 +58,6 @@ export default async function FitxaDeMarca({ params }: Params) {
   const germanes = MARQUES.filter((m) => m.categoria === marca.categoria && m.nom !== marca.nom);
   // A quina pàgina de la botiga es troba l'equipament d'aquesta marca (cascs, ulleres, roba…).
   const categoriaBotiga = CATEGORIES_EQUIPAMENT.find((c) => (marca.tipus as string[]).includes(c));
-  const whatsapp = enllacWhatsapp(tm('missatge', { marca: marca.nom }));
   const fonts = [...new Set(fitxa.imatges.map((i) => new URL(i.font).origin))];
 
   return (
@@ -147,9 +145,6 @@ export default async function FitxaDeMarca({ params }: Params) {
                 <span className="fletxa">→</span>
               </Link>
             )}
-            <a className="boto boto--clar" href={whatsapp} target="_blank" rel="noopener noreferrer">
-              {tm('pregunta', { marca: marca.nom })}
-            </a>
           </div>
         </section>
 

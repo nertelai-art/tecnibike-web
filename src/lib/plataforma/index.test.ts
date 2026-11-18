@@ -254,6 +254,22 @@ describe('participants i signatura', () => {
   });
 });
 
+describe("contacte per una bici en venda", () => {
+  const contacte = { biciId: 'mostra-gravel', variant: 'M', missatge: "M'interessa, la puc provar?", ...client };
+
+  it('la de prova desa la petició i en torna el codi', async () => {
+    const p = nova();
+    expect(await p.contacteVendaEnLinia()).toBe(true);
+    expect(await p.enviarContacteVenda(contacte)).toEqual({ codi: 'TB-PROVA1' });
+  });
+
+  it("no accepta una bici que no hi és ni una petició sense telèfon", async () => {
+    const p = nova();
+    await expect(p.enviarContacteVenda({ ...contacte, biciId: 'no-hi-es' })).rejects.toMatchObject({ motiu: 'dades' });
+    await expect(p.enviarContacteVenda({ ...contacte, telefon: '' } as never)).rejects.toThrow();
+  });
+});
+
 describe('cita al taller', () => {
   it('ocupa una plaça de la franja triada', async () => {
     const p = nova();

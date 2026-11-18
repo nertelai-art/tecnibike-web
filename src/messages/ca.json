@@ -15,7 +15,8 @@
     "idioma": "Idioma",
     "menu": "Menú",
     "tancar": "Tanca el menú",
-    "inici": "Tecnibike, inici"
+    "inici": "Tecnibike, inici",
+    "idiomaActual": "Idioma: {idioma}. Canvia d’idioma"
   },
   "selector": {
     "etiqueta": "Lloguer o compra",
@@ -208,16 +209,14 @@
   },
   "botigaCategoria": {
     "tornar": "Torna a l’inici",
-    "aviat": "Aquí tens el que trobaràs a la botiga. Per reservar-ho, escriu-nos per WhatsApp i passa a recollir-ho: t’ho tindrem a punt.",
-    "reservar": "Reserva-ho per WhatsApp",
-    "missatge": "Hola! Voldria reservar: {article}.",
+    "aviat": "Aquí tens el que trobaràs a la botiga. Vine a veure-ho o truca’ns al 972 66 29 51 i t’ho tindrem a punt.",
     "veureMarca": "Mira la marca {marca}",
     "preuConsultar": "Preu a consultar",
     "preuDesDe": "Des de {preu}"
   },
   "venda": {
     "titol": "Bicis en venda",
-    "intro": "Les bicis que venem a la botiga de Sant Antoni de Calonge. Pregunta’ns per WhatsApp per la teva talla i vine a provar-la.",
+    "intro": "Les bicis que venem a la botiga de Sant Antoni de Calonge. Deixa’ns el telèfon i et trucarem per la teva talla, o vine a provar-la.",
     "tornarInici": "Torna a l’inici",
     "tornar": "Totes les bicis en venda",
     "mostraEtiqueta": "Mostra",
@@ -228,9 +227,7 @@
     "preuDesDe": "Des de {preu}",
     "ivaInclos": "IVA inclòs",
     "ivaNoInclos": "IVA no inclòs",
-    "preguntar": "Pregunta per WhatsApp",
-    "missatge": "Hola! M’interessa la bici {bici}. Me’n podeu dir més?",
-    "nota": "De moment no venem en línia: escriu-nos i te la reservem a la botiga perquè la puguis provar.",
+    "nota": "De moment no venem en línia: te la reservem a la botiga perquè la puguis provar.",
     "fitxaTecnica": "Fitxa tècnica",
     "si": "Sí",
     "no": "No",
@@ -246,6 +243,25 @@
     "talla": {
       "esgotada": "Esgotada",
       "queden": "{n, plural, one {Queda #} other {Queden #}}"
+    },
+    "trucar": "Truca’ns al {telefon}",
+    "contacte": {
+      "titol": "T’interessa? Et truquem",
+      "intro": "Deixa’ns el telèfon i l’equip de la botiga et trucarà per resoldre’t els dubtes i reservar-te-la perquè la provis.",
+      "telefon": "Telèfon",
+      "correu": "Correu electrònic (opcional)",
+      "variantQualsevol": "Encara no ho sé",
+      "missatge": "Missatge (opcional)",
+      "missatgeDefecte": "M’interessa la {bici}.",
+      "enviar": "Vull que em truqueu",
+      "enviant": "Enviant…",
+      "fetTitol": "Rebut!",
+      "fetText": "L’equip de la botiga et trucarà ben aviat al {telefon}.",
+      "errors": {
+        "dades": "Revisa els camps marcats.",
+        "xarxa": "No s’ha pogut enviar. Torna-ho a provar o truca’ns al 972 66 29 51.",
+        "noDisponible": "Ara mateix no podem rebre la petició en línia. Truca’ns al 972 66 29 51."
+      }
     }
   },
   "marques": {
@@ -638,7 +654,6 @@
     "perUnitat": "{preu} la unitat",
     "buit": "No hi ha cap producte d'aquesta marca per a aquest moment. Prova un altre filtre.",
     "ambLaBici": "Afegeix-la a la teva bici de lloguer",
-    "perWhatsapp": "O demana-la per WhatsApp",
     "missatge": "Hola! Voldria reservar nutrició per a la ruta (gels, barretes…). Què teniu?",
     "nota": "Fotos de producte de les webs de les marques. Preus a la botiga.",
     "marca": "Marca",
@@ -657,7 +672,6 @@
       "unitats": "{n, plural, one {# unitat} other {# unitats}} · {preu}",
       "opcional": "Opcional"
     },
-    "demanaWhatsapp": "Reserva-la per WhatsApp",
     "veureMes": "Veure'n més ({n})",
     "veureMenys": "Veure'n menys",
     "triaMarca": "Tria una marca",
@@ -665,7 +679,8 @@
     "productesN": "{n, plural, one {# producte} other {# productes}}",
     "triada": "Triada",
     "mira": "Mira-la",
-    "resultat": "{n, plural, one {# producte} other {# productes}} · {marca}"
+    "resultat": "{n, plural, one {# producte} other {# productes}} · {marca}",
+    "aLaBotiga": "La trobaràs a la botiga: vine abans de sortir i te la preparem."
   },
   "fitxaMarca": {
     "tornar": "Totes les marques",

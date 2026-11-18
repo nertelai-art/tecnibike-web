@@ -6,6 +6,7 @@ import type {
   CitaTaller,
   Confirmacio,
   ConfiguracioReserves,
+  ContacteVenda,
   Extra,
   FranjaTaller,
   HorariBotiga,
@@ -86,6 +87,13 @@ export interface Plataforma {
   bicisVenda(): Promise<BiciVenda[]>;
   /** Una bici en venda per la seva adreça, o `null`. */
   biciVenda(id: string): Promise<BiciVenda | null>;
+  /**
+   * Si es pot demanar que l'equip truqui per una bici en venda. Si no, la fitxa no ensenya el formulari:
+   * una petició no es desa mai on l'equip no la veuria.
+   */
+  contacteVendaEnLinia(): Promise<boolean>;
+  /** Fa arribar a l'equip la petició de contacte per una bici en venda. */
+  enviarContacteVenda(contacte: ContacteVenda): Promise<Confirmacio>;
   valoracio(): Promise<Valoracio>;
   ressenyes(): Promise<Ressenya[]>;
 }

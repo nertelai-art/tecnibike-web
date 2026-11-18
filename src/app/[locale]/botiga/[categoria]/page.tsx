@@ -8,15 +8,14 @@ import { Peu } from '@/components/Seccions';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
 import { enllacMarca } from '@/content/marques';
 import { Link } from '@/i18n/navigation';
-import { enllacWhatsapp } from '@/lib/contacte';
 import { plataforma } from '@/lib/plataforma';
 import { categoriaEquipament } from '@/lib/plataforma/esquema';
 import { formatEuros } from '@/lib/preus';
 import styles from '@/components/botiga/Categoria.module.css';
 
 // Pàgina d'una categoria de la botiga d'equipament. Llista els articles de la plataforma; el preu
-// només surt si ve de la plataforma (els de mostra no s'ensenyen). Ara es pregunta per WhatsApp;
-// quan es pugui vendre en línia, el botó es canvia per «Afegeix a la cistella».
+// només surt si ve de la plataforma (els de mostra no s'ensenyen). De moment no es ven en línia: es ve
+// a la botiga o es truca (l'avís de dalt). Quan es pugui, cada article portarà «Afegeix a la cistella».
 //
 // La nutrició té la seva pròpia pàgina (hero amb les marques, que filtren, i catàleg amb sabors):
 // NutricioPortada, sense la capçalera ni la tira de marques de les altres categories.
@@ -133,14 +132,6 @@ export default async function CategoriaBotiga({ params }: Params) {
                             : formatEuros(a.preu, locale)}
                       </p>
                     )}
-                    <a
-                      className="boto boto--blau"
-                      href={enllacWhatsapp(t('missatge', { article: `${a.marca} ${a.nom}` }))}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {t('reservar')}
-                    </a>
                   </div>
                 </li>
               );

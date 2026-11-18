@@ -324,6 +324,41 @@
 .accions :global(.boto) {
   justify-content: center;
 }
+/* Formulari de contacte d'una bici en venda: l'equip truca. */
+.contacte {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border-radius: var(--radi);
+  background: var(--blanc);
+  box-shadow:
+    0 0 0 1px var(--linia-fina),
+    0 18px 40px -28px rgb(18 20 23 / 0.45);
+}
+.contacteTitol {
+  font-size: clamp(22px, 2.4vw, 28px);
+}
+.contacteIntro {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--tinta-2);
+}
+.contacteCamps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 12px;
+}
+.contacteMissatge {
+  grid-column: 1 / -1;
+}
+.contacte :global(.boto) {
+  justify-self: start;
+}
+.contacteFet {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--blau-fosc);
+}
 .nota {
   font-size: 14px;
   line-height: 1.5;

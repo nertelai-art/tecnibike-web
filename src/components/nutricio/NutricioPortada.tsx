@@ -16,7 +16,6 @@ import { useRef, useState, type CSSProperties } from 'react';
 import { Link } from '@/i18n/navigation';
 import { MARQUES } from '@/content/marques';
 import { colorSabor, destacats, imatgeDe, ORDRE_MARQUES, temaDe } from '@/content/nutricio';
-import { enllacWhatsapp } from '@/lib/contacte';
 import { momentNutricio, type MomentNutricio, type ProducteNutricio } from '@/lib/plataforma/esquema';
 import { formatEuros } from '@/lib/preus';
 import { useReducedMotion } from '@/lib/scroll-scene';
@@ -253,18 +252,11 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
 
         <div className={styles.peu}>
           {ambReserva ? (
-            <>
-              <Link href="/#flota" className="boto boto--blau">
-                {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
-              </Link>
-              <a className={styles.whatsapp} href={enllacWhatsapp(t('missatge'))} target="_blank" rel="noopener noreferrer">
-                {t('perWhatsapp')}
-              </a>
-            </>
+            <Link href="/#flota" className="boto boto--blau">
+              {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
+            </Link>
           ) : (
-            <a className="boto boto--blau" href={enllacWhatsapp(t('missatge'))} target="_blank" rel="noopener noreferrer">
-              {t('demanaWhatsapp')} <span className="fletxa" aria-hidden="true">→</span>
-            </a>
+            <p className={styles.nota}>{t('aLaBotiga')}</p>
           )}
           <p className={styles.nota}>{t('nota')}</p>
         </div>
