@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import { araABotiga, esData, esPassat } from '@/lib/calendari';
 import { diesEntre, MAX_DIES_LLOGUER } from '@/lib/horari';
 import { ErrorReserva, plataforma, type Disponibilitat } from '@/lib/plataforma';
-import { citaTaller, type FranjaTaller, modalitatPagament, moment, participantsReserva, reservaLloguer } from '@/lib/plataforma/esquema';
+import { citaTaller, contacteVenda, type FranjaTaller, modalitatPagament, moment, participantsReserva, reservaLloguer } from '@/lib/plataforma/esquema';
 
 // Accions de servidor de les reserves. Tot el que arriba del navegador es torna a validar aquí, i
 // el preu, l'horari i les unitats lliures els comprova la plataforma: el formulari només orienta.
@@ -94,6 +94,17 @@ export async function enviarParticipants(entrada: unknown): Promise<{ ok: true }
   } catch (e) {
     const r = errorDe(e);
     return r.ok ? { ok: false, error: 'xarxa' } : r;
+  }
+}
+
+/** La petició de contacte d'una bici en venda: l'equip de la botiga truca. */
+export async function demanarContacteVenda(entrada: unknown): Promise<ResultatReserva> {
+  const validada = contacteVenda.safeParse(entrada);
+  if (!validada.success) return { ok: false, error: 'dades', camps: validada.error.issues.map((i) => String(i.path[0])) };
+  try {
+    return { ok: true, ...(await plataforma.enviarContacteVenda(validada.data)) };
+  } catch (e) {
+    return errorDe(e);
   }
 }
 

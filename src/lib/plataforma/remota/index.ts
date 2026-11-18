@@ -693,6 +693,12 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
       const bicis = await bicisEnVenda();
       return bicis.length ? (bicis.find((b) => b.id === id) ?? null) : proves.biciVenda(id);
     },
+    // La plataforma encara no té on rebre les peticions de contacte d'una bici en venda (preguntat a la
+    // coordinadora el 18-11-2026). Fins llavors, la fitxa no ensenya el formulari i res no es desa.
+    contacteVendaEnLinia: async () => false,
+    enviarContacteVenda: async () => {
+      throw new ErrorReserva('noDisponible', 'la plataforma encara no rep peticions de contacte');
+    },
     valoracio: () => proves.valoracio(),
     ressenyes: () => proves.ressenyes(),
   };

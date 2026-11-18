@@ -15,7 +15,8 @@
     "idioma": "Idioma",
     "menu": "Menú",
     "tancar": "Cerrar el menú",
-    "inici": "Tecnibike, inicio"
+    "inici": "Tecnibike, inicio",
+    "idiomaActual": "Idioma: {idioma}. Cambia de idioma"
   },
   "selector": {
     "etiqueta": "Alquiler o compra",
@@ -208,16 +209,14 @@
   },
   "botigaCategoria": {
     "tornar": "Volver al inicio",
-    "aviat": "Aquí tienes lo que encontrarás en la tienda. Para reservarlo, escríbenos por WhatsApp y pasa a recogerlo: te lo tendremos a punto.",
-    "reservar": "Resérvalo por WhatsApp",
-    "missatge": "¡Hola! Quería reservar: {article}.",
+    "aviat": "Aquí tienes lo que encontrarás en la tienda. Ven a verlo o llámanos al 972 66 29 51 y te lo tendremos listo.",
     "veureMarca": "Ver la marca {marca}",
     "preuConsultar": "Precio a consultar",
     "preuDesDe": "Desde {preu}"
   },
   "venda": {
     "titol": "Bicis en venta",
-    "intro": "Las bicis que vendemos en la tienda de Sant Antoni de Calonge. Pregúntanos por WhatsApp por tu talla y ven a probarla.",
+    "intro": "Las bicis que vendemos en la tienda de Sant Antoni de Calonge. Déjanos tu teléfono y te llamaremos por tu talla, o ven a probarla.",
     "tornarInici": "Volver al inicio",
     "tornar": "Todas las bicis en venta",
     "mostraEtiqueta": "Muestra",
@@ -228,9 +227,7 @@
     "preuDesDe": "Desde {preu}",
     "ivaInclos": "IVA incluido",
     "ivaNoInclos": "IVA no incluido",
-    "preguntar": "Pregunta por WhatsApp",
-    "missatge": "¡Hola! Me interesa la bici {bici}. ¿Me podéis contar más?",
-    "nota": "De momento no vendemos en línea: escríbenos y te la reservamos en la tienda para que la puedas probar.",
+    "nota": "De momento no vendemos en línea: te la reservamos en la tienda para que puedas probarla.",
     "fitxaTecnica": "Ficha técnica",
     "si": "Sí",
     "no": "No",
@@ -246,6 +243,25 @@
     "talla": {
       "esgotada": "Agotada",
       "queden": "{n, plural, one {Queda #} other {Quedan #}}"
+    },
+    "trucar": "Llámanos al {telefon}",
+    "contacte": {
+      "titol": "¿Te interesa? Te llamamos",
+      "intro": "Déjanos tu teléfono y el equipo de la tienda te llamará para resolver tus dudas y reservártela para que la pruebes.",
+      "telefon": "Teléfono",
+      "correu": "Correo electrónico (opcional)",
+      "variantQualsevol": "Aún no lo sé",
+      "missatge": "Mensaje (opcional)",
+      "missatgeDefecte": "Me interesa la {bici}.",
+      "enviar": "Quiero que me llaméis",
+      "enviant": "Enviando…",
+      "fetTitol": "¡Recibido!",
+      "fetText": "El equipo de la tienda te llamará muy pronto al {telefon}.",
+      "errors": {
+        "dades": "Revisa los campos marcados.",
+        "xarxa": "No se ha podido enviar. Vuelve a intentarlo o llámanos al 972 66 29 51.",
+        "noDisponible": "Ahora mismo no podemos recibir la petición en línea. Llámanos al 972 66 29 51."
+      }
     }
   },
   "marques": {
@@ -638,7 +654,6 @@
     "perUnitat": "{preu} la unidad",
     "buit": "No hay ningún producto de esta marca para este momento. Prueba otro filtro.",
     "ambLaBici": "Añádela a tu bici de alquiler",
-    "perWhatsapp": "O pídela por WhatsApp",
     "missatge": "¡Hola! Quería reservar nutrición para la ruta (geles, barritas…). ¿Qué tenéis?",
     "nota": "Fotos de producto de las webs de las marcas. Precios en la tienda.",
     "marca": "Marca",
@@ -657,7 +672,6 @@
       "unitats": "{n, plural, one {# unidad} other {# unidades}} · {preu}",
       "opcional": "Opcional"
     },
-    "demanaWhatsapp": "Resérvala por WhatsApp",
     "veureMes": "Ver más ({n})",
     "veureMenys": "Ver menos",
     "triaMarca": "Elige una marca",
@@ -665,7 +679,8 @@
     "productesN": "{n, plural, one {# producto} other {# productos}}",
     "triada": "Elegida",
     "mira": "Verla",
-    "resultat": "{n, plural, one {# producto} other {# productos}} · {marca}"
+    "resultat": "{n, plural, one {# producto} other {# productos}} · {marca}",
+    "aLaBotiga": "La encontrarás en la tienda: ven antes de salir y te la preparamos."
   },
   "fitxaMarca": {
     "tornar": "Todas las marcas",

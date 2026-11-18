@@ -133,7 +133,13 @@ Versions que **no** són l'última, i per què:
   `carbohidrats`, `cafeïna`); el tipus, si no hi és, es dedueix del nom. Sense la clau de la
   plataforma, la de proves l'encén només amb `pnpm dev` (`index.ts`). Mentre la botiga no tingui cap
   article, el catàleg de nutrició de la botiga ensenya els de prova. Si un producte no té foto, surt una il·lustració pròpia (`Paquet.tsx`). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
-- **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`).
+- **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`). Res més
+  es reserva ni es compra per WhatsApp (botiga, venda, nutrició i marques, 18-11-2026).
+- **Selector d'idioma** (`SelectorIdioma.tsx`, 18-11-2026): a la barra només es veu l'idioma triat (bandera i
+  codi); en clicar-lo, un desplegable amb les quatre banderes (SVG propis) i el nom de cada idioma en la
+  seva llengua. Dins del menú de mòbil s'obre en el mateix lloc.
+- **Camps dels formularis:** fons blanc amb vora (`--vora-camp` a `Reserva.module.css`), perquè el gris
+  de l'escenari no es veia sobre el panell blanc.
 - **Vídeos generats amb IA** (Higgsfield: Nano Banana 2.1 per als fotogrames clau i Kling 4.0 per
   als vídeos) a partir de les fotos reals de la Pinarello del client. No són gravacions: s'ha de dir
   al client. Els originals i les tires de control són a `recursos/ia/` (fora del repositori).
@@ -146,8 +152,9 @@ Versions que **no** són l'última, i per què:
   `python scripts/capes-bici.py public/img/flota/carretera.jpg public/img/bici-scroll 360` (Pillow i
   NumPy). Només amb ratolí i pantalla ≥ 1000 px; si no, la barra del navegador amb els colors.
 - **Botiga d'equipament:** cada categoria té pàgina a `/[locale]/botiga/[categoria]`. Tecnibike de
-  moment només fa lloguer i cites de taller, no ven en línia: es reserva per WhatsApp i, quan es pugui
-  vendre, el botó es canvia per la cistella. Els articles són els productes de venda de la plataforma
+  moment només fa lloguer i cites de taller, no ven en línia: es ve a la botiga o es truca (l'avís de dalt;
+  des del 18-11-2026 els articles ja no porten «Reserva-ho per WhatsApp») i, quan es pugui vendre, cada
+  article portarà la cistella. Els articles són els productes de venda de la plataforma
   (`saleProducts`, categoria pel nom: `categoriaVendaDe` a `remota/index.ts`); **el preu només surt si
   ve de la plataforma** (tancat, «des de» o a consultar), perquè l'equip de la botiga sàpiga que el que
   es veu és el que hi ha posat. Mentre no n'hi hagi cap d'una categoria, surten els de mostra, sense
@@ -158,7 +165,11 @@ Versions que **no** són l'última, i per què:
   de la flota de lloguer. La fitxa ensenya la foto, el preu (tancat, «des de» o a consultar, amb l'IVA),
   les variants (talles) amb el seu preu si és diferent, la descripció i la fitxa tècnica, que són els
   camps del catàleg tal com els escriu la botiga (`quadre`, `grup`, `any`…; `marca` va a dalt). Es
-  pregunta per WhatsApp. Mentre la botiga no n'hagi donat d'alta cap, surten quatre bicis **de mostra**
+  demana amb un **formulari de contacte** (`ContacteVenda.tsx`: nom, telèfon, correu opcional, talla i
+  missatge; l'equip truca), no per WhatsApp (18-11-2026). La petició va a la plataforma
+  (`enviarContacteVenda`); mentre la plataforma no tingui on rebre-la (`contacteVendaEnLinia`, ara `false`
+  amb la remota: preguntat a la coordinadora el 18-11-2026), la fitxa diu que truquin i no es desa res en
+  memòria. Les bicis de mostra no porten ni una cosa ni l'altra. Mentre la botiga no n'hagi donat d'alta cap, surten quatre bicis **de mostra**
   (`bicisVenda` a `dades-prova.ts`, amb fotos de la flota) amb un avís ben visible i sense preu.
   Des de la plataforma v1.0.14 (16-11-2026) també porta si es pot comprar (`availability`: disponible,
   esgotada o per encàrrec), quantes n'hi ha (`stock`, de la bici i de cada talla; nul vol dir que no se'n

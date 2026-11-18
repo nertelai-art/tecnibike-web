@@ -507,6 +507,20 @@ describe('plataforma remota: el que encara no té API', () => {
   });
 });
 
+describe('plataforma remota: contacte per una bici en venda', () => {
+  // La plataforma encara no té on rebre-ho: el formulari no s'ensenya i no es desa res en memòria.
+  it("mentre la plataforma no en tingui la ruta, no s'ofereix ni es desa enlloc", async () => {
+    const { plataforma, crides } = remota();
+    expect(await plataforma.contacteVendaEnLinia()).toBe(false);
+    await expect(
+      plataforma.enviarContacteVenda({
+        biciId: 'x', missatge: 'Hola', nom: 'Anna Puig', telefon: '+34 600 000 000', idioma: 'ca', privacitat: true,
+      }),
+    ).rejects.toMatchObject({ motiu: 'noDisponible' });
+    expect(crides).toHaveLength(0);
+  });
+});
+
 describe('plataforma remota: el taller', () => {
   const B = '/api/public/bookings';
   const servei = (category: string | null, priceCents: number | null, priceBasis: 'exact' | 'from' | 'on_request', extra: object = {}) => ({
