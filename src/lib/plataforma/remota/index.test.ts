@@ -508,16 +508,56 @@ describe('plataforma remota: el que encara no té API', () => {
 });
 
 describe('plataforma remota: contacte per una bici en venda', () => {
-  // La plataforma encara no té on rebre-ho: el formulari no s'ensenya i no es desa res en memòria.
-  it("mentre la plataforma no en tingui la ruta, no s'ofereix ni es desa enlloc", async () => {
-    const { plataforma, crides } = remota();
-    expect(await plataforma.contacteVendaEnLinia()).toBe(false);
-    await expect(
-      plataforma.enviarContacteVenda({
-        biciId: 'x', missatge: 'Hola', nom: 'Anna Puig', telefon: '+34 600 000 000', idioma: 'ca', privacitat: true,
-      }),
-    ).rejects.toMatchObject({ motiu: 'noDisponible' });
-    expect(crides).toHaveLength(0);
+  // La petició va a /api/public/requests (sol·licitud al panell de la botiga, l'equip en rep l'avís),
+  // amb la mateixa clau de la web i l'abast web_request_write.
+  const Q = '/api/public/requests';
+  const bici = {
+    id: 'f0000000-0000-4000-8000-000000000001', name: 'Orbea Oiz M30', description: null, imageUrl: null, category: 'Bicicletes',
+    attributes: { marca: 'Orbea' }, priceCents: 150000, priceBasis: 'exact', vatIncluded: true,
+  };
+  const cataleg_ = { [`GET ${R}/catalog`]: { cos: { ...cataleg, saleProducts: [bici] } } };
+  const contacte = {
+    biciId: 'orbea-oiz-m30', variant: 'M', missatge: 'La puc provar dissabte?', nom: 'Anna Puig', telefon: '+34 600 000 000',
+    correu: 'anna@example.com', idioma: 'ca' as const, privacitat: true as const,
+  };
+  const error = (code: string) => ({ error: { code, message: 'no' } });
+
+  it("es mira si la clau pot enviar-ne sense desar res: sense Idempotency-Key, 422 vol dir que sí", async () => {
+    const { plataforma, crides } = remota({ [`POST ${Q}`]: { estat: 422, cos: { error: { code: 'invalid_request', field: 'Idempotency-Key', message: 'cal' } } } });
+    expect(await plataforma.contacteVendaEnLinia()).toBe(true);
+    expect(crides[0]!.capcaleres.get('idempotency-key')).toBeNull();
+    expect(crides[0]!.capcaleres.get('x-api-key')).toBe('clau-prova');
+    // Un cop sabut, no es torna a preguntar a cada pàgina.
+    await plataforma.contacteVendaEnLinia();
+    expect(crides.filter((c) => c.url.pathname === Q)).toHaveLength(1);
+  });
+
+  it("una clau sense l'abast (401) vol dir que no: la fitxa demana que truquin", async () => {
+    expect(await remota({ [`POST ${Q}`]: { estat: 401, cos: error('unauthorized') } }).plataforma.contacteVendaEnLinia()).toBe(false);
+    expect(await remota({ [`POST ${Q}`]: { estat: 409, cos: error('key_not_bound') } }).plataforma.contacteVendaEnLinia()).toBe(false);
+  });
+
+  it('la petició va al panell de la botiga, amb qui és, la bici, la talla i el missatge, una sola vegada', async () => {
+    const { plataforma, crides } = remota({ ...cataleg_, [`POST ${Q}`]: { estat: 201, cos: { reference: '6DB3FA', status: 'pending' } } });
+    expect(await plataforma.enviarContacteVenda(contacte)).toEqual({ codi: '6DB3FA' });
+    const post = crides.find((c) => c.metode === 'POST')!;
+    expect(post.capcaleres.get('idempotency-key')).toBe('clau-idempotencia-1');
+    expect(post.cos).toEqual({
+      kind: 'purchase',
+      contact: { name: 'Anna Puig', phone: '+34 600 000 000', email: 'anna@example.com' },
+      summary: 'Interès per Orbea Oiz M30 (M): La puc provar dissabte?',
+      details: { producte: 'f0000000-0000-4000-8000-000000000001', bici: 'Orbea Oiz M30', variant: 'M', idioma: 'ca' },
+      privacyAccepted: true,
+    });
+  });
+
+  it("una bici que no és en venda és un error de dades, i sense l'abast no es perd: no disponible", async () => {
+    const { plataforma } = remota(cataleg_);
+    await expect(plataforma.enviarContacteVenda({ ...contacte, biciId: 'no-hi-es' })).rejects.toMatchObject({ motiu: 'dades' });
+    const sense = remota({ ...cataleg_, [`POST ${Q}`]: { estat: 401, cos: error('unauthorized') } });
+    await expect(sense.plataforma.enviarContacteVenda(contacte)).rejects.toMatchObject({ motiu: 'noDisponible' });
+    const mal = remota({ ...cataleg_, [`POST ${Q}`]: { estat: 422, cos: { error: { code: 'invalid_request', field: 'contact.phone', message: 'no' } } } });
+    await expect(mal.plataforma.enviarContacteVenda(contacte)).rejects.toMatchObject({ motiu: 'dades' });
   });
 });
 

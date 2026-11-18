@@ -4,6 +4,7 @@ import {
   biciVenda,
   categoriaLloguer,
   citaTaller,
+  contacteVenda,
   serveiTaller,
   type Peca,
   type Article,
@@ -36,6 +37,7 @@ import {
   type RentalErrorCode,
   type RentalHoursResponse,
 } from './contracte';
+import { WebRequestErrorResponseSchema, WebRequestResponseSchema } from './contracte-sollicituds';
 import { WebBookingAvailabilityResponseSchema, WebBookingErrorResponseSchema, WebBookingResponseSchema } from './contracte-cites';
 
 // Implementació remota de la plataforma: l'API de lloguer de app.nertel.ai
@@ -77,6 +79,8 @@ type Opcions = {
   fetch?: typeof globalThis.fetch;
   /** Una clau d'idempotència per a cada enviament d'una reserva. */
   generaClau?: () => string;
+  /** El rellotge, en mil·lisegons: només per saber quan cal tornar a mirar el permís de la clau. */
+  rellotge?: () => number;
 };
 
 type Model = RentalCatalogResponse['models'][number];
@@ -357,7 +361,17 @@ export function resultatDelPagament(parametres: Record<string, string | string[]
   return null;
 }
 
-export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves, compilant = false, fetch = globalThis.fetch, generaClau = () => crypto.randomUUID() }: Opcions): Plataforma {
+export function crearPlataformaRemota({
+  url,
+  clau,
+  clauCites,
+  serveiCita,
+  proves,
+  compilant = false,
+  fetch = globalThis.fetch,
+  generaClau = () => crypto.randomUUID(),
+  rellotge = () => Date.now(),
+}: Opcions): Plataforma {
   /**
    * Les lectures que fan servir totes les pàgines (catàleg, horari i ajustos), una per ruta. Qui la
    * demana mentre ja s'està fent espera la mateixa resposta; compilant, a més, es guarda fins al final.
@@ -417,8 +431,8 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
     if (reserva.nutricio?.length && !(await ambNutricio())) throw new ErrorReserva('noDisponible', 'la botiga no ven nutrició amb el lloguer');
   }
 
-  /** Les bicis en venda del catàleg, amb una adreça llegible única. */
-  async function bicisEnVenda(): Promise<BiciVenda[]> {
+  /** Les bicis en venda del catàleg, amb una adreça llegible única i l'identificador del producte. */
+  async function bicisEnVendaAmbProducte(): Promise<{ bici: BiciVenda; producteId: string }[]> {
     const vistes = new Set<string>();
     return ((await cataleg()).saleProducts ?? [])
       .filter((p) => esCategoriaBicis(p.category))
@@ -427,9 +441,36 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
         let id = base;
         for (let n = 2; vistes.has(id); n++) id = `${base}-${n}`;
         vistes.add(id);
-        return biciVendaDe(p, id);
+        return { bici: biciVendaDe(p, id), producteId: p.id };
       });
   }
+  const bicisEnVenda = async () => (await bicisEnVendaAmbProducte()).map((b) => b.bici);
+
+  /**
+   * Una sol·licitud al panell de la botiga (`POST /api/public/requests`, abast `web_request_write`), amb
+   * la mateixa clau de la web. Sense `cos` ni `Idempotency-Key` només mira si la clau hi té permís: la
+   * plataforma comprova la clau abans que res i, si la clau és bona, rebutja la crida per la capçalera
+   * que falta (`422`) sense desar res.
+   */
+  async function cridaSollicitud(cos?: unknown, idempotencia?: string) {
+    const resposta = await fetch(new URL('/api/public/requests', url), {
+      method: 'POST',
+      headers: {
+        'x-api-key': clau,
+        accept: 'application/json',
+        'content-type': 'application/json',
+        ...(idempotencia && { 'Idempotency-Key': idempotencia }),
+      },
+      body: JSON.stringify(cos ?? {}),
+      cache: 'no-store',
+    });
+    const json: unknown = await resposta.json().catch(() => null);
+    const problema = WebRequestErrorResponseSchema.safeParse(json);
+    return { estat: resposta.status, ok: resposta.ok, json, problema: problema.success ? problema.data.error : undefined };
+  }
+
+  // Si la clau pot desar sol·licituds no canvia d'una pàgina a l'altra: es mira un cop cada 5 minuts.
+  let permisSollicituds: { pot: boolean; fins: number } | null = null;
 
   /** L'API de cites (`/api/public/bookings`), la mateixa que fan servir els agents de veu i WhatsApp. */
   async function cridaCites(ruta: string, { metode = 'GET', cos, idempotencia }: { metode?: string; cos?: unknown; idempotencia?: string } = {}) {
@@ -693,11 +734,42 @@ export function crearPlataformaRemota({ url, clau, clauCites, serveiCita, proves
       const bicis = await bicisEnVenda();
       return bicis.length ? (bicis.find((b) => b.id === id) ?? null) : proves.biciVenda(id);
     },
-    // La plataforma encara no té on rebre les peticions de contacte d'una bici en venda (preguntat a la
-    // coordinadora el 18-11-2026). Fins llavors, la fitxa no ensenya el formulari i res no es desa.
-    contacteVendaEnLinia: async () => false,
-    enviarContacteVenda: async () => {
-      throw new ErrorReserva('noDisponible', 'la plataforma encara no rep peticions de contacte');
+    // La petició de contacte d'una bici en venda és una sol·licitud al panell de la botiga. Si la clau no
+    // en pot desar (sense l'abast `web_request_write`), la fitxa no ensenya el formulari i demana que truquin.
+    contacteVendaEnLinia: async () => {
+      const ara = rellotge();
+      if (permisSollicituds && ara < permisSollicituds.fins) return permisSollicituds.pot;
+      let pot = false;
+      try {
+        const { estat, problema } = await cridaSollicitud();
+        pot = estat === 422 && problema?.code === 'invalid_request';
+        if (!pot) console.error(`La clau de la web no pot desar sol·licituds: ${estat} ${problema?.code ?? ''}`);
+      } catch (e) {
+        console.error('No es pot comprovar si la clau desa sol·licituds', e);
+      }
+      permisSollicituds = { pot, fins: ara + REVALIDA_S * 1000 };
+      return pot;
+    },
+    enviarContacteVenda: async (entrada) => {
+      const contacte = contacteVenda.parse(entrada);
+      const trobada = (await bicisEnVendaAmbProducte()).find((b) => b.bici.id === contacte.biciId);
+      if (!trobada) throw new ErrorReserva('dades', 'la bici no és en venda');
+      // La marca davant del nom, si el nom no la porta ja («Orbea Oiz M30»).
+      const { marca, nom: nomBici } = trobada.bici;
+      const nom = marca && !nomBici.toLowerCase().startsWith(marca.toLowerCase()) ? `${marca} ${nomBici}` : nomBici;
+      const cos = {
+        kind: 'purchase',
+        contact: { name: contacte.nom, phone: contacte.telefon, ...(contacte.correu && { email: contacte.correu }) },
+        summary: `Interès per ${nom}${contacte.variant ? ` (${contacte.variant})` : ''}${contacte.missatge ? `: ${contacte.missatge}` : ''}`.slice(0, 2000),
+        details: { producte: trobada.producteId, bici: nom, ...(contacte.variant && { variant: contacte.variant }), idioma: contacte.idioma },
+        privacyAccepted: true,
+      };
+      const { estat, ok, json, problema } = await cridaSollicitud(cos, generaClau());
+      if (ok) return { codi: WebRequestResponseSchema.parse(json).reference };
+      const detall = problema ? [problema.field, problema.message].filter(Boolean).join(': ') : undefined;
+      if (estat === 401 || problema?.code === 'key_not_bound') throw new ErrorReserva('noDisponible', detall);
+      if (problema?.code === 'invalid_request' && problema.field?.startsWith('contact')) throw new ErrorReserva('dades', detall);
+      throw new Error(`La plataforma ha respost ${estat} ${problema?.code ?? ''} a POST /api/public/requests${detall ? ` (${detall})` : ''}`);
     },
     valoracio: () => proves.valoracio(),
     ressenyes: () => proves.ressenyes(),
