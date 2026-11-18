@@ -1,6 +1,6 @@
 import ca from '@/messages/ca.json';
 import { productesNutricio } from '@/lib/plataforma/dades-nutricio';
-import { colorSabor, ORDRE_MARQUES, TEMES_MARCA } from './nutricio';
+import { colorSabor, descripcioDe, ORDRE_MARQUES, TEMES_MARCA } from './nutricio';
 
 // El catàleg de prova no porta textos: surten dels missatges per l'id. Si se n'hi afegeix un sense
 // text o sense color, la pàgina ho ensenyaria buit o gris.
@@ -34,5 +34,16 @@ describe('nutrició: fotos del catàleg de prova', () => {
         expect(existsSync(join(process.cwd(), 'public', img!)), img).toBe(true);
       }
     }
+  });
+});
+
+// Els articles de la plataforma tenen ids que no són als missatges: sense descripció pròpia no se'n
+// pinta cap, en lloc de la clau («nutricio.productes.<id>», com sortia el 18-11-2026).
+describe('nutrició: la descripció de cada producte', () => {
+  const t = Object.assign((clau: string) => `text de ${clau}`, { has: (clau: string) => clau === 'productes.gel-100' });
+  it('la de la plataforma, la dels missatges si el producte és de prova, o cap', () => {
+    expect(descripcioDe({ id: 'qualsevol', descripcio: 'De la botiga' }, t)).toBe('De la botiga');
+    expect(descripcioDe({ id: 'gel-100' }, t)).toBe('text de productes.gel-100');
+    expect(descripcioDe({ id: 'fea37395-cf5a-40b0-8d20-51825e4a2091' }, t)).toBeNull();
   });
 });

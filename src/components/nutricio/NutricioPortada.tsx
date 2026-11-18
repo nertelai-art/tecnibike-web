@@ -15,8 +15,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRef, useState, type CSSProperties } from 'react';
 import { Link } from '@/i18n/navigation';
 import { MARQUES } from '@/content/marques';
-import { colorSabor, destacats, imatgeDe, ORDRE_MARQUES, temaDe } from '@/content/nutricio';
-import { enllacWhatsapp } from '@/lib/contacte';
+import { colorSabor, descripcioDe, destacats, imatgeDe, ORDRE_MARQUES, temaDe } from '@/content/nutricio';
 import { momentNutricio, type MomentNutricio, type ProducteNutricio } from '@/lib/plataforma/esquema';
 import { formatEuros } from '@/lib/preus';
 import { useReducedMotion } from '@/lib/scroll-scene';
@@ -222,7 +221,7 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
                     {p.format}
                     {p.carbohidratsG !== undefined && <> · {t('carbohidrats', { g: p.carbohidratsG })}</>}
                   </p>
-                  <p className={styles.descripcio}>{p.descripcio ?? t(`productes.${p.id}`)}</p>
+                  {descripcioDe(p, t) && <p className={styles.descripcio}>{descripcioDe(p, t)}</p>}
                   <div className={styles.peuTargeta}>
                     {p.sabors.length > 1 ? (
                       <div className={styles.sabors} role="radiogroup" aria-label={t('saborDe', { producte: p.nom })}>
@@ -253,18 +252,11 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
 
         <div className={styles.peu}>
           {ambReserva ? (
-            <>
-              <Link href="/#flota" className="boto boto--blau">
-                {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
-              </Link>
-              <a className={styles.whatsapp} href={enllacWhatsapp(t('missatge'))} target="_blank" rel="noopener noreferrer">
-                {t('perWhatsapp')}
-              </a>
-            </>
+            <Link href="/#flota" className="boto boto--blau">
+              {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
+            </Link>
           ) : (
-            <a className="boto boto--blau" href={enllacWhatsapp(t('missatge'))} target="_blank" rel="noopener noreferrer">
-              {t('demanaWhatsapp')} <span className="fletxa" aria-hidden="true">→</span>
-            </a>
+            <p className={styles.nota}>{t('aLaBotiga')}</p>
           )}
           <p className={styles.nota}>{t('nota')}</p>
         </div>

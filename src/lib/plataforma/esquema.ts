@@ -283,6 +283,20 @@ export const citaTaller = z.object({
   ...client,
 });
 
+/** Algú que vol que la botiga li truqui per una bici en venda (el formulari de la fitxa). */
+export const contacteVenda = z.object({
+  biciId: z.string().min(1),
+  /** La talla o l'opció que li interessa, si la bici en té. */
+  variant: z.string().trim().min(1).max(60).optional(),
+  missatge: z.string().trim().max(1000),
+  nom: client.nom,
+  telefon: client.telefon,
+  /** Opcional: amb el telèfon n'hi ha prou perquè l'equip truqui. */
+  correu: z.email().optional(),
+  idioma: client.idioma,
+  privacitat: client.privacitat,
+});
+
 export const confirmacio = z.object({
   codi: z.string(),
   totalCentims: z.number().int().optional(),
@@ -353,6 +367,7 @@ export type Durada = z.infer<typeof durada>;
 export type ReservaLloguer = z.infer<typeof reservaLloguer>;
 export type FranjaTaller = z.infer<typeof franjaTaller>;
 export type CitaTaller = z.infer<typeof citaTaller>;
+export type ContacteVenda = z.infer<typeof contacteVenda>;
 export type Confirmacio = z.infer<typeof confirmacio>;
 
 export type CategoriaLloguer = z.infer<typeof categoriaLloguer>;

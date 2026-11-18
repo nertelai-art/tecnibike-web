@@ -2,17 +2,18 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Peu } from '@/components/Seccions';
+import { ContacteVenda } from '@/components/venda/ContacteVenda';
 import { Galeria } from '@/components/venda/Galeria';
 import { textPreuVenda } from '@/components/venda/preu';
 import { Link } from '@/i18n/navigation';
-import { enllacWhatsapp } from '@/lib/contacte';
+import { TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
 import { plataforma } from '@/lib/plataforma';
 import { formatEuros } from '@/lib/preus';
 import styles from '@/components/venda/Venda.module.css';
 
 // Fitxa d'una bici en venda: la foto, el preu, les talles, la descripció i la fitxa tècnica (els camps
-// que la botiga hi ha posat al catàleg). Tecnibike encara no ven en línia: es pregunta per WhatsApp i
-// es reserva a la botiga.
+// que la botiga hi ha posat al catàleg). Tecnibike encara no ven en línia: amb el formulari, l'equip
+// truca i la reserva a la botiga. Si la plataforma encara no pot rebre la petició, es demana que truquin.
 
 // Es torna a generar cada 5 minuts (REVALIDA_S de la plataforma), perquè el que canviï a la plataforma
 // hi surti: vegeu src/app/revalida.test.ts.
@@ -41,7 +42,7 @@ const nomCamp = (camp: string) => camp.charAt(0).toLocaleUpperCase() + camp.slic
 export default async function FitxaVenda({ params }: Params) {
   const { locale, id } = await params;
   setRequestLocale(locale);
-  const bici = await plataforma.biciVenda(id);
+  const [bici, ambFormulari] = await Promise.all([plataforma.biciVenda(id), plataforma.contacteVendaEnLinia()]);
   if (!bici) notFound();
   const t = await getTranslations('venda');
   const nom = [bici.marca, bici.nom].filter(Boolean).join(' ');
@@ -101,11 +102,17 @@ export default async function FitxaVenda({ params }: Params) {
               </>
             )}
 
-            <div className={styles.accions}>
-              <a className="boto boto--blau" href={enllacWhatsapp(t('missatge', { bici: nom }))} target="_blank" rel="noopener noreferrer">
-                {t('preguntar')}
-              </a>
-            </div>
+            {/* Les bicis de mostra no estan a la venda: no s'hi demana res. */}
+            {!bici.ficticia &&
+              (ambFormulari ? (
+                <ContacteVenda biciId={bici.id} nomBici={nom} variants={bici.variants.map((v) => v.nom)} nomVariants={bici.nomVariants ?? t('opcions')} />
+              ) : (
+                <div className={styles.accions}>
+                  <a className="boto boto--blau" href={`tel:${TELEFON}`}>
+                    {t('trucar', { telefon: TELEFON_VISIBLE })}
+                  </a>
+                </div>
+              ))}
             <p className={styles.nota}>{t('nota')}</p>
 
             {bici.descripcio && <p className={styles.descripcio}>{bici.descripcio}</p>}

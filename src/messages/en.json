@@ -15,7 +15,8 @@
     "idioma": "Language",
     "menu": "Menu",
     "tancar": "Close menu",
-    "inici": "Tecnibike, home"
+    "inici": "Tecnibike, home",
+    "idiomaActual": "Language: {idioma}. Change language"
   },
   "selector": {
     "etiqueta": "Rent or buy",
@@ -208,16 +209,14 @@
   },
   "botigaCategoria": {
     "tornar": "Back to home",
-    "aviat": "This is what you’ll find in the shop. To reserve it, message us on WhatsApp and pick it up: we’ll have it ready.",
-    "reservar": "Reserve on WhatsApp",
-    "missatge": "Hi! I would like to reserve: {article}.",
+    "aviat": "Here’s what you’ll find at the shop. Come and see it, or call us on 972 66 29 51 and we’ll have it ready.",
     "veureMarca": "See the {marca} brand",
     "preuConsultar": "Price on request",
     "preuDesDe": "From {preu}"
   },
   "venda": {
     "titol": "Bikes for sale",
-    "intro": "The bikes we sell at our shop in Sant Antoni de Calonge. Ask us about your size on WhatsApp and come and try it.",
+    "intro": "The bikes we sell at our shop in Sant Antoni de Calonge. Leave us your phone number and we’ll call you about your size, or come and try one.",
     "tornarInici": "Back to home",
     "tornar": "All bikes for sale",
     "mostraEtiqueta": "Sample",
@@ -228,9 +227,7 @@
     "preuDesDe": "From {preu}",
     "ivaInclos": "VAT included",
     "ivaNoInclos": "VAT not included",
-    "preguntar": "Ask on WhatsApp",
-    "missatge": "Hi! I’m interested in the {bici} bike. Could you tell me more?",
-    "nota": "We don’t sell online yet: message us and we’ll keep it for you at the shop so you can try it.",
+    "nota": "We don’t sell online yet: we’ll hold it at the shop so you can try it.",
     "fitxaTecnica": "Specifications",
     "si": "Yes",
     "no": "No",
@@ -246,6 +243,25 @@
     "talla": {
       "esgotada": "Sold out",
       "queden": "{n} left"
+    },
+    "trucar": "Call us on {telefon}",
+    "contacte": {
+      "titol": "Interested? We’ll call you",
+      "intro": "Leave us your phone number and the shop team will call you to answer your questions and hold the bike for you to try.",
+      "telefon": "Phone",
+      "correu": "Email (optional)",
+      "variantQualsevol": "Not sure yet",
+      "missatge": "Message (optional)",
+      "missatgeDefecte": "I’m interested in the {bici}.",
+      "enviar": "Call me",
+      "enviant": "Sending…",
+      "fetTitol": "Got it!",
+      "fetText": "The shop team will call you shortly on {telefon}.",
+      "errors": {
+        "dades": "Please check the highlighted fields.",
+        "xarxa": "It couldn’t be sent. Try again or call us on 972 66 29 51.",
+        "noDisponible": "We can’t take the request online right now. Call us on 972 66 29 51."
+      }
     }
   },
   "marques": {
@@ -638,7 +654,6 @@
     "perUnitat": "{preu} each",
     "buit": "No products from this brand for this moment. Try another filter.",
     "ambLaBici": "Add it to your rental bike",
-    "perWhatsapp": "Or order it on WhatsApp",
     "missatge": "Hi! I'd like to book some nutrition for my ride (gels, bars…). What do you have?",
     "nota": "Product photos from the brands’ websites. Prices in the shop.",
     "marca": "Brand",
@@ -657,7 +672,6 @@
       "unitats": "{n, plural, one {# item} other {# items}} · {preu}",
       "opcional": "Optional"
     },
-    "demanaWhatsapp": "Book it on WhatsApp",
     "veureMes": "See more ({n})",
     "veureMenys": "See less",
     "triaMarca": "Pick a brand",
@@ -665,7 +679,8 @@
     "productesN": "{n, plural, one {# product} other {# products}}",
     "triada": "Selected",
     "mira": "See it",
-    "resultat": "{n, plural, one {# product} other {# products}} · {marca}"
+    "resultat": "{n, plural, one {# product} other {# products}} · {marca}",
+    "aLaBotiga": "You’ll find it at the shop: drop by before your ride and we’ll get it ready."
   },
   "fitxaMarca": {
     "tornar": "All brands",
