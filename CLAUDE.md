@@ -166,10 +166,12 @@ Versions que **no** són l'última, i per què:
   les variants (talles) amb el seu preu si és diferent, la descripció i la fitxa tècnica, que són els
   camps del catàleg tal com els escriu la botiga (`quadre`, `grup`, `any`…; `marca` va a dalt). Es
   demana amb un **formulari de contacte** (`ContacteVenda.tsx`: nom, telèfon, correu opcional, talla i
-  missatge; l'equip truca), no per WhatsApp (18-11-2026). La petició va a la plataforma
-  (`enviarContacteVenda`); mentre la plataforma no tingui on rebre-la (`contacteVendaEnLinia`, ara `false`
-  amb la remota: preguntat a la coordinadora el 18-11-2026), la fitxa diu que truquin i no es desa res en
-  memòria. Les bicis de mostra no porten ni una cosa ni l'altra. Mentre la botiga no n'hagi donat d'alta cap, surten quatre bicis **de mostra**
+  missatge; l'equip truca), no per WhatsApp (18-11-2026). La petició és una **sol·licitud al panell de la botiga**
+  (`POST /api/public/requests`, `kind: purchase`, contracte llegit a `remota/contracte-sollicituds.ts`), i
+  l'equip en rep l'avís com d'una d'un agent. Fa servir la mateixa clau de la web, que ha de portar l'abast
+  `web_request_write`. Si no el porta, la fitxa diu que truquin i no es desa res en memòria: la web ho mira
+  (`contacteVendaEnLinia`) amb una crida sense `Idempotency-Key`, que no desa res (401 = no, 422 = sí), un
+  cop cada 5 minuts. A producció, la primera petició de prova l'ha de fer l'Enric. Les bicis de mostra no porten ni una cosa ni l'altra. Mentre la botiga no n'hagi donat d'alta cap, surten quatre bicis **de mostra**
   (`bicisVenda` a `dades-prova.ts`, amb fotos de la flota) amb un avís ben visible i sense preu.
   Des de la plataforma v1.0.14 (16-11-2026) també porta si es pot comprar (`availability`: disponible,
   esgotada o per encàrrec), quantes n'hi ha (`stock`, de la bici i de cada talla; nul vol dir que no se'n
