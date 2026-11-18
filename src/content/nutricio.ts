@@ -88,6 +88,19 @@ export function imatgeDe(producte: { imatge?: string; sabors: readonly { id: str
   return producte.sabors.find((s) => s.id === sabor)?.imatge ?? producte.imatge;
 }
 
+/**
+ * La descripció d'un producte: la que porta (la de la plataforma) o, si és dels de prova, la dels
+ * missatges (`nutricio.productes.<id>`). Un article de la plataforma sense descripció no en té cap.
+ */
+export function descripcioDe(
+  producte: { id: string; descripcio?: string },
+  t: { (clau: string): string; has(clau: string): boolean },
+): string | null {
+  if (producte.descripcio) return producte.descripcio;
+  const clau = `productes.${producte.id}`;
+  return t.has(clau) ? t(clau) : null;
+}
+
 /** Els productes que surten a l'escena d'una marca: com a molt `quants`, primer un de cada tipus. */
 export function destacats<T extends { tipus: string }>(productes: readonly T[], quants = 4): T[] {
   const vistos = new Set<string>();
