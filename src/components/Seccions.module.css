@@ -453,12 +453,13 @@
 .peu {
   background: var(--grafit);
   color: rgb(255 255 255 / 0.75);
-  padding-block: 64px 40px;
+  padding-top: 64px;
 }
 
 .peuGraella {
   display: grid;
   gap: 18px;
+  padding-bottom: 40px;
 }
 
 .peuMarca {
@@ -503,4 +504,37 @@
 }
 .credits a {
   color: inherit;
+}
+
+/* Franja «Web feta per Nertel»: sota el peu, d'un to una mica més fosc i amb una vora subtil. */
+.creditNertel {
+  display: flex;
+  justify-content: center;
+  padding: 16px var(--gutter);
+  border-top: 1px solid rgb(255 255 255 / 0.05);
+  background: rgb(0 0 0 / 0.25);
+}
+.creditNertel a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgb(255 255 255 / 0.6);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+.creditNertel a:hover {
+  color: var(--blanc);
+}
+/* El símbol és blau marí, pensat per a fons clars: sobre el grafit s'aclareix. */
+.creditNertelSimbol {
+  height: 24px;
+  width: auto;
+  filter: brightness(2.2) saturate(1.2);
+}
+.creditNertelNom {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--blanc);
 }
