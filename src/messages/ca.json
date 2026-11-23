@@ -415,7 +415,8 @@
     "modalitat": "Com vols pagar?",
     "modalitats": {
       "senyal": "Ara un {percent} % ({import}) i la resta a la botiga",
-      "total": "Tot ara ({import})"
+      "total": "Tot ara ({import})",
+      "botiga": "A la botiga, en recollir la bici ({import})"
     },
     "confirmar": "Confirma la reserva",
     "pagar": "Paga i reserva",

@@ -77,11 +77,11 @@ const hores = RentalHoursResponseSchema.parse({
   ],
 });
 
-const ajustos = (payment?: { mode: 'none' | 'deposit' | 'full'; depositPercent: number | null }) =>
+const ajustos = (payment?: { mode: 'none' | 'deposit' | 'full'; depositPercent: number | null; payAtShop?: boolean }) =>
   RentalSettingsResponseSchema.parse({
     timeZone: 'Europe/Madrid', slotMinutes: 30, maxDays: 30, minNoticeMinutes: 60, turnaroundMinutes: 30, halfDayMinutes: 240,
     holdMinutes: 15, paymentEnabled: false, participantsEnabled: false, shopItemsEnabled: false,
-    ...(payment && { payment: { ...payment, payAtShop: false, cancellation: { noticeHours: 48, refundPercentInside: 100, refundPercentOutside: 0 } } }),
+    ...(payment && { payment: { payAtShop: false, ...payment, cancellation: { noticeHours: 48, refundPercentInside: 100, refundPercentOutside: 0 } } }),
   });
 
 type Crida = { metode: string; url: URL; capcaleres: Headers; cos: unknown };
@@ -207,6 +207,13 @@ describe('plataforma remota: horari i ajustos', () => {
     expect(await plataforma.configuracioReserves()).toMatchObject({
       pagament: { actiu: true, modalitats: ['senyal'], senyalPercent: 30 }, participants: { actiu: false }, retencioMinuts: 15,
     });
+  });
+
+  it('si la botiga també deixa pagar en recollir, la web ofereix «a la botiga» després del pagament en línia', async () => {
+    const { plataforma } = remota({ [`GET ${R}/settings`]: { cos: ajustos({ mode: 'full', depositPercent: null, payAtShop: true }) } });
+    expect((await plataforma.configuracioReserves()).pagament).toMatchObject({ actiu: true, modalitats: ['total', 'botiga'] });
+    const { plataforma: sense } = remota({ [`GET ${R}/settings`]: { cos: ajustos({ mode: 'full', depositPercent: null }) } });
+    expect((await sense.configuracioReserves()).pagament.modalitats).toEqual(['total']);
   });
 
   it("l'antelació mínima per reservar és la de la botiga", async () => {

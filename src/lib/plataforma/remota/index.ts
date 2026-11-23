@@ -600,7 +600,8 @@ export function crearPlataformaRemota({
       return {
         pagament: {
           actiu: mode !== 'none',
-          modalitats: [mode === 'full' ? 'total' : 'senyal'],
+          // Primer la que cobra en línia; «a la botiga» només si la botiga també ho deixa.
+          modalitats: [mode === 'full' ? 'total' : 'senyal', ...(payment?.payAtShop ? (['botiga'] as const) : [])],
           senyalPercent: payment?.depositPercent ?? 100,
         },
         participants: { actiu: false },
