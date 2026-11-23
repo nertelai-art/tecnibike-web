@@ -364,7 +364,7 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
                   <strong key={total ?? 'cap'}>{total === null ? '—' : euros(total)}</strong>
                 </p>
                 <button type="submit" form={`${id}-form`} className={`boto boto--blau ${styles.confirmar}`} disabled={enviant || total === null || !ara}>
-                  {enviant ? t('enviant') : configuracio.pagament.actiu ? t('pagar') : t('confirmar')}
+                  {enviant ? t('enviant') : configuracio.pagament.actiu && modalitat !== 'botiga' ? t('pagar') : t('confirmar')}
                 </button>
               </div>
             </>

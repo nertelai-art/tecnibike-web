@@ -306,12 +306,15 @@ export const confirmacio = z.object({
 
 // ── Pagament i participants (preparats, apagats fins que la plataforma ho permeti) ─────────────
 
-export const modalitatPagament = z.enum(['senyal', 'total']);
+/** Les que es paguen en línia, per la passarel·la. */
+export const modalitatEnLinia = z.enum(['senyal', 'total']);
+/** «botiga»: reservar ara i pagar-ho tot en recollir la bici, si la botiga ho deixa (`payment.payAtShop`). */
+export const modalitatPagament = z.enum([...modalitatEnLinia.options, 'botiga']);
 
 export const configuracioReserves = z.object({
   pagament: z.object({
     actiu: z.boolean(),
-    /** Senyal (un percentatge ara i la resta a la botiga) o tot per avançat. */
+    /** Senyal (un percentatge ara i la resta a la botiga), tot per avançat o, si la botiga ho deixa, tot a la botiga. */
     modalitats: z.array(modalitatPagament).min(1),
     senyalPercent: z.number().int().min(1).max(100),
   }),
@@ -359,6 +362,7 @@ export type Ciclista = z.infer<typeof ciclista>;
 export type BiciReserva = z.infer<typeof biciReserva>;
 export type ConfiguracioReserves = z.infer<typeof configuracioReserves>;
 export type ModalitatPagament = z.infer<typeof modalitatPagament>;
+export type ModalitatEnLinia = z.infer<typeof modalitatEnLinia>;
 export type Retencio = z.infer<typeof retencio>;
 export type Participant = z.infer<typeof participant>;
 export type ParticipantsReserva = z.infer<typeof participantsReserva>;

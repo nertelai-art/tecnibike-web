@@ -1,5 +1,27 @@
 import type { HorariBotiga } from './plataforma/esquema';
-import { afegeixNutricio, commutaExtra, extresLliures, grupsExtres, nutricioLliure, primeraRecollida, retornPerDefecte, tallesLliures, variantsLliures } from './reserva';
+import { afegeixNutricio, camiReserva, commutaExtra, extresLliures, grupsExtres, nutricioLliure, primeraRecollida, retornPerDefecte, tallesLliures, variantsLliures } from './reserva';
+
+describe('per on va una reserva segons com es paga', () => {
+  const ambBotiga = { actiu: true, modalitats: ['total', 'botiga'] as const };
+
+  it('sense pagament en línia, la reserva es fa directament', () => {
+    expect(camiReserva({ actiu: false, modalitats: ['senyal'] }, undefined)).toBe('directa');
+  });
+
+  it('«a la botiga» fa la reserva directament, sense passar pel pagament', () => {
+    expect(camiReserva(ambBotiga, 'botiga')).toBe('directa');
+  });
+
+  it('el pagament en línia passa per la passarel·la', () => {
+    expect(camiReserva(ambBotiga, 'total')).toBe('pagament');
+  });
+
+  it('una modalitat que la botiga no ofereix no es deixa passar', () => {
+    expect(camiReserva({ actiu: true, modalitats: ['total'] }, 'botiga')).toBe('invalida');
+    expect(camiReserva(ambBotiga, 'senyal')).toBe('invalida');
+    expect(camiReserva(ambBotiga, undefined)).toBe('invalida');
+  });
+});
 
 const feiner = [
   { obre: '09:00', tanca: '13:00' },

@@ -10,7 +10,7 @@ import type {
   Extra,
   FranjaTaller,
   HorariBotiga,
-  ModalitatPagament,
+  ModalitatEnLinia,
   Moment,
   ParticipantsReserva,
   Producte,
@@ -68,7 +68,7 @@ export interface Plataforma {
   retenirReserva(reserva: ReservaLloguer): Promise<Retencio>;
   alliberarRetencio(id: string): Promise<void>;
   /** Adreça de la passarel·la de pagament de la plataforma per a una retenció. */
-  iniciarPagament(retencioId: string, modalitat: ModalitatPagament, tornada: string): Promise<{ url: string }>;
+  iniciarPagament(retencioId: string, modalitat: ModalitatEnLinia, tornada: string): Promise<{ url: string }>;
   /** En tornar del pagament: si la retenció ja s'ha convertit en reserva. */
   estatRetencio(id: string): Promise<EstatRetencio>;
   /** Dades dels ciclistes i signatura del contracte abans de recollir. */
