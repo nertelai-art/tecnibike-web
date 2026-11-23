@@ -1,6 +1,6 @@
 import { esPassat, sumaDies, type Instant } from './calendari';
 import { horesRecollida, horesRetorn, MAX_DIES_LLOGUER } from './horari';
-import type { HorariBotiga, LiniaNutricio, Moment } from './plataforma/esquema';
+import type { ConfiguracioReserves, HorariBotiga, LiniaNutricio, ModalitatPagament, Moment } from './plataforma/esquema';
 
 // Ajudes del formulari de reserva amb diverses bicis. Pures: la disponibilitat, l'horari i l'«ara»
 // entren per paràmetre.
@@ -11,6 +11,19 @@ type Disponibilitat = {
   variantsExtres?: Record<string, Record<string, number | null>>;
 };
 type Linia = { biciId: string; talla: string | null; pedals: string; extres: readonly string[]; variants?: Readonly<Record<string, string>> };
+
+/**
+ * Per on va una reserva: `directa` (es fa i es paga a la botiga), `pagament` (es retenen les bicis i
+ * es va a la passarel·la) o `invalida` (una modalitat que la botiga no ofereix ara).
+ */
+export function camiReserva(
+  pagament: Pick<ConfiguracioReserves['pagament'], 'actiu'> & { modalitats: readonly ModalitatPagament[] },
+  modalitat: ModalitatPagament | undefined,
+): 'directa' | 'pagament' | 'invalida' {
+  if (!pagament.actiu) return 'directa';
+  if (!modalitat || !pagament.modalitats.includes(modalitat)) return 'invalida';
+  return modalitat === 'botiga' ? 'directa' : 'pagament';
+}
 
 /** Les unitats d'una línia de nutrició no passen d'aquí (com a l'esquema). */
 export const MAX_QUANTITAT_NUTRICIO = 10;

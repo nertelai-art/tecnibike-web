@@ -415,7 +415,8 @@
     "modalitat": "How would you like to pay?",
     "modalitats": {
       "senyal": "{percent}% now ({import}) and the rest at the shop",
-      "total": "All now ({import})"
+      "total": "All now ({import})",
+      "botiga": "At the shop, when you pick up the bike ({import})"
     },
     "confirmar": "Confirm booking",
     "pagar": "Pay and book",
