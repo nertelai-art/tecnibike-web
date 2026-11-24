@@ -211,7 +211,8 @@
     "aviat": "Voici ce que vous trouverez au magasin. Venez le voir ou appelez-nous au 972 66 29 51 et nous vous le préparerons.",
     "veureMarca": "Voir la marque {marca}",
     "preuConsultar": "Prix sur demande",
-    "preuDesDe": "À partir de {preu}"
+    "preuDesDe": "À partir de {preu}",
+    "aLaBotiga": "Au magasin"
   },
   "venda": {
     "titol": "Vélos à vendre",
@@ -722,6 +723,16 @@
         "boto": "Voir les {categoria} au magasin"
       }
     }
+  },
+  "guia": {
+    "aTecnibike": "Chez Tecnibike",
+    "trucar": "Appelez-nous : {telefon}",
+    "tipus": "Quel type choisir",
+    "consells": "Comment choisir",
+    "marques": "Les marques que vous trouverez",
+    "veureFitxa": "Voir la marque",
+    "preguntes": "Questions fréquentes",
+    "fonts": "Sources"
   },
   "credits": {
     "metaTitol": "Crédits des images",

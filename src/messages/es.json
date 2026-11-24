@@ -211,7 +211,8 @@
     "aviat": "Aquí tienes lo que encontrarás en la tienda. Ven a verlo o llámanos al 972 66 29 51 y te lo tendremos listo.",
     "veureMarca": "Ver la marca {marca}",
     "preuConsultar": "Precio a consultar",
-    "preuDesDe": "Desde {preu}"
+    "preuDesDe": "Desde {preu}",
+    "aLaBotiga": "En la tienda"
   },
   "venda": {
     "titol": "Bicis en venta",
@@ -722,6 +723,16 @@
         "boto": "Ver {categoria} en la tienda"
       }
     }
+  },
+  "guia": {
+    "aTecnibike": "En Tecnibike",
+    "trucar": "Llámanos: {telefon}",
+    "tipus": "Qué tipo necesitas",
+    "consells": "Cómo elegir",
+    "marques": "Las marcas que encontrarás",
+    "veureFitxa": "Ver la marca",
+    "preguntes": "Preguntas frecuentes",
+    "fonts": "Fuentes"
   },
   "credits": {
     "metaTitol": "Créditos de las imágenes",
