@@ -280,6 +280,33 @@ const MOMENTS: Record<string, MomentNutricio> = {
   despres: 'despres', despues: 'despres', after: 'despres',
 };
 
+/**
+ * Les marques de nutrició que la web coneix (colors, logo, filtres), amb els noms llargs que poden
+ * dur al catàleg. Si un article no porta el camp «marca», la marca surt del començament del nom.
+ */
+const MARQUES_NUTRICIO: [prefix: string, marca: string][] = [
+  ['science in sport', 'SiS'],
+  ['maurten', 'Maurten'],
+  ['226ers', '226ERS'],
+  ['nutrinovex', 'Nutrinovex'],
+  ['sis', 'SiS'],
+];
+
+/** La marca i el nom sense la marca davant: «226ERS HIGH ENERGY GEL» → 226ERS i «HIGH ENERGY GEL». */
+export function marcaNutricioDe(nom: string, atributs: Record<string, unknown>): { marca: string; nom: string } {
+  const escrita = text(atribut(atributs, 'marca', 'brand'));
+  if (escrita) return { marca: escrita, nom };
+  for (const [prefix, marca] of MARQUES_NUTRICIO) {
+    const davant = nom.slice(0, prefix.length);
+    const resta = nom.slice(prefix.length);
+    if (davant.toLowerCase() === prefix && (resta === '' || /^[\s·:\-–]/.test(resta))) {
+      const net = resta.replace(/^[\s·:\-–]+/, '').trim();
+      return { marca, nom: net || nom };
+    }
+  }
+  return { marca: '', nom };
+}
+
 /** Un article de botiga de la plataforma (`shopItems`) com a producte de nutrició de la web. */
 function producteNutricioDe(a: ArticleBotiga): ProducteNutricio {
   const moments = String(atribut(a.attributes, 'moment', 'moments', 'momento') ?? '')
@@ -288,15 +315,31 @@ function producteNutricioDe(a: ArticleBotiga): ProducteNutricio {
     .filter((m): m is MomentNutricio => m !== undefined);
   const carbohidrats = nombre(atribut(a.attributes, 'carbohidrats', 'carbohidratos', 'carbs'));
   const cafeina = nombre(atribut(a.attributes, 'cafeïna', 'cafeina', 'caffeine'));
+  const { marca, nom } = marcaNutricioDe(a.name, a.attributes);
+  const valor = (...claus: string[]) => nombre(atribut(a.attributes, ...claus));
+  const kcal = valor('kcal', 'calories', 'calorias', 'energia', 'energy');
+  const sucres = valor('sucres', 'azucares', 'azúcares', 'sugar', 'sugars');
+  const proteines = valor('proteines', 'proteïnes', 'proteinas', 'proteínas', 'protein');
+  const sodi = valor('sodi', 'sodio', 'sodium');
+  const ingredients = text(atribut(a.attributes, 'ingredients', 'ingredientes'));
+  const alergens = text(atribut(a.attributes, 'al·lèrgens', 'allergens', 'alergens', 'alérgenos', 'alergenos'));
+  const modeUs = text(atribut(a.attributes, 'ús', 'us', "mode d'ús", 'uso', 'modo de uso', 'usage'));
   return {
     id: a.id,
-    marca: text(atribut(a.attributes, 'marca', 'brand')) ?? '',
-    nom: a.name,
+    marca,
+    nom,
     tipus: tipusNutricioDe(a.name, a.attributes),
     moments: moments.length ? [...new Set(moments)] : ['durant'],
     format: text(atribut(a.attributes, 'format', 'formato', 'size')) ?? '',
     ...(carbohidrats !== undefined && { carbohidratsG: carbohidrats }),
     ...(cafeina !== undefined && cafeina > 0 && { cafeinaMg: cafeina }),
+    ...(kcal !== undefined && { kcal }),
+    ...(sucres !== undefined && { sucresG: sucres }),
+    ...(proteines !== undefined && { proteinesG: proteines }),
+    ...(sodi !== undefined && { sodiMg: sodi }),
+    ...(ingredients && { ingredients }),
+    ...(alergens && { alergens }),
+    ...(modeUs && { modeUs }),
     ...(a.description && { descripcio: a.description }),
     ...(a.imageUrl && { imatge: a.imageUrl }),
     preu: a.priceCents,

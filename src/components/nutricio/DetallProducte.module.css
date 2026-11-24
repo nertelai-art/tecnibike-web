@@ -1,0 +1,268 @@
+/* Fitxa d'un producte de nutrició: foto a l'esquerra en el color de la marca, dades a la dreta. */
+
+.dialeg {
+  width: min(920px, calc(100vw - 24px));
+  max-height: calc(100svh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radi);
+  background: var(--blanc);
+  color: var(--tinta);
+  box-shadow: 0 40px 120px -40px rgb(0 0 0 / 0.6);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.dialeg::backdrop {
+  background: rgb(18 20 23 / 0.6);
+  backdrop-filter: blur(4px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dialeg[open] {
+    animation: entra 0.35s var(--ease);
+  }
+  .dialeg[open] .foto img,
+  .dialeg[open] .foto svg {
+    animation: foto 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s backwards;
+  }
+}
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+@keyframes foto {
+  from {
+    opacity: 0;
+    transform: scale(0.6) rotate(-10deg);
+  }
+}
+
+.capsa {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  min-height: 480px;
+}
+
+.tancar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--escenari);
+  color: var(--tinta);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tancar:hover {
+  background: var(--escenari-2);
+}
+.tancar:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+
+.foto {
+  position: relative;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  padding: clamp(28px, 4vw, 48px);
+  background:
+    radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--marca-accent) 32%, var(--marca)), var(--marca) 72%);
+}
+.foto img,
+.foto svg {
+  width: 100%;
+  height: 100%;
+  max-height: 420px;
+  min-height: 0;
+  align-self: center;
+  object-fit: contain;
+  filter: drop-shadow(0 22px 26px rgb(0 0 0 / 0.4));
+}
+.cafeina {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #6b4226;
+  color: var(--blanc);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.cos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(24px, 3.5vw, 40px);
+  padding-top: clamp(28px, 4vw, 48px);
+}
+.cos p {
+  margin: 0;
+}
+
+.marca {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+.nom {
+  margin: 0;
+  padding-right: 40px;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.05;
+}
+
+.etiquetes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.etiquetes span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--escenari);
+  font-size: 13px;
+  font-weight: 700;
+}
+.etiquetes span[data-moment] {
+  background: color-mix(in srgb, var(--taronja) 12%, var(--blanc));
+  color: var(--taronja-fosc);
+}
+
+.descripcio {
+  line-height: 1.55;
+  color: var(--tinta-2);
+}
+
+.sabors {
+  margin: 4px 0 0;
+  padding: 0;
+  border: 0;
+}
+.sabors legend {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.sabors div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sabors button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--blanc);
+  box-shadow: inset 0 0 0 1px var(--linia);
+  color: var(--tinta);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.sabors button span {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--sabor);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.15);
+}
+.sabors button[aria-checked='true'] {
+  box-shadow: inset 0 0 0 2px var(--grafit);
+}
+.sabors button:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+.saborUnic {
+  font-size: 14px;
+}
+
+.subtitol {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+
+.valors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.valors div {
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--escenari);
+}
+.valors dt {
+  font-size: 12px;
+  color: var(--tinta-2);
+}
+.valors dd {
+  margin: 2px 0 0;
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.senseValors {
+  font-size: 14px;
+  color: var(--tinta-3);
+}
+
+.text p {
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--tinta-2);
+}
+
+.peu {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--linia-fina);
+}
+.preu {
+  font-size: 24px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.nota {
+  font-size: 14px;
+  color: var(--tinta-2);
+}
+
+@media (max-width: 720px) {
+  .capsa {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .foto {
+    height: 260px;
+  }
+}

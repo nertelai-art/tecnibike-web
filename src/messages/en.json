@@ -695,7 +695,33 @@
     "triada": "Selected",
     "mira": "See it",
     "resultat": "{n, plural, one {# product} other {# products}} · {marca}",
-    "aLaBotiga": "You’ll find it at the shop: drop by before your ride and we’ll get it ready."
+    "aLaBotiga": "You’ll find it at the shop: drop by before your ride and we’ll get it ready.",
+    "detall": {
+      "tancar": "Close details",
+      "valors": "Per serving",
+      "senseValors": "The shop hasn't added the nutrition facts for this product yet. Ask us in the shop.",
+      "kcal": "Energy",
+      "carbohidrats": "Carbohydrates",
+      "sucres": "Sugars",
+      "proteines": "Protein",
+      "sodi": "Sodium",
+      "cafeina": "Caffeine",
+      "unitatKcal": "{n} kcal",
+      "unitatG": "{n} g",
+      "unitatMg": "{n} mg",
+      "modeUs": "How to take it",
+      "ingredients": "Ingredients",
+      "alergens": "Allergens",
+      "tipus": {
+        "gel": "Gel",
+        "barreta": "Bar",
+        "beguda": "Drink",
+        "pastilles": "Tablets",
+        "gominoles": "Chews",
+        "recuperacio": "Recovery",
+        "shot": "Shot"
+      }
+    }
   },
   "fitxaMarca": {
     "tornar": "All brands",

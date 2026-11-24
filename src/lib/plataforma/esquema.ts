@@ -206,6 +206,15 @@ export const producteNutricio = z.object({
   format: z.string(),
   carbohidratsG: z.number().nonnegative().optional(),
   cafeinaMg: z.number().nonnegative().optional(),
+  /** Valors per unitat que la botiga posa al catàleg (camps `kcal`, `sucres`, `proteines`, `sodi`). */
+  kcal: z.number().nonnegative().optional(),
+  sucresG: z.number().nonnegative().optional(),
+  proteinesG: z.number().nonnegative().optional(),
+  sodiMg: z.number().nonnegative().optional(),
+  /** Textos de la fitxa, tal com els escriu la botiga (camps `ingredients`, `al·lèrgens`, `ús`). */
+  ingredients: z.string().optional(),
+  alergens: z.string().optional(),
+  modeUs: z.string().optional(),
   /** El text de la botiga. Sense, surt dels missatges de la web per l'`id`. */
   descripcio: z.string().optional(),
   imatge: z.string().optional(),
