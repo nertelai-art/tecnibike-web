@@ -6,11 +6,11 @@ import { NutricioContingut, NutricioPortada } from '@/components/nutricio/Nutric
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Peu } from '@/components/Seccions';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
-import { enllacMarca } from '@/content/marques';
 import { Link } from '@/i18n/navigation';
 import { plataforma } from '@/lib/plataforma';
 import { categoriaEquipament } from '@/lib/plataforma/esquema';
 import { formatEuros } from '@/lib/preus';
+import { GuiaIntro, GuiaMarques, GuiaPreguntes, GuiaTriar } from '@/components/botiga/GuiaCategoria';
 import styles from '@/components/botiga/Categoria.module.css';
 
 // Pàgina d'una categoria de la botiga d'equipament. Llista els articles de la plataforma; el preu
@@ -20,6 +20,9 @@ import styles from '@/components/botiga/Categoria.module.css';
 // La nutrició té la seva pròpia pàgina (hero amb les marques, que filtren, i catàleg amb sabors):
 // NutricioPortada, sense la capçalera ni la tira de marques de les altres categories.
 // Cada marca de la tira porta a la seva fitxa, o a la graella filtrada si és de nutrició.
+//
+// Totes porten la guia de la categoria (src/content/guies): introducció i què hi fa la botiga, tipus,
+// com triar-ne, marques (excepte la nutrició, que ja les té al hero) i preguntes freqüents.
 
 type Params = { params: Promise<{ locale: string; categoria: string }> };
 
@@ -74,21 +77,11 @@ export default async function CategoriaBotiga({ params }: Params) {
 
         {!esNutricio && (
         <div className="contenidor">
-          <ul className={styles.marques} aria-label={te('marques')}>
-            {marques.map((m) => (
-              <li key={m.nom}>
-                <Link href={enllacMarca(m)} aria-label={t('veureMarca', { marca: m.nom })}>
-                  {m.logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element -- logos petits (SVG i WebP ja retallats)
-                    <img src={`/img/marques/${m.logo}`} alt={m.nom} data-vector={m.logo.endsWith('.svg') || undefined} />
-                  ) : (
-                    <span>{m.nom}</span>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <GuiaIntro categoria={categoria} />
+          <GuiaMarques categoria={categoria} />
+          <GuiaTriar categoria={categoria} />
 
+          <h2 className={styles.titolArticles}>{t('aLaBotiga')}</h2>
           <p className={styles.avis}>{t('aviat')}</p>
         </div>
         )}
@@ -137,6 +130,14 @@ export default async function CategoriaBotiga({ params }: Params) {
               );
             })}
           </ul>
+
+          {esNutricio && (
+            <>
+              <GuiaIntro categoria={categoria} />
+              <GuiaTriar categoria={categoria} />
+            </>
+          )}
+          <GuiaPreguntes categoria={categoria} />
         </div>
       </main>
       <Peu />

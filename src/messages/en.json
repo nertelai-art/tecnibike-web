@@ -24,8 +24,7 @@
     "compra": "Buy"
   },
   "mostra": {
-    "marca": "Sample data, to be confirmed",
-    "nota": "Data marked with * is sample data and must be confirmed with Tecnibike."
+    "marca": "Sample data, to be confirmed"
   },
   "portada": {
     "situacio": "Sant Antoni de Calonge · Costa Brava",
@@ -212,7 +211,8 @@
     "aviat": "Here’s what you’ll find at the shop. Come and see it, or call us on 972 66 29 51 and we’ll have it ready.",
     "veureMarca": "See the {marca} brand",
     "preuConsultar": "Price on request",
-    "preuDesDe": "From {preu}"
+    "preuDesDe": "From {preu}",
+    "aLaBotiga": "In the shop"
   },
   "venda": {
     "titol": "Bikes for sale",
@@ -366,8 +366,22 @@
     "privacitat": "Privacy",
     "galetes": "Cookies",
     "drets": "© {any} Tecnibike Costa Brava SL",
-    "nertel": "Bookings and support by Nertel",
-    "credits": "Photo credits"
+    "credits": "Image credits",
+    "fetaPer": "Website by",
+    "mapaWeb": "Site map",
+    "bicis": "Bikes",
+    "lloguer": "Bike rental",
+    "venda": "Bikes for sale",
+    "rutes": "Local routes",
+    "marques": "Brands",
+    "taller": "Workshop",
+    "serveis": "Services and prices",
+    "cita": "Book a service",
+    "botiga": "Shop",
+    "visita": "Visit us",
+    "comArribar": "Get directions",
+    "contacte": "Contact",
+    "instagram": "Tecnibike on Instagram"
   },
   "reserva": {
     "tornar": "All bikes",
@@ -735,5 +749,26 @@
         "boto": "See {categoria} in the shop"
       }
     }
+  },
+  "guia": {
+    "aTecnibike": "At Tecnibike",
+    "trucar": "Call us: {telefon}",
+    "tipus": "Which type you need",
+    "consells": "How to choose",
+    "marques": "Brands you'll find",
+    "veureFitxa": "See the brand",
+    "preguntes": "Frequently asked questions",
+    "fonts": "Sources"
+  },
+  "credits": {
+    "metaTitol": "Image credits",
+    "titol": "Image credits",
+    "intro": "Some photos on this site come from Wikimedia Commons, under Creative Commons licences that require crediting the author and the licence. Here they all are. Brand photos credit their source on each brand page.",
+    "equipament": "Gear shop",
+    "extres": "Rental extras",
+    "autor": "Author",
+    "llicencia": "Licence",
+    "font": "Original",
+    "tornar": "Back to home"
   }
 }

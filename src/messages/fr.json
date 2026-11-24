@@ -24,8 +24,7 @@
     "compra": "Achat"
   },
   "mostra": {
-    "marca": "Donnée d'exemple, à confirmer",
-    "nota": "Les données marquées d'un * sont des exemples et doivent être confirmées avec Tecnibike."
+    "marca": "Donnée d'exemple, à confirmer"
   },
   "portada": {
     "situacio": "Sant Antoni de Calonge · Costa Brava",
@@ -212,7 +211,8 @@
     "aviat": "Voici ce que vous trouverez au magasin. Venez le voir ou appelez-nous au 972 66 29 51 et nous vous le préparerons.",
     "veureMarca": "Voir la marque {marca}",
     "preuConsultar": "Prix sur demande",
-    "preuDesDe": "À partir de {preu}"
+    "preuDesDe": "À partir de {preu}",
+    "aLaBotiga": "Au magasin"
   },
   "venda": {
     "titol": "Vélos à vendre",
@@ -366,8 +366,22 @@
     "privacitat": "Confidentialité",
     "galetes": "Cookies",
     "drets": "© {any} Tecnibike Costa Brava SL",
-    "nertel": "Réservations et accueil avec Nertel",
-    "credits": "Crédits photo"
+    "credits": "Crédits des images",
+    "fetaPer": "Site réalisé par",
+    "mapaWeb": "Plan du site",
+    "bicis": "Vélos",
+    "lloguer": "Location de vélos",
+    "venda": "Vélos à vendre",
+    "rutes": "Itinéraires du coin",
+    "marques": "Marques",
+    "taller": "Atelier",
+    "serveis": "Services et tarifs",
+    "cita": "Prendre rendez-vous",
+    "botiga": "Boutique",
+    "visita": "Venez nous voir",
+    "comArribar": "Itinéraire",
+    "contacte": "Contact",
+    "instagram": "Tecnibike sur Instagram"
   },
   "reserva": {
     "tornar": "Tous les vélos",
@@ -735,5 +749,26 @@
         "boto": "Voir les {categoria} au magasin"
       }
     }
+  },
+  "guia": {
+    "aTecnibike": "Chez Tecnibike",
+    "trucar": "Appelez-nous : {telefon}",
+    "tipus": "Quel type choisir",
+    "consells": "Comment choisir",
+    "marques": "Les marques que vous trouverez",
+    "veureFitxa": "Voir la marque",
+    "preguntes": "Questions fréquentes",
+    "fonts": "Sources"
+  },
+  "credits": {
+    "metaTitol": "Crédits des images",
+    "titol": "Crédits des images",
+    "intro": "Certaines photos de ce site proviennent de Wikimedia Commons, sous licences Creative Commons qui demandent de citer l'auteur et la licence. Les voici toutes. Les photos des marques citent leur source sur la fiche de chaque marque.",
+    "equipament": "Boutique d'équipement",
+    "extres": "Options de location",
+    "autor": "Auteur",
+    "llicencia": "Licence",
+    "font": "Original",
+    "tornar": "Retour à l'accueil"
   }
 }
