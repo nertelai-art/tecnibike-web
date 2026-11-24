@@ -2,6 +2,8 @@
 
 export const TELEFON = '+34972662951';
 export const TELEFON_VISIBLE = '972 66 29 51';
+export const CORREU = 'info@tecnibike.es';
+export const INSTAGRAM = 'https://www.instagram.com/tecnibikecostabrava/';
 
 /**
  * WhatsApp: el número de l'agent de WhatsApp de Nertel (el 872 43 99 96, el mateix que despenja la veu).

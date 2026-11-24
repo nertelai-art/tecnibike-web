@@ -1,5 +1,5 @@
 // Fotos dels pedals i extres del lloguer. Són de Wikimedia Commons (llicències CC que demanen citar
-// l'autor i la llicència): els crèdits surten al peu. Quan hi hagi fotos pròpies de la botiga,
+// l'autor i la llicència): els crèdits són a la pàgina /credits, enllaçada des del peu. Quan hi hagi fotos pròpies de la botiga,
 // se substitueixen i aquests crèdits marxen.
 
 import type { Foto } from './equipament';

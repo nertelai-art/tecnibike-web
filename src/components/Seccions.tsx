@@ -1,13 +1,9 @@
 import Image from 'next/image';
-import { hasLocale } from 'next-intl';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
-import { FOTOS_EXTRES } from '@/content/fotos-extres';
 import type { Ressenya, Valoracio } from '@/lib/plataforma/esquema';
 import { Link } from '@/i18n/navigation';
-import { routing } from '@/i18n/routing';
-import { enllacWhatsapp, TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
-import { enllacCreditNertel } from '@/lib/credit-nertel';
+import { CORREU, enllacWhatsapp, TELEFON, TELEFON_VISIBLE } from '@/lib/contacte';
 import { AnatomiaTaller } from './anatomia/AnatomiaTaller';
 import { CarruselMarques } from './marques/CarruselMarques';
 import { MapaRutes } from './rutes/MapaRutes';
@@ -238,7 +234,7 @@ export async function Visita() {
     '@type': 'BikeStore',
     name: 'Tecnibike Costa Brava',
     telephone: TELEFON,
-    email: 'info@tecnibike.es',
+    email: CORREU,
     address: {
       '@type': 'PostalAddress',
       streetAddress: "Carrer de l'Empordà, 29",
@@ -274,8 +270,8 @@ export async function Visita() {
             <a className={styles.enllacClar} href={`tel:${TELEFON}`}>
               {t('telefon')} · {TELEFON_VISIBLE}
             </a>
-            <a className={styles.enllacClar} href="mailto:info@tecnibike.es">
-              info@tecnibike.es
+            <a className={styles.enllacClar} href={`mailto:${CORREU}`}>
+              {CORREU}
             </a>
           </div>
         </div>
@@ -309,61 +305,5 @@ export async function Visita() {
   );
 }
 
-export async function Peu() {
-  const t = await getTranslations('peu');
-  const tm = await getTranslations('mostra');
-  const locale = await getLocale();
-  const idioma = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
-  return (
-    <footer className={styles.peu}>
-      <div className={`contenidor ${styles.peuGraella}`}>
-        <p className={styles.peuMarca}>TCNBK</p>
-        <p className={styles.lema}>{t('lema')}</p>
-        <p className={styles.notaMostra}>{tm('nota')}</p>
-        <ul className={styles.legal}>
-          <li>{t('drets', { any: 2026 })}</li>
-          <li>
-            <a href="https://tecnibike.es/aviso-legal/">{t('legal')}</a>
-          </li>
-          <li>
-            <a href="https://tecnibike.es/politica-de-privacidad/">{t('privacitat')}</a>
-          </li>
-          <li>
-            <a href="https://tecnibike.es/politica-de-cookies/">{t('galetes')}</a>
-          </li>
-          <li>{t('nertel')}</li>
-        </ul>
-        <details className={styles.credits}>
-          <summary>{t('credits')}</summary>
-          <p>
-            {[...CATEGORIES_EQUIPAMENT.map((c) => FOTOS_EQUIPAMENT[c]), ...Object.values(FOTOS_EXTRES)].map((foto, i) => {
-              return (
-                <span key={foto.src}>
-                  {i > 0 && ' · '}
-                  <a href={foto.font} target="_blank" rel="noopener noreferrer">
-                    {foto.autor}
-                  </a>{' '}
-                  (
-                  <a href={foto.llicenciaUrl} target="_blank" rel="noopener noreferrer license">
-                    {foto.llicencia}
-                  </a>
-                  )
-                </span>
-              );
-            })}
-          </p>
-        </details>
-      </div>
-
-      {/* Qui ha fet la web. Franja pròpia sota el peu, discreta, que porta a nertel.ai. */}
-      <div className={styles.creditNertel}>
-        <a href={enllacCreditNertel(idioma)} target="_blank" rel="noopener">
-          <span>{t('fetaPer')}</span>
-          {/* El blau marí del símbol és per a fons clars: sobre el peu fosc s'aclareix perquè es vegi sencer. */}
-          <Image src="/img/nertel-mark.png" alt="" width={116} height={96} className={styles.creditNertelSimbol} />
-          <span className={styles.creditNertelNom}>Nertel</span>
-        </a>
-      </div>
-    </footer>
-  );
-}
+// El peu és a Peu.tsx; es reexporta perquè les pàgines l'importen d'aquí.
+export { Peu } from './Peu';

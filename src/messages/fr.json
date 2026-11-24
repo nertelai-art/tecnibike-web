@@ -24,8 +24,7 @@
     "compra": "Achat"
   },
   "mostra": {
-    "marca": "Donnée d'exemple, à confirmer",
-    "nota": "Les données marquées d'un * sont des exemples et doivent être confirmées avec Tecnibike."
+    "marca": "Donnée d'exemple, à confirmer"
   },
   "portada": {
     "situacio": "Sant Antoni de Calonge · Costa Brava",
@@ -366,9 +365,22 @@
     "privacitat": "Confidentialité",
     "galetes": "Cookies",
     "drets": "© {any} Tecnibike Costa Brava SL",
-    "nertel": "Réservations et accueil avec Nertel",
-    "credits": "Crédits photo",
-    "fetaPer": "Site réalisé par"
+    "credits": "Crédits des images",
+    "fetaPer": "Site réalisé par",
+    "mapaWeb": "Plan du site",
+    "bicis": "Vélos",
+    "lloguer": "Location de vélos",
+    "venda": "Vélos à vendre",
+    "rutes": "Itinéraires du coin",
+    "marques": "Marques",
+    "taller": "Atelier",
+    "serveis": "Services et tarifs",
+    "cita": "Prendre rendez-vous",
+    "botiga": "Boutique",
+    "visita": "Venez nous voir",
+    "comArribar": "Itinéraire",
+    "contacte": "Contact",
+    "instagram": "Tecnibike sur Instagram"
   },
   "reserva": {
     "tornar": "Tous les vélos",
@@ -710,5 +722,16 @@
         "boto": "Voir les {categoria} au magasin"
       }
     }
+  },
+  "credits": {
+    "metaTitol": "Crédits des images",
+    "titol": "Crédits des images",
+    "intro": "Certaines photos de ce site proviennent de Wikimedia Commons, sous licences Creative Commons qui demandent de citer l'auteur et la licence. Les voici toutes. Les photos des marques citent leur source sur la fiche de chaque marque.",
+    "equipament": "Boutique d'équipement",
+    "extres": "Options de location",
+    "autor": "Auteur",
+    "llicencia": "Licence",
+    "font": "Original",
+    "tornar": "Retour à l'accueil"
   }
 }
