@@ -1,6 +1,6 @@
 import { esPassat, sumaDies, type Instant } from './calendari';
 import { horesRecollida, horesRetorn, MAX_DIES_LLOGUER } from './horari';
-import type { HorariBotiga, LiniaNutricio, Moment } from './plataforma/esquema';
+import type { ConfiguracioReserves, HorariBotiga, LiniaNutricio, ModalitatPagament, Moment } from './plataforma/esquema';
 
 // Ajudes del formulari de reserva amb diverses bicis. Pures: la disponibilitat, l'horari i l'«ara»
 // entren per paràmetre.
@@ -11,6 +11,19 @@ type Disponibilitat = {
   variantsExtres?: Record<string, Record<string, number | null>>;
 };
 type Linia = { biciId: string; talla: string | null; pedals: string; extres: readonly string[]; variants?: Readonly<Record<string, string>> };
+
+/**
+ * Per on va una reserva: `directa` (es fa i es paga a la botiga), `pagament` (es retenen les bicis i
+ * es va a la passarel·la) o `invalida` (una modalitat que la botiga no ofereix ara).
+ */
+export function camiReserva(
+  pagament: Pick<ConfiguracioReserves['pagament'], 'actiu'> & { modalitats: readonly ModalitatPagament[] },
+  modalitat: ModalitatPagament | undefined,
+): 'directa' | 'pagament' | 'invalida' {
+  if (!pagament.actiu) return 'directa';
+  if (!modalitat || !pagament.modalitats.includes(modalitat)) return 'invalida';
+  return modalitat === 'botiga' ? 'directa' : 'pagament';
+}
 
 /** Les unitats d'una línia de nutrició no passen d'aquí (com a l'esquema). */
 export const MAX_QUANTITAT_NUTRICIO = 10;
@@ -100,4 +113,20 @@ export function commutaExtra(triats: readonly string[], id: string, extres: read
   const grup = extres.find((e) => e.id === id)?.grupId;
   const delGrup = grup ? new Set(extres.filter((e) => e.grupId === grup).map((e) => e.id)) : new Set<string>();
   return [...triats.filter((x) => !delGrup.has(x)), id];
+}
+
+/**
+ * Els extres agrupats pel nom del grup de la plataforma («Pedals», «Accessoris»), en l'ordre en què
+ * arriben. Un grup d'un sol extra no porta títol (només repetiria el nom de l'extra: a Tecnibike cada
+ * extra té el seu grup), i tots els solts van junts, al lloc del primer.
+ */
+export function grupsExtres<T extends { grupNom?: string }>(extres: readonly T[]): { nom: string | undefined; extres: T[] }[] {
+  const perNom = new Map<string | undefined, T[]>();
+  for (const e of extres) perNom.set(e.grupNom, [...(perNom.get(e.grupNom) ?? []), e]);
+  const grups = new Map<string | undefined, T[]>();
+  for (const [nom, delGrup] of perNom) {
+    const clau = delGrup.length > 1 ? nom : undefined;
+    grups.set(clau, [...(grups.get(clau) ?? []), ...delGrup]);
+  }
+  return [...grups].map(([nom, extres]) => ({ nom, extres }));
 }

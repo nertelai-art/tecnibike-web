@@ -1,0 +1,65 @@
+/* «Lloguer | Compra»: dues pastilles en una càpsula. La marcada, plena; l'altra, un enllaç. */
+
+.selector {
+  --vora: var(--linia);
+  --fons: var(--blanc);
+  --text: var(--tinta-2);
+  --actiu-fons: var(--blau-fosc);
+  --actiu-text: var(--blanc);
+  display: inline-flex;
+  gap: 4px;
+  width: min(100%, 420px);
+  margin-bottom: 20px;
+  padding: 4px;
+  border: 1.5px solid var(--vora);
+  border-radius: 999px;
+  background: var(--fons);
+}
+.selector[data-tema='fosc'] {
+  --vora: rgb(255 255 255 / 0.28);
+  --fons: rgb(255 255 255 / 0.06);
+  --text: rgb(255 255 255 / 0.82);
+  --actiu-fons: var(--blanc);
+  --actiu-text: var(--tinta);
+}
+
+.opcio {
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 22px;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+.opcio:hover {
+  color: var(--taronja);
+}
+.opcio[aria-current='page'],
+.opcio[aria-pressed='true'] {
+  background: var(--actiu-fons);
+  color: var(--actiu-text);
+}
+.opcio:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opcio {
+    transition: none;
+  }
+}

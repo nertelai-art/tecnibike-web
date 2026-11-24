@@ -2,13 +2,15 @@ import { primerMomentReservable, sumaDies } from '../calendari';
 import { diesEntre, validaFranja } from '../horari';
 import { importNutricio, totalReserva } from '../preus';
 import { productesNutricio } from './dades-nutricio';
-import { articles, configuracioReserves, extres, flota, horari, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
+import { articles, bicisVenda, configuracioReserves, extres, flota, horari, productes, ressenyes, serveisTaller, valoracioGoogle } from './dades-prova';
 import { frangesTaller, unitatsLliures } from './disponibilitat-prova';
 import {
   article,
   biciLloguer,
+  biciVenda,
   citaTaller,
   configuracioReserves as esquemaConfiguracio,
+  contacteVenda,
   extra,
   horariBotiga,
   participantsReserva,
@@ -22,6 +24,7 @@ import {
   type CitaTaller,
   type Confirmacio,
   type ConfiguracioReserves,
+  type ContacteVenda,
   type Extra,
   type LiniaNutricio,
   type ParticipantsReserva,
@@ -52,6 +55,7 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
   const retencions: Retinguda[] = [];
   const participants = new Map<string, ParticipantsReserva>();
   const cites: (CitaTaller & Confirmacio)[] = [];
+  const contactes: (ContacteVenda & Confirmacio)[] = [];
   const config = esquemaConfiguracio.parse({
     pagament: { ...configuracioReserves.pagament, ...configuracio.pagament },
     participants: { ...configuracioReserves.participants, ...configuracio.participants },
@@ -229,8 +233,8 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
     },
     crearCitaTaller: async (entrada) => {
       const cita = citaTaller.parse(entrada);
-      const franja = (await plataforma.frangesTaller(cita.dia)).find((f) => f.inici === cita.hora);
-      if (!franja || franja.places < 1) throw new ErrorReserva('franja');
+      const franja = (await plataforma.frangesTaller(cita.dia))?.find((f) => f.inici === cita.hora);
+      if (!franja || franja.places === 0) throw new ErrorReserva('franja');
       const confirmacio = { codi: generaCodi() };
       cites.push({ ...cita, ...confirmacio });
       return confirmacio;
@@ -238,6 +242,16 @@ export function crearPlataformaProva({ generaCodi, rellotge, configuracio = {} }
     nutricio: async () => producteNutricio.array().parse(productesNutricio),
     productes: async () => producte.array().parse(productes),
     articles: async (categoria) => article.array().parse(articles.filter((a) => a.categoria === categoria)),
+    bicisVenda: async () => biciVenda.array().parse(bicisVenda),
+    biciVenda: async (id) => biciVenda.array().parse(bicisVenda).find((b) => b.id === id) ?? null,
+    contacteVendaEnLinia: async () => true,
+    enviarContacteVenda: async (entrada) => {
+      const contacte = contacteVenda.parse(entrada);
+      if (!bicisVenda.some((b) => b.id === contacte.biciId)) throw new ErrorReserva('dades', 'la bici no és en venda');
+      const confirmacio = { codi: generaCodi() };
+      contactes.push({ ...contacte, ...confirmacio });
+      return confirmacio;
+    },
     valoracio: async () => valoracio.parse(valoracioGoogle),
     ressenyes: async () => ressenya.array().parse(ressenyes),
   };

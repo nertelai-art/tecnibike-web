@@ -6,6 +6,7 @@
   "nav": {
     "saltar": "Skip to content",
     "lloguer": "Rental",
+    "venda": "For sale",
     "taller": "Workshop",
     "rutes": "Routes",
     "botiga": "Shop",
@@ -14,7 +15,13 @@
     "idioma": "Language",
     "menu": "Menu",
     "tancar": "Close menu",
-    "inici": "Tecnibike, home"
+    "inici": "Tecnibike, home",
+    "idiomaActual": "Language: {idioma}. Change language"
+  },
+  "selector": {
+    "etiqueta": "Rent or buy",
+    "lloguer": "Rent",
+    "compra": "Buy"
   },
   "mostra": {
     "marca": "Sample data, to be confirmed",
@@ -79,7 +86,6 @@
   "flota": {
     "situacio": "Rental",
     "titol": "Choose your bike.",
-    "intro": "Bikes from our own shop, checked after every rental. The more days you keep it, the lower the price.",
     "categories": {
       "totes": "All",
       "muntanya": "Mountain",
@@ -101,7 +107,8 @@
       "de2a6": "2–6 days",
       "mesDe6": "7+ days",
       "nota": "Price per bike per day. Helmet included*."
-    }
+    },
+    "veureBici": "View it"
   },
   "comFunciona": {
     "titol": "Renting is this easy.",
@@ -202,14 +209,65 @@
   },
   "botigaCategoria": {
     "tornar": "Back to home",
-    "aviat": "Online shopping is coming soon. For now, reserve it on WhatsApp and pick it up at the shop: we will have it ready.",
-    "reservar": "Reserve on WhatsApp",
-    "missatge": "Hi! I would like to reserve: {article}."
+    "aviat": "Here’s what you’ll find at the shop. Come and see it, or call us on 972 66 29 51 and we’ll have it ready.",
+    "veureMarca": "See the {marca} brand",
+    "preuConsultar": "Price on request",
+    "preuDesDe": "From {preu}"
+  },
+  "venda": {
+    "titol": "Bikes for sale",
+    "intro": "The bikes we sell at our shop in Sant Antoni de Calonge. Leave us your phone number and we’ll call you about your size, or come and try one.",
+    "tornarInici": "Back to home",
+    "tornar": "All bikes for sale",
+    "mostraEtiqueta": "Sample",
+    "mostra": "There are no bikes for sale in the shop’s catalogue yet. These are samples, so you can see what the page will look like: they are not for sale.",
+    "mostraFitxa": "This bike is a sample and is not for sale. When the shop adds its bikes to the catalogue, they will appear here with their price.",
+    "opcions": "Options",
+    "preuConsultar": "Price on request",
+    "preuDesDe": "From {preu}",
+    "ivaInclos": "VAT included",
+    "ivaNoInclos": "VAT not included",
+    "nota": "We don’t sell online yet: we’ll hold it at the shop so you can try it.",
+    "fitxaTecnica": "Specifications",
+    "si": "Yes",
+    "no": "No",
+    "lloguer": "Want to try one before you decide? We rent them too.",
+    "lloguerEnllac": "See our rental bikes",
+    "foto": "Photo {n} of {total}",
+    "disponibilitat": {
+      "disponible": "In stock at the shop",
+      "esgotada": "Sold out",
+      "perEncarrec": "Made to order"
+    },
+    "enEstoc": "{n, plural, one {# unit} other {# units}}",
+    "talla": {
+      "esgotada": "Sold out",
+      "queden": "{n} left"
+    },
+    "trucar": "Call us on {telefon}",
+    "contacte": {
+      "titol": "Interested? We’ll call you",
+      "intro": "Leave us your phone number and the shop team will call you to answer your questions and hold the bike for you to try.",
+      "telefon": "Phone",
+      "correu": "Email (optional)",
+      "variantQualsevol": "Not sure yet",
+      "missatge": "Message (optional)",
+      "missatgeDefecte": "I’m interested in the {bici}.",
+      "enviar": "Call me",
+      "enviant": "Sending…",
+      "fetTitol": "Got it!",
+      "fetText": "The shop team will call you shortly on {telefon}.",
+      "errors": {
+        "dades": "Please check the highlighted fields.",
+        "xarxa": "It couldn’t be sent. Try again or call us on 972 66 29 51.",
+        "noDisponible": "We can’t take the request online right now. Call us on 972 66 29 51."
+      }
+    }
   },
   "marques": {
     "situacio": "The brands",
     "titol": "Kit yourself out like a pro.",
-    "text": "The bikes, components, clothing and nutrition the pro teams use. Browse them, and if you are after one, ask us on WhatsApp.",
+    "text": "The bikes, components, clothing and nutrition the pro teams use. Browse them and tap one to find out more.",
     "filtre": "Filter by category",
     "categories": {
       "totes": "All",
@@ -237,7 +295,8 @@
     "carrusel": "{n} brands in the shop",
     "pregunta": "Ask about {marca} on WhatsApp",
     "missatge": "Hi! Do you have any {marca} gear?",
-    "preguntar": "Ask us"
+    "veure": "See the {marca} brand",
+    "mira": "See more"
   },
   "botiga": {
     "situacio": "The shop",
@@ -297,7 +356,9 @@
     "telefon": "Call us",
     "whatsapp": "Message us on WhatsApp",
     "correu": "Email",
-    "mapa": "Get directions"
+    "mapa": "Get directions",
+    "mapaAria": "Map showing the Tecnibike shop",
+    "comArribar": "Get directions"
   },
   "peu": {
     "lema": "Bike rental, workshop and shop on the Costa Brava for over 15 years.",
@@ -341,7 +402,6 @@
     "preuDia": "{preu}/day",
     "estoc": "{n, plural, =0 {Sold out} one {1 left} other {# left}}",
     "estocMolts": "Over 15",
-    "senseImatge": "No image",
     "dades": "Your details",
     "nom": "Full name",
     "telefon": "Phone (with WhatsApp)",
@@ -356,7 +416,8 @@
     "modalitat": "How would you like to pay?",
     "modalitats": {
       "senyal": "{percent}% now ({import}) and the rest at the shop",
-      "total": "All now ({import})"
+      "total": "All now ({import})",
+      "botiga": "At the shop, when you pick up the bike ({import})"
     },
     "confirmar": "Confirm booking",
     "pagar": "Pay and book",
@@ -429,7 +490,9 @@
     "tipusBici": "Bike type",
     "calculDies": "{preu}/day × {dies}",
     "variantDe": "{extra} options",
-    "nutricio": "Ride nutrition"
+    "nutricio": "Ride nutrition",
+    "extresTriats": "{n} selected",
+    "extresDisponibles": "{n, plural, one {# option} other {# options}}"
   },
   "cita": {
     "titol": "Book the workshop",
@@ -458,15 +521,21 @@
       "dades": "Please check the highlighted fields.",
       "franja": "This time has just filled up. Choose another one.",
       "serveis": "Choose at least one service.",
-      "xarxa": "We couldn't send it. Please try again or call us on +34 972 66 29 51."
+      "xarxa": "We couldn't send it. Please try again or call us on +34 972 66 29 51.",
+      "noDisponible": "We can't save the appointment online right now. Call us on 972 66 29 51 and we'll book it for you."
     },
     "fet": {
       "titol": "Appointment confirmed",
       "text": "See you on {data} at {hora}. We'll give you a quote before touching anything and message you on WhatsApp when it's ready*.",
-      "altra": "Book another slot"
+      "altra": "Book another slot",
+      "titolPendent": "Appointment requested",
+      "textPendent": "We've held {data} at {hora} for you. The workshop will confirm it shortly on WhatsApp."
     },
     "situacio": "Workshop",
-    "tancar": "Close"
+    "tancar": "Close",
+    "lliure": "Free",
+    "preuConsultar": "Price on request",
+    "senseCitesEnLinia": "Right now workshop appointments are booked by phone:"
   },
   "whatsapp": {
     "parla": "Chat with our assistant on WhatsApp",
@@ -498,7 +567,6 @@
     "situacio": "Sports nutrition",
     "titol": "Fuel for every kilometre",
     "intro": "Gels, bars and drinks from Maurten, 226ERS, Nutrinovex and SiS, the same ones we stock in the shop. We'll have them ready with your rental bike, or drop by before you ride.",
-    "veure": "{n, plural, one {See the product} other {See all # products}}",
     "totesMarques": "All brands",
     "quan": "When to take it",
     "tot": "All",
@@ -588,9 +656,8 @@
     "perUnitat": "{preu} each",
     "buit": "No products from this brand for this moment. Try another filter.",
     "ambLaBici": "Add it to your rental bike",
-    "perWhatsapp": "Or order it on WhatsApp",
     "missatge": "Hi! I'd like to book some nutrition for my ride (gels, bars…). What do you have?",
-    "nota": "Product photos from the brands' websites. Sample prices and stock*.",
+    "nota": "Product photos from the brands’ websites. Prices in the shop.",
     "marca": "Brand",
     "totes": "All",
     "sabor": "Flavour",
@@ -603,11 +670,45 @@
     "reserva": {
       "titol": "Ride nutrition",
       "intro": "Gels, bars and drinks from the shop. We'll have them ready with your bike, and you pay for them with your booking.",
-      "triats": "In your booking"
+      "triats": "In your booking",
+      "unitats": "{n, plural, one {# item} other {# items}} · {preu}",
+      "opcional": "Optional"
     },
-    "demanaWhatsapp": "Book it on WhatsApp",
     "veureMes": "See more ({n})",
     "veureMenys": "See less",
-    "escenaSr": "Each brand's products spin around as you scroll down."
+    "triaMarca": "Pick a brand",
+    "veureMarca": "{marca}: see its {n} products",
+    "productesN": "{n, plural, one {# product} other {# products}}",
+    "triada": "Selected",
+    "mira": "See it",
+    "resultat": "{n, plural, one {# product} other {# products}} · {marca}",
+    "aLaBotiga": "You’ll find it at the shop: drop by before your ride and we’ll get it ready."
+  },
+  "fitxaMarca": {
+    "tornar": "All brands",
+    "dades": "The brand at a glance",
+    "desDe": "Since {any}",
+    "historia": "The brand",
+    "destacats": "Our picks",
+    "web": "{marca} website",
+    "mes": "More brands: {categoria}",
+    "credits": "Photos from the {marca} website:",
+    "accio": {
+      "bicis": {
+        "titol": "Want to ride a {marca}?",
+        "text": "Rent one for a day or a week, or come to the shop to see it and try it.",
+        "boto": "See the rental fleet"
+      },
+      "components": {
+        "titol": "{marca}, in our workshop",
+        "text": "We use it when we service your bike and, if you want it, we fit and adjust it for you. Book a slot and bring your bike.",
+        "boto": "Book the workshop"
+      },
+      "equipament": {
+        "titol": "{marca}, in the shop",
+        "text": "Come and try it on: we help you find your size and adjust it there and then.",
+        "boto": "See {categoria} in the shop"
+      }
+    }
   }
 }

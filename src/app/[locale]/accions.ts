@@ -4,7 +4,8 @@ import { headers } from 'next/headers';
 import { araABotiga, esData, esPassat } from '@/lib/calendari';
 import { diesEntre, MAX_DIES_LLOGUER } from '@/lib/horari';
 import { ErrorReserva, plataforma, type Disponibilitat } from '@/lib/plataforma';
-import { citaTaller, modalitatPagament, moment, participantsReserva, reservaLloguer } from '@/lib/plataforma/esquema';
+import { citaTaller, contacteVenda, type FranjaTaller, modalitatEnLinia, modalitatPagament, moment, participantsReserva, reservaLloguer } from '@/lib/plataforma/esquema';
+import { camiReserva } from '@/lib/reserva';
 
 // Accions de servidor de les reserves. Tot el que arriba del navegador es torna a validar aquí, i
 // el preu, l'horari i les unitats lliures els comprova la plataforma: el formulari només orienta.
@@ -32,9 +33,16 @@ export async function consultarDisponibilitat(recollida: unknown, retorn: unknow
   }
 }
 
-export async function consultarFranges(dia: string) {
+/** Les hores d'arribada al taller d'un dia, o `'senseCites'` si ara no es poden demanar en línia. */
+export async function consultarFranges(dia: string): Promise<FranjaTaller[] | 'senseCites'> {
   if (!esData(dia)) return [];
-  return plataforma.frangesTaller(dia);
+  try {
+    return (await plataforma.frangesTaller(dia)) ?? 'senseCites';
+  } catch (e) {
+    // Si la plataforma no respon, millor dir que truquin que ensenyar el dia ple.
+    console.error('Hores del taller no disponibles', e);
+    return 'senseCites';
+  }
 }
 
 function errorDe(e: unknown): ResultatReserva {
@@ -49,18 +57,21 @@ function errorDe(e: unknown): ResultatReserva {
 const campsAmbError = (issues: { path: PropertyKey[] }[]) => issues.map((i) => i.path.map(String).join('.'));
 
 /**
- * Sense pagament en línia, la reserva queda feta i es paga a la botiga. Amb pagament (quan la
- * plataforma l'activi), les bicis queden retingudes i es torna l'adreça de la passarel·la.
+ * Sense pagament en línia, o si qui reserva tria pagar a la botiga (i la botiga ho deixa), la
+ * reserva queda feta i es paga en recollir la bici. Amb pagament en línia, les bicis queden
+ * retingudes i es torna l'adreça de la passarel·la.
  */
 export async function reservarLloguer(entrada: unknown, modalitat?: unknown): Promise<ResultatReserva> {
   const validada = reservaLloguer.safeParse(entrada);
   if (!validada.success) return { ok: false, error: 'dades', camps: campsAmbError(validada.error.issues) };
   try {
     const { pagament } = await plataforma.configuracioReserves();
-    if (!pagament.actiu) return { ok: true, ...(await plataforma.crearReservaLloguer(validada.data)) };
+    const llegida = modalitatPagament.safeParse(modalitat);
+    const cami = camiReserva(pagament, llegida.success ? llegida.data : undefined);
+    if (cami === 'directa') return { ok: true, ...(await plataforma.crearReservaLloguer(validada.data)) };
 
-    const triada = modalitatPagament.safeParse(modalitat);
-    if (!triada.success || !pagament.modalitats.includes(triada.data)) return { ok: false, error: 'dades', camps: ['modalitat'] };
+    const triada = modalitatEnLinia.safeParse(modalitat);
+    if (cami === 'invalida' || !triada.success) return { ok: false, error: 'dades', camps: ['modalitat'] };
     const retencio = await plataforma.retenirReserva(validada.data);
     try {
       const capcaleres = await headers();
@@ -87,6 +98,17 @@ export async function enviarParticipants(entrada: unknown): Promise<{ ok: true }
   } catch (e) {
     const r = errorDe(e);
     return r.ok ? { ok: false, error: 'xarxa' } : r;
+  }
+}
+
+/** La petició de contacte d'una bici en venda: l'equip de la botiga truca. */
+export async function demanarContacteVenda(entrada: unknown): Promise<ResultatReserva> {
+  const validada = contacteVenda.safeParse(entrada);
+  if (!validada.success) return { ok: false, error: 'dades', camps: validada.error.issues.map((i) => String(i.path[0])) };
+  try {
+    return { ok: true, ...(await plataforma.enviarContacteVenda(validada.data)) };
+  } catch (e) {
+    return errorDe(e);
   }
 }
 

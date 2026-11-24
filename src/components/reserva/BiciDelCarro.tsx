@@ -9,9 +9,10 @@ import { useTranslations } from 'next-intl';
 import { useId } from 'react';
 import type { BiciLloguer, Extra } from '@/lib/plataforma/esquema';
 import { optimitzable } from '@/lib/imatges';
-import { commutaExtra } from '@/lib/reserva';
+import { commutaExtra, grupsExtres } from '@/lib/reserva';
 import { tallaSuggerida } from '@/lib/talles';
 import { Extres } from './Extres';
+import { Plegable } from './Plegable';
 import styles from './Reserva.module.css';
 
 export type LiniaFormulari = {
@@ -46,9 +47,11 @@ type Props = {
   onCanvi: (canvi: Partial<LiniaFormulari>) => void;
   /** Sense aquesta funció, és la bici de la fitxa: no es pot canviar ni treure. */
   onTreure?: () => void;
+  /** Acabada d'afegir: entra amb una animació i es ressalta un moment. */
+  nova?: boolean;
 };
 
-export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliures, lliuresVariants, errors, ambCapcalera, preuDe, onCanvi, onTreure }: Props) {
+export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliures, lliuresVariants, errors, ambCapcalera, preuDe, onCanvi, onTreure, nova }: Props) {
   const t = useTranslations('reserva');
   const id = useId();
   const bici = flota.find((b) => b.id === linia.biciId) ?? flota[0]!;
@@ -58,7 +61,7 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
   const unitats = linia.talla && talles ? talles[linia.talla] : undefined;
 
   return (
-    <fieldset className={styles.biciCarro}>
+    <fieldset className={styles.biciCarro} data-clau={linia.clau} data-nova={nova || undefined}>
       <legend className="sr-only">{t('bici', { n: index + 1 })}</legend>
       {ambCapcalera && (
         <div className={styles.biciCap}>
@@ -177,26 +180,36 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
         </div>
       )}
 
-      <div className={styles.grup}>
-        <p className={styles.etiquetaGrup}>{t('extres')}</p>
-        <Extres
-          nom={`${id}-extres`}
-          extres={extres}
-          triats={linia.extres}
-          lliures={lliures}
-          multiple
-          onCanvi={(x) => {
-            const triats = commutaExtra(linia.extres, x, extres);
-            // La variant d'un extra que es treu ja no compta.
-            const variants = Object.fromEntries(Object.entries(linia.variants).filter(([id]) => triats.includes(id)));
-            onCanvi({ extres: triats, variants });
-          }}
-          variants={linia.variants}
-          lliuresVariants={lliuresVariants}
-          onVariant={(x, v) => onCanvi({ variants: { ...linia.variants, [x]: v } })}
-          faltaVariant={new Set(extres.filter((e) => error(`variants.${e.id}`)).map((e) => e.id))}
-        />
-      </div>
+      {/* Els extres, oberts: abans es plegaven i no es veien. Agrupats pel grup de la plataforma. */}
+      <Plegable
+        titol={t('extres')}
+        resum={linia.extres.length > 0 ? t('extresTriats', { n: linia.extres.length }) : t('extresDisponibles', { n: extres.length })}
+        inicial
+        forcada={extres.some((e) => error(`variants.${e.id}`))}
+      >
+        {grupsExtres(extres).map((grup) => (
+          <div key={grup.nom ?? '-'} className={styles.grupExtres}>
+            {grup.nom && <p className={styles.grupExtresNom}>{grup.nom}</p>}
+            <Extres
+              nom={`${id}-extres`}
+              extres={grup.extres}
+              triats={linia.extres}
+              lliures={lliures}
+              multiple
+              onCanvi={(x) => {
+                const triats = commutaExtra(linia.extres, x, extres);
+                // La variant d'un extra que es treu ja no compta.
+                const variants = Object.fromEntries(Object.entries(linia.variants).filter(([id]) => triats.includes(id)));
+                onCanvi({ extres: triats, variants });
+              }}
+              variants={linia.variants}
+              lliuresVariants={lliuresVariants}
+              onVariant={(x, v) => onCanvi({ variants: { ...linia.variants, [x]: v } })}
+              faltaVariant={new Set(extres.filter((e) => error(`variants.${e.id}`)).map((e) => e.id))}
+            />
+          </div>
+        ))}
+      </Plegable>
     </fieldset>
   );
 }

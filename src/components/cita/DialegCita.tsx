@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CitaTaller } from '@/components/reserva/CitaTaller';
 import { enllacWhatsapp } from '@/lib/contacte';
 import type { Peca, ServeiTaller } from '@/lib/plataforma/esquema';
-import { EVENT_CITA, ID_DIALEG_CITA } from './obrir-cita';
+import { citaDeLAdreca, EVENT_CITA, ID_DIALEG_CITA } from './obrir-cita';
 import styles from './DialegCita.module.css';
 
 export function DialegCita({ serveis }: { serveis: ServeiTaller[] }) {
@@ -25,6 +25,16 @@ export function DialegCita({ serveis }: { serveis: ServeiTaller[] }) {
       dialeg.current?.showModal();
     };
     window.addEventListener(EVENT_CITA, obre);
+    // Des d'una altra pàgina, «Demana cita» porta aquí amb ?cita (i la peça): s'obre el diàleg i es
+    // treu el paràmetre de l'adreça, perquè en recarregar no torni a sortir.
+    const { obrir, peca } = citaDeLAdreca(window.location.search);
+    if (obrir) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('cita');
+      url.searchParams.delete('peca');
+      window.history.replaceState(window.history.state, '', url);
+      obre(new CustomEvent<Peca | null>(EVENT_CITA, { detail: peca }));
+    }
     return () => window.removeEventListener(EVENT_CITA, obre);
   }, []);
 

@@ -66,17 +66,104 @@
   background: var(--escenari);
 }
 
-.idiomes a {
-  min-height: 36px;
-  padding: 0 9px;
-  font-size: 12px;
-  color: var(--tinta-3);
+/* Selector d'idioma: el triat, i en clicar-lo el desplegable amb les banderes. */
+.idioma {
+  position: relative;
 }
-
-.idiomes a[aria-current='true'] {
+.idiomaBoto {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
   color: var(--tinta);
-  box-shadow: inset 0 -2px 0 var(--taronja);
-  border-radius: 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease);
+}
+.idiomaBoto:hover,
+.idioma[data-obert] .idiomaBoto {
+  background: var(--escenari);
+}
+.idiomaBoto:focus-visible,
+.idiomaLlista a:focus-visible {
+  outline: 2px solid var(--blau-fosc);
+  outline-offset: 2px;
+}
+.bandera {
+  width: 21px;
+  height: 14px;
+  flex: none;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgb(18 20 23 / 0.12);
+}
+.idiomaFletxa {
+  width: 7px;
+  height: 7px;
+  margin-left: 2px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s var(--ease);
+}
+.idioma[data-obert] .idiomaFletxa {
+  transform: translateY(1px) rotate(-135deg);
+}
+.nav .idiomaLlista {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 2;
+  display: grid;
+  gap: 2px;
+  min-width: 190px;
+  padding: 8px;
+  border-radius: 16px;
+  background: var(--blanc);
+  box-shadow:
+    0 0 0 1px var(--linia-fina),
+    0 18px 40px -18px rgb(18 20 23 / 0.45);
+  animation: idioma-obre 0.18s var(--ease);
+}
+.nav .idiomaLlista[hidden] {
+  display: none;
+}
+.nav .idiomaLlista a {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.idiomaLlista a[aria-current='true'] {
+  background: var(--escenari);
+}
+.idiomaTriat {
+  margin-left: auto;
+  color: var(--taronja);
+  font-weight: 800;
+}
+@keyframes idioma-obre {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav .idiomaLlista {
+    animation: none;
+  }
 }
 
 .accions {
@@ -175,10 +262,19 @@
     font-size: 16px;
   }
 
-  .idiomes {
-    flex-direction: row !important;
+  /* Dins del menú de mòbil, el selector va a sota, i el desplegable s'obre en el mateix lloc. */
+  .idioma {
     border-top: 1px solid var(--linia);
-    padding-top: 12px !important;
+    padding-top: 12px;
+  }
+  .idiomaBoto {
+    min-height: 48px;
+    font-size: 15px;
+  }
+  .nav .idiomaLlista {
+    position: static;
+    margin-top: 8px;
+    box-shadow: 0 0 0 1px var(--linia-fina);
   }
 
   .barra {

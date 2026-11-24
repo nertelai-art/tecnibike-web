@@ -6,6 +6,7 @@
   "nav": {
     "saltar": "Salta al contingut",
     "lloguer": "Lloguer",
+    "venda": "Venda",
     "taller": "Taller",
     "rutes": "Rutes",
     "botiga": "Botiga",
@@ -14,7 +15,13 @@
     "idioma": "Idioma",
     "menu": "Menú",
     "tancar": "Tanca el menú",
-    "inici": "Tecnibike, inici"
+    "inici": "Tecnibike, inici",
+    "idiomaActual": "Idioma: {idioma}. Canvia d’idioma"
+  },
+  "selector": {
+    "etiqueta": "Lloguer o compra",
+    "lloguer": "Lloguer",
+    "compra": "Compra"
   },
   "mostra": {
     "marca": "Dada de mostra, pendent de confirmar",
@@ -79,7 +86,6 @@
   "flota": {
     "situacio": "Lloguer",
     "titol": "Tria la teva bici.",
-    "intro": "Bicis de la nostra botiga, revisades després de cada lloguer. El preu baixa com més dies la tens.",
     "categories": {
       "totes": "Totes",
       "muntanya": "Muntanya",
@@ -101,7 +107,8 @@
       "de2a6": "2–6 dies",
       "mesDe6": "+6 dies",
       "nota": "Preu per bici i per dia. Casc inclòs*."
-    }
+    },
+    "veureBici": "Mira-la"
   },
   "comFunciona": {
     "titol": "Llogar és així de fàcil.",
@@ -202,14 +209,65 @@
   },
   "botigaCategoria": {
     "tornar": "Torna a l’inici",
-    "aviat": "La botiga en línia arriba aviat. De moment, reserva-ho per WhatsApp i passa a recollir-ho a la botiga: t’ho tindrem a punt.",
-    "reservar": "Reserva-ho per WhatsApp",
-    "missatge": "Hola! Voldria reservar: {article}."
+    "aviat": "Aquí tens el que trobaràs a la botiga. Vine a veure-ho o truca’ns al 972 66 29 51 i t’ho tindrem a punt.",
+    "veureMarca": "Mira la marca {marca}",
+    "preuConsultar": "Preu a consultar",
+    "preuDesDe": "Des de {preu}"
+  },
+  "venda": {
+    "titol": "Bicis en venda",
+    "intro": "Les bicis que venem a la botiga de Sant Antoni de Calonge. Deixa’ns el telèfon i et trucarem per la teva talla, o vine a provar-la.",
+    "tornarInici": "Torna a l’inici",
+    "tornar": "Totes les bicis en venda",
+    "mostraEtiqueta": "Mostra",
+    "mostra": "Encara no hi ha cap bici en venda al catàleg de la botiga. Aquestes són de mostra, perquè vegis com quedarà la pàgina: no estan a la venda.",
+    "mostraFitxa": "Aquesta bici és de mostra i no està a la venda. Quan la botiga doni d’alta les seves bicis al catàleg, sortiran aquí amb el preu.",
+    "opcions": "Opcions",
+    "preuConsultar": "Preu a consultar",
+    "preuDesDe": "Des de {preu}",
+    "ivaInclos": "IVA inclòs",
+    "ivaNoInclos": "IVA no inclòs",
+    "nota": "De moment no venem en línia: te la reservem a la botiga perquè la puguis provar.",
+    "fitxaTecnica": "Fitxa tècnica",
+    "si": "Sí",
+    "no": "No",
+    "lloguer": "Vols provar-ne una abans de decidir-te? També en lloguem.",
+    "lloguerEnllac": "Mira les bicis de lloguer",
+    "foto": "Foto {n} de {total}",
+    "disponibilitat": {
+      "disponible": "Disponible a la botiga",
+      "esgotada": "Esgotada",
+      "perEncarrec": "Per encàrrec"
+    },
+    "enEstoc": "{n, plural, one {# unitat} other {# unitats}}",
+    "talla": {
+      "esgotada": "Esgotada",
+      "queden": "{n, plural, one {Queda #} other {Queden #}}"
+    },
+    "trucar": "Truca’ns al {telefon}",
+    "contacte": {
+      "titol": "T’interessa? Et truquem",
+      "intro": "Deixa’ns el telèfon i l’equip de la botiga et trucarà per resoldre’t els dubtes i reservar-te-la perquè la provis.",
+      "telefon": "Telèfon",
+      "correu": "Correu electrònic (opcional)",
+      "variantQualsevol": "Encara no ho sé",
+      "missatge": "Missatge (opcional)",
+      "missatgeDefecte": "M’interessa la {bici}.",
+      "enviar": "Vull que em truqueu",
+      "enviant": "Enviant…",
+      "fetTitol": "Rebut!",
+      "fetText": "L’equip de la botiga et trucarà ben aviat al {telefon}.",
+      "errors": {
+        "dades": "Revisa els camps marcats.",
+        "xarxa": "No s’ha pogut enviar. Torna-ho a provar o truca’ns al 972 66 29 51.",
+        "noDisponible": "Ara mateix no podem rebre la petició en línia. Truca’ns al 972 66 29 51."
+      }
+    }
   },
   "marques": {
     "situacio": "Les marques",
     "titol": "Equipa’t com un professional.",
-    "text": "Les bicis, els components, la roba i la nutrició que fan servir els equips. Passa-les, i si en busques una, pregunta’ns-ho per WhatsApp.",
+    "text": "Les bicis, els components, la roba i la nutrició que fan servir els equips. Passa-les i toca’n una per saber-ne més.",
     "filtre": "Filtra per categoria",
     "categories": {
       "totes": "Totes",
@@ -237,7 +295,8 @@
     "carrusel": "{n} marques de la botiga",
     "pregunta": "Pregunta per {marca} per WhatsApp",
     "missatge": "Hola! Teniu material de {marca}?",
-    "preguntar": "Pregunta-ho"
+    "veure": "Mira la marca {marca}",
+    "mira": "Mira-la"
   },
   "botiga": {
     "situacio": "La botiga",
@@ -297,7 +356,9 @@
     "telefon": "Truca'ns",
     "whatsapp": "Escriu-nos per WhatsApp",
     "correu": "Correu",
-    "mapa": "Com arribar-hi"
+    "mapa": "Com arribar-hi",
+    "mapaAria": "Mapa amb la botiga Tecnibike",
+    "comArribar": "Com arribar-hi"
   },
   "peu": {
     "lema": "Lloguer, taller i botiga de bicis a la Costa Brava des de fa més de 15 anys.",
@@ -341,7 +402,6 @@
     "preuDia": "{preu}/dia",
     "estoc": "{n, plural, =0 {Esgotat} one {Queda 1} other {Queden #}}",
     "estocMolts": "Més de 15",
-    "senseImatge": "Sense imatge",
     "dades": "Les teves dades",
     "nom": "Nom i cognoms",
     "telefon": "Telèfon (amb WhatsApp)",
@@ -356,7 +416,8 @@
     "modalitat": "Com vols pagar?",
     "modalitats": {
       "senyal": "Ara un {percent} % ({import}) i la resta a la botiga",
-      "total": "Tot ara ({import})"
+      "total": "Tot ara ({import})",
+      "botiga": "A la botiga, en recollir la bici ({import})"
     },
     "confirmar": "Confirma la reserva",
     "pagar": "Paga i reserva",
@@ -429,7 +490,9 @@
     "tipusBici": "Tipus de bici",
     "calculDies": "{preu}/dia × {dies}",
     "variantDe": "Opcions de {extra}",
-    "nutricio": "Nutrició per a la ruta"
+    "nutricio": "Nutrició per a la ruta",
+    "extresTriats": "{n, plural, one {# triat} other {# triats}}",
+    "extresDisponibles": "{n, plural, one {# opció} other {# opcions}}"
   },
   "cita": {
     "titol": "Demana cita al taller",
@@ -458,15 +521,21 @@
       "dades": "Revisa els camps marcats.",
       "franja": "Aquesta hora s'acaba d'omplir. Tria'n una altra.",
       "serveis": "Tria almenys un servei.",
-      "xarxa": "No s'ha pogut enviar. Torna-ho a provar o truca'ns al 972 66 29 51."
+      "xarxa": "No s'ha pogut enviar. Torna-ho a provar o truca'ns al 972 66 29 51.",
+      "noDisponible": "Ara mateix no podem desar la cita en línia. Truca'ns al 972 66 29 51 i te la donem."
     },
     "fet": {
       "titol": "Cita confirmada",
       "text": "T'esperem el {data} a les {hora}. Et direm el pressupost abans de tocar res i t'avisarem per WhatsApp quan estigui llesta*.",
-      "altra": "Demana una altra cita"
+      "altra": "Demana una altra cita",
+      "titolPendent": "Cita demanada",
+      "textPendent": "Hem guardat l'hora del {data} a les {hora}. El taller te la confirmarà ben aviat per WhatsApp."
     },
     "situacio": "Taller",
-    "tancar": "Tanca"
+    "tancar": "Tanca",
+    "lliure": "Lliure",
+    "preuConsultar": "Preu a consultar",
+    "senseCitesEnLinia": "Ara mateix les cites del taller es demanen per telèfon:"
   },
   "whatsapp": {
     "parla": "Parla amb el nostre assistent per WhatsApp",
@@ -498,7 +567,6 @@
     "situacio": "Nutrició esportiva",
     "titol": "Combustible per a cada quilòmetre",
     "intro": "Gels, barretes i begudes de Maurten, 226ERS, Nutrinovex i SiS, els mateixos que tenim a la botiga. Te'ls deixem a punt amb la bici de lloguer, o passa a buscar-los abans de sortir.",
-    "veure": "{n, plural, one {Mira'n el producte} other {Mira'n els # productes}}",
     "totesMarques": "Totes les marques",
     "quan": "Quan el prens",
     "tot": "Tot",
@@ -588,9 +656,8 @@
     "perUnitat": "{preu} la unitat",
     "buit": "No hi ha cap producte d'aquesta marca per a aquest moment. Prova un altre filtre.",
     "ambLaBici": "Afegeix-la a la teva bici de lloguer",
-    "perWhatsapp": "O demana-la per WhatsApp",
     "missatge": "Hola! Voldria reservar nutrició per a la ruta (gels, barretes…). Què teniu?",
-    "nota": "Fotos de producte de les webs de les marques. Preus i estoc de mostra*.",
+    "nota": "Fotos de producte de les webs de les marques. Preus a la botiga.",
     "marca": "Marca",
     "totes": "Totes",
     "sabor": "Sabor",
@@ -603,11 +670,45 @@
     "reserva": {
       "titol": "Nutrició per a la ruta",
       "intro": "Gels, barretes i begudes de la botiga. Te les deixem a punt amb la bici i es paguen amb la reserva.",
-      "triats": "A la reserva"
+      "triats": "A la reserva",
+      "unitats": "{n, plural, one {# unitat} other {# unitats}} · {preu}",
+      "opcional": "Opcional"
     },
-    "demanaWhatsapp": "Reserva-la per WhatsApp",
     "veureMes": "Veure'n més ({n})",
     "veureMenys": "Veure'n menys",
-    "escenaSr": "Els productes de cada marca giren sobre si mateixos a mesura que baixes."
+    "triaMarca": "Tria una marca",
+    "veureMarca": "{marca}: mira’n els {n} productes",
+    "productesN": "{n, plural, one {# producte} other {# productes}}",
+    "triada": "Triada",
+    "mira": "Mira-la",
+    "resultat": "{n, plural, one {# producte} other {# productes}} · {marca}",
+    "aLaBotiga": "La trobaràs a la botiga: vine abans de sortir i te la preparem."
+  },
+  "fitxaMarca": {
+    "tornar": "Totes les marques",
+    "dades": "La marca en breu",
+    "desDe": "Des de {any}",
+    "historia": "La marca",
+    "destacats": "Què en destaquem",
+    "web": "Web de {marca}",
+    "mes": "Més marques: {categoria}",
+    "credits": "Fotos de la web de {marca}:",
+    "accio": {
+      "bicis": {
+        "titol": "Vols rodar amb una {marca}?",
+        "text": "Lloga-la per un dia o per una setmana, o vine a la botiga a veure-la i provar-la.",
+        "boto": "Mira la flota de lloguer"
+      },
+      "components": {
+        "titol": "{marca}, al nostre taller",
+        "text": "El fem servir quan revisem la teva bici i, si el vols, te’l posem i te l’ajustem. Demana cita i passa amb la bici.",
+        "boto": "Demana cita al taller"
+      },
+      "equipament": {
+        "titol": "{marca}, a la botiga",
+        "text": "Vine a emprovar-t’ho: t’ajudem a trobar la talla i t’ho ajustem al moment.",
+        "boto": "Mira {categoria} a la botiga"
+      }
+    }
   }
 }

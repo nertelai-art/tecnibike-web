@@ -11,6 +11,7 @@ import { enllacCreditNertel } from '@/lib/credit-nertel';
 import { AnatomiaTaller } from './anatomia/AnatomiaTaller';
 import { CarruselMarques } from './marques/CarruselMarques';
 import { MapaRutes } from './rutes/MapaRutes';
+import { MapaBotiga } from './visita/MapaBotiga';
 import { Revela } from './Revela';
 import styles from './Seccions.module.css';
 
@@ -299,6 +300,9 @@ export async function Visita() {
             {t('mapa')} <span className="fletxa">↗</span>
           </a>
         </div>
+      </div>
+      <div className="contenidor">
+        <MapaBotiga />
       </div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(negoci) }} />
     </section>

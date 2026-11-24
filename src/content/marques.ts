@@ -48,6 +48,25 @@ export const MARQUES: Marca[] = [
   { nom: 'Nutrinovex', logo: 'nutrinovex.webp', categoria: 'nutricio', tipus: ['nutricio'] },
 ];
 
+/** L'adreça d'una marca en minúscules i sense signes: `x-sauce`, `226ers`. */
+export function slugMarca(m: Pick<Marca, 'nom'>): string {
+  return m.nom
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/**
+ * On porta clicar una marca: les de nutrició, al catàleg de nutrició filtrat per aquella marca; la
+ * resta, a la seva fitxa.
+ */
+export function enllacMarca(m: Pick<Marca, 'nom' | 'categoria'>): string {
+  if (m.categoria === 'nutricio') return `/botiga/nutricio?marca=${encodeURIComponent(m.nom)}#nutricio-productes`;
+  return `/marques/${slugMarca(m)}`;
+}
+
 export function marquesDeTipus(tipus: TipusMarca): Marca[] {
   return MARQUES.filter((m) => m.tipus.includes(tipus));
 }

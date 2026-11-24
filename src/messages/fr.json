@@ -6,6 +6,7 @@
   "nav": {
     "saltar": "Aller au contenu",
     "lloguer": "Location",
+    "venda": "Vente",
     "taller": "Atelier",
     "rutes": "Parcours",
     "botiga": "Boutique",
@@ -14,7 +15,13 @@
     "idioma": "Langue",
     "menu": "Menu",
     "tancar": "Fermer le menu",
-    "inici": "Tecnibike, accueil"
+    "inici": "Tecnibike, accueil",
+    "idiomaActual": "Langue : {idioma}. Changer de langue"
+  },
+  "selector": {
+    "etiqueta": "Location ou achat",
+    "lloguer": "Location",
+    "compra": "Achat"
   },
   "mostra": {
     "marca": "Donnée d'exemple, à confirmer",
@@ -79,7 +86,6 @@
   "flota": {
     "situacio": "Location",
     "titol": "Choisissez votre vélo.",
-    "intro": "Des vélos de notre boutique, révisés après chaque location. Plus vous le gardez, plus le prix baisse.",
     "categories": {
       "totes": "Tous",
       "muntanya": "VTT",
@@ -101,7 +107,8 @@
       "de2a6": "2–6 jours",
       "mesDe6": "7 jours et +",
       "nota": "Prix par vélo et par jour. Casque inclus*."
-    }
+    },
+    "veureBici": "La voir"
   },
   "comFunciona": {
     "titol": "Louer, c'est aussi simple que ça.",
@@ -202,14 +209,65 @@
   },
   "botigaCategoria": {
     "tornar": "Retour à l’accueil",
-    "aviat": "La boutique en ligne arrive bientôt. En attendant, réservez sur WhatsApp et venez le chercher au magasin : il sera prêt.",
-    "reservar": "Réserver sur WhatsApp",
-    "missatge": "Bonjour ! Je voudrais réserver : {article}."
+    "aviat": "Voici ce que vous trouverez au magasin. Venez le voir ou appelez-nous au 972 66 29 51 et nous vous le préparerons.",
+    "veureMarca": "Voir la marque {marca}",
+    "preuConsultar": "Prix sur demande",
+    "preuDesDe": "À partir de {preu}"
+  },
+  "venda": {
+    "titol": "Vélos à vendre",
+    "intro": "Les vélos que nous vendons au magasin de Sant Antoni de Calonge. Laissez-nous votre téléphone et nous vous appellerons pour votre taille, ou venez l’essayer.",
+    "tornarInici": "Retour à l’accueil",
+    "tornar": "Tous les vélos à vendre",
+    "mostraEtiqueta": "Exemple",
+    "mostra": "Il n’y a pas encore de vélo à vendre dans le catalogue de la boutique. Ceux-ci sont des exemples, pour voir à quoi ressemblera la page : ils ne sont pas à vendre.",
+    "mostraFitxa": "Ce vélo est un exemple et n’est pas à vendre. Quand la boutique ajoutera ses vélos au catalogue, ils apparaîtront ici avec leur prix.",
+    "opcions": "Options",
+    "preuConsultar": "Prix sur demande",
+    "preuDesDe": "À partir de {preu}",
+    "ivaInclos": "TVA incluse",
+    "ivaNoInclos": "TVA non incluse",
+    "nota": "Nous ne vendons pas encore en ligne : nous vous le réservons au magasin pour que vous puissiez l’essayer.",
+    "fitxaTecnica": "Fiche technique",
+    "si": "Oui",
+    "no": "Non",
+    "lloguer": "Envie d’en essayer un avant de vous décider ? Nous en louons aussi.",
+    "lloguerEnllac": "Voir nos vélos de location",
+    "foto": "Photo {n} sur {total}",
+    "disponibilitat": {
+      "disponible": "Disponible en boutique",
+      "esgotada": "Épuisé",
+      "perEncarrec": "Sur commande"
+    },
+    "enEstoc": "{n, plural, one {# unité} other {# unités}}",
+    "talla": {
+      "esgotada": "Épuisé",
+      "queden": "{n, plural, one {Plus que #} other {Plus que #}}"
+    },
+    "trucar": "Appelez-nous au {telefon}",
+    "contacte": {
+      "titol": "Intéressé ? On vous appelle",
+      "intro": "Laissez-nous votre téléphone et l’équipe du magasin vous appellera pour répondre à vos questions et vous le réserver pour un essai.",
+      "telefon": "Téléphone",
+      "correu": "E-mail (facultatif)",
+      "variantQualsevol": "Je ne sais pas encore",
+      "missatge": "Message (facultatif)",
+      "missatgeDefecte": "Le {bici} m’intéresse.",
+      "enviar": "Rappelez-moi",
+      "enviant": "Envoi…",
+      "fetTitol": "Bien reçu !",
+      "fetText": "L’équipe du magasin vous appellera très vite au {telefon}.",
+      "errors": {
+        "dades": "Vérifiez les champs signalés.",
+        "xarxa": "L’envoi a échoué. Réessayez ou appelez-nous au 972 66 29 51.",
+        "noDisponible": "Nous ne pouvons pas recevoir la demande en ligne pour le moment. Appelez-nous au 972 66 29 51."
+      }
+    }
   },
   "marques": {
     "situacio": "Les marques",
     "titol": "Équipez-vous comme un pro.",
-    "text": "Les vélos, les composants, les vêtements et la nutrition des équipes pros. Faites-les défiler, et si vous en cherchez une, demandez-nous sur WhatsApp.",
+    "text": "Les vélos, les composants, les vêtements et la nutrition des équipes pros. Faites-les défiler et touchez-en une pour en savoir plus.",
     "filtre": "Filtrer par catégorie",
     "categories": {
       "totes": "Toutes",
@@ -237,7 +295,8 @@
     "carrusel": "{n} marques du magasin",
     "pregunta": "Demander pour {marca} sur WhatsApp",
     "missatge": "Bonjour ! Avez-vous du matériel {marca} ?",
-    "preguntar": "Demandez-nous"
+    "veure": "Voir la marque {marca}",
+    "mira": "Voir plus"
   },
   "botiga": {
     "situacio": "La boutique",
@@ -297,7 +356,9 @@
     "telefon": "Appelez-nous",
     "whatsapp": "Écrivez-nous sur WhatsApp",
     "correu": "E-mail",
-    "mapa": "Itinéraire"
+    "mapa": "Itinéraire",
+    "mapaAria": "Carte avec la boutique Tecnibike",
+    "comArribar": "Itinéraire"
   },
   "peu": {
     "lema": "Location, atelier et boutique de vélos sur la Costa Brava depuis plus de 15 ans.",
@@ -341,7 +402,6 @@
     "preuDia": "{preu}/jour",
     "estoc": "{n, plural, =0 {Épuisé} one {Il en reste 1} other {Il en reste #}}",
     "estocMolts": "Plus de 15",
-    "senseImatge": "Pas d'image",
     "dades": "Vos coordonnées",
     "nom": "Nom et prénom",
     "telefon": "Téléphone (avec WhatsApp)",
@@ -356,7 +416,8 @@
     "modalitat": "Comment voulez-vous payer ?",
     "modalitats": {
       "senyal": "{percent} % maintenant ({import}) et le reste à la boutique",
-      "total": "Tout maintenant ({import})"
+      "total": "Tout maintenant ({import})",
+      "botiga": "À la boutique, au retrait du vélo ({import})"
     },
     "confirmar": "Confirmer la réservation",
     "pagar": "Payer et réserver",
@@ -429,7 +490,9 @@
     "tipusBici": "Type de vélo",
     "calculDies": "{preu}/jour × {dies}",
     "variantDe": "Options de {extra}",
-    "nutricio": "Nutrition pour la sortie"
+    "nutricio": "Nutrition pour la sortie",
+    "extresTriats": "{n, plural, one {# choisi} other {# choisis}}",
+    "extresDisponibles": "{n, plural, one {# option} other {# options}}"
   },
   "cita": {
     "titol": "Rendez-vous à l'atelier",
@@ -458,15 +521,21 @@
       "dades": "Vérifiez les champs signalés.",
       "franja": "Ce créneau vient d'être pris. Choisissez-en un autre.",
       "serveis": "Choisissez au moins un service.",
-      "xarxa": "L'envoi a échoué. Réessayez ou appelez-nous au +34 972 66 29 51."
+      "xarxa": "L'envoi a échoué. Réessayez ou appelez-nous au +34 972 66 29 51.",
+      "noDisponible": "Nous ne pouvons pas enregistrer le rendez-vous en ligne pour le moment. Appelez-nous au 972 66 29 51 et nous vous le donnons."
     },
     "fet": {
       "titol": "Rendez-vous confirmé",
       "text": "Rendez-vous le {data} à {hora}. Nous vous donnerons un devis avant de toucher à quoi que ce soit et vous préviendrons sur WhatsApp quand il sera prêt*.",
-      "altra": "Prendre un autre rendez-vous"
+      "altra": "Prendre un autre rendez-vous",
+      "titolPendent": "Rendez-vous demandé",
+      "textPendent": "Nous avons réservé le {data} à {hora}. L’atelier vous le confirmera très vite par WhatsApp."
     },
     "situacio": "Atelier",
-    "tancar": "Fermer"
+    "tancar": "Fermer",
+    "lliure": "Libre",
+    "preuConsultar": "Prix sur demande",
+    "senseCitesEnLinia": "Pour le moment, les rendez-vous à l’atelier se prennent par téléphone :"
   },
   "whatsapp": {
     "parla": "Parlez avec notre assistant sur WhatsApp",
@@ -498,7 +567,6 @@
     "situacio": "Nutrition sportive",
     "titol": "Du carburant pour chaque kilomètre",
     "intro": "Gels, barres et boissons de Maurten, 226ERS, Nutrinovex et SiS, les mêmes que dans notre boutique. Nous les préparons avec votre vélo de location, ou passez les chercher avant de partir.",
-    "veure": "{n, plural, one {Voir le produit} other {Voir les # produits}}",
     "totesMarques": "Toutes les marques",
     "quan": "Quand le prendre",
     "tot": "Tout",
@@ -588,9 +656,8 @@
     "perUnitat": "{preu} l'unité",
     "buit": "Aucun produit de cette marque pour ce moment. Essayez un autre filtre.",
     "ambLaBici": "Ajoutez-la à votre vélo de location",
-    "perWhatsapp": "Ou commandez-la sur WhatsApp",
     "missatge": "Bonjour ! Je voudrais réserver de la nutrition pour ma sortie (gels, barres…). Qu’avez-vous ?",
-    "nota": "Photos de produits issues des sites des marques. Prix et stock indicatifs*.",
+    "nota": "Photos de produits issues des sites des marques. Prix en boutique.",
     "marca": "Marque",
     "totes": "Toutes",
     "sabor": "Parfum",
@@ -603,11 +670,45 @@
     "reserva": {
       "titol": "Nutrition pour la sortie",
       "intro": "Gels, barres et boissons de la boutique. Nous les préparons avec votre vélo et ils se paient avec la réservation.",
-      "triats": "Dans la réservation"
+      "triats": "Dans la réservation",
+      "unitats": "{n, plural, one {# unité} other {# unités}} · {preu}",
+      "opcional": "Facultatif"
     },
-    "demanaWhatsapp": "Réservez-la sur WhatsApp",
     "veureMes": "Voir plus ({n})",
     "veureMenys": "Voir moins",
-    "escenaSr": "Les produits de chaque marque tournent sur eux-mêmes à mesure que vous descendez."
+    "triaMarca": "Choisissez une marque",
+    "veureMarca": "{marca} : voir ses {n} produits",
+    "productesN": "{n, plural, one {# produit} other {# produits}}",
+    "triada": "Choisie",
+    "mira": "La voir",
+    "resultat": "{n, plural, one {# produit} other {# produits}} · {marca}",
+    "aLaBotiga": "Vous la trouverez au magasin : passez avant de partir et nous vous la préparons."
+  },
+  "fitxaMarca": {
+    "tornar": "Toutes les marques",
+    "dades": "La marque en bref",
+    "desDe": "Depuis {any}",
+    "historia": "La marque",
+    "destacats": "Nos coups de cœur",
+    "web": "Site de {marca}",
+    "mes": "Plus de marques : {categoria}",
+    "credits": "Photos du site de {marca} :",
+    "accio": {
+      "bicis": {
+        "titol": "Envie de rouler sur un {marca} ?",
+        "text": "Louez-le pour une journée ou une semaine, ou venez le voir et l’essayer au magasin.",
+        "boto": "Voir la flotte de location"
+      },
+      "components": {
+        "titol": "{marca}, dans notre atelier",
+        "text": "Nous l’utilisons quand nous révisons votre vélo et, si vous le souhaitez, nous l’installons et le réglons. Prenez rendez-vous et venez avec votre vélo.",
+        "boto": "Prendre rendez-vous à l’atelier"
+      },
+      "equipament": {
+        "titol": "{marca}, au magasin",
+        "text": "Venez l’essayer : nous vous aidons à trouver la bonne taille et l’ajustons sur place.",
+        "boto": "Voir les {categoria} au magasin"
+      }
+    }
   }
 }

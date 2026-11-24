@@ -1,0 +1,64 @@
+/* Mapa de «On som», sota l'adreça i l'horari, sobre el fons blau de la secció. */
+
+.mapaBotiga {
+  position: relative;
+  margin-top: clamp(32px, 5vw, 56px);
+  border-radius: var(--radi);
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.5);
+}
+
+.mapa {
+  height: clamp(300px, 42vw, 460px);
+  /* Mentre carrega, un fons que no fa salt. */
+  background: #e9ebef;
+}
+.mapa[data-error] {
+  height: 120px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.marca {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--taronja);
+  border: 5px solid var(--blanc);
+  box-shadow:
+    0 0 0 8px rgb(248 90 0 / 0.25),
+    0 6px 14px rgb(18 20 23 / 0.35);
+}
+
+/* El rètol amb el nom i l'enllaç per arribar-hi, a sobre del mapa. */
+.rotul {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: grid;
+  gap: 2px;
+  max-width: calc(100% - 32px);
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: var(--blanc);
+  color: var(--tinta);
+  box-shadow: 0 10px 24px -12px rgb(18 20 23 / 0.45);
+  font-size: 14px;
+}
+.rotul strong {
+  font-size: 16px;
+}
+.rotul span {
+  color: var(--tinta-2);
+}
+.rotul a {
+  margin-top: 6px;
+  color: var(--blau-fosc);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.rotul a:focus-visible {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

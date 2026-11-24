@@ -1,3 +1,4 @@
+import { connexioDe } from './connexio';
 import { crearPlataformaProva } from './proves';
 import { crearPlataformaRemota } from './remota';
 import type { Plataforma } from './interficie';
@@ -24,7 +25,10 @@ const proves = crearPlataformaProva({
   rellotge: () => new Date(),
   configuracio: { nutricio: { actiu: process.env.NODE_ENV === 'development' } },
 });
-const { PLATAFORMA_API_URL: url, PLATAFORMA_API_CLAU: clau } = process.env;
+const connexio = connexioDe(process.env);
 
-export const plataformaRemota = Boolean(url && clau);
-export const plataforma: Plataforma = url && clau ? crearPlataformaRemota({ url, clau, proves }) : proves;
+export const plataformaRemota = connexio !== null;
+// Compilant (`next build`, també a Vercel), el catàleg, l'horari i els ajustos es demanen una sola
+// vegada per procés, no un cop per pàgina (vegeu `compilant` a remota/index.ts).
+const compilant = process.env.NEXT_PHASE === 'phase-production-build';
+export const plataforma: Plataforma = connexio ? crearPlataformaRemota({ ...connexio, proves, compilant }) : proves;

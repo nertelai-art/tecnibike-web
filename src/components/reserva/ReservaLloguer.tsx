@@ -13,7 +13,7 @@ import { primerMomentReservable, esPassat, sumaDies, type Instant } from '@/lib/
 import { blocsDelDia, diesEntre, horesRecollida, horesRetorn, MAX_DIES_LLOGUER, minutsEntre, validaFranja } from '@/lib/horari';
 import type { Disponibilitat } from '@/lib/plataforma';
 import type { BiciLloguer, ConfiguracioReserves, Extra, HorariBotiga, LiniaNutricio, ModalitatPagament, Moment, ProducteNutricio } from '@/lib/plataforma/esquema';
-import { desglosLinia, duradaDe, formatEuros, importNutricio, preuPerDia } from '@/lib/preus';
+import { desglosLinia, duradaDe, formatEuros, importNutricio, preuNutricio, preuPerDia } from '@/lib/preus';
 import { extresLliures, primeraRecollida, retornPerDefecte, tallesLliures, variantsLliures } from '@/lib/reserva';
 import { useReducedMotion } from '@/lib/scroll-scene';
 import { BiciDelCarro, type LiniaFormulari } from './BiciDelCarro';
@@ -165,7 +165,21 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
 
   // ── Bicis ──
   const canviaLinia = (clau: number, canvi: Partial<LiniaFormulari>) => setLinies((ls) => ls.map((l) => (l.clau === clau ? { ...l, ...canvi } : l)));
-  const afegeix = () => setLinies((ls) => [...ls, novaLinia(seguentClau.current++, ls.at(-1)?.biciId ?? bici.id)]);
+  const [novaClau, setNovaClau] = useState<number | null>(null);
+  const afegeix = () => {
+    const clau = seguentClau.current++;
+    setLinies((ls) => [...ls, novaLinia(clau, ls.at(-1)?.biciId ?? bici.id)]);
+    setNovaClau(clau);
+  };
+  // La bici nova queda sota el que es veu: s'hi baixa amb un desplaçament suau fins a deixar-la al mig
+  // de la pantalla, i el focus va al seu primer camp (sense tornar a desplaçar).
+  useEffect(() => {
+    if (novaClau === null) return;
+    const el = formulari.current?.querySelector<HTMLElement>(`[data-clau="${novaClau}"]`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+    el.querySelector<HTMLElement>('select, input')?.focus({ preventScroll: true });
+  }, [novaClau, reduced]);
   const treu = (clau: number) => setLinies((ls) => ls.filter((l) => l.clau !== clau));
 
   function enviar(event: FormEvent<HTMLFormElement>) {
@@ -313,7 +327,7 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
                             <span>
                               {n.quantitat} × {p?.nom ?? n.producteId}
                             </span>
-                            <span>{p ? euros(p.preu * n.quantitat) : '—'}</span>
+                            <span>{p ? euros(preuNutricio(p, n.sabor) * n.quantitat) : '—'}</span>
                           </p>
                         );
                       })}
@@ -350,7 +364,7 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
                   <strong key={total ?? 'cap'}>{total === null ? '—' : euros(total)}</strong>
                 </p>
                 <button type="submit" form={`${id}-form`} className={`boto boto--blau ${styles.confirmar}`} disabled={enviant || total === null || !ara}>
-                  {enviant ? t('enviant') : configuracio.pagament.actiu ? t('pagar') : t('confirmar')}
+                  {enviant ? t('enviant') : configuracio.pagament.actiu && modalitat !== 'botiga' ? t('pagar') : t('confirmar')}
                 </button>
               </div>
             </>
@@ -454,6 +468,7 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
                   preuDe={preuDe}
                   onCanvi={(canvi) => canviaLinia(l.clau, canvi)}
                   onTreure={i > 0 ? () => treu(l.clau) : undefined}
+                  nova={l.clau === novaClau}
                 />
               ))}
               {linies.length < MAX_BICIS && (

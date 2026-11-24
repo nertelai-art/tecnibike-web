@@ -58,7 +58,14 @@ export function Extres({ nom, extres, triats, lliures, multiple, onCanvi, varian
                 onChange={() => onCanvi(e.id)}
               />
               <span className={styles.extraFoto}>
-                {e.imatge ? <Image src={e.imatge} alt="" width={96} height={96} unoptimized={!optimitzable(e.imatge)} /> : <small>{t('senseImatge')}</small>}
+                {e.imatge ? (
+                  <Image src={e.imatge} alt="" width={96} height={96} unoptimized={!optimitzable(e.imatge)} />
+                ) : (
+                  // Sense foto a la plataforma: una icona neutra, no un forat.
+                  <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.extraIcona}>
+                    <path d="M21 7.5 12 3 3 7.5v9L12 21l9-4.5v-9ZM3 7.5l9 4.5 9-4.5M12 12v9" />
+                  </svg>
+                )}
               </span>
               <span className={styles.extraText}>
                 <strong>{nomExtra}</strong>

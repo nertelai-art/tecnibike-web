@@ -1,14 +1,15 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
-import { routing } from '@/i18n/routing';
 import { Logo } from './Logo';
+import { SelectorIdioma } from './SelectorIdioma';
 import styles from './Capcalera.module.css';
 
 const ENLLACOS = [
   { href: '/#flota', clau: 'lloguer' },
+  { href: '/venda', clau: 'venda' },
   { href: '/#taller', clau: 'taller' },
   { href: '/#rutes', clau: 'rutes' },
   { href: '/#botiga', clau: 'botiga' },
@@ -17,7 +18,6 @@ const ENLLACOS = [
 
 export function Capcalera() {
   const t = useTranslations('nav');
-  const locale = useLocale();
   const pathname = usePathname();
   const [obert, setObert] = useState(false);
 
@@ -65,15 +65,7 @@ export function Capcalera() {
               </li>
             ))}
           </ul>
-          <ul className={styles.idiomes} aria-label={t('idioma')}>
-            {routing.locales.map((l) => (
-              <li key={l}>
-                <Link href={pathname} locale={l} aria-current={l === locale ? 'true' : undefined} hrefLang={l}>
-                  {l.toUpperCase()}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <SelectorIdioma onTria={() => setObert(false)} />
         </nav>
 
         <div className={styles.accions}>

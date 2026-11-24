@@ -31,12 +31,14 @@ export const biciLloguer = z.object({
 /** Peça de la bici de l'escena d'anatomia a la qual pertany un servei. */
 export const peca = z.enum(['transmissio', 'frens', 'rodes', 'direccio', 'seient', 'quadre']);
 
+/** El preu d'un servei del taller per peça, del catàleg de la plataforma (o de mostra, a les proves). */
 export const serveiTaller = z.object({
   id: z.string(),
   peca,
-  desDe: centims,
-  /** Dies laborables habituals. */
-  dies: z.number().int().positive(),
+  /** Nul si és a consultar o la botiga no el vol dir. */
+  preu: centims.nullable(),
+  /** Preu tancat, «des de» o a consultar, com l'ha posat la botiga. */
+  preuBase: z.enum(['exacte', 'desDe', 'consultar']),
   ficticia: z.boolean(),
 });
 
@@ -59,7 +61,50 @@ export const article = z.object({
   categoria: categoriaEquipament,
   marca: z.string(),
   nom: z.string(),
-  preu: centims,
+  /** Nul si el preu és a consultar. */
+  preu: centims.nullable(),
+  /** Preu tancat, «des de» o a consultar, com l'ha posat la botiga. Sense, tancat. */
+  preuBase: z.enum(['exacte', 'desDe', 'consultar']).optional(),
+  descripcio: z.string().optional(),
+  imatge: z.string().optional(),
+  ficticia: z.boolean(),
+});
+
+/** Una variant d'una bici en venda (la talla, el color), amb el seu preu si no és el de la bici. */
+export const varianteVenda = z.object({
+  nom: z.string(),
+  preu: centims.nullable(),
+  /** Quantes n'hi ha d'aquesta talla. Nul: la botiga no en porta el compte (no vol dir que no n'hi hagi). */
+  estoc: z.number().int().nonnegative().nullable(),
+});
+
+/**
+ * Una bici en venda: un producte de venda del catàleg de la plataforma, de la categoria de bicis. No
+ * té res a veure amb la flota de lloguer.
+ */
+export const biciVenda = z.object({
+  /** L'adreça llegible: `orbea-oiz-m30`. */
+  id: z.string(),
+  nom: z.string(),
+  marca: z.string(),
+  /** Nul si és a consultar. */
+  preu: centims.nullable(),
+  preuBase: z.enum(['exacte', 'desDe', 'consultar']),
+  ivaInclos: z.boolean(),
+  descripcio: z.string().optional(),
+  /** La foto principal. */
+  imatge: z.string().optional(),
+  /** Totes les fotos, la principal la primera. Buida si la plataforma no en dona la llista. */
+  imatges: z.array(z.string()),
+  /** Si es pot comprar: hi és, no n'hi ha, o per encàrrec. Sense, la plataforma no ho diu. */
+  disponibilitat: z.enum(['disponible', 'esgotada', 'perEncarrec']).optional(),
+  /** Quantes n'hi ha (la suma de les talles). Nul: no se'n porta el compte. */
+  estoc: z.number().int().nonnegative().nullable(),
+  /** Com en diu la botiga, de les variants: «Talles», «Colors». */
+  nomVariants: z.string().optional(),
+  variants: z.array(varianteVenda),
+  /** La fitxa tècnica: els camps del catàleg (quadre, grup, any…), com els ha escrit la botiga. */
+  fitxa: z.array(z.object({ camp: z.string(), valor: z.union([z.string(), z.boolean()]) })),
   ficticia: z.boolean(),
 });
 
@@ -114,6 +159,8 @@ export const extra = z.object({
   nom: z.string().optional(),
   /** El grup d'opcions de la plataforma: dels extres d'un mateix grup se'n pot triar un com a molt. */
   grupId: z.string().optional(),
+  /** El nom del grup a la plataforma («Pedals», «Accessoris»): el formulari els agrupa per aquest nom. */
+  grupNom: z.string().optional(),
   imatge: z.string().optional(),
   preu: centims,
   cobrament: z.enum(['perReserva', 'perDia']),
@@ -140,6 +187,8 @@ export const saborNutricio = z.object({
   nom: z.string().optional(),
   /** La foto d'aquest sabor, si l'envàs canvia. Sense, la del producte. */
   imatge: z.string().optional(),
+  /** El preu d'aquest sabor, si no és el del producte. */
+  preu: centims.optional(),
   estoc: z.number().int().nonnegative().nullable(),
 });
 
@@ -222,7 +271,8 @@ export const reservaLloguer = z.object({
   ...client,
 });
 
-export const franjaTaller = z.object({ inici: hora, places: z.number().int().nonnegative() });
+/** Una hora d'arribada al taller. `places`: les que queden, o nul si la plataforma només diu que és lliure. */
+export const franjaTaller = z.object({ inici: hora, places: z.number().int().nonnegative().nullable() });
 
 export const citaTaller = z.object({
   tipusBici: z.enum(['carretera', 'muntanya', 'gravel', 'electrica', 'urbana']),
@@ -231,6 +281,20 @@ export const citaTaller = z.object({
   dia: data,
   hora,
   ...client,
+});
+
+/** Algú que vol que la botiga li truqui per una bici en venda (el formulari de la fitxa). */
+export const contacteVenda = z.object({
+  biciId: z.string().min(1),
+  /** La talla o l'opció que li interessa, si la bici en té. */
+  variant: z.string().trim().min(1).max(60).optional(),
+  missatge: z.string().trim().max(1000),
+  nom: client.nom,
+  telefon: client.telefon,
+  /** Opcional: amb el telèfon n'hi ha prou perquè l'equip truqui. */
+  correu: z.email().optional(),
+  idioma: client.idioma,
+  privacitat: client.privacitat,
 });
 
 export const confirmacio = z.object({
@@ -242,12 +306,15 @@ export const confirmacio = z.object({
 
 // ── Pagament i participants (preparats, apagats fins que la plataforma ho permeti) ─────────────
 
-export const modalitatPagament = z.enum(['senyal', 'total']);
+/** Les que es paguen en línia, per la passarel·la. */
+export const modalitatEnLinia = z.enum(['senyal', 'total']);
+/** «botiga»: reservar ara i pagar-ho tot en recollir la bici, si la botiga ho deixa (`payment.payAtShop`). */
+export const modalitatPagament = z.enum([...modalitatEnLinia.options, 'botiga']);
 
 export const configuracioReserves = z.object({
   pagament: z.object({
     actiu: z.boolean(),
-    /** Senyal (un percentatge ara i la resta a la botiga) o tot per avançat. */
+    /** Senyal (un percentatge ara i la resta a la botiga), tot per avançat o, si la botiga ho deixa, tot a la botiga. */
     modalitats: z.array(modalitatPagament).min(1),
     senyalPercent: z.number().int().min(1).max(100),
   }),
@@ -295,6 +362,7 @@ export type Ciclista = z.infer<typeof ciclista>;
 export type BiciReserva = z.infer<typeof biciReserva>;
 export type ConfiguracioReserves = z.infer<typeof configuracioReserves>;
 export type ModalitatPagament = z.infer<typeof modalitatPagament>;
+export type ModalitatEnLinia = z.infer<typeof modalitatEnLinia>;
 export type Retencio = z.infer<typeof retencio>;
 export type Participant = z.infer<typeof participant>;
 export type ParticipantsReserva = z.infer<typeof participantsReserva>;
@@ -303,6 +371,7 @@ export type Durada = z.infer<typeof durada>;
 export type ReservaLloguer = z.infer<typeof reservaLloguer>;
 export type FranjaTaller = z.infer<typeof franjaTaller>;
 export type CitaTaller = z.infer<typeof citaTaller>;
+export type ContacteVenda = z.infer<typeof contacteVenda>;
 export type Confirmacio = z.infer<typeof confirmacio>;
 
 export type CategoriaLloguer = z.infer<typeof categoriaLloguer>;
@@ -314,4 +383,5 @@ export type Ressenya = z.infer<typeof ressenya>;
 export type Producte = z.infer<typeof producte>;
 export type CategoriaEquipament = z.infer<typeof categoriaEquipament>;
 export type Article = z.infer<typeof article>;
+export type BiciVenda = z.infer<typeof biciVenda>;
 export type Valoracio = z.infer<typeof valoracio>;

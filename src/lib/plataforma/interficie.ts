@@ -1,14 +1,16 @@
 import type {
   Article,
   BiciLloguer,
+  BiciVenda,
   CategoriaEquipament,
   CitaTaller,
   Confirmacio,
   ConfiguracioReserves,
+  ContacteVenda,
   Extra,
   FranjaTaller,
   HorariBotiga,
-  ModalitatPagament,
+  ModalitatEnLinia,
   Moment,
   ParticipantsReserva,
   Producte,
@@ -26,7 +28,7 @@ import type {
 
 export class ErrorReserva extends Error {
   constructor(
-    readonly motiu: 'bici' | 'talla' | 'durada' | 'esgotat' | 'extra' | 'franja' | 'retencio' | 'participants' | 'noDisponible',
+    readonly motiu: 'dades' | 'bici' | 'talla' | 'durada' | 'esgotat' | 'extra' | 'franja' | 'retencio' | 'participants' | 'noDisponible',
     /** Per als registres: què ha dit la plataforma, si n'ha dit res. La web decideix pel motiu. */
     detall?: string,
   ) {
@@ -66,13 +68,14 @@ export interface Plataforma {
   retenirReserva(reserva: ReservaLloguer): Promise<Retencio>;
   alliberarRetencio(id: string): Promise<void>;
   /** Adreça de la passarel·la de pagament de la plataforma per a una retenció. */
-  iniciarPagament(retencioId: string, modalitat: ModalitatPagament, tornada: string): Promise<{ url: string }>;
+  iniciarPagament(retencioId: string, modalitat: ModalitatEnLinia, tornada: string): Promise<{ url: string }>;
   /** En tornar del pagament: si la retenció ja s'ha convertit en reserva. */
   estatRetencio(id: string): Promise<EstatRetencio>;
   /** Dades dels ciclistes i signatura del contracte abans de recollir. */
   registrarParticipants(participants: ParticipantsReserva): Promise<void>;
   serveisTaller(): Promise<ServeiTaller[]>;
-  frangesTaller(dia: string): Promise<FranjaTaller[]>;
+  /** Les hores d'arribada d'un dia. `null`: ara no es poden demanar cites en línia (falta la clau). */
+  frangesTaller(dia: string): Promise<FranjaTaller[] | null>;
   crearCitaTaller(cita: CitaTaller): Promise<Confirmacio>;
   /** Gels, barretes i begudes que es poden afegir a una reserva de lloguer. */
   nutricio(): Promise<ProducteNutricio[]>;
@@ -80,6 +83,17 @@ export interface Plataforma {
   productes(): Promise<Producte[]>;
   /** Articles de la botiga d'equipament d'una categoria. */
   articles(categoria: CategoriaEquipament): Promise<Article[]>;
+  /** Bicis en venda: els productes de venda de la categoria de bicis del catàleg (no la flota de lloguer). */
+  bicisVenda(): Promise<BiciVenda[]>;
+  /** Una bici en venda per la seva adreça, o `null`. */
+  biciVenda(id: string): Promise<BiciVenda | null>;
+  /**
+   * Si es pot demanar que l'equip truqui per una bici en venda. Si no, la fitxa no ensenya el formulari:
+   * una petició no es desa mai on l'equip no la veuria.
+   */
+  contacteVendaEnLinia(): Promise<boolean>;
+  /** Fa arribar a l'equip la petició de contacte per una bici en venda. */
+  enviarContacteVenda(contacte: ContacteVenda): Promise<Confirmacio>;
   valoracio(): Promise<Valoracio>;
   ressenyes(): Promise<Ressenya[]>;
 }

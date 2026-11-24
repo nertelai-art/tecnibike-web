@@ -26,7 +26,7 @@ export function unitatsLliures(biciId: string, talla: string, recollida: string,
 export const HORES_RECEPCIO = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00', '18:00', '19:00'] as const;
 
 /** Franges de recepció del taller d'un dia, amb les places que queden. Diumenge, cap. */
-export function frangesTaller(dia: string, ocupades: Readonly<Record<string, number>> = {}): FranjaTaller[] {
+export function frangesTaller(dia: string, ocupades: Readonly<Record<string, number>> = {}): (FranjaTaller & { places: number })[] {
   if (!esObert(dia)) return [];
   return HORES_RECEPCIO.map((inici) => ({
     inici,
