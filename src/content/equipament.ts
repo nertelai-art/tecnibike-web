@@ -1,5 +1,5 @@
 // Seccions de la botiga d'equipament. Les fotos són de Wikimedia Commons (llicències CC que demanen
-// citar l'autor i la llicència): els crèdits surten al peu de la web. Quan hi hagi fotos pròpies de
+// citar l'autor i la llicència): els crèdits són a la pàgina /credits, enllaçada des del peu. Quan hi hagi fotos pròpies de
 // la botiga, se substitueixen i aquests crèdits marxen.
 
 import { categoriaEquipament, type CategoriaEquipament } from '@/lib/plataforma/esquema';
