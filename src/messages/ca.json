@@ -24,8 +24,7 @@
     "compra": "Compra"
   },
   "mostra": {
-    "marca": "Dada de mostra, pendent de confirmar",
-    "nota": "Les dades marcades amb * són de mostra i s'han de confirmar amb Tecnibike."
+    "marca": "Dada de mostra, pendent de confirmar"
   },
   "portada": {
     "situacio": "Sant Antoni de Calonge · Costa Brava",
@@ -212,7 +211,8 @@
     "aviat": "Aquí tens el que trobaràs a la botiga. Vine a veure-ho o truca’ns al 972 66 29 51 i t’ho tindrem a punt.",
     "veureMarca": "Mira la marca {marca}",
     "preuConsultar": "Preu a consultar",
-    "preuDesDe": "Des de {preu}"
+    "preuDesDe": "Des de {preu}",
+    "aLaBotiga": "A la botiga"
   },
   "venda": {
     "titol": "Bicis en venda",
@@ -366,8 +366,22 @@
     "privacitat": "Privacitat",
     "galetes": "Galetes",
     "drets": "© {any} Tecnibike Costa Brava SL",
-    "nertel": "Reserves i atenció amb Nertel",
-    "credits": "Crèdits de les fotos"
+    "credits": "Crèdits de les imatges",
+    "fetaPer": "Web feta per",
+    "mapaWeb": "Mapa del web",
+    "bicis": "Bicis",
+    "lloguer": "Lloguer de bicis",
+    "venda": "Bicis en venda",
+    "rutes": "Rutes per la zona",
+    "marques": "Marques",
+    "taller": "Taller",
+    "serveis": "Serveis i preus",
+    "cita": "Demana cita",
+    "botiga": "Botiga",
+    "visita": "Visita'ns",
+    "comArribar": "Com arribar-hi",
+    "contacte": "Contacte",
+    "instagram": "Instagram de Tecnibike"
   },
   "reserva": {
     "tornar": "Totes les bicis",
@@ -681,7 +695,33 @@
     "triada": "Triada",
     "mira": "Mira-la",
     "resultat": "{n, plural, one {# producte} other {# productes}} · {marca}",
-    "aLaBotiga": "La trobaràs a la botiga: vine abans de sortir i te la preparem."
+    "aLaBotiga": "La trobaràs a la botiga: vine abans de sortir i te la preparem.",
+    "detall": {
+      "tancar": "Tanca la fitxa",
+      "valors": "Valors per unitat",
+      "senseValors": "La botiga encara no ha posat els valors nutricionals d'aquest producte. Pregunta'ns-els a la botiga.",
+      "kcal": "Energia",
+      "carbohidrats": "Carbohidrats",
+      "sucres": "Sucres",
+      "proteines": "Proteïnes",
+      "sodi": "Sodi",
+      "cafeina": "Cafeïna",
+      "unitatKcal": "{n} kcal",
+      "unitatG": "{n} g",
+      "unitatMg": "{n} mg",
+      "modeUs": "Com es pren",
+      "ingredients": "Ingredients",
+      "alergens": "Al·lèrgens",
+      "tipus": {
+        "gel": "Gel",
+        "barreta": "Barreta",
+        "beguda": "Beguda",
+        "pastilles": "Pastilles",
+        "gominoles": "Gominoles",
+        "recuperacio": "Recuperació",
+        "shot": "Shot"
+      }
+    }
   },
   "fitxaMarca": {
     "tornar": "Totes les marques",
@@ -709,5 +749,26 @@
         "boto": "Mira {categoria} a la botiga"
       }
     }
+  },
+  "guia": {
+    "aTecnibike": "A Tecnibike",
+    "trucar": "Truca'ns: {telefon}",
+    "tipus": "Quin tipus et cal",
+    "consells": "Com triar-ne",
+    "marques": "Les marques que hi trobaràs",
+    "veureFitxa": "Mira la marca",
+    "preguntes": "Preguntes freqüents",
+    "fonts": "Fonts"
+  },
+  "credits": {
+    "metaTitol": "Crèdits de les imatges",
+    "titol": "Crèdits de les imatges",
+    "intro": "Algunes fotos d'aquesta web són de Wikimedia Commons, amb llicències Creative Commons que demanen citar-ne l'autor i la llicència. Aquí les tens totes. Les fotos de les marques porten la font a la seva fitxa.",
+    "equipament": "Botiga d'equipament",
+    "extres": "Extres del lloguer",
+    "autor": "Autor",
+    "llicencia": "Llicència",
+    "font": "Original",
+    "tornar": "Torna a l'inici"
   }
 }

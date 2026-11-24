@@ -130,7 +130,10 @@ Versions que **no** són l'última, i per què:
   (`GET /settings` → `shopItemsEnabled`) i almenys un article; si no, és apagada, la pàgina la demana
   per WhatsApp i una reserva que en porti es rebutja abans d'enviar-la. La marca, el format, el tipus,
   el moment i els carbohidrats surten dels camps del catàleg (`marca`, `format`, `tipus`, `moment`,
-  `carbohidrats`, `cafeïna`); el tipus, si no hi és, es dedueix del nom. Sense la clau de la
+  `carbohidrats`, `cafeïna`); el tipus, si no hi és, es dedueix del nom. La marca, també: si no hi és, surt del començament del nom («226ERS HIGH ENERGY GEL» → 226ERS; el 24-11-2026 la
+  botiga no l'omplia i la pàgina sortia sense colors ni logos). Clicar una targeta obre la fitxa del producte en un diàleg
+  (`DetallProducte.tsx`): sabor, quan es pren, valors per unitat i textos dels camps del catàleg `kcal`, `sucres`, `proteïnes`,
+  `sodi`, `ingredients`, `al·lèrgens` i `ús` (també en castellà o anglès). Sense els camps, no se n'ensenya cap. Sense la clau de la
   plataforma, la de proves l'encén només amb `pnpm dev` (`index.ts`). Mentre la botiga no tingui cap
   article, el catàleg de nutrició de la botiga ensenya els de prova. Si un producte no té foto, surt una il·lustració pròpia (`Paquet.tsx`). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
 - **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`). Res més
