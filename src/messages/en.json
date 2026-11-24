@@ -212,7 +212,8 @@
     "aviat": "Here’s what you’ll find at the shop. Come and see it, or call us on 972 66 29 51 and we’ll have it ready.",
     "veureMarca": "See the {marca} brand",
     "preuConsultar": "Price on request",
-    "preuDesDe": "From {preu}"
+    "preuDesDe": "From {preu}",
+    "aLaBotiga": "In the shop"
   },
   "venda": {
     "titol": "Bikes for sale",
@@ -709,5 +710,15 @@
         "boto": "See {categoria} in the shop"
       }
     }
+  },
+  "guia": {
+    "aTecnibike": "At Tecnibike",
+    "trucar": "Call us: {telefon}",
+    "tipus": "Which type you need",
+    "consells": "How to choose",
+    "marques": "Brands you'll find",
+    "veureFitxa": "See the brand",
+    "preguntes": "Frequently asked questions",
+    "fonts": "Sources"
   }
 }

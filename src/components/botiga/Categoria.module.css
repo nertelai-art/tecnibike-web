@@ -45,59 +45,14 @@
   color: var(--taronja);
 }
 
-.marques {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px 40px;
-  margin: 40px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.marques img {
-  height: 36px;
-  width: auto;
-  max-width: 150px;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  filter: grayscale(1);
-  opacity: 0.75;
-}
-.marques img[data-vector] {
-  mix-blend-mode: normal;
-  filter: brightness(0);
-  opacity: 0.7;
-}
-.marques span {
-  font-size: 28px;
-  font-weight: 800;
-  font-variation-settings: 'wdth' 70;
-}
-/* Cada marca porta a la seva fitxa (o al catàleg filtrat): en passar-hi, recupera el color. */
-.marques a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  border-radius: 8px;
-  color: var(--tinta);
-  text-decoration: none;
-  transition: transform 0.2s var(--ease);
-}
-.marques a:hover {
-  transform: translateY(-2px);
-}
-.marques a:hover img,
-.marques a:focus-visible img {
-  filter: none;
-  opacity: 1;
-}
-.marques a:focus-visible {
-  outline: 3px solid var(--taronja);
-  outline-offset: 4px;
+.titolArticles {
+  margin: clamp(56px, 7vw, 96px) 0 0;
+  font-size: clamp(24px, 2.6vw, 32px);
+  line-height: 1.1;
 }
 
 .avis {
-  margin-top: 32px;
+  margin-top: 20px;
   padding: 14px 18px;
   border-left: 3px solid var(--taronja);
   border-radius: 0 12px 12px 0;
