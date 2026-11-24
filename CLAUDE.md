@@ -226,8 +226,10 @@ Versions que **no** són l'última, i per què:
 
 - Confirmar amb el client totes les dades marcades amb `*` (preus del taller, condicions de
   lloguer, models de la flota, rutes).
-- Logo en SVG (ara és text compost amb la tipografia del web) i decidir quin logo és el vigent:
-  el blau TCNBK o el ciclista taronja de l'Instagram.
+- Logo en vectors. Des del 24-11-2026 el logo és el ciclista de l'Instagram pintat del blau de TCNBK (`--blau`): a la
+  barra (amb «Tecnibike» a sota), al favicon i a la foto del perfil de WhatsApp (`recursos/whatsapp-perfil.png`). Tot
+  surt de `node scripts/logo-ciclista.mjs <png>`, a partir d'un PNG de 165 px: quan el client doni l'original en
+  vectors, es torna a executar amb aquell. (El «TCNBK» gran del peu es queda.)
 - Fotos originals de la botiga a bona resolució, i fotos de producte per a la botiga d'equipament.
   Les de les categories són de Wikimedia Commons amb crèdits al peu (`src/content/equipament.ts`):
   en canviar-les, treu-ne els crèdits.
