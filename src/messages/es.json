@@ -681,7 +681,33 @@
     "triada": "Elegida",
     "mira": "Verla",
     "resultat": "{n, plural, one {# producto} other {# productos}} · {marca}",
-    "aLaBotiga": "La encontrarás en la tienda: ven antes de salir y te la preparamos."
+    "aLaBotiga": "La encontrarás en la tienda: ven antes de salir y te la preparamos.",
+    "detall": {
+      "tancar": "Cerrar la ficha",
+      "valors": "Valores por unidad",
+      "senseValors": "La tienda aún no ha puesto los valores nutricionales de este producto. Pregúntanoslos en la tienda.",
+      "kcal": "Energía",
+      "carbohidrats": "Hidratos de carbono",
+      "sucres": "Azúcares",
+      "proteines": "Proteínas",
+      "sodi": "Sodio",
+      "cafeina": "Cafeína",
+      "unitatKcal": "{n} kcal",
+      "unitatG": "{n} g",
+      "unitatMg": "{n} mg",
+      "modeUs": "Cómo se toma",
+      "ingredients": "Ingredientes",
+      "alergens": "Alérgenos",
+      "tipus": {
+        "gel": "Gel",
+        "barreta": "Barrita",
+        "beguda": "Bebida",
+        "pastilles": "Pastillas",
+        "gominoles": "Gominolas",
+        "recuperacio": "Recuperación",
+        "shot": "Shot"
+      }
+    }
   },
   "fitxaMarca": {
     "tornar": "Todas las marcas",

@@ -5,7 +5,8 @@
 // ensenya tots els seus productes a la graella i el fons del hero pren el color de la marca; tornar-hi
 // a clicar la deixa anar i es tornen a veure tots. La graella també té els filtres per marca i pel
 // moment de la ruta. El sabor canvia la foto. Amb `?marca=…` a l'adreça (des del carrusel de marques),
-// la pàgina ja surt amb aquella marca triada, i l'adreça es manté al dia en canviar-la.
+// la pàgina ja surt amb aquella marca triada, i l'adreça es manté al dia en canviar-la. Clicar una
+// targeta obre la fitxa del producte en un diàleg (DetallProducte).
 //
 // Preus: només els que venen de la plataforma. Els de mostra (`ficticia`) no s'ensenyen, perquè
 // l'equip de la botiga ha de poder confiar que el preu de la web és el bo.
@@ -19,6 +20,7 @@ import { colorSabor, descripcioDe, destacats, imatgeDe, ORDRE_MARQUES, temaDe } 
 import { momentNutricio, type MomentNutricio, type ProducteNutricio } from '@/lib/plataforma/esquema';
 import { formatEuros } from '@/lib/preus';
 import { useReducedMotion } from '@/lib/scroll-scene';
+import { DetallProducte } from './DetallProducte';
 import { Paquet } from './Paquet';
 import styles from './Nutricio.module.css';
 
@@ -73,6 +75,8 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
   );
   const [moment, setMoment] = useState<MomentNutricio | null>(null);
   const [sabors, setSabors] = useState<Record<string, string>>({});
+  const [obert, setObert] = useState<string | null>(null);
+  const producteObert = obert ? (productes.find((p) => p.id === obert) ?? null) : null;
 
   const marques = [...ORDRE_MARQUES.filter((m) => productes.some((p) => p.marca === m)), ...new Set(productes.map((p) => p.marca).filter((m) => !(ORDRE_MARQUES as readonly string[]).includes(m)))];
   // Sense marca triada, les marques s'intercalen: la primera fila ja n'ensenya de totes.
@@ -216,7 +220,12 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
                 </div>
                 <div className={styles.dades}>
                   <p className={styles.marca}>{p.marca}</p>
-                  <h3 className={styles.nom}>{p.nom}</h3>
+                  <h3 className={styles.nom}>
+                    {/* Tota la targeta obre la fitxa: el botó s'estira per sobre (::after); els sabors queden a sobre. */}
+                    <button type="button" className={styles.obrir} aria-haspopup="dialog" onClick={() => setObert(p.id)}>
+                      {p.nom}
+                    </button>
+                  </h3>
                   <p className={styles.xifres}>
                     {p.format}
                     {p.carbohidratsG !== undefined && <> · {t('carbohidrats', { g: p.carbohidratsG })}</>}
@@ -249,6 +258,14 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
           })}
         </ul>
         {filtrats.length === 0 && <p className={styles.buit}>{t('buit')}</p>}
+
+        <DetallProducte
+          producte={producteObert}
+          sabor={producteObert ? (sabors[producteObert.id] ?? null) : null}
+          onSabor={(s) => producteObert && setSabors((x) => ({ ...x, [producteObert.id]: s }))}
+          onTanca={() => setObert(null)}
+          ambReserva={ambReserva}
+        />
 
         <div className={styles.peu}>
           {ambReserva ? (

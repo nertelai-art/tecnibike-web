@@ -681,7 +681,33 @@
     "triada": "Triada",
     "mira": "Mira-la",
     "resultat": "{n, plural, one {# producte} other {# productes}} · {marca}",
-    "aLaBotiga": "La trobaràs a la botiga: vine abans de sortir i te la preparem."
+    "aLaBotiga": "La trobaràs a la botiga: vine abans de sortir i te la preparem.",
+    "detall": {
+      "tancar": "Tanca la fitxa",
+      "valors": "Valors per unitat",
+      "senseValors": "La botiga encara no ha posat els valors nutricionals d'aquest producte. Pregunta'ns-els a la botiga.",
+      "kcal": "Energia",
+      "carbohidrats": "Carbohidrats",
+      "sucres": "Sucres",
+      "proteines": "Proteïnes",
+      "sodi": "Sodi",
+      "cafeina": "Cafeïna",
+      "unitatKcal": "{n} kcal",
+      "unitatG": "{n} g",
+      "unitatMg": "{n} mg",
+      "modeUs": "Com es pren",
+      "ingredients": "Ingredients",
+      "alergens": "Al·lèrgens",
+      "tipus": {
+        "gel": "Gel",
+        "barreta": "Barreta",
+        "beguda": "Beguda",
+        "pastilles": "Pastilles",
+        "gominoles": "Gominoles",
+        "recuperacio": "Recuperació",
+        "shot": "Shot"
+      }
+    }
   },
   "fitxaMarca": {
     "tornar": "Totes les marques",
