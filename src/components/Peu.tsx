@@ -116,7 +116,7 @@ export async function Peu() {
             <a href="https://tecnibike.es/aviso-legal/">{t('legal')}</a>
           </li>
           <li>
-            <a href="https://tecnibike.es/politica-de-privacidad/">{t('privacitat')}</a>
+            <Link href="/privacitat">{t('privacitat')}</Link>
           </li>
           <li>
             <a href="https://tecnibike.es/politica-de-cookies/">{t('galetes')}</a>

@@ -10,6 +10,7 @@ import { useId, useState, useTransition, type FormEvent } from 'react';
 import { demanarContacteVenda, type ResultatReserva } from '@/app/[locale]/accions';
 import formulari from '@/components/reserva/Reserva.module.css';
 import styles from './Venda.module.css';
+import { enllacPrivacitat } from '@/components/EnllacPrivacitat';
 
 type Props = { biciId: string; nomBici: string; variants: readonly string[]; nomVariants: string };
 
@@ -121,7 +122,7 @@ export function ContacteVenda({ biciId, nomBici, variants, nomVariants }: Props)
 
       <label className={formulari.check} data-error={error('privacitat') || undefined}>
         <input type="checkbox" name="privacitat" required />
-        <span>{tr('privacitat')}</span>
+        <span>{tr.rich('privacitat', { enllac: enllacPrivacitat })}</span>
       </label>
 
       {missatgeError && (
