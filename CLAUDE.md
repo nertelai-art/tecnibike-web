@@ -130,7 +130,10 @@ Versions que **no** són l'última, i per què:
   (`GET /settings` → `shopItemsEnabled`) i almenys un article; si no, és apagada, la pàgina la demana
   per WhatsApp i una reserva que en porti es rebutja abans d'enviar-la. La marca, el format, el tipus,
   el moment i els carbohidrats surten dels camps del catàleg (`marca`, `format`, `tipus`, `moment`,
-  `carbohidrats`, `cafeïna`); el tipus, si no hi és, es dedueix del nom. Sense la clau de la
+  `carbohidrats`, `cafeïna`); el tipus, si no hi és, es dedueix del nom. La marca, també: si no hi és, surt del començament del nom («226ERS HIGH ENERGY GEL» → 226ERS; el 24-11-2026 la
+  botiga no l'omplia i la pàgina sortia sense colors ni logos). Clicar una targeta obre la fitxa del producte en un diàleg
+  (`DetallProducte.tsx`): sabor, quan es pren, valors per unitat i textos dels camps del catàleg `kcal`, `sucres`, `proteïnes`,
+  `sodi`, `ingredients`, `al·lèrgens` i `ús` (també en castellà o anglès). Sense els camps, no se n'ensenya cap. Sense la clau de la
   plataforma, la de proves l'encén només amb `pnpm dev` (`index.ts`). Mentre la botiga no tingui cap
   article, el catàleg de nutrició de la botiga ensenya els de prova. Si un producte no té foto, surt una il·lustració pròpia (`Paquet.tsx`). Els preus són el PVP de la marca, no els de la botiga, i porten `*`.
 - **WhatsApp:** icona flotant a baix a la dreta a tota la pàgina d'inici (`WhatsappFlotant.tsx`). Res més
@@ -226,8 +229,10 @@ Versions que **no** són l'última, i per què:
 
 - Confirmar amb el client totes les dades marcades amb `*` (preus del taller, condicions de
   lloguer, models de la flota, rutes).
-- Logo en SVG (ara és text compost amb la tipografia del web) i decidir quin logo és el vigent:
-  el blau TCNBK o el ciclista taronja de l'Instagram.
+- Logo en vectors. Des del 24-11-2026 el logo és el ciclista de l'Instagram pintat del blau de TCNBK (`--blau`): a la
+  barra (amb «Tecnibike» a sota), al favicon i a la foto del perfil de WhatsApp (`recursos/whatsapp-perfil.png`). Tot
+  surt de `node scripts/logo-ciclista.mjs <png>`, a partir d'un PNG de 165 px: quan el client doni l'original en
+  vectors, es torna a executar amb aquell. (El «TCNBK» gran del peu es queda.)
 - Fotos originals de la botiga a bona resolució, i fotos de producte per a la botiga d'equipament.
   Les de les categories són de Wikimedia Commons amb crèdits al peu (`src/content/equipament.ts`):
   en canviar-les, treu-ne els crèdits.

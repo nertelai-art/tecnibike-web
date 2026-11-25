@@ -59,7 +59,9 @@
 
 .marquesHero {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  /* Quatre columnes fixes (dues en pantalles mitjanes): ni una rajola sola en una fila nova, ni rajoles
+     estirades a tota l'amplada quan la botiga en té menys de quatre. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin-top: clamp(24px, 3vw, 40px);
 }
@@ -68,8 +70,9 @@
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   gap: 10px;
+  --pad-rajola: 20px;
   min-height: 320px;
-  padding: 20px;
+  padding: var(--pad-rajola);
   border: 0;
   border-radius: 22px;
   background: var(--marca);
@@ -143,7 +146,7 @@
 .rajolaProductes {
   position: relative;
   min-height: 150px;
-  margin-bottom: 6px;
+  margin-bottom: 14px;
 }
 .rajolaPeca {
   --gir: calc((var(--j) - 1) * 12deg);
@@ -151,8 +154,8 @@
   position: absolute;
   left: 50%;
   bottom: 0;
-  width: 38%;
-  height: 92%;
+  width: min(38%, 110px);
+  height: 86%;
   display: grid;
   place-items: end center;
   transform: translateX(calc(-50% + var(--x))) rotate(var(--gir));
@@ -181,7 +184,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-top: 12px;
+  /* Arriba fins a la vora de la rajola: els paquets girats no treuen el cap per sota. */
+  margin: 0 calc(-1 * var(--pad-rajola)) calc(-1 * var(--pad-rajola));
+  padding: 12px var(--pad-rajola) var(--pad-rajola);
   border-top: 1px solid rgb(255 255 255 / 0.16);
   background: var(--marca);
   box-shadow: 0 -12px 16px -6px var(--marca);
@@ -210,14 +215,18 @@
     transform: translateY(30px);
   }
 }
-@media (max-width: 560px) {
+@media (max-width: 1100px) {
   .marquesHero {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .marquesHero {
     gap: 10px;
   }
   .rajola {
+    --pad-rajola: 14px;
     min-height: 0;
-    padding: 14px;
     gap: 8px;
   }
   .rajolaLema {
@@ -314,6 +323,7 @@
   list-style: none;
 }
 .targeta {
+  position: relative;
   display: grid;
   grid-template-rows: auto 1fr;
   border-radius: 16px;
@@ -366,7 +376,9 @@
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   height: 168px;
   padding: 14px;
-  background: radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--marca) 14%, var(--blanc)), color-mix(in srgb, var(--marca) 4%, var(--escenari)) 70%);
+  /* El color de la marca, com les rajoles del hero, amb una llum del seu accent al darrere del paquet. */
+  background: radial-gradient(circle at 50% 62%, color-mix(in srgb, var(--marca-accent) 34%, var(--marca)), var(--marca) 72%);
+  border-bottom: 3px solid var(--marca-accent);
 }
 .foto img,
 .foto svg {
@@ -408,6 +420,34 @@
 .nom {
   font-size: 16px;
   line-height: 1.2;
+}
+/* El nom és el botó que obre la fitxa; el seu ::after cobreix tota la targeta. */
+.obrir {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.obrir::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 16px;
+}
+.obrir:focus-visible {
+  outline: none;
+}
+.obrir:focus-visible::after {
+  outline: 3px solid var(--taronja);
+  outline-offset: 2px;
+}
+.sabors {
+  position: relative;
+  z-index: 2;
 }
 .xifres {
   font-size: 12px;

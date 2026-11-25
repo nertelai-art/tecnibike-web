@@ -380,6 +380,44 @@ describe('plataforma remota: la nutrició amb el lloguer (articles de botiga)', 
     expect(barreta).toMatchObject({ marca: '', tipus: 'barreta', sabors: [{ id: BARRETA_UNICA, nom: '', estoc: null }] });
   });
 
+  it("els valors nutricionals i els textos de la fitxa surten dels camps del catàleg, en qualsevol idioma", async () => {
+    const amb = (attributes: Record<string, unknown>) =>
+      remota({ [`GET ${R}/catalog`]: { cos: { ...ambArticles, shopItems: [{ ...ambArticles.shopItems[0]!, attributes }] } } }).plataforma.nutricio();
+    const [ca] = await amb({ marca: 'Maurten', kcal: 100, sucres: '12,5', 'proteïnes': 0, sodi: 20, ingredients: 'Aigua, maltodextrina', 'al·lèrgens': 'Cap', 'ús': 'Un cada 30 min' });
+    expect(ca).toMatchObject({ kcal: 100, sucresG: 12.5, proteinesG: 0, sodiMg: 20, ingredients: 'Aigua, maltodextrina', alergens: 'Cap', modeUs: 'Un cada 30 min' });
+    const [es] = await amb({ calorias: 89, sodio: 50, ingredientes: 'Agua', alergenos: 'Ninguno', uso: 'Sin agua' });
+    expect(es).toMatchObject({ kcal: 89, sodiMg: 50, ingredients: 'Agua', alergens: 'Ninguno', modeUs: 'Sin agua' });
+    // Sense els camps, no se n'inventa cap.
+    const [buit] = await amb({});
+    expect(buit).not.toHaveProperty('kcal');
+    expect(buit).not.toHaveProperty('ingredients');
+  });
+
+  it("sense el camp «marca», la marca surt del començament del nom i se'n treu (així pren els colors de la marca)", async () => {
+    // Tal com arriben de la plataforma de Tecnibike el 24-11-2026: la marca només és al nom.
+    const article = (id: string, name: string) => ({ ...ambArticles.shopItems[1]!, id, name, variants: [{ id: `${id.slice(0, -1)}9`, label: null, priceCents: null }] });
+    const { plataforma } = remota({
+      [`GET ${R}/catalog`]: {
+        cos: {
+          ...ambArticles,
+          shopItems: [
+            article('e0000000-0000-4000-8000-000000000011', '226ERS HIGH ENERGY GEL'),
+            article('e0000000-0000-4000-8000-000000000012', 'maurten gel 160'),
+            article('e0000000-0000-4000-8000-000000000013', 'Science in Sport Beta Fuel'),
+            article('e0000000-0000-4000-8000-000000000014', 'Gel de llimona'),
+          ],
+        },
+      },
+    });
+    const productes = await plataforma.nutricio();
+    expect(productes.map((p) => [p.marca, p.nom])).toEqual([
+      ['226ERS', 'HIGH ENERGY GEL'],
+      ['Maurten', 'gel 160'],
+      ['SiS', 'Beta Fuel'],
+      ['', 'Gel de llimona'],
+    ]);
+  });
+
   it('la nutrició és activa quan la botiga ven articles amb el lloguer i en té algun', async () => {
     expect((await amb().plataforma.configuracioReserves()).nutricio.actiu).toBe(true);
     const sense = remota({ [`GET ${R}/catalog`]: { cos: ambArticles } });
