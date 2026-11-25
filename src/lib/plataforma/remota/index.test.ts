@@ -140,6 +140,12 @@ describe('plataforma remota: el catàleg', () => {
     expect(extres.find((e) => e.id === COMPTA)).toMatchObject({ grup: 'extres', nom: 'Comptaquilòmetres', grupId: G_ACCESSORIS, preu: 200, cobrament: 'perDia' });
     expect(extres.find((e) => e.id === CADENAT)).toMatchObject({ cobrament: 'perReserva', ficticia: false });
   });
+
+  it("els noms que la web sap traduir porten la clau: la pàgina n'ensenya la traducció (25-11-2026)", async () => {
+    const extres = await remota().plataforma.extres();
+    expect(extres.find((e) => e.id === PLANS)).toMatchObject({ nom: 'Pedals plans', clau: 'pedals-plans', grupClau: 'pedals' });
+    expect(extres.find((e) => e.id === COMPTA)).toMatchObject({ clau: 'comptaquilometres', grupClau: 'accessoris' });
+  });
 });
 
 describe('plataforma remota: els camps nous del catàleg (13-11-2026)', () => {
@@ -373,8 +379,8 @@ describe('plataforma remota: la nutrició amb el lloguer (articles de botiga)', 
     const [gel, barreta] = await amb().plataforma.nutricio();
     expect(gel).toMatchObject({ id: GEL, marca: 'Maurten', nom: 'Gel 100', tipus: 'gel', format: '40 g', carbohidratsG: 25, preu: 350, ficticia: false });
     expect(gel!.sabors).toEqual([
-      { id: COLA, nom: 'Cola', estoc: null },
-      { id: LLIMONA, nom: 'Llimona', preu: 380, estoc: null },
+      { id: COLA, nom: 'Cola', clau: 'cola', estoc: null },
+      { id: LLIMONA, nom: 'Llimona', clau: 'llimona', preu: 380, estoc: null },
     ]);
     // Sense marca ni tipus escrits, es dedueixen del nom; un producte sense sabors en té un de sol, sense nom.
     expect(barreta).toMatchObject({ marca: '', tipus: 'barreta', sabors: [{ id: BARRETA_UNICA, nom: '', estoc: null }] });

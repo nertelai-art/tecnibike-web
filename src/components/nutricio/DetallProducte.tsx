@@ -4,15 +4,15 @@
 // la marca, el sabor (que canvia la foto), per a què és i quan es pren, els valors per unitat i la
 // resta de la fitxa (ingredients, al·lèrgens, com es pren). Només surt el que hi ha: els valors i
 // els textos són els camps que la botiga omple al catàleg de la plataforma, i no se n'inventa cap.
+// És només informació: ni preu ni «afegeix» (25-11-2026). Per afegir-ne, la reserva de lloguer.
 //
 // <dialog> natiu: atrapa el focus, es tanca amb Escape o clicant fora, i torna el focus a la targeta.
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
+import { nomSabor as nomSaborDe } from '@/lib/nom-traduit';
 import { useEffect, useRef, type CSSProperties } from 'react';
-import { Link } from '@/i18n/navigation';
 import { colorSabor, descripcioDe, imatgeDe, temaDe } from '@/content/nutricio';
 import type { ProducteNutricio } from '@/lib/plataforma/esquema';
-import { formatEuros } from '@/lib/preus';
 import { Paquet } from './Paquet';
 import styles from './DetallProducte.module.css';
 
@@ -21,12 +21,10 @@ type Props = {
   sabor: string | null;
   onSabor: (sabor: string) => void;
   onTanca: () => void;
-  ambReserva: boolean;
 };
 
-export function DetallProducte({ producte, sabor, onSabor, onTanca, ambReserva }: Props) {
+export function DetallProducte({ producte, sabor, onSabor, onTanca }: Props) {
   const t = useTranslations('nutricio');
-  const locale = useLocale();
   const dialeg = useRef<HTMLDialogElement>(null);
 
   // Obert mentre hi ha producte; la pàgina de sota no fa scroll.
@@ -45,8 +43,7 @@ export function DetallProducte({ producte, sabor, onSabor, onTanca, ambReserva }
   const triat = p ? (sabor ?? p.sabors[0]!.id) : null;
   const tema = temaDe(p?.marca ?? '');
   const img = p && triat ? imatgeDe(p, triat) : undefined;
-  const nomSabor = (s: string) => p?.sabors.find((x) => x.id === s)?.nom || (t.has(`sabors.${s}`) ? t(`sabors.${s}`) : '');
-  const preu = p && triat ? (p.sabors.find((s) => s.id === triat)?.preu ?? p.preu) : 0;
+  const nomSabor = (s: string) => (p ? nomSaborDe(p.sabors, s, t) : '');
 
   const valors = p
     ? ([
@@ -160,17 +157,6 @@ export function DetallProducte({ producte, sabor, onSabor, onTanca, ambReserva }
                 <p>{text}</p>
               </div>
             ))}
-
-            <div className={styles.peu}>
-              {!p.ficticia && <p className={styles.preu}>{formatEuros(preu, locale)}</p>}
-              {ambReserva ? (
-                <Link href="/#flota" className="boto boto--blau" onClick={() => dialeg.current?.close()}>
-                  {t('ambLaBici')}
-                </Link>
-              ) : (
-                <p className={styles.nota}>{t('aLaBotiga')}</p>
-              )}
-            </div>
           </div>
         </div>
       )}

@@ -500,7 +500,12 @@
     "variantDe": "Opciones de {extra}",
     "nutricio": "Nutrición para la ruta",
     "extresTriats": "{n, plural, one {# elegido} other {# elegidos}}",
-    "extresDisponibles": "{n, plural, one {# opción} other {# opciones}}"
+    "extresDisponibles": "{n, plural, one {# opción} other {# opciones}}",
+    "grupsNoms": {
+      "pedals": "Pedales",
+      "accessoris": "Accesorios",
+      "extres": "Extras"
+    }
   },
   "cita": {
     "titol": "Pide cita en el taller",

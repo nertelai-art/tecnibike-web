@@ -500,7 +500,12 @@
     "variantDe": "Options de {extra}",
     "nutricio": "Nutrition pour la sortie",
     "extresTriats": "{n, plural, one {# choisi} other {# choisis}}",
-    "extresDisponibles": "{n, plural, one {# option} other {# options}}"
+    "extresDisponibles": "{n, plural, one {# option} other {# options}}",
+    "grupsNoms": {
+      "pedals": "Pédales",
+      "accessoris": "Accessoires",
+      "extres": "Options"
+    }
   },
   "cita": {
     "titol": "Rendez-vous à l'atelier",

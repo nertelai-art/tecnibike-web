@@ -6,6 +6,7 @@
 
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
+import { nomSabor as nomSaborDe } from '@/lib/nom-traduit';
 import { useId, useState } from 'react';
 import { Paquet } from '@/components/nutricio/Paquet';
 import { colorSabor, imatgeDe, ORDRE_MARQUES, temaDe } from '@/content/nutricio';
@@ -44,7 +45,7 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
   const filtrats = productes.filter((p) => !marca || p.marca === marca).sort((a, b) => (marca ? 0 : posicio(a) - posicio(b)));
   const visibles = tots ? filtrats : filtrats.slice(0, VISIBLES);
   const euros = (c: number) => formatEuros(c, locale);
-  const nomSabor = (p: ProducteNutricio, s: string) => p.sabors.find((x) => x.id === s)?.nom ?? t(`sabors.${s}`);
+  const nomSabor = (p: ProducteNutricio, s: string) => nomSaborDe(p.sabors, s, t);
   const canviaQuantitat = (i: number, q: number) =>
     onCanvi(q <= 0 ? linies.filter((_, j) => j !== i) : linies.map((l, j) => (j === i ? { ...l, quantitat: Math.min(MAX_QUANTITAT_NUTRICIO, q) } : l)));
 

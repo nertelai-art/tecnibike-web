@@ -6,6 +6,7 @@
 
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { nomGrup } from '@/lib/nom-traduit';
 import { useId } from 'react';
 import type { BiciLloguer, Extra } from '@/lib/plataforma/esquema';
 import { optimitzable } from '@/lib/imatges';
@@ -189,7 +190,7 @@ export function BiciDelCarro({ index, linia, flota, pedals, extres, talles, lliu
       >
         {grupsExtres(extres).map((grup) => (
           <div key={grup.nom ?? '-'} className={styles.grupExtres}>
-            {grup.nom && <p className={styles.grupExtresNom}>{grup.nom}</p>}
+            {grup.nom && <p className={styles.grupExtresNom}>{nomGrup(grup.nom, grup.extres[0]?.grupClau, t)}</p>}
             <Extres
               nom={`${id}-extres`}
               extres={grup.extres}
