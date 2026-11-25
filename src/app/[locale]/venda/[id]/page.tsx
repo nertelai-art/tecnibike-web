@@ -54,7 +54,7 @@ export default async function FitxaVenda({ params }: Params) {
       <main id="contingut" className={styles.pagina}>
         <div className={`contenidor ${styles.fitxa}`}>
           <Link href="/venda" className={styles.tornar}>
-            ← {t('tornar')}
+            {t('tornar')}
           </Link>
 
           <Galeria fotos={fotos} alt={nom} transicio={`venda-${bici.id}`} etiquetes={fotos.map((_, i) => t('foto', { n: i + 1, total: fotos.length }))}>

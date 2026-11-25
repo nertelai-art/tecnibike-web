@@ -208,7 +208,7 @@ export function CarruselMarques() {
                 <span>{m.tipus.map((tipus) => t(`tipus.${tipus}`)).join(' · ')}</span>
               </span>
               <span className={styles.preguntar} aria-hidden="true">
-                {t('mira')} →
+                {t('mira')}
               </span>
             </Link>
           </li>

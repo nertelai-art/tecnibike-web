@@ -207,12 +207,7 @@
     }
   },
   "botigaCategoria": {
-    "tornar": "Back to home",
-    "aviat": "Here’s what you’ll find at the shop. Come and see it, or call us on 972 66 29 51 and we’ll have it ready.",
-    "veureMarca": "See the {marca} brand",
-    "preuConsultar": "Price on request",
-    "preuDesDe": "From {preu}",
-    "aLaBotiga": "In the shop"
+    "tornar": "Back to home"
   },
   "venda": {
     "titol": "Bikes for sale",

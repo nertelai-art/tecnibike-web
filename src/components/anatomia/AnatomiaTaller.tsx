@@ -72,7 +72,7 @@ export function AnatomiaTaller() {
       </h2>
       <p className={styles.intro}>{tt('intro')}</p>
       <BotoCita className={`boto ${styles.cta}`}>
-        {t('ctaCita')} <span className="fletxa">→</span>
+        {t('ctaCita')}
       </BotoCita>
     </div>
   );
@@ -179,7 +179,7 @@ function Banners({ actius }: { actius: boolean }) {
               <h3 className={styles.bannerNom}>{t(`peces.${m.peca}.nom`)}</h3>
               <p className={styles.bannerText}>{t(`peces.${m.peca}.qualitat`)}</p>
               <BotoCita peca={m.peca} className={styles.bannerEnllac}>
-                {t('reservar')} →
+                {t('reservar')}
               </BotoCita>
             </aside>
           </div>

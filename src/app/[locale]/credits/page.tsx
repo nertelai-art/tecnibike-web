@@ -60,7 +60,7 @@ export default async function Credits({ params }: Params) {
       <main id="contingut" className={styles.pagina}>
         <div className="contenidor">
           <Link href="/" className={styles.tornar}>
-            ← {t('tornar')}
+            {t('tornar')}
           </Link>
           <h1 className="titol-seccio">{t('titol')}</h1>
           <p className="intro">{t('intro')}</p>

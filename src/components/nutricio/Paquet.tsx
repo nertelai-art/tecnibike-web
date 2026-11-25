@@ -10,6 +10,8 @@ type Props = {
   nom: string;
   tipus: TipusNutricio;
   sabor: string;
+  /** El nom del sabor, per al color quan l'id és intern (sabors de la plataforma). */
+  nomSabor?: string;
   className?: string;
 };
 
@@ -34,7 +36,7 @@ const FORMES: Record<TipusNutricio, { contorn: string; franja: [number, number];
   shot: { contorn: 'M42 12 H58 V30 Q70 36 70 50 V124 Q70 132 62 132 H38 Q30 132 30 124 V50 Q30 36 42 30 Z', franja: [96, 114], text: [66, 80], ample: 36 },
 };
 
-export function Paquet({ marca, nom, tipus, sabor, className }: Props) {
+export function Paquet({ marca, nom, tipus, sabor, nomSabor, className }: Props) {
   const tema = temaDe(marca);
   const forma = FORMES[tipus];
   const [y1, y2] = forma.franja;
@@ -54,7 +56,7 @@ export function Paquet({ marca, nom, tipus, sabor, className }: Props) {
       </defs>
       <path d={forma.contorn} fill={tema.paquet} stroke={tema.tinta} strokeOpacity="0.18" strokeWidth="1" />
       <g clipPath={`url(#${id}-c)`}>
-        <rect x="0" y={y1} width="100" height={y2 - y1} fill={colorSabor(sabor)} />
+        <rect x="0" y={y1} width="100" height={y2 - y1} fill={colorSabor(sabor, nomSabor)} />
         {/* La lluïssor del plàstic, que es mou en passar-hi per sobre. */}
         <rect className="paquet-brill" x="-60" y="0" width="80" height="140" fill={`url(#${id}-b)`} />
       </g>

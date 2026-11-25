@@ -89,7 +89,7 @@ export function DetallProducte({ producte, sabor, onSabor, onTanca, ambReserva }
               // eslint-disable-next-line @next/next/no-img-element -- retalls amb transparència
               <img key={img} src={img} alt={`${p.marca} ${p.nom} · ${nomSabor(triat)}`} />
             ) : (
-              <Paquet marca={p.marca} nom={p.nom} tipus={p.tipus} sabor={triat} />
+              <Paquet marca={p.marca} nom={p.nom} tipus={p.tipus} sabor={triat} nomSabor={nomSabor(triat)} />
             )}
             {p.cafeinaMg !== undefined && <span className={styles.cafeina}>{t('cafeina', { mg: p.cafeinaMg })}</span>}
           </div>
@@ -124,7 +124,7 @@ export function DetallProducte({ producte, sabor, onSabor, onTanca, ambReserva }
                       role="radio"
                       aria-checked={triat === s.id}
                       onClick={() => onSabor(s.id)}
-                      style={{ '--sabor': colorSabor(s.id) } as CSSProperties}
+                      style={{ '--sabor': colorSabor(s.id, s.nom) } as CSSProperties}
                     >
                       <span aria-hidden="true" />
                       {nomSabor(s.id)}
@@ -165,7 +165,7 @@ export function DetallProducte({ producte, sabor, onSabor, onTanca, ambReserva }
               {!p.ficticia && <p className={styles.preu}>{formatEuros(preu, locale)}</p>}
               {ambReserva ? (
                 <Link href="/#flota" className="boto boto--blau" onClick={() => dialeg.current?.close()}>
-                  {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
+                  {t('ambLaBici')}
                 </Link>
               ) : (
                 <p className={styles.nota}>{t('aLaBotiga')}</p>

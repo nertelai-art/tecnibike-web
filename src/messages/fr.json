@@ -207,12 +207,7 @@
     }
   },
   "botigaCategoria": {
-    "tornar": "Retour à l’accueil",
-    "aviat": "Voici ce que vous trouverez au magasin. Venez le voir ou appelez-nous au 972 66 29 51 et nous vous le préparerons.",
-    "veureMarca": "Voir la marque {marca}",
-    "preuConsultar": "Prix sur demande",
-    "preuDesDe": "À partir de {preu}",
-    "aLaBotiga": "Au magasin"
+    "tornar": "Retour à l’accueil"
   },
   "venda": {
     "titol": "Vélos à vendre",

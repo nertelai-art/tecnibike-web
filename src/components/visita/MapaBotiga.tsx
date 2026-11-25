@@ -68,7 +68,7 @@ export function MapaBotiga() {
         <strong>Tecnibike</strong>
         <span>{t('adreca')}</span>
         <a href={COM_ARRIBAR} target="_blank" rel="noopener noreferrer">
-          {t('comArribar')} <span aria-hidden="true">↗</span>
+          {t('comArribar')}
         </a>
       </div>
     </div>
