@@ -5,24 +5,21 @@ import { Suspense } from 'react';
 import { NutricioContingut, NutricioPortada } from '@/components/nutricio/NutricioPortada';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Peu } from '@/components/Seccions';
-import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT, marquesDeCategoria } from '@/content/equipament';
+import { CATEGORIES_EQUIPAMENT, FOTOS_EQUIPAMENT } from '@/content/equipament';
 import { Link } from '@/i18n/navigation';
 import { plataforma } from '@/lib/plataforma';
 import { categoriaEquipament } from '@/lib/plataforma/esquema';
-import { formatEuros } from '@/lib/preus';
 import { GuiaIntro, GuiaMarques, GuiaPreguntes, GuiaTriar } from '@/components/botiga/GuiaCategoria';
 import styles from '@/components/botiga/Categoria.module.css';
 
-// Pàgina d'una categoria de la botiga d'equipament. Llista els articles de la plataforma; el preu
-// només surt si ve de la plataforma (els de mostra no s'ensenyen). De moment no es ven en línia: es ve
-// a la botiga o es truca (l'avís de dalt). Quan es pugui, cada article portarà «Afegeix a la cistella».
+// Pàgina d'una categoria de la botiga d'equipament: la guia de la categoria (src/content/guies), amb
+// la introducció i què hi fa la botiga, les marques (cadascuna porta a la seva fitxa), els tipus, com
+// triar-ne i les preguntes freqüents. De moment no es ven en línia: es ve a la botiga o es truca.
+// (Fins al 25-11-2026 hi havia a sota els articles de la plataforma, «A la botiga»; l'usuari la va fer
+// treure: les marques ja porten al detall.)
 //
 // La nutrició té la seva pròpia pàgina (hero amb les marques, que filtren, i catàleg amb sabors):
-// NutricioPortada, sense la capçalera ni la tira de marques de les altres categories.
-// Cada marca de la tira porta a la seva fitxa, o a la graella filtrada si és de nutrició.
-//
-// Totes porten la guia de la categoria (src/content/guies): introducció i què hi fa la botiga, tipus,
-// com triar-ne, marques (excepte la nutrició, que ja les té al hero) i preguntes freqüents.
+// NutricioPortada, sense la capçalera; la guia hi va a sota, sense les marques, que ja són al hero.
 
 type Params = { params: Promise<{ locale: string; categoria: string }> };
 
@@ -50,10 +47,8 @@ export default async function CategoriaBotiga({ params }: Params) {
   const categoria = valida.data;
   const t = await getTranslations('botigaCategoria');
   const te = await getTranslations('equipament');
-  const marques = marquesDeCategoria(categoria);
   const esNutricio = categoria === 'nutricio';
-  const [articles, nutricio, configuracio] = await Promise.all([
-    esNutricio ? [] : plataforma.articles(categoria),
+  const [nutricio, configuracio] = await Promise.all([
     esNutricio ? plataforma.nutricio() : [],
     plataforma.configuracioReserves(),
   ]);
@@ -66,7 +61,7 @@ export default async function CategoriaBotiga({ params }: Params) {
           <Image src={FOTOS_EQUIPAMENT[categoria].src} alt="" fill priority sizes="100vw" className={styles.fons} />
           <div className={`contenidor ${styles.capText}`}>
             <Link href="/#equipament" className={styles.tornar}>
-              ← {t('tornar')}
+              {t('tornar')}
             </Link>
             <p className="situacio">{te('situacio')}</p>
             <h1 className="titol-seccio">{te(`categories.${categoria}.nom`)}</h1>
@@ -80,9 +75,6 @@ export default async function CategoriaBotiga({ params }: Params) {
           <GuiaIntro categoria={categoria} />
           <GuiaMarques categoria={categoria} />
           <GuiaTriar categoria={categoria} />
-
-          <h2 className={styles.titolArticles}>{t('aLaBotiga')}</h2>
-          <p className={styles.avis}>{t('aviat')}</p>
         </div>
         )}
 
@@ -95,42 +87,6 @@ export default async function CategoriaBotiga({ params }: Params) {
         )}
 
         <div className="contenidor">
-          <ul className={styles.articles}>
-            {articles.map((a) => {
-              const logo = marques.find((m) => m.nom === a.marca)?.logo;
-              return (
-                <li key={a.id} className={styles.article}>
-                  <div className={styles.imatge} aria-hidden="true">
-                    {a.imatge ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- la foto de la plataforma, de qualsevol mida
-                      <img src={a.imatge} alt="" data-foto />
-                    ) : logo ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- sense foto de producte, el logo de la marca
-                      <img src={`/img/marques/${logo}`} alt="" />
-                    ) : (
-                      <span>{a.marca}</span>
-                    )}
-                  </div>
-                  <div className={styles.dades}>
-                    <p className={styles.marca}>{a.marca}</p>
-                    <h2 className={styles.nom}>{a.nom}</h2>
-                    {a.descripcio && <p className={styles.descripcio}>{a.descripcio}</p>}
-                    {/* El preu, només si ve de la plataforma: els de mostra no s'ensenyen. */}
-                    {!a.ficticia && (
-                      <p className={styles.preu}>
-                        {a.preu === null || a.preuBase === 'consultar'
-                          ? t('preuConsultar')
-                          : a.preuBase === 'desDe'
-                            ? t('preuDesDe', { preu: formatEuros(a.preu, locale) })
-                            : formatEuros(a.preu, locale)}
-                      </p>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-
           {esNutricio && (
             <>
               <GuiaIntro categoria={categoria} />

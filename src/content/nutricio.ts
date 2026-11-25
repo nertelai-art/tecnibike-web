@@ -76,8 +76,69 @@ const COLORS_SABOR: Record<string, string> = {
   variat: '#8fa3d9',
 };
 
-export function colorSabor(id: string): string {
-  return COLORS_SABOR[id] ?? '#9aa5b1';
+const GRIS = '#9aa5b1';
+
+/**
+ * Paraules de cada sabor en català, castellà, anglès i francès (sense accents ni majúscules), per als
+ * sabors de la plataforma, que tenen un id intern i només el nom que hi escriu la botiga.
+ */
+const PARAULES_SABOR: [RegExp, string][] = [
+  [/poma verda|manzana verde|green apple|pomme verte/, 'pomaVerda'],
+  [/neutr|sense sabor|sin sabor|unflavou?red|nature/, 'neutre'],
+  [/cola/, 'cola'],
+  [/cafe|coffee|expresso|espresso/, 'cafe'],
+  [/sindria|sandia|watermelon|pasteque/, 'sindria'],
+  [/maduixa|fresa|strawberr|fraise/, 'maduixa'],
+  [/llimona|limon|lemon|citron/, 'llimona'],
+  [/llima|lima|lime/, 'llima'],
+  [/mango|mangue/, 'mangoMandarina'],
+  [/taronja|naranja|orange|mandarin|tangerin/, 'taronja'],
+  [/gerd|frambues|raspberr|framboise/, 'gerdLlimona'],
+  [/fruits vermells|frutos rojos|red berr|fruits rouges|berr|baies/, 'fruitsVermells'],
+  [/pomelo|grapefruit|pamplemousse/, 'pomeloRosat'],
+  [/poma|manzana|apple|pomme/, 'poma'],
+  [/platan|banan/, 'platan'],
+  [/xocolata negra|chocolate negro|dark chocolate|chocolat noir/, 'xocolataNegra'],
+  [/xocolata|chocolate|chocolat/, 'xocolata'],
+  [/cacau|cacao|cocoa/, 'cacau'],
+  [/vainilla|vanill/, 'vainilla'],
+  [/eucalipt|eucalypt/, 'eucaliptusMentol'],
+  [/menta|mint|menthe|mentol|menthol/, 'mentol'],
+  [/regalessia|regaliz|liquorice|licorice|reglisse/, 'herbasanaRegalessia'],
+  [/civada|avena|oat|avoine/, 'civada'],
+  [/ametll|almendra|almond|amande/, 'ametllesLlavors'],
+  [/canyella|canela|cinnamon|cannelle/, 'pomaCanyella'],
+  [/gingebre|jengibre|ginger|gingembre/, 'platanGingebre'],
+  [/citric|citrus|agrume/, 'citric'],
+  [/tropical|pinya|pina|pineapple|ananas/, 'tropical'],
+  [/salat|salad|salty|sale/, 'salat'],
+  [/variat|variado|mixed|assorti/, 'variat'],
+];
+
+/**
+ * El color d'un sabor: pel seu id (el catàleg de prova) o, si no el coneix, pel nom (els sabors de la
+ * plataforma). Amb dos sabors al nom («Mango i mandarina»), mana el que surt primer. Si no, gris.
+ */
+export function colorSabor(id: string, nom?: string): string {
+  const perId = COLORS_SABOR[id];
+  if (perId) return perId;
+  if (!nom) return GRIS;
+  const net = nom
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+  // El nom d'un sabor conegut («Maduixa i kiwi» → maduixaKiwi) té el seu color exacte.
+  const paraules = net.split(/[^a-z]+/).filter((w) => w && !['i', 'y', 'and', 'et', 'amb', 'con', 'with', 'avec'].includes(w));
+  const exacte = COLORS_SABOR[paraules.map((w, i) => (i ? w[0]!.toUpperCase() + w.slice(1) : w)).join('')];
+  if (exacte) return exacte;
+  let millor: { pos: number; llarg: number; clau: string } | null = null;
+  for (const [patro, clau] of PARAULES_SABOR) {
+    const m = patro.exec(net);
+    if (!m) continue;
+    const candidat = { pos: m.index, llarg: m[0].length, clau };
+    if (!millor || candidat.pos < millor.pos || (candidat.pos === millor.pos && candidat.llarg > millor.llarg)) millor = candidat;
+  }
+  return millor ? COLORS_SABOR[millor.clau]! : GRIS;
 }
 
 /** Les marques en l'ordre de la secció, com els expositors de la botiga d'esquerra a dreta. */

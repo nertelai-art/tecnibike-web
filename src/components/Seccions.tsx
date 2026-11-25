@@ -57,7 +57,7 @@ export async function Rutes() {
         <p className="intro">{t('intro')}</p>
         <MapaRutes />
         <a href="#visita" className="boto boto--clar">
-          {t('guia')} <span className="fletxa">→</span>
+          {t('guia')}
         </a>
       </div>
     </section>
@@ -140,9 +140,6 @@ export async function Equipament() {
                       .map((m) => m.nom)
                       .join(' · ')}
                   </span>
-                </span>
-                <span className={styles.fletxaCategoria} aria-hidden="true">
-                  →
                 </span>
               </Link>
             </Revela>
@@ -265,7 +262,7 @@ export async function Visita() {
           </address>
           <div className={styles.contacte}>
             <a className="boto boto--fosc-sobre-fosc" href={enllacWhatsapp()} target="_blank" rel="noopener noreferrer">
-              {t('whatsapp')} <span className="fletxa">→</span>
+              {t('whatsapp')}
             </a>
             <a className={styles.enllacClar} href={`tel:${TELEFON}`}>
               {t('telefon')} · {TELEFON_VISIBLE}
@@ -293,7 +290,7 @@ export async function Visita() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {t('mapa')} <span className="fletxa">↗</span>
+            {t('mapa')}
           </a>
         </div>
       </div>

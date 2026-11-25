@@ -112,7 +112,7 @@
   background: var(--grafit-2);
 }
 
-/* Tota la targeta és l'enllaç: la foto, el text i la fletxa. */
+/* Tota la targeta és l'enllaç: la foto i el text. */
 .enllacCategoria {
   position: absolute;
   inset: 0;
@@ -168,37 +168,6 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--taronja);
-}
-
-.fletxaCategoria {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--blanc);
-  color: var(--grafit);
-  font-size: 20px;
-  font-weight: 800;
-  transform: scale(0.8);
-  opacity: 0;
-  transition:
-    transform 0.4s var(--ease),
-    opacity 0.4s var(--ease);
-}
-.enllacCategoria:hover .fletxaCategoria,
-.enllacCategoria:focus-visible .fletxaCategoria {
-  transform: none;
-  opacity: 1;
-}
-@media (hover: none) {
-  .fletxaCategoria {
-    transform: none;
-    opacity: 1;
-  }
 }
 
 @media (max-width: 980px) {

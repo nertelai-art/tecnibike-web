@@ -260,13 +260,6 @@ p {
   padding: 0 18px;
   font-size: 15px;
 }
-.boto .fletxa {
-  transition: transform 0.2s var(--ease);
-}
-.boto:hover .fletxa {
-  transform: translateX(3px);
-}
-
 .mostra {
   color: var(--taronja-fosc);
   font-weight: 700;

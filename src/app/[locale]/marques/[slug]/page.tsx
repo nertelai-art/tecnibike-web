@@ -67,7 +67,7 @@ export default async function FitxaDeMarca({ params }: Params) {
           {portada && <Image src={portada.src} alt="" fill priority sizes="100vw" className={styles.fons} />}
           <div className={`contenidor ${styles.capText}`}>
             <Link href="/#marques" className={styles.tornar}>
-              ← {t('tornar')}
+              {t('tornar')}
             </Link>
             {marca.logo && (
               <span className={styles.logo}>
@@ -107,7 +107,7 @@ export default async function FitxaDeMarca({ params }: Params) {
             </ol>
 
             <a className={styles.web} href={fitxa.web} target="_blank" rel="noopener noreferrer">
-              {t('web', { marca: marca.nom })} ↗
+              {t('web', { marca: marca.nom })}
             </a>
           </section>
 
@@ -131,18 +131,17 @@ export default async function FitxaDeMarca({ params }: Params) {
           <div className={styles.botons}>
             {marca.categoria === 'bicis' && (
               <Link href="/#flota" className="boto">
-                {t('accio.bicis.boto')} <span className="fletxa">→</span>
+                {t('accio.bicis.boto')}
               </Link>
             )}
             {marca.categoria === 'components' && (
               <BotoCita className="boto">
-                {t('accio.components.boto')} <span className="fletxa">→</span>
+                {t('accio.components.boto')}
               </BotoCita>
             )}
             {marca.categoria === 'equipament' && categoriaBotiga && (
               <Link href={`/botiga/${categoriaBotiga}`} className="boto">
-                {t('accio.equipament.boto', { categoria: te(`categories.${categoriaBotiga}.nom`).toLowerCase() })}{' '}
-                <span className="fletxa">→</span>
+                {t('accio.equipament.boto', { categoria: te(`categories.${categoriaBotiga}.nom`).toLowerCase() })}
               </Link>
             )}
           </div>
