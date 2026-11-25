@@ -24,6 +24,6 @@ export type GuiaEquipament = {
   aTecnibike: Text;
   /** Preguntes freqüents (3 o 4), que també van com a dades estructurades FAQPage. */
   preguntes: { pregunta: Text; resposta: Text }[];
-  /** Fonts consultades per a la informació general. */
+  /** Fonts consultades per a la informació general. No surten a la web: hi són per poder-ho revisar. */
   fonts: { nom: string; url: string }[];
 };

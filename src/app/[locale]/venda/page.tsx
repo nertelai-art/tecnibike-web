@@ -39,7 +39,7 @@ export default async function BicisEnVenda({ params }: Params) {
         <header className={styles.cap}>
           <div className="contenidor">
             <Link href="/" className={styles.tornar}>
-              ← {t('tornarInici')}
+              {t('tornarInici')}
             </Link>
             <SelectorLloguerCompra actiu="compra" tema="fosc" />
             <h1 className="titol-seccio">{t('titol')}</h1>

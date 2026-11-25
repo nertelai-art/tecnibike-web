@@ -90,7 +90,7 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
                   {img ? (
                     <Image key={img} src={img} alt="" width={112} height={144} unoptimized={!optimitzable(img)} />
                   ) : (
-                    <Paquet marca={p.marca} nom={p.nom} tipus={p.tipus} sabor={sabor} />
+                    <Paquet marca={p.marca} nom={p.nom} tipus={p.tipus} sabor={sabor} nomSabor={nomSabor(p, sabor)} />
                   )}
                 </div>
                 <div className={styles.nutricioText}>
@@ -125,7 +125,7 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
                   ) : (
                     // Un producte d'un sol sabor de la plataforma no en té el nom: llavors no es diu.
                     nomSabor(p, sabor) && <p className={styles.nutricioSaborUnic}>
-                      <span aria-hidden="true" style={{ background: colorSabor(sabor) }} />
+                      <span aria-hidden="true" style={{ background: colorSabor(sabor, nomSabor(p, sabor)) }} />
                       {nomSabor(p, sabor)}
                     </p>
                   )}
@@ -163,7 +163,7 @@ export function NutricioReserva({ productes, linies, disponibilitat, onCanvi }: 
                 const queden = nutricioLliure(disponibilitat, linies, l.producteId, l.sabor);
                 return (
                   <li key={`${l.producteId}-${l.sabor}`}>
-                    <span className={styles.nutricioPunt} aria-hidden="true" style={{ background: colorSabor(l.sabor) }} />
+                    <span className={styles.nutricioPunt} aria-hidden="true" style={{ background: colorSabor(l.sabor, nomSabor(p, l.sabor)) }} />
                     <span className={styles.nutricioLinia}>
                       <strong>
                         {p.marca} {p.nom}

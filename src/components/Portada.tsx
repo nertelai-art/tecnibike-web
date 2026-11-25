@@ -61,7 +61,7 @@ export function Portada({ valoracio }: { valoracio: Valoracio }) {
         <p className={styles.subtitol}>{t('subtitol')}</p>
         <div className={styles.botons}>
           <a href="#flota" className="boto boto--blau">
-            {t('ctaLloguer')} <span className="fletxa">→</span>
+            {t('ctaLloguer')}
           </a>
           <BotoCita className="boto boto--fosc-sobre-fosc">{t('ctaTaller')}</BotoCita>
         </div>

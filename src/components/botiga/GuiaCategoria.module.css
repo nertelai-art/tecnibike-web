@@ -231,15 +231,6 @@
   color: var(--tinta-2);
 }
 
-.fonts {
-  margin-top: 28px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--tinta-3);
-}
-.fonts a {
-  color: inherit;
-}
 
 @media (max-width: 900px) {
   .intro {

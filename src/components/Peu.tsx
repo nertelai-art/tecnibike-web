@@ -100,7 +100,7 @@ export async function Peu() {
               <span>{tv('diumenge')}</span>
             </p>
             <a className={styles.comArribar} href={COM_ARRIBAR} target="_blank" rel="noopener noreferrer">
-              {t('comArribar')} <span aria-hidden="true">→</span>
+              {t('comArribar')}
             </a>
           </div>
         </nav>

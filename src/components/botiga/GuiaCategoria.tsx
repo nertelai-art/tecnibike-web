@@ -12,7 +12,6 @@ import styles from './GuiaCategoria.module.css';
 
 // La guia d'una categoria de la botiga (src/content/guies): per què importa, què hi fa la botiga, els
 // tipus, com triar-ne, les marques i les preguntes freqüents (també com a FAQPage per a Google).
-// Les parts surten per separat perquè la pàgina les intercali amb els articles.
 
 async function guiaDe(categoria: CategoriaEquipament) {
   const locale = await getLocale();
@@ -107,7 +106,7 @@ export async function GuiaMarques({ categoria }: { categoria: CategoriaEquipamen
                 <strong>{m.nom}</strong>
                 {fitxa && <span className={styles.marcaLema}>{fitxa.lema[l]}</span>}
                 <span className={styles.veure}>
-                  {t('veureFitxa')} <span aria-hidden="true">→</span>
+                  {t('veureFitxa')}
                 </span>
               </Link>
             </li>
@@ -118,7 +117,7 @@ export async function GuiaMarques({ categoria }: { categoria: CategoriaEquipamen
   );
 }
 
-/** Preguntes freqüents i fonts, amb les dades estructurades FAQPage. */
+/** Preguntes freqüents, amb les dades estructurades FAQPage. Les fonts de la recerca són al contingut (no es publiquen). */
 export async function GuiaPreguntes({ categoria }: { categoria: CategoriaEquipament }) {
   const { g, l, t } = await guiaDe(categoria);
   const faq = {
@@ -143,17 +142,6 @@ export async function GuiaPreguntes({ categoria }: { categoria: CategoriaEquipam
           </details>
         ))}
       </div>
-      <p className={styles.fonts}>
-        {t('fonts')}:{' '}
-        {g.fonts.map((f, i) => (
-          <span key={f.url}>
-            {i > 0 && ' · '}
-            <a href={f.url} target="_blank" rel="noopener noreferrer">
-              {f.nom}
-            </a>
-          </span>
-        ))}
-      </p>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }} />
     </section>
   );

@@ -107,7 +107,7 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
       >
         <div className={`contenidor ${styles.heroText}`}>
           <Link href="/#equipament" className={styles.tornar}>
-            ← {tb('tornar')}
+            {tb('tornar')}
           </Link>
           <p className="situacio">{te('situacio')}</p>
           <h1 className={styles.titol}>{t('situacio')}</h1>
@@ -150,7 +150,7 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
                             // eslint-disable-next-line @next/next/no-img-element -- retalls petits amb transparència
                             <img src={img} alt="" loading="lazy" decoding="async" />
                           ) : (
-                            <Paquet marca={p.marca} nom={p.nom} tipus={p.tipus} sabor={p.sabors[0]!.id} />
+                            <Paquet marca={p.marca} nom={p.nom} tipus={p.tipus} sabor={p.sabors[0]!.id} nomSabor={p.sabors[0]!.nom} />
                           )}
                         </span>
                       );
@@ -214,7 +214,7 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
                     // eslint-disable-next-line @next/next/no-img-element -- retalls petits amb transparència
                     <img key={img} src={img} alt={`${p.marca} ${p.nom} · ${nomSabor(p, sabor)}`} loading="lazy" decoding="async" />
                   ) : (
-                    <Paquet marca={p.marca} nom={p.nom} tipus={p.tipus} sabor={sabor} />
+                    <Paquet marca={p.marca} nom={p.nom} tipus={p.tipus} sabor={sabor} nomSabor={nomSabor(p, sabor)} />
                   )}
                   {p.cafeinaMg !== undefined && <span className={styles.cafeina}>{t('cafeina', { mg: p.cafeinaMg })}</span>}
                 </div>
@@ -242,7 +242,7 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
                             aria-checked={sabor === s.id}
                             title={nomSabor(p, s.id)}
                             aria-label={nomSabor(p, s.id)}
-                            style={{ '--sabor': colorSabor(s.id) } as CSSProperties}
+                            style={{ '--sabor': colorSabor(s.id, s.nom) } as CSSProperties}
                             onClick={() => setSabors((x) => ({ ...x, [p.id]: s.id }))}
                           />
                         ))}
@@ -270,7 +270,7 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
         <div className={styles.peu}>
           {ambReserva ? (
             <Link href="/#flota" className="boto boto--blau">
-              {t('ambLaBici')} <span className="fletxa" aria-hidden="true">→</span>
+              {t('ambLaBici')}
             </Link>
           ) : (
             <p className={styles.nota}>{t('aLaBotiga')}</p>

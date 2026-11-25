@@ -154,7 +154,11 @@ Versions que **no** són l'última, i per què:
   per la vora dreta i les rodes giren el que recorre. Les capes (`public/img/bici-scroll/`) les fa
   `python scripts/capes-bici.py public/img/flota/carretera.jpg public/img/bici-scroll 360` (Pillow i
   NumPy). Només amb ratolí i pantalla ≥ 1000 px; si no, la barra del navegador amb els colors.
-- **Botiga d'equipament:** cada categoria té pàgina a `/[locale]/botiga/[categoria]`. Tecnibike de
+- **Botiga d'equipament:** cada categoria té pàgina a `/[locale]/botiga/[categoria]`. Cada pàgina és la guia de la categoria
+  (`src/content/guies/`, 24-11-2026): introducció, marques (porten a la fitxa), tipus, com triar-ne i preguntes freqüents.
+  Les fonts de la recerca són al contingut però **no es publiquen**, i des del 25-11-2026 la pàgina ja no llista els
+  articles de la plataforma («A la botiga»): les marques porten al detall. El que segueix d'articles val per a quan es
+  torni a ensenyar el catàleg. Tecnibike de
   moment només fa lloguer i cites de taller, no ven en línia: es ve a la botiga o es truca (l'avís de dalt;
   des del 18-11-2026 els articles ja no porten «Reserva-ho per WhatsApp») i, quan es pugui vendre, cada
   article portarà la cistella. Els articles són els productes de venda de la plataforma

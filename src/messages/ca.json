@@ -207,12 +207,7 @@
     }
   },
   "botigaCategoria": {
-    "tornar": "Torna a l’inici",
-    "aviat": "Aquí tens el que trobaràs a la botiga. Vine a veure-ho o truca’ns al 972 66 29 51 i t’ho tindrem a punt.",
-    "veureMarca": "Mira la marca {marca}",
-    "preuConsultar": "Preu a consultar",
-    "preuDesDe": "Des de {preu}",
-    "aLaBotiga": "A la botiga"
+    "tornar": "Torna a l’inici"
   },
   "venda": {
     "titol": "Bicis en venda",
