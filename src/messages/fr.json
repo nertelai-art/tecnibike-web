@@ -415,7 +415,7 @@
     "telefon": "Téléphone (avec WhatsApp)",
     "correu": "E-mail",
     "comentaris": "Commentaires (facultatif)",
-    "privacitat": "J'ai lu et j'accepte la politique de confidentialité.",
+    "privacitat": "J’ai lu et j’accepte la <enllac>politique de confidentialité</enllac>.",
     "resum": "Votre réservation",
     "liniaBici": "{nom} · taille {talla}",
     "senseTalla": "taille à choisir",
@@ -770,5 +770,10 @@
     "llicencia": "Licence",
     "font": "Original",
     "tornar": "Retour à l'accueil"
+  },
+  "privacitatPagina": {
+    "titol": "Politique de confidentialité",
+    "actualitzada": "Mise à jour le {data}.",
+    "tornar": "Retour à l’accueil"
   }
 }

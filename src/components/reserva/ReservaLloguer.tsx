@@ -21,6 +21,7 @@ import { BiciDelCarro, type LiniaFormulari } from './BiciDelCarro';
 import { NutricioReserva } from './NutricioReserva';
 import { Participants } from './Participants';
 import styles from './Reserva.module.css';
+import { enllacPrivacitat } from '@/components/EnllacPrivacitat';
 
 const MAX_BICIS = 8;
 
@@ -514,7 +515,7 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
               </label>
               <label className={styles.check} data-error={error('privacitat') || undefined}>
                 <input name="privacitat" type="checkbox" required aria-invalid={error('privacitat') || undefined} />
-                <span>{t('privacitat')}</span>
+                <span>{t.rich('privacitat', { enllac: enllacPrivacitat })}</span>
               </label>
               {error('privacitat') && <em className={styles.errorSolt}>{t('camps.privacitat')}</em>}
             </fieldset>

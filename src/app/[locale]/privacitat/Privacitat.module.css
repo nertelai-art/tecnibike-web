@@ -1,0 +1,50 @@
+.pagina {
+  padding-block: clamp(120px, 14vw, 160px) clamp(64px, 8vw, 96px);
+}
+
+.text {
+  max-width: 760px;
+}
+
+.tornar {
+  display: inline-block;
+  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+}
+
+.data {
+  margin: 8px 0 0;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.seccio {
+  margin-top: 40px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.seccio p {
+  margin: 0 0 12px;
+}
+
+.seccio ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.seccio li + li {
+  margin-top: 6px;
+}
+
+.subtitol {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taronja-fosc);
+}
