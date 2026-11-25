@@ -13,6 +13,7 @@ import type { CitaTaller as Cita, FranjaTaller, Peca, ServeiTaller } from '@/lib
 import { formatEuros } from '@/lib/preus';
 import styles from './Reserva.module.css';
 import cita from './Cita.module.css';
+import { enllacPrivacitat } from '@/components/EnllacPrivacitat';
 
 const TIPUS: Cita['tipusBici'][] = ['carretera', 'muntanya', 'gravel', 'electrica', 'urbana'];
 const noop = () => () => {};
@@ -267,7 +268,7 @@ export function CitaTaller({ serveis, pecaInicial }: Props) {
         </div>
         <label className={styles.check} data-error={error('privacitat') || undefined}>
           <input name="privacitat" type="checkbox" required aria-invalid={error('privacitat') || undefined} />
-          <span>{tr('privacitat')}</span>
+          <span>{tr.rich('privacitat', { enllac: enllacPrivacitat })}</span>
         </label>
       </fieldset>
 
