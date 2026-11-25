@@ -60,6 +60,9 @@ Versions que **no** són l'última, i per què:
   ensenya hores i demana que truquin: una cita no es desa mai en memòria** (fins al 13-11-2026 es
   perdien així a producció). Limitacions:
   el preu de la fitxa és orientatiu (mana el que torna la plataforma), només hi ha un grup obligatori (els pedals) i els noms de models i extres surten en un sol idioma.
+  **Des del 25-11-2026, els noms d'extres, grups i sabors que la web ja té traduïts es tradueixen** (`src/lib/claus-cataleg.ts`:
+  si el nom de la plataforma, en qualsevol idioma, és un de `reserva.extresNoms`, `reserva.grupsNoms` o `nutricio.sabors`, la
+  plataforma de la web en posa la clau i la pàgina n'ensenya la traducció). La resta (descripcions, noms nous) surt com l'escriu la botiga.
   Dels models, la web llegeix els camps del catàleg (13-11-2026, plataforma v1.0.10): l'adreça surt de
   la referència (`sku`) i, si no en té, del nom (les adreces d'abans encara troben la bici); la
   categoria, de `category` («Muntanya», «Carretera»…); si és elèctrica, de `attributes["elèctrica"]`;

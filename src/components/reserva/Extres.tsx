@@ -6,6 +6,7 @@
 
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
+import { nomExtra } from '@/lib/nom-traduit';
 import type { Extra } from '@/lib/plataforma/esquema';
 import { optimitzable } from '@/lib/imatges';
 import { formatEuros } from '@/lib/preus';
@@ -40,7 +41,7 @@ export function Extres({ nom, extres, triats, lliures, multiple, onCanvi, varian
         const n = lliures[e.id];
         const triat = triats.includes(e.id);
         const esgotat = n === 0 && !triat;
-        const nomExtra = e.nom ?? t(`extresNoms.${e.id}`);
+        const nomE = nomExtra(e, t);
         const preu = e.preu === 0 ? t('inclos') : e.cobrament === 'perDia' ? t('preuDia', { preu: formatEuros(e.preu, locale) }) : formatEuros(e.preu, locale);
         const ambVariants = Boolean(triat && e.variants?.length && onVariant);
         const queden = ambVariants ? (lliuresVariants?.(e.id) ?? {}) : {};
@@ -54,7 +55,7 @@ export function Extres({ nom, extres, triats, lliures, multiple, onCanvi, varian
                 value={e.id}
                 checked={triat}
                 disabled={esgotat}
-                aria-label={`${nomExtra} · ${preu}`}
+                aria-label={`${nomE} · ${preu}`}
                 onChange={() => onCanvi(e.id)}
               />
               <span className={styles.extraFoto}>
@@ -68,7 +69,7 @@ export function Extres({ nom, extres, triats, lliures, multiple, onCanvi, varian
                 )}
               </span>
               <span className={styles.extraText}>
-                <strong>{nomExtra}</strong>
+                <strong>{nomE}</strong>
                 <span>
                   {preu}
                   {e.ficticia && <span className="mostra">*</span>}
@@ -79,7 +80,7 @@ export function Extres({ nom, extres, triats, lliures, multiple, onCanvi, varian
               </span>
             </label>
             {ambVariants && (
-              <div className={styles.variants} role="radiogroup" aria-label={t('variantDe', { extra: nomExtra })} data-error={falta || undefined}>
+              <div className={styles.variants} role="radiogroup" aria-label={t('variantDe', { extra: nomE })} data-error={falta || undefined}>
                 {e.variants!.map((v) => {
                   const q = queden[v.nom];
                   const triada = variants[e.id] === v.nom;

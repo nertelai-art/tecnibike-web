@@ -12,6 +12,7 @@
 // l'equip de la botiga ha de poder confiar que el preu de la web és el bo.
 
 import { useLocale, useTranslations } from 'next-intl';
+import { nomSabor as nomSaborDe } from '@/lib/nom-traduit';
 import { useSearchParams } from 'next/navigation';
 import { useRef, useState, type CSSProperties } from 'react';
 import { Link } from '@/i18n/navigation';
@@ -84,7 +85,7 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
   const filtrats = productes
     .filter((p) => (!marca || p.marca === marca) && (!moment || p.moments.includes(moment)))
     .sort((a, b) => (marca ? 0 : posicio(a) - posicio(b)));
-  const nomSabor = (p: ProducteNutricio, s: string) => p.sabors.find((x) => x.id === s)?.nom ?? t(`sabors.${s}`);
+  const nomSabor = (p: ProducteNutricio, s: string) => nomSaborDe(p.sabors, s, t);
   const temaHero = marca ? temaDe(marca) : null;
 
   const canviaMarca = (m: string | null) => {
@@ -264,7 +265,6 @@ export function NutricioContingut({ productes, ambReserva, marcaInicial = null }
           sabor={producteObert ? (sabors[producteObert.id] ?? null) : null}
           onSabor={(s) => producteObert && setSabors((x) => ({ ...x, [producteObert.id]: s }))}
           onTanca={() => setObert(null)}
-          ambReserva={ambReserva}
         />
 
         <div className={styles.peu}>

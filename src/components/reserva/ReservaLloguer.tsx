@@ -7,6 +7,7 @@
 // El servidor torna a calcular el preu en confirmar.
 
 import { useLocale, useTranslations } from 'next-intl';
+import { nomExtra } from '@/lib/nom-traduit';
 import { useEffect, useId, useRef, useState, useSyncExternalStore, useTransition, type FormEvent, type ReactNode } from 'react';
 import { consultarDisponibilitat, reservarLloguer, type ResultatReserva } from '@/app/[locale]/accions';
 import { primerMomentReservable, esPassat, sumaDies, type Instant } from '@/lib/calendari';
@@ -305,7 +306,7 @@ export function ReservaLloguer({ bici, flota, extres, nutricio: productesNutrici
                             </p>
                             {d.extres.map((e) => (
                               <p key={e.id} className={styles.liniaDetall}>
-                                <span>+ {perId.get(e.id)?.nom ?? t(`extresNoms.${e.id}`)}</span>
+                                <span>+ {nomExtra(perId.get(e.id) ?? { id: e.id }, t)}</span>
                                 <span>{euros(e.import)}</span>
                               </p>
                             ))}
