@@ -157,10 +157,14 @@ export const extra = z.object({
   grup: z.enum(['pedals', 'extres']),
   /** El nom que hi ha posat la botiga. Sense, el nom surt dels missatges de la web per l'`id`. */
   nom: z.string().optional(),
+  /** Si el nom de la botiga és d'un extra que la web té traduït, la seva clau (`reserva.extresNoms`). */
+  clau: z.string().optional(),
   /** El grup d'opcions de la plataforma: dels extres d'un mateix grup se'n pot triar un com a molt. */
   grupId: z.string().optional(),
   /** El nom del grup a la plataforma («Pedals», «Accessoris»): el formulari els agrupa per aquest nom. */
   grupNom: z.string().optional(),
+  /** Si el nom del grup és un dels que la web té traduïts, la seva clau (`reserva.grupsNoms`). */
+  grupClau: z.string().optional(),
   imatge: z.string().optional(),
   preu: centims,
   cobrament: z.enum(['perReserva', 'perDia']),
@@ -185,6 +189,8 @@ export const saborNutricio = z.object({
   id: z.string().min(1).max(40),
   /** El nom que hi ha posat la botiga. Sense, surt dels missatges de la web per l'`id`. */
   nom: z.string().optional(),
+  /** Si el nom de la botiga és d'un sabor que la web té traduït, la seva clau (`nutricio.sabors`). */
+  clau: z.string().optional(),
   /** La foto d'aquest sabor, si l'envàs canvia. Sense, la del producte. */
   imatge: z.string().optional(),
   /** El preu d'aquest sabor, si no és el del producte. */

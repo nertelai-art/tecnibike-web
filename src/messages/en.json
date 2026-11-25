@@ -500,7 +500,12 @@
     "variantDe": "{extra} options",
     "nutricio": "Ride nutrition",
     "extresTriats": "{n} selected",
-    "extresDisponibles": "{n, plural, one {# option} other {# options}}"
+    "extresDisponibles": "{n, plural, one {# option} other {# options}}",
+    "grupsNoms": {
+      "pedals": "Pedals",
+      "accessoris": "Accessories",
+      "extres": "Extras"
+    }
   },
   "cita": {
     "titol": "Book the workshop",

@@ -20,6 +20,7 @@ import {
   type TipusNutricio,
   type Tarifa,
 } from '../esquema';
+import { clauExtra, clauGrup, clauSabor } from '@/lib/claus-cataleg';
 import { ErrorReserva, type Plataforma } from '../interficie';
 import {
   RentalAvailabilityResponseSchema,
@@ -347,6 +348,7 @@ function producteNutricioDe(a: ArticleBotiga): ProducteNutricio {
     sabors: a.variants.map((v) => ({
       id: v.id,
       nom: v.label ?? '',
+      ...(v.label && clauSabor(v.label) && { clau: clauSabor(v.label) }),
       ...(v.priceCents !== null && v.priceCents !== a.priceCents && { preu: v.priceCents }),
       estoc: null,
     })),
@@ -625,8 +627,10 @@ export function crearPlataformaRemota({
           id: o.id,
           grup: obligatoris.has(o.groupId) ? 'pedals' : 'extres',
           nom: o.name,
+          ...(clauExtra(o.name) && { clau: clauExtra(o.name) }),
           ...(!multiples.has(o.groupId) && { grupId: o.groupId }),
           ...(nomsGrups.has(o.groupId) && { grupNom: nomsGrups.get(o.groupId) }),
+          ...(clauGrup(nomsGrups.get(o.groupId) ?? '') && { grupClau: clauGrup(nomsGrups.get(o.groupId)!) }),
           ...(o.imageUrl && { imatge: o.imageUrl }),
           preu: o.priceCents,
           cobrament: o.priceUnit === 'day' ? 'perDia' : 'perReserva',

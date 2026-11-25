@@ -237,26 +237,6 @@
   color: var(--tinta-2);
 }
 
-.peu {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px 20px;
-  margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid var(--linia-fina);
-}
-.preu {
-  font-size: 24px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-.nota {
-  font-size: 14px;
-  color: var(--tinta-2);
-}
-
 @media (max-width: 720px) {
   .capsa {
     grid-template-columns: 1fr;
